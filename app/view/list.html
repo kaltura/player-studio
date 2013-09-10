@@ -1,0 +1,33 @@
+<div class="container ">
+    <div class="row">
+         <div class="col-md-1">
+             <button type="button" class="btn btn-primary" data-ng-click="newPlayer()">{{'new_player' | i18n}}</button>
+         </div>
+        <div class="col-md-3">
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="{{'search' | i18n}}" ng-model="search">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">{{ 'Name' | i18n }}</div>
+        <div class="col-md-1">{{ 'ID' | i18n }}</div>
+        <div class="col-md-1">{{ 'Actions' | i18n }}</div>
+    </div>
+    <div ng-repeat="item in data | filter:search" class="row">
+       <div class="col-md-4">{{item.name}} </div>
+        <div class="col-md-1">{{item.id}} </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-link" ng-click="copy(item)">{{'copy' | i18n}}</button>
+            <button type="button" class="btn btn-link" ng-click="delete(item)">{{'delete' | i18n}}</button>
+            <button type="button" class="btn btn-link" ng-click="preview(item)">{{'preview' | i18n}}</button>
+
+
+        </div>
+    </div>
+   </div>
