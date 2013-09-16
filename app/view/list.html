@@ -1,33 +1,73 @@
-<div class="container ">
-    <div class="row">
-         <div class="col-md-1">
-             <button type="button" class="btn btn-primary" data-ng-click="newPlayer()">{{'new_player' | i18n}}</button>
-         </div>
-        <div class="col-md-3">
-            <form class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="{{'search' | i18n}}" ng-model="search">
-                </div>
-            </form>
+<div class="row">
+    <div class="col-md-8">
+        <div class="pull-right">
+            <button type="button" class="btn btn-primary" data-ng-click="newPlayer()">{{'new_player'| i18n}}</button>
         </div>
+        <button type="button" class="navbar-toggle" >
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <h2 class="text-muted" id="pageHeader">
+            {{title}}
+        </h2>
+        <small ng-hide="showSubTitle">
+            {{'In this page you can customize the look and the functionality of your players'|i18n}}
+        </small>
     </div>
-
+    <div class="col-md-4">
+        <form class="form-inline" role="search">
+            <input type="text" class="form-control" placeholder="{{'Search by name or tag'| i18n}}" ng-model="search">
+        </form>
+    </div>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">{{ 'Name' | i18n }}</div>
-        <div class="col-md-1">{{ 'ID' | i18n }}</div>
-        <div class="col-md-1">{{ 'Actions' | i18n }}</div>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <td class="col-md-3">{{'Preview'| i18n }}</td>
+            <td class="col-md-3">{{ 'Name' | i18n }}</td>
+            <td>{{ 'ID' | i18n }}</td>
+            <td>{{ 'Save Date' | i18n }}</td>
+            <td>{{ 'Creation Date' | i18n }}</td>
+            <td>{{ 'Actions' | i18n }}</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in data| filter:search | limitTo:perPage">
+            <td>{{item.image}} </td>
+            <td>{{item.name}} </td>
+            <td>{{item.id}} </td>
+            <td></td>
+            <td></td>
+            <td>
+                <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}</button>
+                <button type="button" class="btn btn btn-link" ng-click="delete(item)"><span class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}</button>
+                <button type="button" class="btn btn-link" ng-click="preview(item)"><span class="glyphicon glyphicon-eye-open"></span> {{'Preview'| i18n}}</button>
+                <button type="button" class="btn btn-link" ng-click="preview(item)"><span class="glyphicon glyphicon-edit"></span> {{'Update'| i18n}}</button>
+            </td>    
+        </tr>
+    </tbody>
+</table>
+<div class="row">
+    <div class="pull-right">
+        <form class="form-inline" role="form">
+            <label  class="" for="perpageSelect" ><small>Show rows:</small></label>
+            <div class="form-group">
+                <select class="form-control" id="perpageSelect" ng-model="perPage">
+                    <option >5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
+                </select>
+            </div>
+        </form>
     </div>
-    <div ng-repeat="item in data | filter:search" class="row">
-       <div class="col-md-4">{{item.name}} </div>
-        <div class="col-md-1">{{item.id}} </div>
-        <div class="col-md-1">
-            <button type="button" class="btn btn-link" ng-click="copy(item)">{{'copy' | i18n}}</button>
-            <button type="button" class="btn btn-link" ng-click="delete(item)">{{'delete' | i18n}}</button>
-            <button type="button" class="btn btn-link" ng-click="preview(item)">{{'preview' | i18n}}</button>
-
-
-        </div>
+    <div class="text-center">
+        <ul class="pagination" ng-repeat="page in pages">
+            <li><a href="#">{{page}}</a></li>
+        </ul>
+        <!--<li><a href="#">&laquo;</a></li>-->
+        <!--<li><a href="#">&raquo;</a></li>-->
     </div>
-   </div>
+</div>

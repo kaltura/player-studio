@@ -5,5 +5,8 @@
     "name":"Name",
     "id":"Id",
     "new_player":"New Player",
-    "search":"Search"
+    "search":"Search",
+    "players list":"Players list",
+    "duplicate":"Duplicate",
+    "search for":"Search for"
 }
