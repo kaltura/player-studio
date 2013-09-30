@@ -34,7 +34,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="item in data| filter:search | limitTo:perPage">
+        <tr ng-repeat="item in showPlayers()| filter:search">
             <td>{{item.image}} </td>
             <td>{{item.name}} </td>
             <td>{{item.id}} </td>
@@ -49,10 +49,10 @@
         </tr>
     </tbody>
 </table>
-<div class="row">
+<div class="row text-center">
     <div class="pull-right">
         <form class="form-inline" role="form">
-            <label  class="" for="perpageSelect" ><small>Show rows:</small></label>
+            <label  class="" for="perpageSelect" ><small>  {{data.length}} Players in total, Show </small></label>
             <div class="form-group">
                 <select class="form-control" id="perpageSelect" ng-model="perPage">
                     <option >5</option>
@@ -60,14 +60,14 @@
                     <option>15</option>
                     <option>20</option>
                 </select>
-            </div>
+            </div>  <small> per page</small>
         </form>
     </div>
-    <div class="text-center">
-        <ul class="pagination" ng-repeat="page in pages">
-            <li><a href="#">{{page}}</a></li>
-        </ul>
-        <!--<li><a href="#">&laquo;</a></li>-->
-        <!--<li><a href="#">&raquo;</a></li>-->
-    </div>
+    <ul class="pagination absolute">
+        <li><a ng-click="prevPage()" href="#">&laquo;</a></li>
+        <li ng-class="{active : page == currentPage}" ng-repeat="page in [pages]| range">
+            <a ng-click='gotoPage(page)'>{{page + 1}}</a>
+        </li>
+        <li><a ng-click="nextPage()" href="#">&raquo;</a></li>
+    </ul>
 </div>
