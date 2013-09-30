@@ -26,7 +26,7 @@ angular.module('ui.bootstrap.pagination', [])
   };
 
   this.calculateTotalPages = function() {
-    return this.itemsPerPage < 1 ? 1 : Math.ceil($scope.totalItems / this.itemsPerPage);
+    return $scope.totalItems < 1 ? 1 : Math.ceil($scope.totalItems / this.itemsPerPage);
   };
 
   this.getAttributeValue = function(attribute, defaultValue, interpolate) {

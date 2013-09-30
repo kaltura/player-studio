@@ -8,7 +8,7 @@ KMCModule.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
             resolve: {'playersData': function(PlayerService) {
-                    return PlayerService.promise
+                    return PlayerService.promise;
                 }
             }
         }

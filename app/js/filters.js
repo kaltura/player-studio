@@ -23,5 +23,14 @@ Filt.filter('range', function() {
             result.push(i);
         return result;
     };
+}).filter('startFrom', function() {
+    return function(input, start) {
+        if (input) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+        return [];
+    };
 });
+;
 
