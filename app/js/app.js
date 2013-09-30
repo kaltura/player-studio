@@ -2,7 +2,7 @@
 
 window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
-var KMCModule = angular.module('KMCModule', ['localization', 'myApp.filters']);
+var KMCModule = angular.module('KMCModule', ['localization', 'myApp.filters','ui.bootstrap.pagination']);
 KMCModule.config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/player/list', {
             templateUrl: 'view/list.html',

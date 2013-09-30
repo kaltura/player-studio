@@ -3,12 +3,12 @@
 /* Controllers */
 
 KMCModule.controller('PlayerListCtrl', ['$rootScope', '$scope', 'PlayerService', '$filter', '$routeParams', function($rootScope, $scope, PlayerService, $filter) {
-        $rootScope.lang = 'he-IL'
+        $rootScope.lang = 'en-US';
         $scope.search = '';
         $scope.data = PlayerService.getPlayers();
-        $scope.perPage = 5;
-        $scope.currentPage = 0;
-        $scope.pages = 0;
+        $scope.currentPage = 1;
+        $scope.maxSize = 5;
+        $scope.totalItems = $scope.data.length;
         $scope.title = $filter('i18n')('players list');
         $scope.showSubTitle = true;
         $scope.$watch('search', function(newValue, oldValue) {
@@ -17,24 +17,10 @@ KMCModule.controller('PlayerListCtrl', ['$rootScope', '$scope', 'PlayerService',
                 $scope.title = $filter('i18n')('search for') + ' "' + newValue + '"';
             else if (oldValue)
                 $scope.title = $filter('i18n')('players list');
-        })
-        $scope.$watch('perPage', function() {
-            $scope.pages = $scope.data.length / $scope.perPage;
         });
-        $scope.gotoPage = function(page) {
-            $scope.currentPage = page;
-        };
-        $scope.nextPage = function() {
-            if ($scope.data.length > $scope.currentPage * $scope.perPage)
-                 $scope.currentPage =  $scope.currentPage+1;
-        };
-        $scope.prevPage = function() {
-            if ($scope.currentPage > 1)
-                $scope.currentPage =  $scope.currentPage-1;
-        };
         $scope.showPlayers = function() {
-            var begin = $scope.currentPage * $scope.perPage;
-            var end = ($scope.currentPage + 1) * $scope.perPage
+            var begin = ($scope.currentPage - 1) * $scope.maxSize;
+            var end = $scope.currentPage * $scope.maxSize;
             return $scope.data.slice(begin, end);
         };
         $scope.newPlayer = function() {

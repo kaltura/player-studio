@@ -87,7 +87,7 @@ angular.module('ui.bootstrap.pagination', [])
       numPages: '='
     },
     controller: 'PaginationController',
-    templateUrl: 'template/pagination/pagination.html',
+    templateUrl: 'lib/bootstrap-ui/template/pagination/pagination.html',
     replace: true,
     link: function(scope, element, attrs, paginationCtrl) {
 

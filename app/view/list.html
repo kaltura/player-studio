@@ -52,9 +52,9 @@
 <div class="row text-center">
     <div class="pull-right">
         <form class="form-inline" role="form">
-            <label  class="" for="perpageSelect" ><small>  {{data.length}} Players in total, Show </small></label>
+            <label  class="" for="maxSizeSelect" ><small>  {{totalItems}} Players in total, Show </small></label>
             <div class="form-group">
-                <select class="form-control" id="perpageSelect" ng-model="perPage">
+                <select class="form-control" id="maxSizeSelect" ng-model="maxSize">
                     <option >5</option>
                     <option>10</option>
                     <option>15</option>
@@ -63,11 +63,5 @@
             </div>  <small> per page</small>
         </form>
     </div>
-    <ul class="pagination absolute">
-        <li><a ng-click="prevPage()" href="#">&laquo;</a></li>
-        <li ng-class="{active : page == currentPage}" ng-repeat="page in [pages]| range">
-            <a ng-click='gotoPage(page)'>{{page + 1}}</a>
-        </li>
-        <li><a ng-click="nextPage()" href="#">&raquo;</a></li>
-    </ul>
+    <pagination previous-text='&laquo;' next-text='&raquo;' page="currentPage" total-items="totalItems" items-per-page="maxSize"></pagination>
 </div>
