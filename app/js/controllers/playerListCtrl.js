@@ -11,7 +11,6 @@ KMCModule.controller('PlayerListCtrl', ['$rootScope', '$scope', 'PlayerService',
         $scope.filterd = $filter('filter')($scope.data, $scope.search);
         $scope.calculateTotalItems = function() {
             $scope.totalItems = $scope.filterd.length;
-            $scope.totalPages = Math.ceil($scope.filterd.length / $scope.maxSize);
             return $scope.totalItems;
         };
         $scope.calculateTotalItems();
@@ -26,7 +25,7 @@ KMCModule.controller('PlayerListCtrl', ['$rootScope', '$scope', 'PlayerService',
                 if (oldValue)
                     $scope.title = $filter('i18n')('players list');
             }
-          
+
             $timeout(function() {
                 $scope.calculateTotalItems();
             }, 100);
@@ -35,10 +34,10 @@ KMCModule.controller('PlayerListCtrl', ['$rootScope', '$scope', 'PlayerService',
             window.location.href = '#/player/new';
         };
         $scope.duplicate = function(item) {
+            $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
         };
         $scope.delete = function(item) {
-            $scope.data.splice(item, 1);
-            $scope.calculateTotalItems();
+            $scope.data.splice($scope.data.indexOf(item), 1);
         };
 
     }]);

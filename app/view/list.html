@@ -42,7 +42,7 @@
             <td></td>
             <td>
                 <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}</button>
-                <button type="button" class="btn btn btn-link" ng-click="delete($index)"><span class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}</button>
+                <button type="button" class="btn btn btn-link" ng-click="delete(item)"><span class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}</button>
                 <button type="button" class="btn btn-link" ng-click="preview(item)"><span class="glyphicon glyphicon-eye-open"></span> {{'Preview'| i18n}}</button>
                 <button type="button" class="btn btn-link" ng-click="preview(item)"><span class="glyphicon glyphicon-edit"></span> {{'Update'| i18n}}</button>
             </td>    
@@ -63,5 +63,5 @@
             </div>  <small> per page</small>
         </form>
     </div>
-    <pagination previous-text='&laquo;' next-text='&raquo;' page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
+    <pagination ng-class='{disabled: filtered.length >= 1 }' previous-text='&laquo;' next-text='&raquo;' page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
 </div>
