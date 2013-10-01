@@ -14,10 +14,15 @@ var KMCModule = angular.module('KMCModule',
                     }
                 }
                 );
-                $routeProvider.when('/player/new',
+                $routeProvider.when('/edit/:id',
                         {templateUrl: 'view/edit.html',
-                            controller: 'PlayerEditCtrl'});
-                //  $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: 'MyCtrl2'});
+                            controller: 'PlayerEditCtrl',
+                            resolve: {'playerData': function(PlayerService) {
+                                    return PlayerService.promise;
+                                }
+                            }
+                        }
+                );
                 $routeProvider.otherwise({redirectTo: '/list'});
             }]);
 

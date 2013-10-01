@@ -7,6 +7,7 @@ KMCModule.controller('PlayerListCtrl',
             function(PlayerService, $rootScope, $scope, $filter, $modal, $timeout, $log) {
                 $rootScope.lang = 'en-US';
                 $scope.search = '';
+                $scope.data = [];
                 $scope.data = PlayerService.getPlayers();
                 $scope.currentPage = 1;
                 $scope.maxSize = 5;

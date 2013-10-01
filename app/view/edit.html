@@ -1,15 +1,73 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-2">
-            <ul class="nav nav-pills nav-stacked">
-                <li data-ng-repeat="categorie in Categories" data-ng-click="updateCategorie(categorie)">{{categorie.name}}</li>
+<!-- Push Wrapper -->
+<div class="mp-pusher" id="mp-pusher">
+    <!-- mp-menu -->
+    <nav id="mp-menu" class="mp-menu">
+        <div class="mp-level">
+            <h2 class="icon icon-world">All Categories</h2>
+            <ul>
+                <li class="icon icon-arrow-left">
+                    <a class="icon icon-display" href="#">Basic Display</a>
+                    <div class="mp-level">
+                        <h2 class="icon icon-display">Basic Display</h2>
+                        <ul>
+                            <li class="icon icon-arrow-left">
+                                <a class="icon icon-phone" href="#">Top Overlay</a>
+                                <div class="mp-level">
+                                    <h2>Top Overlay</h2>
+                                    <ul>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" ng-model="data.topOverlay.title"> Title
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>  
+                                                <input type="checkbox" ng-model="data.topOverlay.info"> Info
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" ng-model="data.topOverlay.share"> Share
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="icon icon-arrow-left">
+                                <a class="icon icon-phone" href="#">Control Bar</a>
+                                <div class="mp-level">
+                                    <h2>Control Bar</h2>
+                                    <ul>
+                                        <li><a href="#">Volume</a></li>
+                                        <li><a href="#">Counters</a></li>
+                                        <li><a href="#">Quality(flavours)</a></li>
+                                        <li><a href="#">Fullscreen</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-4">
-
-        </div>
-    </div>
-
-</div>
+    </nav>
+    <!-- /mp-menu -->
+    <div class="scroller"><!-- this is for emulating position fixed of the nav -->
+        <div class="scroller-inner"><!-- site content goes here -->
+            <div class="jumbotron">
+                <a class="menu-trigger" id='trigger' >
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <h2 class=" inline text-muted" id="pageHeader">
+                    {{title}}
+                </h2>
+            </div> 
+            <div class="jumbotron">
+                <pre>{{data}}</pre>
+            </div>
+        </div><!-- /scroller-inner -->
+    </div><!-- /scroller -->
+</div><!-- /pusher -->
+<script>
+    new mlPushMenu(document.getElementById('mp-menu'), document.getElementById('trigger'));
+</script>
