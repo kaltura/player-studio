@@ -1,63 +1,65 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="pull-right">
-                <button type="button" class="btn btn-primary" data-ng-click="newPlayer()">{{'new_player'| i18n}}</button>
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary" data-ng-click="newPlayer()">{{'new_player'| i18n}}</button>
+                </div>
+                <h2 class="text-muted" id="pageHeader">
+                    {{title}}
+                </h2>
+                <small ng-hide="showSubTitle">
+                    {{'In this page you can customize the look and the functionality of your players'|i18n}}
+                </small>
             </div>
-            <h2 class="text-muted" id="pageHeader">
-                {{title}}
-            </h2>
-            <small ng-hide="showSubTitle">
-                {{'In this page you can customize the look and the functionality of your players'|i18n}}
-            </small>
+            <div class="col-md-4">
+                <form class="form-inline" role="search">
+                    <input type="text" class="form-control" placeholder="{{'Search by name or tag'| i18n}}" ng-model="search">
+                </form>
+            </div>
         </div>
-        <div class="col-md-4">
-            <form class="form-inline" role="search">
-                <input type="text" class="form-control" placeholder="{{'Search by name or tag'| i18n}}" ng-model="search">
-            </form>
-        </div>
-    </div>
-    <table class="table table-hover table-striped">
-        <thead>
-            <tr>
-                <td class="col-md-3">{{'Preview'| i18n }}</td>
-                <td class="col-md-3">{{ 'Name' | i18n }}</td>
-                <td>{{ 'ID' | i18n }}</td>
-                <td>{{ 'Save Date' | i18n }}</td>
-                <td>{{ 'Creation Date' | i18n }}</td>
-                <td>{{ 'Actions' | i18n }}</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
-                <td>{{item.image}} </td>
-                <td><a ng-href='#/edit/{{item.id}}'>{{item.name}}</a> </td>
-                <td>{{item.id}} </td>
-                <td></td>
-                <td></td>
-                <td>
-                    <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}</button>
-                    <button type="button" class="btn btn-link" ng-click="delete(item)"><span class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}</button>
-                    <button type="button" class="btn btn-link" ng-click="preview(item)"><span class="glyphicon glyphicon-eye-open"></span> {{'Preview'| i18n}}</button>
-                    <button type="button" class="btn btn-link" ng-click="preview(item)"><span class="glyphicon glyphicon-edit"></span> {{'Update'| i18n}}</button>
-                </td>    
-            </tr>
-        </tbody>
-    </table>
-    <div class="row text-center">
-        <div class="pull-right">
-            <form class="form-inline" role="form">
-                <label  class="" for="maxSizeSelect" ><small>  {{filtered.length}} Players in total, Show </small></label>
-                <div class="form-group">
-                    <select class="form-control" id="maxSizeSelect" ng-model="maxSize">
-                        <option >5</option>
-                        <option>10</option>
-                        <option>15</option>
-                        <option>20</option>
-                    </select>
-                </div>  <small> per page</small>
-            </form>
-        </div>
-        <pagination ng-class='{disabled: filtered.length >= 1 }' previous-text='&laquo;' next-text='&raquo;' page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <td class="col-md-3">{{'Preview'| i18n }}</td>
+                    <td class="col-md-3">{{ 'Name' | i18n }}</td>
+                    <td>{{ 'ID' | i18n }}</td>
+                    <td>{{ 'Save Date' | i18n }}</td>
+                    <td>{{ 'Creation Date' | i18n }}</td>
+                    <td>{{ 'Actions' | i18n }}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
+                    <td>{{item.image}} </td>
+                    <td><a ng-href='#/edit/{{item.id}}'>{{item.name}}</a> </td>
+                    <td>{{item.id}} </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}</button>
+                        <button type="button" class="btn btn-link" ng-click="delete(item)"><span class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}</button>
+                        <button type="button" class="btn btn-link" ng-click="preview(item)"><span class="glyphicon glyphicon-eye-open"></span> {{'Preview'| i18n}}</button>
+                        <button type="button" class="btn btn-link" ng-click="preview(item)"><span class="glyphicon glyphicon-edit"></span> {{'Update'| i18n}}</button>
+                    </td>    
+                </tr>
+            </tbody>
+        </table>
+        <div class="row text-center">
+            <div class="pull-right">
+                <form class="form-inline" role="form">
+                    <label  class="" for="maxSizeSelect" ><small>  {{filtered.length}} Players in total, Show </small></label>
+                    <div class="form-group">
+                        <select class="form-control" id="maxSizeSelect" ng-model="maxSize">
+                            <option >5</option>
+                            <option>10</option>
+                            <option>15</option>
+                            <option>20</option>
+                        </select>
+                    </div>  <small> per page</small>
+                </form>
+            </div>
+            <pagination ng-class='{disabled: filtered.length >= 1 }' previous-text='&laquo;' next-text='&raquo;' page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
+        </div>  
     </div>
 </div>

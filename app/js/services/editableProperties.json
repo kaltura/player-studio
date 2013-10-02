@@ -1,25 +1,32 @@
-{
-    "basicDisplay": {"label": "Basic Display",
-        "type": "menu",
-        "children":
-                {"topOverlay":
-                            {"label": "Top overlay",
-                                "type": "menu",
-                                "children": {
-                                    "title": {"label": "Title", "type": "checkbox", "default": true},
-                                    "info": {"label": "Info", "type": "checkbox", "default": true},
-                                    "share": {"label": "Share", "type": "checkbox", "default": true}
-                                }
-                            }
-                    , "controlBar": {"label": "Control Bar",
-                        "type": "menu",
-                        "children": {
-                            "volume": {"label": "Volume", "type": "checkbox", "default": true},
-                            "counters": {"label": "Counters", "type": "checkbox", "default": false},
-                            "quality": {"label": "Quality", "type": "checkbox", "default": true},
-                            "fullscreen": {"label": "Fullscreen", "type": "checkbox", "default": true}
-                        }
-                    }
+{"properties":
+            [
+                {"label": "Basic Display",
+                    "type": "menu",
+                    "model": "basicDisplay",
+                    "children": [
+                        {"label": "Top overlay",
+                            "type": "menu",
+                            "model": "topOverlay",
+                            "children": [
+                                {"label": "Title", "type": "checkbox", "default": true, "model": "title"},
+                                {"label": "Info", "type": "checkbox", "default": true, "model": "info"},
+                                {"label": "Share", "type": "checkbox", "default": true, "model": "share"}
+                            ]
+                        },
+                        {"label": "Control Bar",
+                            "type": "menu",
+                            "model": "controlBar",
+                            "children":
+                                    [
+                                        {"label": "Volume", "type": "checkbox", "default": true, "model": "volume"},
+                                        {"label": "Counters", "type": "checkbox", "default": false, "model": "counters"},
+                                        {"label": "Quality", "type": "checkbox", "default": true, "model": "quality"},
+                                        {"label": "Fullscreen", "type": "checkbox", "default": true, "model": "fullscreen"}
+
+                                    ]
+
+                        }]
                 }
-    }
+
+            ]
 }

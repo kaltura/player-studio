@@ -3,7 +3,7 @@
 window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
-        ['localization', 'KMC.controllers', 'KMC.filters', 'KMC.services', 'ui.bootstrap'])
+        ['localization', 'KMC.controllers', 'KMC.filters', 'KMC.services', 'KMC.directives', 'ui.bootstrap'])
         .config(['$routeProvider', function($routeProvider) {
                 $routeProvider.when('/list', {
                     templateUrl: 'view/list.html',
@@ -17,8 +17,12 @@ var KMCModule = angular.module('KMCModule',
                 $routeProvider.when('/edit/:id',
                         {templateUrl: 'view/edit.html',
                             controller: 'PlayerEditCtrl',
-                            resolve: {'playerData': function(PlayerService) {
+                            resolve: {
+                                'playerData': function(PlayerService) {
                                     return PlayerService.promise;
+                                },
+                                'editProperties': function(editableProperties) {
+                                    return editableProperties.promise;
                                 }
                             }
                         }

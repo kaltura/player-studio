@@ -4,51 +4,7 @@
     <nav id="mp-menu" class="mp-menu">
         <div class="mp-level">
             <h2 class="icon icon-world">All Categories</h2>
-            <ul>
-                <li class="icon icon-arrow-left">
-                    <a class="icon icon-display" href="#">Basic Display</a>
-                    <div class="mp-level">
-                        <h2 class="icon icon-display">Basic Display</h2>
-                        <ul>
-                            <li class="icon icon-arrow-left">
-                                <a class="icon icon-phone" href="#">Top Overlay</a>
-                                <div class="mp-level">
-                                    <h2>Top Overlay</h2>
-                                    <ul>
-                                        <li>
-                                            <label>
-                                                <input type="checkbox" ng-model="data.topOverlay.title"> Title
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label>  
-                                                <input type="checkbox" ng-model="data.topOverlay.info"> Info
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label>
-                                                <input type="checkbox" ng-model="data.topOverlay.share"> Share
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="icon icon-arrow-left">
-                                <a class="icon icon-phone" href="#">Control Bar</a>
-                                <div class="mp-level">
-                                    <h2>Control Bar</h2>
-                                    <ul>
-                                        <li><a href="#">Volume</a></li>
-                                        <li><a href="#">Counters</a></li>
-                                        <li><a href="#">Quality(flavours)</a></li>
-                                        <li><a href="#">Fullscreen</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
+            <navmenu data='editProperties'/>
         </div>
     </nav>
     <!-- /mp-menu -->
@@ -61,6 +17,7 @@
                 <h2 class=" inline text-muted" id="pageHeader">
                     {{title}}
                 </h2>
+                <p>use the menu (3 bars icon) to navigate through editable properties.</p>
             </div> 
             <div class="jumbotron">
                 <pre>{{data}}</pre>
@@ -69,5 +26,8 @@
     </div><!-- /scroller -->
 </div><!-- /pusher -->
 <script>
-    new mlPushMenu(document.getElementById('mp-menu'), document.getElementById('trigger'));
+    setTimeout(function() {
+        new mlPushMenu(document.getElementById('mp-menu'), document.getElementById('trigger'));
+    }, 500);
+    ;
 </script>

@@ -10,12 +10,12 @@
     "tags": null,
     "createdAt": 1355392741,
     "updatedAt": 1355392741,
-    "topOverlay": {
-        "title": true,
-        "share": true,
-        "info": true},
-    "controlBar": {
-        "volume": true, "counters": true, "quality": true, "fullscreen": true}
-
-
+    "basicDisplay": {
+        "topOverlay": {
+            "title": true,
+            "share": true,
+            "info": true},
+        "controlBar": {
+            "volume": true, "counters": true, "quality": true, "fullscreen": true}
+    }
 }
