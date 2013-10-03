@@ -1,6 +1,6 @@
 'use strict';
 /* Directives */
-angular.module('KMC.directives', []).
+angular.module('KMC.directives', ['colorpicker.module']).
         directive('navmenu', function($compile) {
             return  {
                 template: "<ul ng-transclude=''></ul>",
@@ -34,6 +34,13 @@ angular.module('KMC.directives', []).
                                     newChecbox.attr('model', subModelStr);
                                     $compile(newChecbox)($scope).appendTo(subappendPos);
                                 }
+                                else if (subitem.type === 'colorinput') {
+                                    var newColorbox = angular.element('<color-input/>');
+                                    newColorbox.attr('label', subitem.label);
+                                    var subModelStr = modelStr + '.' + subitem.model;
+                                    newColorbox.attr('model', subModelStr);
+                                    $compile(newColorbox)($scope).appendTo(subappendPos);
+                                }
                                 else if (subitem.type === 'menu') {
                                     renderMenuItems(subitem, parent);
                                 }
@@ -45,6 +52,12 @@ angular.module('KMC.directives', []).
                             newChecbox.attr('model', item.model);
                             $compile(newChecbox)($scope).appendTo(originAppendPos);
                         }
+                        else if (item.type === 'colorinput') {
+                            var newColorbox = angular.element('<color-input/>');
+                            newColorbox.attr('label', item.label);
+                            newColorbox.attr('model', item.model);
+                            $compile(newColorbox)($scope).appendTo(originAppendPos);
+                        }
                     }
                     console.log($scope);
                     for (var i = 0; i < $scope.editProperties.length; i++) {
@@ -55,8 +68,21 @@ angular.module('KMC.directives', []).
                     };
                 }
             };
-        }).
-        directive('modelchecbox', function() {
+        }).directive('colorInput', function() {
+    return  {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            class: '@',
+            label: '@',
+            model: '='
+        },
+        template: '<label>{{label}} \n\
+                                <input colorpicker class="{{class}}" type="text" ng-model="model" />\n\
+                            </label>'
+    };
+})
+        .directive('modelchecbox', function() {
             return  {
                 template: "<label><input type='checkbox' ng-model='model'>{{label}}</label>",
                 replace: true,
