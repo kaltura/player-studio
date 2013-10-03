@@ -61,8 +61,8 @@
 		this.el = el;
 		this.trigger = trigger;
 		this.options = extend( this.defaults, options );
-		// support 3d transforms
-		this.support = Modernizr.csstransforms3d;
+		// support changed to 2d transforms // NadavSInai
+		this.support = Modernizr.csstransforms;
 		if( this.support ) {
 			this._init();
 		}
