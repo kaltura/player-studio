@@ -32,7 +32,7 @@
             <tbody>
                 <tr ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
                     <td>{{item.image}} </td>
-                    <td><a ng-href='#/edit/{{item.id}}'>{{item.name}}</a> </td>
+                    <td><a ng-href='/edit/{{item.id}}'>{{item.name}}</a> </td>
                     <td>{{item.id}} </td>
                     <td></td>
                     <td></td>

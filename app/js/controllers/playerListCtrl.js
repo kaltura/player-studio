@@ -3,12 +3,11 @@
 /* Controllers */
 
 KMCModule.controller('PlayerListCtrl',
-        ['PlayerService', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log',
-            function(PlayerService, $rootScope, $scope, $filter, $modal, $timeout, $log) {
+        ['playersData','$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log',
+            function(playersData,$location, $rootScope, $scope, $filter, $modal, $timeout, $log) {
                 $rootScope.lang = 'en-US';
                 $scope.search = '';
-                $scope.data = [];
-                $scope.data = PlayerService.getPlayers();
+                $scope.data = playersData.data.objects;
                 $scope.currentPage = 1;
                 $scope.maxSize = 5;
                 $scope.filterd = $filter('filter')($scope.data, $scope.search);
@@ -34,7 +33,7 @@ KMCModule.controller('PlayerListCtrl',
                     }, 100);
                 });
                 $scope.newPlayer = function() {
-                    window.location.href = '#/player/new';
+                   $location.path('#/player/new');
                 };
                 $scope.duplicate = function(item) {
                     $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);

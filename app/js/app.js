@@ -3,27 +3,27 @@
 window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
-        ['localization', 'KMC.controllers', 'KMC.filters', 'KMC.services', 'KMC.directives', 'ui.bootstrap'])
-        .config(['$routeProvider', function($routeProvider) {
+        ['localization', 'KMC.controllers', 'KMC.filters', 'KMC.services', 'KMC.directives', 'ui.bootstrap']);
+        
+        KMCModule.config(['$routeProvider','$locationProvider', function($routeProvider,$locationProvider) {
+                $locationProvider.html5Mode(true);
                 $routeProvider.when('/list', {
-                    templateUrl: 'view/list.html',
+                    templateUrl: '/view/list.html',
                     controller: 'PlayerListCtrl',
                     resolve: {'playersData': function(PlayerService) {
-                            return PlayerService.promise;
+                            return PlayerService.getPlayers();
                         }
                     }
                 }
                 );
                 $routeProvider.when('/edit/:id',
-                        {templateUrl: 'view/edit.html',
+                        {templateUrl: '/view/edit.html',
                             controller: 'PlayerEditCtrl',
                             resolve: {
-                                'playerData': function(PlayerService) {
-                                    return PlayerService.promise;
+                                'PlayerData': function(PlayerService, $route) {
+                                    return  PlayerService.getPlayer($route.current.params.id);
                                 },
-                                'editProperties': function(editableProperties) {
-                                    return editableProperties.promise;
-                                }
+                                'editProperties': 'editableProperties'
                             }
                         }
                 );
