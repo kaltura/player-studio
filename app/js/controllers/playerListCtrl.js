@@ -50,7 +50,7 @@ KMCModule.controller('PlayerListCtrl',
                 'design may be lost. (read more about upgrading players)');
             $scope.goToEditPage = function (item) {
                 if (!$scope.checkVersionNeedsUpgrade(item.version)) {
-                    return  $window.location.href = '/edit/' + item.id;
+                    return  $window.location.href = 'edit/' + item.id;
                 } else {
                     var modal = $modal.open({
                         templateUrl: 'template/dialog/message.html',
