@@ -249,7 +249,7 @@ html,body,body > section, .scroller {
 	transition: background 0.3s;
 }
  
-.mp-back::after { 
+.mp-back::after {  
 	font-family: 'linecons';
 	position: absolute;
 	content: "\e037";

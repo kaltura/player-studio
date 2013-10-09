@@ -1,33 +1,95 @@
-{"properties":
-            [
-                {"label": "Basic Display",
-                    "type": "menu",
-                    "model": "basicDisplay",
-                    "children": [
-                        {"label": "Top overlay",
-                            "type": "menu",
-                            "model": "topOverlay",
-                            "children": [
-                                {"label": "Title", "type": "checkbox", "default": true, "model": "title"},
-                                {"label": "Info", "type": "checkbox", "default": true, "model": "info"},
-                                {"label": "Share", "type": "checkbox", "default": true, "model": "share"},
-                                {"label": "Color", "type": "colorinput", "default": "#fff", "model": "color"}
-                            ]
-                        },
-                        {"label": "Control Bar",
-                            "type": "menu",
-                            "model": "controlBar",
-                            "children":
-                                    [
-                                        {"label": "Volume", "type": "checkbox", "default": true, "model": "volume"},
-                                        {"label": "Counters", "type": "checkbox", "default": false, "model": "counters"},
-                                        {"label": "Quality", "type": "checkbox", "default": true, "model": "quality"},
-                                        {"label": "Fullscreen", "type": "checkbox", "default": true, "model": "fullscreen"}
+{"properties": [
+    {
+        "label": "Basic Display",
+        "type": "menu",
+        "model": "basicDisplay",
+        "children": [
+            {
+                "label": "Top overlay",
+                "type": "menu",
+                "model": "topOverlay",
+                "children": [
+                    {
+                        "label": "Title",
+                        "type": "checkbox",
+                        "default": true,
+                        "model": "title"
+                    },
+                    {
+                        "label": "Info",
+                        "type": "checkbox",
+                        "default": true,
+                        "model": "info"
+                    },
+                    {
+                        "label": "Share",
+                        "type": "checkbox",
+                        "default": true,
+                        "model": "share"
+                    },
+                    {
+                        "label": "Color",
+                        "type": "colorinput",
+                        "default": "#fff",
+                        "model": "color"
+                    }
+                ]
+            },
+            {
+                "label": "Control Bar",
+                "type": "menu",
+                "model": "controlBar",
+                "children": [
+                    {
+                        "label": "Volume",
+                        "type": "checkbox",
+                        "default": true,
+                        "model": "volume"
+                    },
+                    {
+                        "label": "Size",
+                        "type": "select",
+                        "default":"0",
+                        "options": [
+                            {
+                               "label":"None",
+                               "value":"0"
+                            },
+                            {
+                               "label":"Normal & Big",
+                               "value":"1"
+                            },
+                            {
+                               "label":"Small,Normal & Big",
+                               "value":"2"
+                            }
+                        ],
+                        "model": "size"
+                    },
+                    {
+                        "label": "Counters",
+                        "type": "checkbox",
+                        "default": false,
+                        "model": "counters"
+                    },
+                    {
+                        "label": "Quality",
+                        "type": "checkbox",
+                        "default": true,
+                        "model": "quality"
+                    },
+                    {
+                        "label": "Fullscreen",
+                        "type": "checkbox",
+                        "default": true,
+                        "model": "fullscreen"
+                    }
 
-                                    ]
+                ]
 
-                        }]
-                }
+            }
+        ]
+    }
 
-            ]
+]
 }

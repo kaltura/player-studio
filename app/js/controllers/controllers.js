@@ -4,7 +4,7 @@
 //
 angular.module('KMC.controllers', [])
         .controller('ModalInstanceCtrl',
-                function($scope, $modalInstance, settings) {
+                function($scope, $modalInstance, settings,$compile) {
                     $scope.title = '';
                     $scope.message = '';
                     $scope.buttons = [{result: false, label: 'Cancel', cssClass: 'btn-default'}, {result: true, label: 'OK', cssClass: 'btn-primary'}];
@@ -12,7 +12,6 @@ angular.module('KMC.controllers', [])
                     $scope.close = function(result) {
                         $modalInstance.close(result);
                     };
-
                     $scope.cancel = function() {
                         $modalInstance.dismiss('cancel');
                     };

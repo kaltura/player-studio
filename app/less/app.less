@@ -1,34 +1,74 @@
 /* app stylesheet */
 .menu {
-    list-style: none;
-    border-bottom: 0.1em solid black;
-    margin-bottom: 2em;
-    padding: 0 0 0.5em;
-    &:before {
-      content: "[";
-    }
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+  &:before {
+    content: "[";
+  }
 
-    &:after {
-      content: "]";
+  &:after {
+    content: "]";
+  }
+  > li {
+    display: inline;
+    &:before {
+      content: "|";
+      padding-right: 0.3em;
     }
-    > li {
-     display: inline;
-        &:before {
-          content: "|";
-          padding-right: 0.3em;
-         }
-    }   
-    > li:nth-child(1):before {
-     content: "";
-     padding: 0;
-   }
+  }
+  > li:nth-child(1):before {
+    content: "";
+    padding: 0;
+  }
 
 }
+
+.playerThumb {
+  width: 300px;
+}
+
+#playerList tr td {
+  .alert {
+    padding: 0;
+    margin: 0;
+    display: block;
+    font-size: 75%;
+  }
+  &.actionBtns {
+    button {
+      width: 100px;
+    }
+    i {
+      padding-left: 20px;
+      color:green;
+    }
+  }
+}
+
 /* for bootstrap Angular UI*/
-.nav, .pagination, .carousel a { cursor: pointer; }
+.nav, .pagination, .carousel a {
+  cursor: pointer;
+}
+
 /* helper classes*/
-.noMargin{margin:0;}
-#pageHeader{margin-top:5px;}
-.absolute{position:absolute;}
-.inline {display:inline;}
-.relative{position:relative;}
+.noMargin {
+  margin: 0;
+}
+
+#pageHeader {
+  margin-top: 5px;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.inline {
+  display: inline;
+}
+
+.relative {
+  position: relative;
+}
