@@ -58,7 +58,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
                                     case 'select' :
                                         renderFormElement(subitem, '<model-select/>', subappendPos, modelStr);
                                         break;
-                                    case 'colorinput' :
+                                    case 'color' :
                                         renderFormElement(subitem, '<model-color/>', subappendPos, modelStr);
                                         break;
                                     case 'number':
@@ -102,7 +102,8 @@ angular.module('KMC.directives', ['colorpicker.module']).
                 model: '='
             },
             template: '<label>{{label}} \n\
-                                <input colorpicker class="{{class}}" type="text" ng-model="model" />\n\
+                                <input colorpicker class="colorinput {{class}}" type="text" ng-model="model" />\n\
+                                <span class="colorExample" style="background-color: {{model}}"></span>\n\
                             </label>'
         };
     }).directive('modelSelect',function () {

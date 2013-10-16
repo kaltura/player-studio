@@ -10,6 +10,19 @@ nav li label input,
 nav li label select {
   float: right;
 }
+.colorinput {
+  width: 50px;
+}
+.colorExample {
+  display: block;
+  width: 25px;
+  height: 25px;
+  float: right;
+  border: grey;
+  margin-right: 10px;
+  background-color: azure;
+  outline: 3px double black;
+}
 #playerList tr td .alert {
   padding: 0;
   margin: 0;
