@@ -1,29 +1,14 @@
 /* app stylesheet */
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
-}
-.menu:before { 
-  content: "[";
-}
-.menu:after {
-  content: "]";
-}
-.menu > li {
-  display: inline;
-}
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+body,
+.jumbotron {
+  font-size: 16px;
 }
 .playerThumb {
-  width: 300px; 
+  width: 300px;
+}
+nav li label input,
+nav li label select {
+  float: right;
 }
 #playerList tr td .alert {
   padding: 0;
@@ -33,10 +18,9 @@
 }
 #playerList tr td.actionBtns button {
   width: 100px;
-  text-align: left;
 }
 #playerList tr td.actionBtns i {
-  padding-left: 10%;
+  padding-left: 20px;
   color: green;
 }
 /* for bootstrap Angular UI*/

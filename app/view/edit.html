@@ -5,29 +5,32 @@
         <div class="mp-level">
             <h2 class="icon icon-world">All Categories</h2>
             <navmenu data="data.settings" edit-properties='editProperties'>
-            </navmenu>     
+            </navmenu>
         </div>
     </nav>
     <!-- /mp-menu -->
     <div class="scroller"><!-- this is for emulating position fixed of the nav -->
         <div class="scroller-inner"><!-- site content goes here -->
             <div class="jumbotron">
-                <a class="menu-trigger" id='trigger' >
+                <a class="menu-trigger" id='trigger'>
                     <span class="sr-only">Toggle navigation</span>
                 </a>
+
                 <h2 class=" inline text-muted" id="pageHeader">
                     {{title}}
                 </h2>
                 <p>use the menu (3 bars icon) to navigate through editable properties.</p>
-            </div> 
-            <div class="jumbotron">
+            </div>
+            <div class="container">
                 <pre>{{data}}</pre>
             </div>
-        </div><!-- /scroller-inner -->
-    </div><!-- /scroller -->
+        </div>
+        <!-- /scroller-inner -->
+    </div>
+    <!-- /scroller -->
 </div><!-- /pusher -->
 <script>
-    setTimeout(function() {
+    setTimeout(function () {
         new mlPushMenu(document.getElementById('mp-menu'), document.getElementById('trigger'));
     }, 500);
     ;

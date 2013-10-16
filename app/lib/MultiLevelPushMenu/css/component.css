@@ -203,7 +203,7 @@ html,body,body > section, .scroller {
 	outline: none;
 	box-shadow: inset 0 -1px rgba(0,0,0,0.2);
 	text-shadow: 0 0 1px rgba(255,255,255,0.1);
-	font-size: 1.4em;
+
 	-webkit-transition: background 0.3s, box-shadow 0.3s;
 	-moz-transition: background 0.3s, box-shadow 0.3s;
 	transition: background 0.3s, box-shadow 0.3s;
@@ -214,7 +214,7 @@ html,body,body > section, .scroller {
 	left: 10px;
 	z-index: -1;
 	color: rgba(0,0,0,0.2);
-	line-height: 3.5;
+	line-height: 2.6;
 }
 
 .mp-level > ul > li:first-child > a,.mp-level > ul > li:first-child label {

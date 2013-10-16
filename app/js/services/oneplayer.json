@@ -18,8 +18,9 @@
                 "info": true,
                 "color": "#fff"},
             "controlBar": {
-                "volume": true, "counters": true, "quality": true, "fullscreen": true
+                "volume": true,"size": 1, "initialvolume":"80","counters": true, "quality": true, "fullscreen": true
             }
+
 
         }
     }

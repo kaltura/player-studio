@@ -29,7 +29,7 @@
                     },
                     {
                         "label": "Color",
-                        "type": "colorinput",
+                        "type": "color",
                         "default": "#fff",
                         "model": "color"
                     }
@@ -47,21 +47,30 @@
                         "model": "volume"
                     },
                     {
+                        "label": "Initial Volume",
+                        "type": "number",
+                        "default": 80,
+                        "model": "initialvolume",
+                        "from" : 0,
+                        "to": 100,
+                        "stepsize":5
+                    },
+                    {
                         "label": "Size",
                         "type": "select",
                         "default":"0",
                         "options": [
                             {
                                "label":"None",
-                               "value":"0"
+                               "value":0
                             },
                             {
                                "label":"Normal & Big",
-                               "value":"1"
+                               "value":1
                             },
                             {
                                "label":"Small,Normal & Big",
-                               "value":"2"
+                               "value":2
                             }
                         ],
                         "model": "size"
