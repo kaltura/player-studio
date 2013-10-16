@@ -65,6 +65,7 @@
 		this.support = Modernizr.csstransforms;
 		if( this.support ) {
 			this._init();
+            this._openMenu();
 		}
 	}
 

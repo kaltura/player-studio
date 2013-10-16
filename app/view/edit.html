@@ -3,7 +3,7 @@
     <!-- mp-menu -->
     <nav id="mp-menu" class="mp-menu">
         <div class="mp-level">
-            <h2 class="icon icon-world">All Categories</h2>
+            <h2 class="icon icon-display">Edit Player</h2>
             <navmenu data="data.settings" edit-properties='editProperties'>
             </navmenu>
         </div>
@@ -19,6 +19,7 @@
                 <h2 class=" inline text-muted" id="pageHeader">
                     {{title}}
                 </h2>
+
                 <p>use the menu (3 bars icon) to navigate through editable properties.</p>
             </div>
             <div class="container">
@@ -32,6 +33,7 @@
 <script>
     setTimeout(function () {
         new mlPushMenu(document.getElementById('mp-menu'), document.getElementById('trigger'));
+
     }, 500);
-    ;
+
 </script>

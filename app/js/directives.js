@@ -15,7 +15,8 @@ angular.module('KMC.directives', ['colorpicker.module']).
                 data: '='
             },
             link: function ($scope, $element, $attrs) {
-                function renderFormElement(item, directive, appendTo, parentModel) {
+
+               function renderFormElement(item, directive, appendTo, parentModel) {
                     var elm = angular.element(directive);
                     angular.forEach(item, function (value, key) {
                         if (key != 'model' && (typeof value == 'string' || typeof value == 'number')) {
@@ -31,11 +32,10 @@ angular.module('KMC.directives', ['colorpicker.module']).
                         elm.attr('model', subModelStr);
                     }
                     else {
-                        elm.attr('model', item.model);
+                        elm.attr('model', 'data.'+item.model);
                     }
+                    elm = $('<li/>').html(elm);
                     var compiled = $compile(elm)($scope).appendTo(appendTo);
-
-
                     return compiled;
                 }
 
@@ -47,7 +47,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
                         case  'menu':
                             var originModel = origin.attr('model') ? origin.attr('model') + '.' : 'data';
                             var parent = renderFormElement(item, '<menu-level/>', originAppendPos, originModel);
-                            var modelStr = originModel + item.model;
+                            var modelStr = originModel + '.'+ item.model;
                             for (var j = 0; j < item.children.length; j++) {
                                 var subitem = item.children[j];
                                 var subappendPos = parent.find('ul[ng-transclude]:first');
@@ -64,6 +64,9 @@ angular.module('KMC.directives', ['colorpicker.module']).
                                     case 'number':
                                         renderFormElement(subitem, '<model-number/>', subappendPos, modelStr);
                                         break;
+                                    case 'text':
+                                        renderFormElement(subitem, '<model-text/>', subappendPos, modelStr);
+                                        break;
                                     case 'menu':
                                         renderMenuItems(subitem, parent);
                                         break;
@@ -78,6 +81,9 @@ angular.module('KMC.directives', ['colorpicker.module']).
                             break;
                         case 'color' :
                             renderFormElement(item, '<model-color/>', originAppendPos);
+                            break;
+                        case 'text' :
+                            renderFormElement(item, '<model-text/>', originAppendPos);
                             break;
                         case 'number':
                             renderFormElement(item, '<model-number/>', originAppendPos);
@@ -105,6 +111,16 @@ angular.module('KMC.directives', ['colorpicker.module']).
                                 <input colorpicker class="colorinput {{class}}" type="text" ng-model="model" />\n\
                                 <span class="colorExample" style="background-color: {{model}}"></span>\n\
                             </label>'
+        };
+    }).directive('modelText',function () {
+        return {
+            replace: true,
+            restrict: 'E',
+            scope: {
+                label: "@",
+                model: "="
+            },
+            template: "<label><input type='text' ng-model='model'/>{{label}}</label>"
         };
     }).directive('modelSelect',function () {
         return {
@@ -194,8 +210,8 @@ angular.module('KMC.directives', ['colorpicker.module']).
                 if (typeof $scope.model != 'undefined') {
                     $scope.initvalue = $scope.model;
                 } else {
-                    if (!$attrs.default) $scope.initvalue = 1;
-                    else  $scope.initvalue = $attrs.default;
+                    if (!$attrs['default']) $scope.initvalue = 1;
+                    else  $scope.initvalue = $attrs['default'];
                 }
 
             }
@@ -206,7 +222,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
             template: "<li class='icon icon-arrow-left'>\n\
                     <a class='icon icon-phone' href='#'>{{label}}</a>\n\
                     <div class='mp-level'>\n\
-                        <h2>{{label}}</h2>\n\
+                        <h2 class='icon icon-arrow-right-3'>{{label}}</h2>\n\
                         <ul ng-transclude=''>\n\
                         </ul>\n\
                     </div>\n\

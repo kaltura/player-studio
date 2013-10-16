@@ -3,6 +3,10 @@ body,
 .jumbotron {
   font-size: 16px;
 }
+.scroller-inner > .container {
+  margin: auto;
+  max-width: 95%;
+}
 .playerThumb {
   width: 300px;
 }

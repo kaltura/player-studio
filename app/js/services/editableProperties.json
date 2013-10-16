@@ -1,5 +1,11 @@
 {"properties": [
     {
+        "label": "Player Display Name",
+        "type": "text",
+        "model": "name",
+        "default": "New Player"
+    },
+    {
         "label": "Basic Display",
         "type": "menu",
         "model": "basicDisplay",
@@ -51,26 +57,26 @@
                         "type": "number",
                         "default": 80,
                         "model": "initialvolume",
-                        "from" : 0,
+                        "from": 0,
                         "to": 100,
-                        "stepsize":5
+                        "stepsize": 5
                     },
                     {
                         "label": "Size",
                         "type": "select",
-                        "default":"0",
+                        "default": "0",
                         "options": [
                             {
-                               "label":"None",
-                               "value":0
+                                "label": "None",
+                                "value": 0
                             },
                             {
-                               "label":"Normal & Big",
-                               "value":1
+                                "label": "Normal & Big",
+                                "value": 1
                             },
                             {
-                               "label":"Small,Normal & Big",
-                               "value":2
+                                "label": "Small,Normal & Big",
+                                "value": 2
                             }
                         ],
                         "model": "size"
