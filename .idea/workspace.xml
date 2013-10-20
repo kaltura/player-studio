@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d877535d-c9b4-44e1-a38a-199f8ba1930c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/css/app.css" afterPath="$PROJECT_DIR$/app/css/app.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/less/app.less" afterPath="$PROJECT_DIR$/app/less/app.less" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/lib/MultiLevelPushMenu/css/component.css" afterPath="$PROJECT_DIR$/app/lib/MultiLevelPushMenu/css/component.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/directives.js" afterPath="$PROJECT_DIR$/app/js/directives.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/view/edit.html" afterPath="$PROJECT_DIR$/app/view/edit.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/services/editableProperties.json" afterPath="$PROJECT_DIR$/app/js/services/editableProperties.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/lib/MultiLevelPushMenu/js/mlpushmenu.js" afterPath="$PROJECT_DIR$/app/lib/MultiLevelPushMenu/js/mlpushmenu.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/services/oneplayer.json" afterPath="$PROJECT_DIR$/app/js/services/oneplayer.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/controllers/playerEditCtrl.js" afterPath="$PROJECT_DIR$/app/js/controllers/playerEditCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="1e6dc897-6bbc-41ce-9c67-12d321cf5e4d" name="ignore" comment="" />
@@ -40,7 +35,7 @@
       <file leaf-file-name="app.less" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/less/app.less">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="14" selection-start="170" selection-end="170" vertical-scroll-proportion="-7.096774" vertical-offset="0" max-vertical-offset="1694">
+            <state line="10" column="14" selection-start="170" selection-end="170" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1386">
               <folding />
             </state>
           </provider>
@@ -49,37 +44,41 @@
       <file leaf-file-name="editableProperties.json" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/js/services/editableProperties.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="99" column="34" selection-start="3388" selection-end="3388" vertical-scroll-proportion="-8.535714" vertical-offset="1700" max-vertical-offset="2552">
+            <state line="1" column="5" selection-start="7" selection-end="7" vertical-scroll-proportion="-0.6666667" vertical-offset="0" max-vertical-offset="2052">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="directives.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="directives.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/js/directives.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="68" selection-start="3301" selection-end="3301" vertical-scroll-proportion="0.33261338" vertical-offset="1254" max-vertical-offset="5346">
+            <state line="60" column="46" selection-start="3201" selection-end="3201" vertical-scroll-proportion="-12.0" vertical-offset="756" max-vertical-offset="4338">
               <folding>
-                <marker date="1381954460663" expanded="true" signature="5217:5346" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="5217:5377" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="5217:5488" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="5413:5440" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9288:9468" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9288:9445" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9288:9622" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9407:9468" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9407:9445" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-                <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
+                <marker date="1382281215069" expanded="true" signature="5236:5507" placeholder="..." />
+                <marker date="1382281215069" expanded="false" signature="5432:5459" placeholder="..." />
+                <marker date="1382281215069" expanded="true" signature="9295:9629" placeholder="..." />
+                <marker date="1382281215069" expanded="true" signature="9414:9604" placeholder="..." />
+                <marker date="1382281215069" expanded="true" signature="9541:9574" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="services.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/js/services/services.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="396">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="playerEditCtrl.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/js/controllers/playerEditCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="41" selection-start="369" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="324">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -87,16 +86,16 @@
       <file leaf-file-name="edit.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/view/edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="21" selection-start="357" selection-end="357" vertical-scroll-proportion="-7.096774" vertical-offset="0" max-vertical-offset="968">
+            <state line="6" column="40" selection-start="243" selection-end="251" vertical-scroll-proportion="-4.0" vertical-offset="0" max-vertical-offset="792">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="oneplayer.json" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="oneplayer.json" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/js/services/oneplayer.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="30" selection-start="417" selection-end="417" vertical-scroll-proportion="-10.645162" vertical-offset="0" max-vertical-offset="704">
+            <state line="4" column="30" selection-start="0" selection-end="661" vertical-scroll-proportion="0.18227848" vertical-offset="0" max-vertical-offset="576">
               <folding />
             </state>
           </provider>
@@ -135,7 +134,6 @@
         <option value="$PROJECT_DIR$/app/js/app.js" />
         <option value="$PROJECT_DIR$/app/js/controllers/playerListCtrl.js" />
         <option value="$PROJECT_DIR$/app/index.html" />
-        <option value="$PROJECT_DIR$/app/js/controllers/playerEditCtrl.js" />
         <option value="$PROJECT_DIR$/app/template/spinedit/spinedit.html" />
         <option value="$PROJECT_DIR$/app/lib/spinedit/css/bootstrap-spinedit.css" />
         <option value="$PROJECT_DIR$/app/css/app.css" />
@@ -145,16 +143,16 @@
         <option value="$PROJECT_DIR$/app/less/app.less" />
         <option value="$PROJECT_DIR$/app/view/edit.html" />
         <option value="$PROJECT_DIR$/app/js/services/editableProperties.json" />
+        <option value="$PROJECT_DIR$/app/js/controllers/playerEditCtrl.js" />
         <option value="$PROJECT_DIR$/app/js/directives.js" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1696" />
-    <option name="height" value="1036" />
+    <option name="x" value="-1" />
+    <option name="width" value="1442" />
+    <option name="height" value="901" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -182,7 +180,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -297,26 +294,71 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="appStudio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="player-studio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="appStudio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="player-studio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="63" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="63" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="63" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="recentsLimit" value="5" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="63" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="609" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="597" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="609" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="59" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="55" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -335,10 +377,7 @@
   </component>
   <component name="PublishConfig">
     <servers>
-      <server id="88bd4dd6-3687-4011-be46-8f37ec243c07">
-        <serverdata />
-      </server>
-      <server id="b523301e-0e60-4aa7-9407-e8b32dde142e">
+      <server id="04e268d7-50d1-43df-800d-f7eef646ab99">
         <serverdata />
       </server>
     </servers>
@@ -412,21 +451,21 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1036" extended-state="6" />
-    <editor active="false" />
+    <frame x="-1" y="0" width="1442" height="901" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14464693" sideWeight="0.71428573" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3997722" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39946738" sideWeight="0.47417504" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32915717" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29620564" sideWeight="0.6002278" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3997722" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22883788" sideWeight="0.6002278" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39946738" sideWeight="0.2969871" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32915717" sideWeight="0.7135863" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -454,18 +493,9 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/lib/angular/angular.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2915" column="0" selection-start="86394" selection-end="86394" vertical-scroll-proportion="0.33265308" vertical-offset="49392" max-vertical-offset="252484">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="76" selection-start="946" selection-end="946" vertical-scroll-proportion="0.5587302" vertical-offset="0" max-vertical-offset="990">
-          <folding />
-        </state>
+        <state line="16" column="76" selection-start="946" selection-end="946" vertical-scroll-proportion="0.5587302" vertical-offset="0" max-vertical-offset="990" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/controllers/playerListCtrl.js">
@@ -482,107 +512,88 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/controllers/playerEditCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="443" selection-end="443" vertical-scroll-proportion="0.42984015" vertical-offset="0" max-vertical-offset="563">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/lib/spinedit/css/bootstrap-spinedit.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="143" selection-end="143" vertical-scroll-proportion="0.3516874" vertical-offset="0" max-vertical-offset="902">
-          <folding />
-        </state>
+        <state line="9" column="0" selection-start="143" selection-end="143" vertical-scroll-proportion="0.3516874" vertical-offset="0" max-vertical-offset="902" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/css/app.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="13" selection-start="194" selection-end="194" vertical-scroll-proportion="0.5079929" vertical-offset="0" max-vertical-offset="1166">
-          <folding />
-        </state>
+        <state line="13" column="13" selection-start="194" selection-end="194" vertical-scroll-proportion="0.5079929" vertical-offset="0" max-vertical-offset="1166" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/lib/MultiLevelPushMenu/css/icons.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="1" selection-start="1407" selection-end="1407" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4488">
-          <folding />
-        </state>
+        <state line="74" column="1" selection-start="1407" selection-end="1407" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4488" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/lib/MultiLevelPushMenu/css/component.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="35" selection-start="986" selection-end="986" vertical-scroll-proportion="2.8655462" vertical-offset="0" max-vertical-offset="6336">
-          <folding />
-        </state>
+        <state line="62" column="35" selection-start="986" selection-end="986" vertical-scroll-proportion="2.8655462" vertical-offset="0" max-vertical-offset="6336" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/template/spinedit/spinedit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="34" selection-start="66" selection-end="66" vertical-scroll-proportion="0.04680851" vertical-offset="0" max-vertical-offset="470">
-          <folding />
-        </state>
+        <state line="1" column="34" selection-start="66" selection-end="66" vertical-scroll-proportion="0.04680851" vertical-offset="0" max-vertical-offset="470" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/less/app.less">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="14" selection-start="170" selection-end="170" vertical-scroll-proportion="-7.096774" vertical-offset="0" max-vertical-offset="1694">
+        <state line="10" column="14" selection-start="170" selection-end="170" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1386">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/lib/MultiLevelPushMenu/js/mlpushmenu.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="29" selection-start="3753" selection-end="3753" vertical-scroll-proportion="0.3352381" vertical-offset="1100" max-vertical-offset="5280">
-          <folding />
-        </state>
+        <state line="67" column="29" selection-start="3753" selection-end="3753" vertical-scroll-proportion="0.3352381" vertical-offset="1100" max-vertical-offset="5280" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/services/oneplayer.json">
+    <entry file="file://$PROJECT_DIR$/app/js/services/services.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="30" selection-start="417" selection-end="417" vertical-scroll-proportion="-10.645162" vertical-offset="0" max-vertical-offset="704">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="409">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/view/edit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="21" selection-start="357" selection-end="357" vertical-scroll-proportion="-7.096774" vertical-offset="0" max-vertical-offset="968">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/services/editableProperties.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="34" selection-start="3388" selection-end="3388" vertical-scroll-proportion="-8.535714" vertical-offset="1700" max-vertical-offset="2552">
+        <state line="6" column="40" selection-start="243" selection-end="251" vertical-scroll-proportion="-4.0" vertical-offset="0" max-vertical-offset="792">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/directives.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="68" selection-start="3301" selection-end="3301" vertical-scroll-proportion="0.33261338" vertical-offset="1254" max-vertical-offset="5346">
+        <state line="60" column="46" selection-start="3201" selection-end="3201" vertical-scroll-proportion="-12.0" vertical-offset="756" max-vertical-offset="4338">
           <folding>
-            <marker date="1381954460663" expanded="true" signature="5217:5346" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="5217:5377" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="5217:5488" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="5413:5440" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9288:9468" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9288:9445" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9288:9622" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9407:9468" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9407:9445" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
-            <marker date="1381954460663" expanded="true" signature="9534:9567" placeholder="..." />
+            <marker date="1382281215069" expanded="true" signature="5236:5507" placeholder="..." />
+            <marker date="1382281215069" expanded="false" signature="5432:5459" placeholder="..." />
+            <marker date="1382281215069" expanded="true" signature="9295:9629" placeholder="..." />
+            <marker date="1382281215069" expanded="true" signature="9414:9604" placeholder="..." />
+            <marker date="1382281215069" expanded="true" signature="9541:9574" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/controllers/playerEditCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="41" selection-start="369" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="324">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/services/editableProperties.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="5" selection-start="7" selection-end="7" vertical-scroll-proportion="-0.6666667" vertical-offset="0" max-vertical-offset="2052">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/services/oneplayer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="30" selection-start="0" selection-end="661" vertical-scroll-proportion="0.18227848" vertical-offset="0" max-vertical-offset="576">
+          <folding />
         </state>
       </provider>
     </entry>

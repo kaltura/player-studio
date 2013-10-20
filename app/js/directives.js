@@ -1,7 +1,7 @@
 'use strict';
 /* Directives */
 angular.module('KMC.directives', ['colorpicker.module']).
-    directive('navmenu', ["$compile", function ($compile) {
+    directive('navmenu', ["$compile", '$parse', function($compile, $parse) {
 
 
         return  {
@@ -10,15 +10,12 @@ angular.module('KMC.directives', ['colorpicker.module']).
             restrict: 'E',
             transclude: true,
             priority: 1000,
-            scope: {
-                editProperties: '=',
-                data: '='
-            },
-            link: function ($scope, $element, $attrs) {
+            link: function($scope, $element, $attrs) {
+                var BaseData = $attrs['data'];
 
-               function renderFormElement(item, directive, appendTo, parentModel) {
+                function renderFormElement(item, directive, appendTo, parentModel) {
                     var elm = angular.element(directive);
-                    angular.forEach(item, function (value, key) {
+                    angular.forEach(item, function(value, key) {
                         if (key != 'model' && (typeof value == 'string' || typeof value == 'number')) {
                             elm.attr(key, value);
                         } else {
@@ -32,9 +29,10 @@ angular.module('KMC.directives', ['colorpicker.module']).
                         elm.attr('model', subModelStr);
                     }
                     else {
-                        elm.attr('model', 'data.'+item.model);
+                        elm.attr('model', BaseData + '.' + item.model);
                     }
-                    elm = $('<li/>').html(elm);
+                    if (item.type != 'menu')
+                        elm = $('<li/>').html(elm);
                     var compiled = $compile(elm)($scope).appendTo(appendTo);
                     return compiled;
                 }
@@ -45,9 +43,9 @@ angular.module('KMC.directives', ['colorpicker.module']).
                         originAppendPos = origin;
                     switch (item.type) {
                         case  'menu':
-                            var originModel = origin.attr('model') ? origin.attr('model') + '.' : 'data';
+                            var originModel = origin.attr('model') ? origin.attr('model') + '.' : BaseData;
                             var parent = renderFormElement(item, '<menu-level/>', originAppendPos, originModel);
-                            var modelStr = originModel + '.'+ item.model;
+                            var modelStr = originModel  + item.model;
                             for (var j = 0; j < item.children.length; j++) {
                                 var subitem = item.children[j];
                                 var subappendPos = parent.find('ul[ng-transclude]:first');
@@ -98,7 +96,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
             }
         }
     }]).
-    directive('modelColor',function () {
+    directive('modelColor',function() {
         return  {
             restrict: 'E',
             replace: true,
@@ -112,7 +110,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
                                 <span class="colorExample" style="background-color: {{model}}"></span>\n\
                             </label>'
         };
-    }).directive('modelText',function () {
+    }).directive('modelText',function() {
         return {
             replace: true,
             restrict: 'E',
@@ -122,7 +120,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
             },
             template: "<label><input type='text' ng-model='model'/>{{label}}</label>"
         };
-    }).directive('modelSelect',function () {
+    }).directive('modelSelect',function() {
         return {
             replace: true,
             restrict: 'E',
@@ -131,18 +129,18 @@ angular.module('KMC.directives', ['colorpicker.module']).
                 model: "=",
                 initvalue: '@'
             },
-            link: function ($scope, $element, $attrs) {
+            link: function($scope, $element, $attrs) {
                 if (typeof $attrs.options != 'undefined') {
                     $scope.options = JSON.parse($attrs.options);
                 }
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 $scope.options = [];
                 if ($scope.model == '' || typeof $scope.model == 'undefined') {
                     $scope.model = $attrs.initvalue;
                 }
 
-                this.setOptions = function (optsArr) {
+                this.setOptions = function(optsArr) {
                     $scope.options = optsArr;
 
                 }
@@ -154,7 +152,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
         }
     }
 ).
-    directive('modelChecbox',function () {
+    directive('modelChecbox',function() {
         return  {
             template: "<label>{{label}}<input type='checkbox' ng-model='model'></label>",
             replace: true,
@@ -166,7 +164,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
                 model: '='
             }
         };
-    }).directive('modelNumber',function () {
+    }).directive('modelNumber',function() {
         return{
             templateUrl: 'template/spinedit/spinedit.html',
             replace: true,
@@ -180,7 +178,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
                 initvalue: '@',
                 numberofdecimals: '@'
             },
-            link: function ($scope, $element, $attrs) {
+            link: function($scope, $element, $attrs) {
 
                 var $spinner = $element.find('input').spinedit({
                     minimum: parseInt($scope.from),
@@ -189,16 +187,16 @@ angular.module('KMC.directives', ['colorpicker.module']).
                     value: parseInt($scope.initvalue),
                     numberOfDecimals: parseInt($scope.numberofdecimals)
                 });
-                $spinner.on("valueChanged", function (e) {
+                $spinner.on("valueChanged", function(e) {
                     if (typeof e.value == 'number') {
-                        $scope.$apply(function () {
+                        $scope.$apply(function() {
                             $scope.model = e.value;
                         });
                     }
 
                 });
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 if (!$attrs.from) $scope.from = 0;
                 else $scope.from = $attrs.from;
                 if (!$attrs.to) $scope.to = 10;
@@ -217,7 +215,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
             }
         }
     }).
-    directive('menuLevel', function () {
+    directive('menuLevel', function() {
         return  {
             template: "<li class='icon icon-arrow-left'>\n\
                     <a class='icon icon-phone' href='#'>{{label}}</a>\n\

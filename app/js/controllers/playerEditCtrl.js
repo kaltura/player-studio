@@ -8,5 +8,5 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.playerId = $routeParams.id;
             $scope.title = $filter('i18n')('Edit player');
             $scope.data = PlayerData.data;
-            $scope.editProperties = editProperties.data.properties;
+            $scope.editProperties = editProperties.data;
         }]);
