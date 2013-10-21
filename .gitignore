@@ -1,3 +1,6 @@
 logs/*
 !.gitkeep
 studio2JuneAI (6).docx
+
+# Intellij project files
+.idea/
