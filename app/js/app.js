@@ -10,8 +10,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', function ($routeProvide
     $routeProvider.when('/list', {
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
-            resolve: {'playersData': function (PlayerService) {
-                return PlayerService.getPlayers();
+            resolve: {'playersData': function (ApiService) {
+                return ApiService;
             }
             }
         }

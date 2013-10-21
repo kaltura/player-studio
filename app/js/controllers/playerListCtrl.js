@@ -7,9 +7,28 @@ KMCModule.controller('PlayerListCtrl',
         function (playersData, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window) {
             $rootScope.lang = 'en-US';
             $scope.search = '';
-            $scope.data = playersData.data.objects;
+			playersData.doRequest('_524241', {
+				'filter' : {
+					'objectType': 'KalturaUiConfFilter' ,
+					'tagsMultiLikeOr' : 'kdp3',
+					'orderBy' : '-updatedAt'
+				},
+				'pager': {
+					'objectType' :  'KalturaFilterPager',
+					'pageIndex' : '1',
+					'pageSize' : '25'
+				},
+				'service' : 'uiConf',
+				'action' : 'list'
+			}).then( function(data) {
+				$scope.data = data.objects;
+				$scope.calculateTotalItems();
+			});
+
+
+            //$scope.data = playersData.data.objects;
             $scope.currentPage = 1;
-            $scope.maxSize = 5;
+            $scope.maxSize = 25;
             $scope.playerVersions = [
                 {"label": "1.0", "url": "", "value": "1.0"},
                 {"label": "2.0", "url": "", "value": "2.0"},
@@ -17,18 +36,25 @@ KMCModule.controller('PlayerListCtrl',
             ]
             $scope.requiredVersion = '201';
             $scope.filterd = $filter('filter')($scope.data, $scope.search);
+			//TODO fix total count!
             $scope.calculateTotalItems = function () {
-                $scope.totalItems = $scope.filterd.length;
+				if ( $scope.filterd )
+              	  $scope.totalItems = $scope.filterd.length;
+				else
+					$scope.totalItems = 0;
                 return $scope.totalItems;
             };
             $scope.checkVersionNeedsUpgrade = function (itemVersion) {
+				if ( ! itemVersion ) {
+					return false;
+				}
                 itemVersion = itemVersion.replace(/\./g, '');
                 if (itemVersion >= $scope.requiredVersion)
                     return false
                 else
                     return true
             }
-            $scope.calculateTotalItems();
+
             $scope.title = $filter('i18n')('players list');
             $scope.showSubTitle = true;
             $scope.$watch('search', function (newValue, oldValue) {
@@ -49,6 +75,7 @@ KMCModule.controller('PlayerListCtrl',
                 'Saving changes to this player upgrade, some features and \n' +
                 'design may be lost. (read more about upgrading players)');
             $scope.goToEditPage = function (item) {
+				//TODO filter according to what? we don't have "version" field
                 if (!$scope.checkVersionNeedsUpgrade(item.version)) {
                     return  $window.location.href = 'edit/' + item.id;
                 } else {
