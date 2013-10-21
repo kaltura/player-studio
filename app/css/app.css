@@ -10,6 +10,20 @@ body,
 .playerThumb {
   width: 300px;
 }
+.playerTemplate {
+  border: 4px solid darkblue;
+  border-radius: 10px;
+  margin: auto;
+  margin-left: 20px;
+  text-align: center;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+#listsearch ul.typeahead.dropdown-menu {
+  max-width: 360px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
 nav li label input,
 nav li label select {
   float: right;

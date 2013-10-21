@@ -1,0 +1,23 @@
+<div class="jumbotron">
+    <h2 class=" inline text-muted" id="pageHeader">
+        {{title}}
+    </h2>
+</div>
+<div class="container">
+    <p> Please Choose a template</p>
+
+    <div class="row">
+        <div class="col-xs-4" ng-repeat="player in templates">
+            <div class="playerTemplate">
+                <h5>{{player.settings.name}}</h5>
+                <div class="thumbWrapper"><img  tooltip-html-unsafe="{{makeTooltip($index)|i18n}}" class="playerThumb" src="{{player.thumbnailUrl}}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <script>
+            $(document).ready(function(){
+               // $('[data-toggle="tooltip"]').tooltip({html:true});
+            })
+        </script>

@@ -14,8 +14,8 @@
                 </small>
             </div>
             <div class="col-md-4">
-                <form class="form-inline" role="search">
-                    <input type="text" class="form-control" placeholder="{{'Search by name or tag'| i18n}}"
+                <form class="form-inline" id="listsearch" role="search">
+                    <input type="text" typeahead="player.name for player in data | filter:$viewValue | limitTo:8" class="form-control" placeholder="{{'Search by name or tag'| i18n}}"
                            ng-model="search">
                 </form>
             </div>
@@ -55,7 +55,7 @@
                     <button type="button" class="btn btn-link" ng-show="checkVersionNeedsUpgrade(item.version)"
                             ng-click="update(item)"><span class="glyphicon glyphicon-edit"></span> {{'Update'| i18n}}
                     </button>
-                    <i class="glyphicon glyphicon-ok-circle" data-toggle="tooltip" title="{{'The player version is upto date'|i18n}}" ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
+                    <i class="glyphicon glyphicon-ok-circle" tooltip="{{'The player version is upto date'|i18n}}" ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
 
 
                 </td>

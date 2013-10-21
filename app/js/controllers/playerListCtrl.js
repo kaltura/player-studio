@@ -7,6 +7,7 @@ KMCModule.controller('PlayerListCtrl',
         function (playersData, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window) {
             $rootScope.lang = 'en-US';
             $scope.search = '';
+            $scope.searchSelect2Options = {};
             $scope.data = playersData.data.objects;
             $scope.currentPage = 1;
             $scope.maxSize = 5;
@@ -75,7 +76,7 @@ KMCModule.controller('PlayerListCtrl',
                 }
             };
             $scope.newPlayer = function () {
-                $location.path('#/player/new');
+                $location.path('/new');
             };
             $scope.duplicate = function (item) {
                 $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
@@ -101,8 +102,7 @@ KMCModule.controller('PlayerListCtrl',
                 });
             };
             $scope.update = function (item) {
-                var selectBox = '<model-select label="version" options="playerVersions"/>';
-                var text = '<span>Updating the player -- TEXT MISSING -- please choose a </span>';
+                var text = '<span>Updating the player -- TEXT MISSING -- current version </span>';
                 var modal = $modal.open({
                     templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
@@ -110,7 +110,7 @@ KMCModule.controller('PlayerListCtrl',
                         settings: function () {
                             return {
                                 'title': 'Update confirmation',
-                                'message': $compile(text + selectBox)($scope)
+                                'message': text + item.version
                             };
                         }
                     }
