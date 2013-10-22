@@ -4,21 +4,28 @@
     </h2>
 </div>
 <div class="container">
-    <p> Please Choose a template</p>
-
+    <p><label> Please choose type of template : <select ui-select2="{minimumResultsForSearch:-1}"
+                                                        ng-model="templateType">
+        <option selected="selected" value="system">Public Templates</option>
+        <option value="user">My Templates</option>
+    </select>
+    </label> <img src="../bower_components/select2/select2-spinner.gif" ng-show="loading"/>
+    </p>
     <div class="row">
         <div class="col-xs-4" ng-repeat="player in templates">
-            <div class="playerTemplate">
+            <a class="playerTemplate" ng-href="/edit/{{player.id}}">
                 <h5>{{player.settings.name}}</h5>
+
                 <div class="thumbWrapper">
-                    <img  tooltip-html-unsafe="{{makeTooltip($index)|i18n}}" class="playerThumb" src="{{player.thumbnailUrl}}"/>
+                    <img tooltip-html-unsafe="{{makeTooltip($index)|i18n}}" class="playerThumb"
+                         src="{{player.thumbnailUrl}}"/>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </div>
-        <script>
-            $(document).ready(function(){
-               // $('[data-toggle="tooltip"]').tooltip({html:true});
-            })
-        </script>
+<script>
+    $(document).ready(function() {
+        // $('[data-toggle="tooltip"]').tooltip({html:true});
+    })
+</script>

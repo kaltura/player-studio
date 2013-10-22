@@ -33,7 +33,12 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
         {templateUrl: 'view/new-template.html',
             controller: 'PlayerCreateCtrl',
             resolve: {
-                'templates': 'playerTemplates'
+                'templates': function(playerTemplates) {
+                    return  playerTemplates.listSystem();
+                },
+                'userId': function() {
+                    return '1' //  KMC would need to give us the userID ?
+                }
 
             }
         }

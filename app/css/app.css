@@ -11,13 +11,12 @@ body,
   width: 300px;
 }
 .playerTemplate {
-  border: 4px solid darkblue;
-  border-radius: 10px;
-  margin: auto;
-  margin-left: 20px;
-  text-align: center;
-  padding-bottom: 20px;
+  display: block;
+  border: 3px solid darkblue;
+  border-radius: 5px;
   margin-bottom: 20px;
+  padding-bottom: 20px;
+  text-align: center;
 }
 #listsearch ul.typeahead.dropdown-menu {
   max-width: 360px;
