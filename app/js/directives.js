@@ -1,9 +1,24 @@
 'use strict';
 /* Directives */
-angular.module('KMC.directives', ['colorpicker.module']).
+angular.module('KMC.directives', ['colorpicker.module'])
+    .directive('timeago', [function() {
+        return {
+            scope: {timestamp: '@'},
+            restrict: 'C',
+            link: function(scope, iElement, iAttrs) {
+                if (typeof $.timeago == 'function')
+                    scope.$watch('timestamp', function(newVal, oldVal) {
+                            if (newVal) {
+                                var date = scope.timestamp * 1000;
+                                iElement.text($.timeago(date));
+                            }
+                        }
+                    )
+
+            }
+        }
+    }]).
     directive('navmenu', ["$compile", '$parse', function($compile, $parse) {
-
-
         return  {
             template: "<ul ng-transclude=''></ul>",
             replace: true,
@@ -12,7 +27,6 @@ angular.module('KMC.directives', ['colorpicker.module']).
             priority: 1000,
             link: function($scope, $element, $attrs) {
                 var BaseData = $attrs['data'];
-
                 function renderFormElement(item, directive, appendTo, parentModel) {
                     var elm = angular.element(directive);
                     angular.forEach(item, function(value, key) {
@@ -45,7 +59,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
                         case  'menu':
                             var originModel = origin.attr('model') ? origin.attr('model') + '.' : BaseData;
                             var parent = renderFormElement(item, '<menu-level/>', originAppendPos, originModel);
-                            var modelStr = originModel  + item.model;
+                            var modelStr = originModel + item.model;
                             for (var j = 0; j < item.children.length; j++) {
                                 var subitem = item.children[j];
                                 var subappendPos = parent.find('ul[ng-transclude]:first');
@@ -218,7 +232,7 @@ angular.module('KMC.directives', ['colorpicker.module']).
     directive('menuLevel', function() {
         return  {
             template: "<li class='icon icon-arrow-left'>\n\
-                    <a class='icon icon-phone' href='#'>{{label}}</a>\n\
+                    <a class='icon icon-phone menuLink' href='#'>{{label}}</a>\n\
                     <div class='mp-level'>\n\
                         <h2 class='icon icon-arrow-right-3'>{{label}}</h2>\n\
                         <ul ng-transclude=''>\n\
@@ -231,6 +245,14 @@ angular.module('KMC.directives', ['colorpicker.module']).
             scope: {
                 'label': '@'
             },
-            transclude: 'true'
+            transclude: 'true',
+            link:function(scope,ielement){
+                ielement.children('a.menuLink').on('click',function(e){
+                    e.preventDefault();
+                    ielement.children('.mp-level').addClass('mp-level-open');
+                    return false;
+                });
+
+            }
         };
     });

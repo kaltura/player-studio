@@ -8,7 +8,7 @@ KMCModule.controller('PlayerListCtrl',
             $rootScope.lang = 'en-US';
             $scope.search = '';
             $scope.searchSelect2Options = {};
-            $scope.data = playersData.data.objects;
+            $scope.data = playersData.data;
             $scope.currentPage = 1;
             $scope.maxSize = 5;
             $scope.playerVersions = [

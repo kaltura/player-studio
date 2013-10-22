@@ -34,14 +34,14 @@
             <tbody>
             <tr ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
                 <td><img class="playerThumb" src="{{item.thumbnailUrl}}"/></td>
-                <td><a data-ng-click="goToEditPage(item)" href=''>{{item.name}}</a>
+                <td><a data-ng-click="goToEditPage(item)" href=''>{{item.settings.name}}</a>
                     <span class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
                         <small>{{'This player is out dated - please update'| i18n}}</small>
                     </span>
                 </td>
                 <td>{{item.id}}</td>
-                <td></td>
-                <td></td>
+                <td><span class="timeago" timestamp="{{item.createdAt}}"></span></td>
+                <td><span class="timeago" timestamp="{{item.updatedAt}}"></span></td>
                 <td class="actionBtns">
                     <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
                             class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}
@@ -56,12 +56,11 @@
                             ng-click="update(item)"><span class="glyphicon glyphicon-edit"></span> {{'Update'| i18n}}
                     </button>
                     <i class="glyphicon glyphicon-ok-circle" tooltip="{{'The player version is upto date'|i18n}}" ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
-
-
                 </td>
             </tr>
             </tbody>
         </table>
+
         <div class="row text-center">
             <div class="pull-right">
                 <form class="form-inline" role="form">

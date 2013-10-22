@@ -8,12 +8,10 @@ KMCServices.config(['$httpProvider', function($httpProvider) {
 KMCServices.factory('PlayerService', ['$http', function($http) {
         return {
             'getPlayers': function() {
-                return $http.get('js/services/allplayers.json');
+                return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/player/list.json');
             },
             'getPlayer': function(id) {
-                //actually does not use the id for now...
-                return $http.get('js/services/oneplayer.json'); //probably really using the id to get a specific player
-
+                return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/player/'+id+'.json');
             }};
     }])
     .factory('editableProperties', ['$http', function($http) {
