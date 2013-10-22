@@ -17,8 +17,8 @@ KMCServices.factory('PlayerService', ['$http', function($http) {
             }};
     }])
     .factory('editableProperties', ['$http', function($http) {
-        return $http.useXDomain(true).get('js/services/editableProperties.json');
+        return $http.get('js/services/editableProperties.json');
     }])
     .factory('playerTemplates', ['$http', function($http) {
-        return $http.get('js/services/templates.json'); // 'http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
+        return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
     }]);

@@ -66,7 +66,7 @@ KMCModule.controller('PlayerListCtrl',
                         }
                     })
                     modal.result.then(function (result) {
-                        if (result) {
+                        if (result) { // here we should move though an upgrade process before reaching the edit.
                             return  $location.url('edit/' + item.id);
                         }
 
