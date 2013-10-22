@@ -27,6 +27,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             priority: 1000,
             link: function($scope, $element, $attrs) {
                 var BaseData = $attrs['data'];
+
                 function renderFormElement(item, directive, appendTo, parentModel) {
                     var elm = angular.element(directive);
                     angular.forEach(item, function(value, key) {
@@ -142,7 +143,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 label: "@",
                 model: "=",
                 initvalue: '@',
-                selectOpts :'@'
+                selectOpts: '@'
             },
             link: function($scope, $element, $attrs) {
                 if (typeof $attrs.options != 'undefined') {
@@ -233,7 +234,8 @@ angular.module('KMC.directives', ['colorpicker.module'])
     directive('menuLevel', function() {
         return  {
             template: "<li class='icon icon-arrow-left'>\n\
-                    <a class='icon icon-phone menuLink' href='#'>{{label}}</a>\n\
+                    <a class='icon icon-phone' data-ng-click='openLevel($event)'>{{label}}</a>\n\
+                    <a class='mp-back' ng-click='goBack()' ng-show='isOnTop'>Back</a>\n\
                     <div class='mp-level'>\n\
                         <h2 class='icon icon-arrow-right-3'>{{label}}</h2>\n\
                         <ul ng-transclude=''>\n\
@@ -243,17 +245,32 @@ angular.module('KMC.directives', ['colorpicker.module'])
             replace: true,
             priority: 70,
             restrict: 'E',
+            controller: function($scope, $element) {
+                $scope.goBack = function() {
+                    $scope.isOnTop = false;
+                }
+                $scope.openLevel = function($event) {
+                    $scope.isOnTop = true;
+                }
+                $scope.isOnTop = false;
+                $scope.$watch('isOnTop', function(newVal, oldVal) {
+                    if (newVal != oldVal) {
+                        if (newVal) { // open
+                            $element.parents('.mp-level:first').addClass('mp-level-in-stack');
+                            $element.children('.mp-level').addClass('mp-level-open');
+                        }
+                        else { //close
+                            $element.find('.mp-level').removeClass('mp-level-open');
+                            $element.parents('.mp-level').removeClass('mp-level-in-stack');
+                        }
+                    }
+                });
+            },
             scope: {
                 'label': '@'
             },
-            transclude: 'true',
-            link: function(scope, ielement) {
-                ielement.children('a.menuLink').on('click', function(e) {
-                    e.preventDefault();
-                    ielement.children('.mp-level').addClass('mp-level-open');
-                    return false;
-                });
+            transclude: 'true'
 
-            }
         };
-    });
+    })
+;
