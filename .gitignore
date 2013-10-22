@@ -1,5 +1,5 @@
 logs/*
 !.gitkeep
-!.idea/*
-!.idea
+.idea/*
+.idea/watcherTasks.xml
 studio2JuneAI (6).docx

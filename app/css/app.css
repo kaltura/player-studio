@@ -24,7 +24,8 @@ body,
   overflow-y: hidden;
 }
 nav li label input,
-nav li label select {
+nav li label select,
+nav li label div {
   float: right;
 }
 .colorinput {

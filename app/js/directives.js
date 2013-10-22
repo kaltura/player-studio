@@ -141,7 +141,8 @@ angular.module('KMC.directives', ['colorpicker.module'])
             scope: {
                 label: "@",
                 model: "=",
-                initvalue: '@'
+                initvalue: '@',
+                selectOpts :'@'
             },
             link: function($scope, $element, $attrs) {
                 if (typeof $attrs.options != 'undefined') {
@@ -161,7 +162,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             },
 
             template: '<label>{{label}}' +
-                '<select ng-model="model" ng-options="item.value as item.label for item in options"> ' +
+                '<select ui-select2="selectOpts" ng-model="model" ng-options="item.value as item.label for item in options"> ' +
                 '</select></label>'
         }
     }
