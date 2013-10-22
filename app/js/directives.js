@@ -17,8 +17,8 @@ angular.module('KMC.directives', ['colorpicker.module'])
 
             }
         }
-    }]).
-    directive('navmenu', ["$compile", '$parse', function($compile, $parse) {
+    }])
+    .directive('navmenu', ["$compile", '$parse', function($compile, $parse) {
         return  {
             template: "<ul ng-transclude=''></ul>",
             replace: true,
@@ -246,8 +246,8 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 'label': '@'
             },
             transclude: 'true',
-            link:function(scope,ielement){
-                ielement.children('a.menuLink').on('click',function(e){
+            link: function(scope, ielement) {
+                ielement.children('a.menuLink').on('click', function(e) {
                     e.preventDefault();
                     ielement.children('.mp-level').addClass('mp-level-open');
                     return false;
