@@ -1,5 +1,5 @@
 logs/*
 !.gitkeep
 !.idea/*
-!.idea
+.idea/
 studio2JuneAI (6).docx
