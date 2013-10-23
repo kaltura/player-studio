@@ -7,6 +7,15 @@ var KMCModule = angular.module('KMCModule',
 
 KMCModule.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
+	$routeProvider.when('/login', {
+			templateUrl: 'view/login.html',
+			controller: 'LoginCtrl',
+			resolve: {'apiService': function (ApiService) {
+				return ApiService;
+			}
+			}
+		}
+	);
     $routeProvider.when('/list', {
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
@@ -27,6 +36,6 @@ KMCModule.config(['$routeProvider', '$locationProvider', function ($routeProvide
             }
         }
     );
-      $routeProvider.otherwise({redirectTo: '/list'});
+      $routeProvider.otherwise({redirectTo: '/login'});
 }]);
 

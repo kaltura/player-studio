@@ -14,15 +14,32 @@ angular.module('KMC.services', [])
             }])
 		.factory('ApiService', ['$q', '$timeout', function( $q, $timeout ) {
 			return{
-				doRequest: function( wid, params){
-
+				apiObj : null,
+				getClient: function () {
+					//first request - create new kwidget.api
+					if ( !this.apiObj ) {
+						this.apiObj =  new kWidget.api();
+					}
+					return this.apiObj;
+				},
+				setKs: function ( ks ) {
+					this.getClient().setKs( ks );
+				},
+				setWid: function ( wid ) {
+					this.getClient().wid = wid;
+				},
+				doRequest: function( params ){
 					//Creating a deferred object
 					var deferred = $q.defer();
-					new kWidget.api( {
-						'wid' : wid,
-					}).doRequest([ params ], function(data ){
+					this.getClient().doRequest( params , function(data ){
 							//timeout will trigger another $digest cycle that will trigger the "then" function
-							$timeout( function() { deferred.resolve(data); }, 0 )   ;
+							$timeout( function() {
+								if ( data.code ) {
+									deferred.reject( data.code );
+								} else {
+									deferred.resolve( data );
+								}
+							}, 0 )   ;
 					});
 					//Returning the promise object
 					return deferred.promise;

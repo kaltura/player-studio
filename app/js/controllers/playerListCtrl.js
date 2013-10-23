@@ -7,20 +7,15 @@ KMCModule.controller('PlayerListCtrl',
         function (playersData, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window) {
             $rootScope.lang = 'en-US';
             $scope.search = '';
-			playersData.doRequest('_524241', {
-				'filter' : {
-					'objectType': 'KalturaUiConfFilter' ,
-					'tagsMultiLikeOr' : 'kdp3',
-					'orderBy' : '-updatedAt'
-				},
-				'pager': {
-					'objectType' :  'KalturaFilterPager',
-					'pageIndex' : '1',
-					'pageSize' : '25'
-				},
+			var request = {
+				'filter:tagsMultiLikeOr' : 'kdp3',
+				'filter:orderBy'  : '-updatedAt',
+				'pager:pageIndex': '25',
+				'pager:pageSize': '1',
 				'service' : 'uiConf',
 				'action' : 'list'
-			}).then( function(data) {
+			};
+			playersData.doRequest( request ).then( function(data) {
 				$scope.data = data.objects;
 				$scope.calculateTotalItems();
 			});
