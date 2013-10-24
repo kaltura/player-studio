@@ -3,25 +3,35 @@
 /* Controllers */
 
 KMCModule.controller('PlayerListCtrl',
-    ['playersData', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile","$window",
-        function (playersData, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window) {
+    ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile","$window", 'localStorageService',
+        function (apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window, localStorageService) {
+			// Check if we have ks in locaclstorage
+			var ks = localStorageService.get('ks');
+			if ( !ks ) { //navigate to login
+				$location.path( "/login" );
+			} else {
+				apiService.setKs( ks );
+			}
             $rootScope.lang = 'en-US';
             $scope.search = '';
 			var request = {
 				'filter:tagsMultiLikeOr' : 'kdp3',
 				'filter:orderBy'  : '-updatedAt',
-				'pager:pageIndex': '25',
-				'pager:pageSize': '1',
+				'filter:objectTypeEqual': '1',
+				'filter:objectType': 'KalturaUiConfFilter',
+				'page:objectType': 'KalturaFilterPager',
+				'pager:pageIndex': '1',
+				'pager:pageSize': '25',
 				'service' : 'uiConf',
 				'action' : 'list'
 			};
-			playersData.doRequest( request ).then( function(data) {
+			apiService.doRequest( request ).then( function(data) {
 				$scope.data = data.objects;
 				$scope.calculateTotalItems();
 			});
 
 
-            //$scope.data = playersData.data.objects;
+            //$scope.data = apiService.data.objects;
             $scope.currentPage = 1;
             $scope.maxSize = 25;
             $scope.playerVersions = [

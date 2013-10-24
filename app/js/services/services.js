@@ -12,7 +12,7 @@ angular.module('KMC.services', [])
         .factory('editableProperties', ['$http', function($http) {
                 return $http.get('js/services/editableProperties.json');
             }])
-		.factory('ApiService', ['$q', '$timeout', function( $q, $timeout ) {
+		.factory('ApiService', ['$q', '$timeout', '$location', function( $q, $timeout, $location ) {
 			return{
 				apiObj : null,
 				getClient: function () {
@@ -35,6 +35,9 @@ angular.module('KMC.services', [])
 							//timeout will trigger another $digest cycle that will trigger the "then" function
 							$timeout( function() {
 								if ( data.code ) {
+									if ( data.code == "INVALID_KS") {
+										$location.path( "/login" );
+									}
 									deferred.reject( data.code );
 								} else {
 									deferred.resolve( data );

@@ -3,7 +3,7 @@
 window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
-    ['localization', 'KMC.controllers', 'KMC.filters', 'KMC.services', 'KMC.directives', 'ui.bootstrap']);
+    ['localization', 'KMC.controllers', 'KMC.filters', 'KMC.services', 'KMC.directives', 'ui.bootstrap', 'LocalStorageModule']);
 
 KMCModule.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
@@ -19,7 +19,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', function ($routeProvide
     $routeProvider.when('/list', {
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
-            resolve: {'playersData': function (ApiService) {
+            resolve: {'apiService': function (ApiService) {
                 return ApiService;
             }
             }
@@ -36,6 +36,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', function ($routeProvide
             }
         }
     );
-      $routeProvider.otherwise({redirectTo: '/login'});
+      $routeProvider.otherwise({
+		  redirectTo: '/list'
+	  });
 }]);
 
