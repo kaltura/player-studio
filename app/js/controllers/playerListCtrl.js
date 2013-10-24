@@ -14,6 +14,7 @@ KMCModule.controller('PlayerListCtrl',
 			}
             $rootScope.lang = 'en-US';
             $scope.search = '';
+
 			var request = {
 				'filter:tagsMultiLikeOr' : 'kdp3',
 				'filter:orderBy'  : '-updatedAt',
@@ -32,6 +33,8 @@ KMCModule.controller('PlayerListCtrl',
 
 
             //$scope.data = apiService.data.objects;
+
+            $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
             $scope.maxSize = 25;
             $scope.playerVersions = [
@@ -97,7 +100,7 @@ KMCModule.controller('PlayerListCtrl',
                         }
                     })
                     modal.result.then(function (result) {
-                        if (result) {
+                        if (result) { // here we should move though an upgrade process before reaching the edit.
                             return  $location.url('edit/' + item.id);
                         }
 
@@ -107,7 +110,7 @@ KMCModule.controller('PlayerListCtrl',
                 }
             };
             $scope.newPlayer = function () {
-                $location.path('#/player/new');
+                $location.path('/new');
             };
             $scope.duplicate = function (item) {
                 $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
@@ -133,8 +136,7 @@ KMCModule.controller('PlayerListCtrl',
                 });
             };
             $scope.update = function (item) {
-                var selectBox = '<model-select label="version" options="playerVersions"/>';
-                var text = '<span>Updating the player -- TEXT MISSING -- please choose a </span>';
+                var text = '<span>Updating the player -- TEXT MISSING -- current version </span>';
                 var modal = $modal.open({
                     templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
@@ -142,7 +144,7 @@ KMCModule.controller('PlayerListCtrl',
                         settings: function () {
                             return {
                                 'title': 'Update confirmation',
-                                'message': $compile(text + selectBox)($scope)
+                                'message': text + item.version
                             };
                         }
                     }

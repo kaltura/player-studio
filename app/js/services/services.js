@@ -1,7 +1,12 @@
 'use strict';
 /* Services */
-angular.module('KMC.services', [])
-        .factory('PlayerService', ['$http', function($http) {
+
+var KMCServices = angular.module('KMC.services', []);
+KMCServices.config(['$httpProvider', function($httpProvider) {
+	$httpProvider.defaults.useXDomain = true;
+	delete $httpProvider.defaults.headers.common['X-Requested-With'];
+}]);
+KMCServices.factory('PlayerService', ['$http', function($http) {
                 return {
                     'getPlayer': function(id) {
                         //actually does not use the id for now...
@@ -48,4 +53,16 @@ angular.module('KMC.services', [])
 					return deferred.promise;
 				}
 			};
+		}])
+		.factory('playerTemplates', ['$http', function($http) {
+			return {
+				'listSystem' : function() {
+					return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
+				},
+				'listUser':function(){
+					return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
+				}
+			}
+
 		}]);
+
