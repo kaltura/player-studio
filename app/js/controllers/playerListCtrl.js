@@ -3,14 +3,40 @@
 /* Controllers */
 
 KMCModule.controller('PlayerListCtrl',
-    ['playersData', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile","$window",
-        function (playersData, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window) {
+    ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile","$window", 'localStorageService',
+        function (apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window, localStorageService) {
+			// Check if we have ks in locaclstorage
+			var ks = localStorageService.get('ks');
+			if ( !ks ) { //navigate to login
+				$location.path( "/login" );
+			} else {
+				apiService.setKs( ks );
+			}
             $rootScope.lang = 'en-US';
             $scope.search = '';
+
+			var request = {
+				'filter:tagsMultiLikeOr' : 'kdp3',
+				'filter:orderBy'  : '-updatedAt',
+				'filter:objectTypeEqual': '1',
+				'filter:objectType': 'KalturaUiConfFilter',
+				'page:objectType': 'KalturaFilterPager',
+				'pager:pageIndex': '1',
+				'pager:pageSize': '25',
+				'service' : 'uiConf',
+				'action' : 'list'
+			};
+			apiService.doRequest( request ).then( function(data) {
+				$scope.data = data.objects;
+				$scope.calculateTotalItems();
+			});
+
+
+            //$scope.data = apiService.data.objects;
+
             $scope.searchSelect2Options = {};
-            $scope.data = playersData.data.objects;
             $scope.currentPage = 1;
-            $scope.maxSize = 5;
+            $scope.maxSize = 25;
             $scope.playerVersions = [
                 {"label": "1.0", "url": "", "value": "1.0"},
                 {"label": "2.0", "url": "", "value": "2.0"},
@@ -18,18 +44,25 @@ KMCModule.controller('PlayerListCtrl',
             ]
             $scope.requiredVersion = '201';
             $scope.filterd = $filter('filter')($scope.data, $scope.search);
+			//TODO fix total count!
             $scope.calculateTotalItems = function () {
-                $scope.totalItems = $scope.filterd.length;
+				if ( $scope.filterd )
+              	  $scope.totalItems = $scope.filterd.length;
+				else
+					$scope.totalItems = 0;
                 return $scope.totalItems;
             };
             $scope.checkVersionNeedsUpgrade = function (itemVersion) {
+				if ( ! itemVersion ) {
+					return false;
+				}
                 itemVersion = itemVersion.replace(/\./g, '');
                 if (itemVersion >= $scope.requiredVersion)
                     return false
                 else
                     return true
             }
-            $scope.calculateTotalItems();
+
             $scope.title = $filter('i18n')('players list');
             $scope.showSubTitle = true;
             $scope.$watch('search', function (newValue, oldValue) {
@@ -50,6 +83,7 @@ KMCModule.controller('PlayerListCtrl',
                 'Saving changes to this player upgrade, some features and \n' +
                 'design may be lost. (read more about upgrading players)');
             $scope.goToEditPage = function (item) {
+				//TODO filter according to what? we don't have "version" field
                 if (!$scope.checkVersionNeedsUpgrade(item.version)) {
                     return  $window.location.href = 'edit/' + item.id;
                 } else {
