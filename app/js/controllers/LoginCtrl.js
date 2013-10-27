@@ -5,6 +5,10 @@
 KMCModule.controller('LoginCtrl',
 	['$scope', 'apiService', '$location','localStorageService',
 		function ( $scope, apiService , $location , localStorageService) {
+            $scope.formError=false;
+            $scope.formHelpMsg = '';
+            $scope.email = '';
+            $scope.pwd= '';
 			$scope.login = function () {
 				apiService.doRequest( {
 					'service' : 'user',
@@ -19,7 +23,8 @@ KMCModule.controller('LoginCtrl',
 						apiService.setKs( data );
 						$location.path( "/list" );
 					}, function( errorMsg ) {
-						alert ( errorMsg );
+						$scope.formError = true;
+						$scope.formHelpMsg = errorMsg ;
 					});
 			};
 		}]);

@@ -1,22 +1,23 @@
-<div class="jumbotron">
-	<div class="container">
-		<h2 class="text-muted" id="pageHeader">
-			Login to v2.0 Studio
-		</h2>
-
-		<table id="loginTable" class="table">
-			<tbody>
-			<tr>
-				<td style="width: 100px;"><label for="email">Email:</label></td>
-				<td><input type="text" id="email" ng-model="email"></td>
-			</tr>
-			<tr>
-				<td><label for="password">Password:</label></td>
-				<td><input type="password" id="password" ng-model="pwd"></td>
-			</tr>
-			</tbody>
-		</table>
-
-		<div class="login-foot"><a class="btn login" ng-click="login()">Login</a></div>
-	</div>
-</div>
+<div class="jumbotron fullheight">
+    <div class="container">
+        <div class="col-xs-4 col-md-offset-4">
+            <h2 class="text-muted page-header"  id="pageHeader">
+                Login to v2.0 Studio
+            </h2>
+            <div class="alert alert-danger" ng-show="formError">{{formHelpMsg}}</div>
+            <div id="loginTable">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class='sr-only control-label'  for="email">Email:</label>
+                        <input class=" form-control col-md-8" value='' type="text" id="email" ng-model="email" placeholder="Email:"/>
+                    </div>
+                    <div class="form-group">
+                        <label class='sr-only control-label' for="password">Password:</label>
+                        <input class="form-control  col-md-8" value='' type="password" id="password" ng-model="pwd" placeholder="Password:">
+                    </div>
+                </form>
+                <div class="col-md-offset-4 login-foot">
+                    <a class="btn btn-primary login" ng-click="login()">Login</a></div>
+            </div>
+        </div>
+    </div>

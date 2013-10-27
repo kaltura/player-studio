@@ -2,7 +2,7 @@
 <html lang="en" ng-app="KMCModule">
     <head>
         <meta charset="utf-8">
-		<base id="baseHref" href="/can be any thing now"/>
+		<base id="baseHref" href="/"/>
         <!--change this base tag to the root of your app URL-->
         <title>Player Studio - JS Version</title>
         <!-- Latest compiled and minified CSS -->
@@ -17,8 +17,9 @@
         <link rel='stylesheet' href='lib/spinedit/css/bootstrap-spinedit.css'/>
 		<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
         <script type="text/javascript">
+
             var element = document.getElementById("baseHref");
-            element.setAttribute("href", window.location.href.toString().split(window.location.host)[1]);
+           // element.setAttribute("href", window.location.href.toString().split(window.location.host)[1]);
         </script>
         <!-- TODO move to ini file -->
         <script type="text/javascript" src="http://kgit.html5video.org/tags/v2.0.0.rc7/mwEmbedLoader.php"></script>

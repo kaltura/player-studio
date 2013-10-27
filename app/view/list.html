@@ -34,7 +34,7 @@
             <tbody>
             <tr ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
                 <td><img class="playerThumb" src="{{item.thumbnailUrl}}"/></td>
-                <td><a data-ng-click="goToEditPage(item)" href=''>{{item.name}}</a>
+                <td><a data-ng-click="goToEditPage(item)" ng-href="/edit/{{item.id}}">{{item.name}}</a>
                     <span class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
                         <small>{{'This player is out dated - please update'| i18n}}</small>
                     </span>
