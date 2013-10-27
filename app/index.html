@@ -2,7 +2,7 @@
 <html lang="en" ng-app="KMCModule">
     <head>
         <meta charset="utf-8">
-		<base href="/player-studio/app/"/>
+		<base id="baseHref" href="/can be any thing now"/>
         <!--change this base tag to the root of your app URL-->
         <title>Player Studio - JS Version</title>
         <!-- Latest compiled and minified CSS -->
@@ -15,24 +15,23 @@
         <link rel='stylesheet' href='lib/colorpicker/css/colorpicker.css'/>
         <link rel='stylesheet' href='lib/MultiLevelPushMenu/css/icons.css'/>
         <link rel='stylesheet' href='lib/spinedit/css/bootstrap-spinedit.css'/>
-		<!-- TODO move to ini file -->
-		<script type="text/javascript" src="../../html5.kaltura/mwEmbed/mwEmbedLoader.php"></script>
-		<link rel="stylesheet" href="bower_components/select2/select2.css">
-    </head>
+		<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
+        <script type="text/javascript">
+            var element = document.getElementById("baseHref");
+            element.setAttribute("href", window.location.href.toString().split(window.location.host)[1]);
+        </script>
+        <!-- TODO move to ini file -->
+        <script type="text/javascript" src="http://kgit.html5video.org/tags/v2.0.0.rc7/mwEmbedLoader.php"></script>
+        <link rel="stylesheet" href="bower_components/select2/select2.css">
 
-    <body class="scroller">
-        <section class="relative" ng-view></section>
-            <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
         <script type="text/javascript" src="bower_components/select2/select2.js"></script>
         <script src="lib/angular/angular.js"></script> <!--1.07-->
-                <!--1.2rc3-->
+        <!--1.2rc3-->
         <!--<script type="text/javascript" src="bower_components/angular/angular.js"></script>-->
         <!--<script type="text/javascript" src="bower_components/angular-route/angular-route.js.js"></script>-->
-
         <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
         <!--<script src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"></script>-->
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
         <script src="lib/sprintf.js"></script>
         <script src="js/services/ng-i18n.js"></script>
         <script src="lib/bootstrap-ui/ui-bootstrap-0.6.0.js"></script>
@@ -41,7 +40,7 @@
         <script src="lib/MultiLevelPushMenu/js/mlpushmenu.js"></script>
         <script src="lib/spinedit/js/bootstrap-spinedit.js"></script>
         <script src="lib/colorpicker/js/bootstrap-colorpicker-module.js"></script>
-		<script src="lib/localStorage/angular-local-storage.js"></script>
+        <script src="lib/localStorage/angular-local-storage.js"></script>
         <script src="js/app.js"></script>
         <script src="js/filters.js"></script>
         <script src="js/controllers/controllers.js"></script>
@@ -49,7 +48,13 @@
         <script src="js/services/services.js"></script>
         <script src="js/controllers/playerListCtrl.js"></script>
         <script src="js/controllers/playerEditCtrl.js"></script>
-		<script src="js/controllers/loginCtrl.js"></script>
+        <script src="js/controllers/LoginCtrl.js"></script>
         <script src="js/controllers/playerCreateCtrl.js"></script>
+
+    </head>
+
+    <body class="scroller">
+        <section class="relative" ng-view></section>
+
     </body>
 </html>
