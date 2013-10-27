@@ -4,6 +4,13 @@ window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
     ['localization', 'KMC.controllers', 'KMC.filters', 'KMC.services', 'KMC.directives', 'ui.bootstrap', 'ui.select2', 'LocalStorageModule']);
+
+KMCModule.factory('playerCache', function($cacheFactory) {
+    return $cacheFactory('playerCache', {
+        capacity: 10
+    });
+})
+
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];

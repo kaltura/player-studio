@@ -85,7 +85,8 @@ KMCModule.controller('PlayerListCtrl',
             $scope.goToEditPage = function (item) {
 				//TODO filter according to what? we don't have "version" field
                 if (!$scope.checkVersionNeedsUpgrade(item.version)) {
-                    return  $window.location.href = 'edit/' + item.id;
+                    $location.path('/edit/' + item.id);
+                    return false;
                 } else {
                     var modal = $modal.open({
                         templateUrl: 'template/dialog/message.html',
@@ -112,6 +113,8 @@ KMCModule.controller('PlayerListCtrl',
             $scope.newPlayer = function () {
                 $location.path('/new');
             };
+
+
             $scope.duplicate = function (item) {
                 $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
             };

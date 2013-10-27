@@ -14,7 +14,7 @@ KMCServices.factory('PlayerService', ['$http', function($http) {
     .factory('editableProperties', ['$http', function($http) {
         return $http.get('js/services/editableProperties.json');
     }])
-    .factory('ApiService', ['$q', '$timeout', '$location', function($q, $timeout, $location) {
+    .factory('ApiService', ['$q', '$timeout', '$location' , 'playerCache', function($q, $timeout, $location,playerCache) {
         return{
             apiObj: null,
             getClient: function() {
@@ -30,22 +30,35 @@ KMCServices.factory('PlayerService', ['$http', function($http) {
             setWid: function(wid) {
                 this.getClient().wid = wid;
             },
+            getKey:function(params){
+                var key = '';
+                for (var i in params){
+                    key += params[i] + '_';
+              }
+                return key;
+            },
             doRequest: function(params) {
                 //Creating a deferred object
                 var deferred = $q.defer();
-                this.getClient().doRequest(params, function(data) {
-                    //timeout will trigger another $digest cycle that will trigger the "then" function
-                    $timeout(function() {
-                        if (data.code) {
-                            if (data.code == "INVALID_KS") {
-                                $location.path("/login");
+                var params_key =  this.getKey(params);
+                if (playerCache.get(params_key)) {
+                    deferred.resolve(playerCache.get(params_key));
+                } else {
+                    this.getClient().doRequest(params, function(data) {
+                        //timeout will trigger another $digest cycle that will trigger the "then" function
+                        $timeout(function() {
+                            if (data.code) {
+                                if (data.code == "INVALID_KS") {
+                                    $location.path("/login");
+                                }
+                                deferred.reject(data.code);
+                            } else {
+                                playerCache.put(params_key,data);
+                                deferred.resolve(data);
                             }
-                            deferred.reject(data.code);
-                        } else {
-                            deferred.resolve(data);
-                        }
-                    }, 0);
-                });
+                        }, 0);
+                    });
+                }
                 //Returning the promise object
                 return deferred.promise;
             }
