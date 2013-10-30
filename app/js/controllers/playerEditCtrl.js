@@ -9,6 +9,11 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.title = $filter('i18n')('Edit player');
             $scope.data = PlayerData.data;
             $scope.menuShown = true;
+            $scope.$on('menuChange', function () {
+                if (!$scope.menuShown) {
+                    $scope.menuShown = true;
+                }
+            });
             $scope.togglemenu = function () {
                 $scope.menuShown = !$scope.menuShown;
             }
