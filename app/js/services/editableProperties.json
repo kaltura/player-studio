@@ -4,6 +4,7 @@
         "description": "short tab description can be placed here",
         "type": "menu",
         "model": "basicDisplay",
+        "description":"basic settings let you set bla bla bla\n lorem ipsum test goes here",
         "icon":"TabBasicSettings",
         "children": [
             {

@@ -71,6 +71,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 "<div class='mp-level'>" +
                 "<a class='mp-back' ng-click='goBack()' ng-show='isOnTop'>Back</a>" +
                 "<h2>{{label}}</h2>" +
+                "<span class='levelDesc'>{{description}}</span>" +
                 "<ul ng-transclude=''></ul>" +
                 "</div>" +
                 "</li>",
@@ -112,7 +113,8 @@ angular.module('KMC.directives', ['colorpicker.module'])
             },
             scope: {
                 'label': '@',
-                'pagename': '@'
+                'pagename': '@',
+                'description': '@'
             },
             transclude: 'true'
         };
@@ -190,10 +192,12 @@ angular.module('KMC.directives', ['colorpicker.module'])
             },
             link: function (scope, iElement, iAttrs) {
                 var input = iElement.find('input').hide();
+                input.on('change', function () {
+                    $(iElement).find('a').toggleClass('checked');
+                });
                 iElement.on('click', 'a', function (e) {
                     e.preventDefault();
                     input.trigger('click');
-                    $(e.target).toggleClass('checked');
                     return false;
                 })
             }
