@@ -7,22 +7,71 @@ KMCServices.config(['$httpProvider', function($httpProvider) {
 }]);
 KMCServices.factory('PlayerService', ['$http', function($http) {
         return {
-            'getPlayers': function() {
-                return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/player/list.json');
-            },
             'getPlayer': function(id) {
-                return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/player/'+id+'.json');
+                //actually does not use the id for now...
+                return $http.get('js/services/oneplayer.json'); //probably really using the id to get a specific player
+
             }};
     }])
     .factory('editableProperties', ['$http', function($http) {
         return $http.get('js/services/editableProperties.json');
     }])
+    .factory('ApiService', ['$q', '$timeout', '$location' , 'playerCache', function($q, $timeout, $location,playerCache) {
+        return{
+            apiObj: null,
+            getClient: function() {
+                //first request - create new kwidget.api
+                if (!this.apiObj) {
+                    this.apiObj = new kWidget.api();
+                }
+                return this.apiObj;
+            },
+            setKs: function(ks) {
+                this.getClient().setKs(ks);
+            },
+            setWid: function(wid) {
+                this.getClient().wid = wid;
+            },
+            getKey:function(params){
+                var key = '';
+                for (var i in params){
+                    key += params[i] + '_';
+              }
+                return key;
+            },
+            doRequest: function(params) {
+                //Creating a deferred object
+                var deferred = $q.defer();
+                var params_key =  this.getKey(params);
+                if (playerCache.get(params_key)) {
+                    deferred.resolve(playerCache.get(params_key));
+                } else {
+                    this.getClient().doRequest(params, function(data) {
+                        //timeout will trigger another $digest cycle that will trigger the "then" function
+                        $timeout(function() {
+                            if (data.code) {
+                                if (data.code == "INVALID_KS") {
+                                    $location.path("/login");
+                                }
+                                deferred.reject(data.code);
+                            } else {
+                                playerCache.put(params_key,data);
+                                deferred.resolve(data);
+                            }
+                        }, 0);
+                    });
+                }
+                //Returning the promise object
+                return deferred.promise;
+            }
+        };
+    }])
     .factory('playerTemplates', ['$http', function($http) {
         return {
-            'listSystem' : function() {
+            'listSystem': function() {
                 return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
             },
-            'listUser':function(){
+            'listUser': function() {
                 return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
             }
         }
