@@ -10,8 +10,8 @@
     "createdAt": 1355392741,
     "updatedAt": 1355392741,
     "settings": {
-        "name": "Widescreen player - light skin - with live support",
         "basicDisplay": {
+            "name": "Widescreen player - light skin - with live support",
             "topOverlay": {
                 "title": true,
                 "share": true,

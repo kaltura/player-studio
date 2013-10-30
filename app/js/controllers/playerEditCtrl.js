@@ -3,25 +3,27 @@
 /* Controllers */
 
 KMCModule.controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'editProperties',
-        function ($scope, PlayerData, $routeParams, $filter, editProperties) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter',
+        function ($scope, PlayerData, $routeParams, $filter) {
             $scope.playerId = $routeParams.id;
             $scope.title = $filter('i18n')('Edit player');
             $scope.data = PlayerData.data;
             $scope.menuShown = true;
-            $scope.togglemenu = function(){
+            $scope.togglemenu = function () {
                 $scope.menuShown = !$scope.menuShown;
             }
-            $scope.editProperties = editProperties.data;
-            $scope.$watch('menuShown', function(newVal, oldVal) {
+            $scope.$watch('menuShown', function (newVal, oldVal) {
                 if (newVal != oldVal) {
-                    if (newVal) {
-                        $('#mp-menu').css('left', '-100%');
-                        $('.mp-pusher').css('margin-left', '0');
+                    if (newVal) { //close
+                        $('#mp-pusher').animate(
+                            {'left': '30%'},
+                            { duration: 200, queue: true });
                     }
-                    else{
-                        $('.mp-pusher').css('margin-left', '30%');
-                        $('#mp-menu').css('left', '0');
+                    else {//open
+                        $('#mp-pusher').animate(
+                            {'left': '0'},
+                            { duration: 200, queue: true });
+
                     }
                 }
             })

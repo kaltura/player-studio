@@ -1,16 +1,18 @@
 [
     {
-        "label": "Player Display Name",
-        "type": "text",
-        "model": "name",
-        "default": "New Player"
-    },
-    {
         "label": "Basic Display",
         "description": "short tab description can be placed here",
         "type": "menu",
         "model": "basicDisplay",
+        "icon":"TabBasicSettings",
         "children": [
+            {
+                "label": "Player Display Name",
+                "type": "text",
+                "icon": "icon-book",
+                "model": "name",
+                "default": "New Player"
+            },
             {
                 "label": "Top overlay",
                 "type": "menu",

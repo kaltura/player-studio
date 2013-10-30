@@ -23,13 +23,10 @@ body,
   overflow-x: scroll;
   overflow-y: hidden;
 }
-nav li label input,
-nav li label select,
-nav li label div {
-  float: right;
-}
-.colorinput {
+.colorinput,
+#mp-menu .mp-level label input[type="text"].colorinput {
   width: 50px;
+  float: right;
 }
 .colorExample {
   display: block;

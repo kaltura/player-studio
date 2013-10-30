@@ -5,31 +5,30 @@ window.lang = 'en-US';
 var KMCModule = angular.module('KMCModule',
     ['localization', 'KMC.controllers', 'KMC.filters', 'KMC.services', 'KMC.directives', 'ui.bootstrap', 'ui.select2', 'LocalStorageModule']);
 
-KMCModule.factory('playerCache', function($cacheFactory) {
+KMCModule.factory('playerCache', function ($cacheFactory) {
     return $cacheFactory('playerCache', {
         capacity: 10
     });
 })
 
-KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
+KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     $locationProvider.html5Mode(true);
-	$routeProvider.when('/login', {
-			templateUrl: 'view/login.html',
-			controller: 'LoginCtrl',
-			resolve: {'apiService': function (ApiService) {
-				return ApiService;
-			}
-			}
-		}
-	);
+    $routeProvider.when('/login', {
+            templateUrl: 'view/login.html',
+            controller: 'LoginCtrl',
+            resolve: {'apiService': function (ApiService) {
+                return ApiService;
+            }
+            }
+        }
+    );
     $routeProvider.when('/list', {
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
             resolve: {'apiService': function (ApiService) {
                 return ApiService;
-
             }
             }
         }
@@ -38,10 +37,13 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
         {templateUrl: 'view/edit.html',
             controller: 'PlayerEditCtrl',
             resolve: {
-                'PlayerData': function(PlayerService, $route) {
+                'PlayerData': function (PlayerService, $route) {
                     return  PlayerService.getPlayer($route.current.params.id);
                 },
-                'editProperties': 'editableProperties'
+                'editProperties': 'editableProperties',
+                'menuSvc': function (menuSvc) {
+                    return menuSvc.promise;
+                }
             }
         }
     );
@@ -49,10 +51,10 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
         {templateUrl: 'view/new-template.html',
             controller: 'PlayerCreateCtrl',
             resolve: {
-                'templates': function(playerTemplates) {
+                'templates': function (playerTemplates) {
                     return  playerTemplates.listSystem();
                 },
-                'userId': function() {
+                'userId': function () {
                     return '1' //  KMC would need to give us the userID ?
                 }
 
@@ -60,9 +62,9 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
         }
     );
 
-	$routeProvider.otherwise({
-		redirectTo: '/list'
-	});
+    $routeProvider.otherwise({
+        redirectTo: '/list'
+    });
 }]);
 
 

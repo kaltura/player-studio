@@ -1,16 +1,11 @@
 <!-- Push Wrapper -->
-<div class="mp-pusher" id="mp-pusher">
-    <!-- mp-menu -->
-    <nav id="mp-menu" class="mp-menu">
-        <div class="mp-level">
-            <h2 class="icon icon-display">Edit Player</h2>
-            <navmenu data="data.settings" edit-properties='editProperties'>
-            </navmenu>
-        </div>
-    </nav>
-    <!-- /mp-menu -->
-    <div class="scroller"><!-- this is for emulating position fixed of the nav -->
-        <div class="scroller-inner"><!-- site content goes here -->
+<menu-head></menu-head>
+<div id="outerWrap">
+    <div  id="mp-pusher">
+        <!-- mp-menu -->
+        <navmenu data="data.settings" edit-properties='editProperties'/>
+        <!-- /mp-menu -->
+        <div class="wrapper">
             <div class="jumbotron">
                 <a class="menu-trigger" data-ng-click="togglemenu()">
                     <span class="sr-only">Toggle navigation</span>
@@ -26,14 +21,5 @@
                 <pre>{{data}}</pre>
             </div>
         </div>
-        <!-- /scroller-inner -->
     </div>
-    <!-- /scroller -->
-</div><!-- /pusher -->
-<script>
-//    setTimeout(function () {
-//        new mlPushMenu(document.getElementById('mp-menu'), document.getElementById('trigger'));
-//
-//    }, 500);
-
-</script>
+</div>
