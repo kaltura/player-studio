@@ -334,4 +334,10 @@ angular.module('KMC.directives', ['colorpicker.module'])
         };
     }
     ]
-    )
+    ).directive('submitOnEnter',function(){
+        return {
+            link:function(scope,element){
+                element.on('keypress')
+            }
+        }
+    })
