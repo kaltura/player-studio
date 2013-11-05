@@ -319,11 +319,9 @@ angular.module('KMC.directives', ['colorpicker.module'])
             }
         };
     }]).directive('onFinishRender', ["$timeout", 'requestNotificationChannel', function($timeout, requestNotificationChannel) {
+        // requieres having requestNotificationChannel.requestStarted('list'); in parent controller
         return {
             restrict: 'A',
-            controller: function() {
-                requestNotificationChannel.requestStarted('list');
-            },
             link: function(scope, element, attr) {
                 if (scope.$last === true) {
                     $timeout(function() {

@@ -8,25 +8,32 @@ KMCModule.controller('PlayerListCtrl',
 			// Check if we have ks in locaclstorage
 			var ks = localStorageService.get('ks');
 			if ( !ks ) { //navigate to login
-				$location.path( "/login" );
+				return $location.path( "/login" );
 			} else {
 				apiService.setKs( ks );
 			}
+            requestNotificationChannel.requestStarted('list');
             $rootScope.lang = 'en-US';
             $scope.search = '';
+            $scope.searchSelect2Options = {};
+            $scope.currentPage = 1;
+            $scope.maxSize = 5;
 
-			var request = {
+
+            var request = {
 				'filter:tagsMultiLikeOr' : 'kdp3',
 				'filter:orderBy'  : '-updatedAt',
 				'filter:objectTypeEqual': '1',
 				'filter:objectType': 'KalturaUiConfFilter',
 				'page:objectType': 'KalturaFilterPager',
 				'pager:pageIndex': '1',
-				'pager:pageSize': '25',
+				'pager:pageSize': $scope.maxSize,
 				'service' : 'uiConf',
 				'action' : 'list'
 			};
+
 			apiService.doRequest( request ).then( function(data) {
+
 				$scope.data = data.objects;
 				$scope.calculateTotalItems();
 			});
@@ -34,9 +41,6 @@ KMCModule.controller('PlayerListCtrl',
 
             //$scope.data = apiService.data.objects;
 
-            $scope.searchSelect2Options = {};
-            $scope.currentPage = 1;
-            $scope.maxSize = 25;
             $scope.playerVersions = [
                 {"label": "1.0", "url": "", "value": "1.0"},
                 {"label": "2.0", "url": "", "value": "2.0"},
