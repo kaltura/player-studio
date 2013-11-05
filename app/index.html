@@ -12,7 +12,6 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
         <!-- Latest compiled and minified JavaScript -->
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
         <link rel="stylesheet" href="css/app.css"/>
         <link rel="stylesheet" href="css/menu.css"/>
         <link rel="stylesheet" href="css/icons.css"/>
@@ -26,7 +25,6 @@
         </style>
         <![endif]-->
         <script type="text/javascript">
-
             var element = document.getElementById("baseHref");
            // element.setAttribute("href", window.location.href.toString().split(window.location.host)[1]);
         </script>
@@ -35,20 +33,16 @@
         <link rel="stylesheet" href="bower_components/select2/select2.css">
         <link rel="stylesheet" href="bower_components/prettyCheckable/prettyCheckable.css">
         <script type="text/javascript" src="bower_components/select2/select2.js"></script>
-        <script src="lib/angular/angular.js"></script> <!--1.07-->
+        <!--1.07-->
+        <script src="lib/angular/angular.js"></script>
         <!--1.2rc3-->
         <!--<script type="text/javascript" src="bower_components/angular/angular.js"></script>-->
         <!--<script type="text/javascript" src="bower_components/angular-route/angular-route.js.js"></script>-->
         <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
-
         <script src="lib/sprintf.js"></script>
         <script src="js/services/ng-i18n.js"></script>
+        <script src="lib/spin.min.js"></script>
         <script src="lib/bootstrap-ui/ui-bootstrap-0.6.0.js"></script>
-
-        <!--<script src="lib/MultiLevelPushMenu/js/modernizr.custom.js"></script>-->
-        <!--<script src="lib/MultiLevelPushMenu/js/classie.js"></script>-->
-         <!--<script src="lib/MultiLevelPushMenu/js/mlpushmenu.js"></script>-->
-
         <script src="lib/spinedit/js/bootstrap-spinedit.js"></script>
         <script src="lib/colorpicker/js/bootstrap-colorpicker-module.js"></script>
         <script src="lib/localStorage/angular-local-storage.js"></script>
@@ -64,9 +58,8 @@
         <script src="js/controllers/playerCreateCtrl.js"></script>
 
     </head>
-
     <body class="scroller">
+        <loading-widget></loading-widget>
         <section class="relative" ng-view></section>
-
     </body>
 </html>

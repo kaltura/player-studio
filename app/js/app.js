@@ -14,6 +14,46 @@ KMCModule.factory('playerCache', function ($cacheFactory) {
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    //request loading indication///
+    var $http,
+        interceptor = ['$q', '$injector', function ($q, $injector) {
+            var notificationChannel;
+            function success(response) {
+                // get $http via $injector because of circular dependency problem
+                $http = $http || $injector.get('$http');
+                // don't send notification until all requests are complete
+                if ($http.pendingRequests.length < 1) {
+                    // get requestNotificationChannel via $injector because of circular dependency problem
+                    notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
+                    // send a notification requests are complete
+                    notificationChannel.requestEnded();
+                }
+                return response;
+            }
+
+            function error(response) {
+                // get $http via $injector because of circular dependency problem
+                $http = $http || $injector.get('$http');
+                // don't send notification until all requests are complete
+                if ($http.pendingRequests.length < 1) {
+                    // get requestNotificationChannel via $injector because of circular dependency problem
+                    notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
+                    // send a notification requests are complete
+                    notificationChannel.requestEnded();
+                }
+                return $q.reject(response);
+            }
+
+            return function (promise) {
+                // get requestNotificationChannel via $injector because of circular dependency problem
+                notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
+                // send a notification requests are complete
+                notificationChannel.requestStarted();
+                return promise.then(success, error);
+            }
+        }];
+
+    $httpProvider.responseInterceptors.push(interceptor);
     $locationProvider.html5Mode(true);
     $routeProvider.when('/login', {
             templateUrl: 'view/login.html',

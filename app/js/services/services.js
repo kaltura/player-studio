@@ -1,41 +1,80 @@
 'use strict';
 /* Services */
 var KMCServices = angular.module('KMC.services', []);
-KMCServices.config(['$httpProvider', function ($httpProvider) {
+KMCServices.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
-KMCServices.factory('PlayerService', ['$http', function ($http) {
-        return {
-            'getPlayer': function (id) {
-                //actually does not use the id for now...
-                return $http.get('js/services/oneplayer.json'); //probably really using the id to get a specific player
+KMCServices.factory('PlayerService', ['$http', function($http) {
+    return {
+        'getPlayer': function(id) {
+            //actually does not use the id for now...
+            return $http.get('js/services/oneplayer.json'); //probably really using the id to get a specific player
 
-            }};
+        }};
+}])
+KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootScope) {
+        // private notification messages
+        var _START_REQUEST_ = '_START_REQUEST_';
+        var _END_REQUEST_ = '_END_REQUEST_';
+        var obj = {customStart: null};
+        // publish start request notification
+        obj.requestStarted = function(customStart) {
+            $rootScope.$broadcast(_START_REQUEST_);
+            if (customStart) {
+                obj.customStart = customStart;
+            }
+        };
+        // publish end request notification
+        obj.requestEnded = function(customStart) {
+            if (obj.customStart) {
+                if (customStart == obj.customStart) {
+                    $rootScope.$broadcast(_END_REQUEST_);
+                    obj.customStart = null;
+                }
+                else return;
+            }
+            else
+                $rootScope.$broadcast(_END_REQUEST_);
+        };
+        // subscribe to start request notification
+        obj.onRequestStarted = function($scope, handler) {
+            $scope.$on(_START_REQUEST_, function(event) {
+                handler();
+            });
+        };
+        // subscribe to end request notification
+        obj.onRequestEnded = function($scope, handler) {
+            $scope.$on(_END_REQUEST_, function(event) {
+                handler();
+            });
+        };
+
+        return obj;
     }])
-    .factory('menuSvc', ['editableProperties', '$rootScope', '$compile', function (editableProperties, $rootScope, $compile) {
+    .factory('menuSvc', ['editableProperties', '$rootScope', '$compile', function(editableProperties, $rootScope, $compile) {
         var menudata = null;
         var promise = editableProperties
-            .success(function (data) {
+            .success(function(data) {
                 menudata = data;
             });
         var menuSVC = {
             promise: promise,
-            get: function () {
+            get: function() {
                 return menudata;
             },
-            setMenu: function (setTo) {
+            setMenu: function(setTo) {
                 $rootScope.$broadcast('menuChange', setTo);
             },
-            renderMenuItems: function (item, origin, BaseData, scope) {
+            renderMenuItems: function(item, origin, BaseData, scope) {
                 var originAppendPos = origin.find('ul[ng-transclude]:first');
                 if (originAppendPos.length < 1)
                     originAppendPos = origin;
                 switch (item.type) {
                     case  'menu':
                         var originModel = origin.attr('model') ? origin.attr('model') : BaseData;
-                        var parent = renderFormElement(item, '<menu-level pagename='+item.model+'/>', originAppendPos, originModel);
-                        var modelStr = originModel +'.'+ item.model;
+                        var parent = renderFormElement(item, '<menu-level pagename=' + item.model + '/>', originAppendPos, originModel);
+                        var modelStr = originModel + '.' + item.model;
                         for (var j = 0; j < item.children.length; j++) {
                             var subitem = item.children[j];
                             var subappendPos = parent.find('ul[ng-transclude]:first');
@@ -56,7 +95,7 @@ KMCServices.factory('PlayerService', ['$http', function ($http) {
                                     renderFormElement(subitem, '<model-text/>', subappendPos, modelStr);
                                     break;
                                 case 'menu':
-                                    menuSVC.renderMenuItems(subitem, parent,BaseData, scope);
+                                    menuSVC.renderMenuItems(subitem, parent, BaseData, scope);
                                     break;
                             }
                         }
@@ -79,7 +118,7 @@ KMCServices.factory('PlayerService', ['$http', function ($http) {
                 }
                 function renderFormElement(item, directive, appendTo, parentModel) {
                     var elm = angular.element(directive);
-                    angular.forEach(item, function (value, key) {
+                    angular.forEach(item, function(value, key) {
                         if (key != 'model' && (typeof value == 'string' || typeof value == 'number')) {
                             elm.attr(key, value);
                         } else {
@@ -105,49 +144,53 @@ KMCServices.factory('PlayerService', ['$http', function ($http) {
         return menuSVC;
 
     }])
-    .factory('editableProperties', ['$http', function ($http) {
+    .factory('editableProperties', ['$http', function($http) {
         return $http.get('js/services/editableProperties.json');
     }])
-    .factory('ApiService', ['$q', '$timeout', '$location' , 'playerCache', function ($q, $timeout, $location, playerCache) {
+    .factory('ApiService', ['$q', '$timeout', '$location' , 'playerCache', 'requestNotificationChannel', function($q, $timeout, $location, playerCache, requestNotificationChannel) {
         return{
             apiObj: null,
-            getClient: function () {
+            getClient: function() {
                 //first request - create new kwidget.api
                 if (!this.apiObj) {
                     this.apiObj = new kWidget.api();
                 }
                 return this.apiObj;
             },
-            setKs: function (ks) {
+            setKs: function(ks) {
                 this.getClient().setKs(ks);
             },
-            setWid: function (wid) {
+            setWid: function(wid) {
                 this.getClient().wid = wid;
             },
-            getKey: function (params) {
+            getKey: function(params) {
                 var key = '';
                 for (var i in params) {
                     key += params[i] + '_';
                 }
                 return key;
             },
-            doRequest: function (params) {
+            doRequest: function(params) {
                 //Creating a deferred object
                 var deferred = $q.defer();
+                requestNotificationChannel.requestStarted();
                 var params_key = this.getKey(params);
                 if (playerCache.get(params_key)) {
                     deferred.resolve(playerCache.get(params_key));
                 } else {
-                    this.getClient().doRequest(params, function (data) {
+                    this.getClient().doRequest(params, function(data) {
                         //timeout will trigger another $digest cycle that will trigger the "then" function
-                        $timeout(function () {
+                        $timeout(function() {
+
                             if (data.code) {
                                 if (data.code == "INVALID_KS") {
                                     $location.path("/login");
                                 }
+                                requestNotificationChannel.requestEnded();
                                 deferred.reject(data.code);
                             } else {
                                 playerCache.put(params_key, data);
+                                requestNotificationChannel.requestEnded();
                                 deferred.resolve(data);
                             }
                         }, 0);
@@ -158,12 +201,12 @@ KMCServices.factory('PlayerService', ['$http', function ($http) {
             }
         };
     }])
-    .factory('playerTemplates', ['$http', function ($http) {
+    .factory('playerTemplates', ['$http', function($http) {
         return {
-            'listSystem': function () {
+            'listSystem': function() {
                 return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
             },
-            'listUser': function () {
+            'listUser': function() {
                 return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
             }
         }

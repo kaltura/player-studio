@@ -1,13 +1,13 @@
 'use strict';
 /* Directives */
 angular.module('KMC.directives', ['colorpicker.module'])
-    .directive('timeago', [function () {
+    .directive('timeago', [function() {
         return {
             scope: {timestamp: '@'},
             restrict: 'C',
-            link: function (scope, iElement, iAttrs) {
+            link: function(scope, iElement, iAttrs) {
                 if (typeof $.timeago == 'function')
-                    scope.$watch('timestamp', function (newVal, oldVal) {
+                    scope.$watch('timestamp', function(newVal, oldVal) {
                             if (newVal) {
                                 var date = scope.timestamp * 1000;
                                 iElement.text($.timeago(date));
@@ -18,18 +18,18 @@ angular.module('KMC.directives', ['colorpicker.module'])
             }
         }
     }])
-    .directive('menuHead', ['menuSvc', '$compile', function (menuSvc, $compile) {
+    .directive('menuHead', ['menuSvc', '$compile', function(menuSvc, $compile) {
         return {
             restrict: 'E',
             template: "<div id='mp-mainlevel'><ul></ul></div>",
             replace: true,
-            link: function (scope, iElement, iAttrs) {
+            link: function(scope, iElement, iAttrs) {
                 var ul = iElement.find('ul');
                 var elements = menuSvc.get();
-                angular.forEach(elements, function (value, key) {
+                angular.forEach(elements, function(value, key) {
                     var elm = angular.element('<li></li>');
                     elm.html('<a class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
-                    elm.on('click', function () {
+                    elm.on('click', function() {
                         menuSvc.setMenu(value.model);
                     });
                     $compile(elm)(scope).appendTo(ul);
@@ -38,7 +38,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             }
         }
     }])
-    .directive('navmenu', ["$compile", '$parse', 'menuSvc' , function ($compile, $parse, menuSvc) {
+    .directive('navmenu', ["$compile", '$parse', 'menuSvc' , function($compile, $parse, menuSvc) {
         return  {
             template: "<nav id='mp-menu'>" +
                 "<div id='mp-inner'>" +
@@ -50,21 +50,21 @@ angular.module('KMC.directives', ['colorpicker.module'])
             replace: true,
             restrict: 'E',
             transclude: true,
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 var BaseData = $attrs['data'];
                 var menuObj = menuSvc.get();
                 var menuList = $element.find('ul[ng-transclude]:first');
-                angular.forEach(menuObj, function (value, key) {
+                angular.forEach(menuObj, function(value, key) {
                     menuSvc.renderMenuItems(value, menuList, BaseData, $scope);
                 });
 
-            }, link: function ($scope, $element, $attrs) {
+            }, link: function($scope, $element, $attrs) {
                 //open first level
                 $element.find('#mp-base >ul > li > div.mp-level').addClass('mp-level-open');
             }
         }
     }]).
-    directive('menuLevel', ['menuSvc', function (menuSvc) {
+    directive('menuLevel', ['menuSvc', function(menuSvc) {
         return  {
             template: "<li>" +
                 "<a class='menu-level-trigger' data-ng-click='openLevel()'>{{label}}</a>" +
@@ -77,11 +77,11 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 "</li>",
             replace: true,
             restrict: 'E',
-            controller: function ($scope, $element) {
-                $scope.goBack = function () {
+            controller: function($scope, $element) {
+                $scope.goBack = function() {
                     $scope.isOnTop = false;
                 }
-                $scope.openLevel = function (arg) {
+                $scope.openLevel = function(arg) {
                     if (typeof arg == 'undefined')
                         $scope.isOnTop = true;
 
@@ -95,10 +95,10 @@ angular.module('KMC.directives', ['colorpicker.module'])
                     }
                 }
                 $scope.isOnTop = false;
-                $scope.$on('menuChange', function (event, arg) {
+                $scope.$on('menuChange', function(event, arg) {
                     $scope.openLevel(arg);
                 });
-                $scope.$watch('isOnTop', function (newVal, oldVal) {
+                $scope.$watch('isOnTop', function(newVal, oldVal) {
                     if (newVal != oldVal) {
                         if (newVal) { // open
                             $element.parents('.mp-level:first').addClass('mp-level-in-stack');
@@ -119,7 +119,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             transclude: 'true'
         };
     }])
-    .directive('modelColor',function () {
+    .directive('modelColor',function() {
         return  {
             restrict: 'E',
             replace: true,
@@ -133,7 +133,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                                 <span class="colorExample" style="background-color: {{model}}"></span>\n\
                             </label>'
         };
-    }).directive('modelText',function () {
+    }).directive('modelText',function() {
         return {
             replace: true,
             restrict: 'E',
@@ -144,7 +144,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             },
             template: "<label><i class='icon {{icon}}'></i>" +
                 "<input class='form-control' tooltip-placement='right' tooltip='{{label}}' type='text' ng-model='model'/></label>"        };
-    }).directive('modelSelect',function () {
+    }).directive('modelSelect',function() {
         return {
             replace: true,
             restrict: 'E',
@@ -154,18 +154,18 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 initvalue: '@',
                 selectOpts: '@'
             },
-            link: function ($scope, $element, $attrs) {
+            link: function($scope, $element, $attrs) {
                 if (typeof $attrs.options != 'undefined') {
                     $scope.options = JSON.parse($attrs.options);
                 }
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 $scope.options = [];
                 if ($scope.model == '' || typeof $scope.model == 'undefined') {
                     $scope.model = $attrs.initvalue;
                 }
 
-                this.setOptions = function (optsArr) {
+                this.setOptions = function(optsArr) {
                     $scope.options = optsArr;
 
                 }
@@ -177,7 +177,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
         }
     }
 ).
-    directive('modelChecbox',function () {
+    directive('modelChecbox',function() {
         return  {
             template: '<label>{{label}}' +
                 '<div class="clearfix prettyCheck prettycheckbox">' +
@@ -190,19 +190,19 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 label: '@',
                 model: '='
             },
-            link: function (scope, iElement, iAttrs) {
+            link: function(scope, iElement, iAttrs) {
                 var input = iElement.find('input').hide();
-                input.on('change', function () {
+                input.on('change', function() {
                     $(iElement).find('a').toggleClass('checked');
                 });
-                iElement.on('click', 'a', function (e) {
+                iElement.on('click', 'a', function(e) {
                     e.preventDefault();
                     input.trigger('click');
                     return false;
                 })
             }
         };
-    }).directive('modelNumber', function () {
+    }).directive('modelNumber', function() {
         return{
             templateUrl: 'template/spinedit/spinedit.html',
             replace: true,
@@ -216,7 +216,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 initvalue: '@',
                 numberofdecimals: '@'
             },
-            link: function ($scope, $element, $attrs) {
+            link: function($scope, $element, $attrs) {
 
                 var $spinner = $element.find('input').spinedit({
                     minimum: parseInt($scope.from),
@@ -225,16 +225,16 @@ angular.module('KMC.directives', ['colorpicker.module'])
                     value: parseInt($scope.initvalue),
                     numberOfDecimals: parseInt($scope.numberofdecimals)
                 });
-                $spinner.on("valueChanged", function (e) {
+                $spinner.on("valueChanged", function(e) {
                     if (typeof e.value == 'number') {
-                        $scope.$apply(function () {
+                        $scope.$apply(function() {
                             $scope.model = e.value;
                         });
                     }
 
                 });
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 if (!$attrs.from) $scope.from = 0;
                 else $scope.from = $attrs.from;
                 if (!$attrs.to) $scope.to = 10;
@@ -253,4 +253,85 @@ angular.module('KMC.directives', ['colorpicker.module'])
             }
         }
     })
-;
+    .directive('loadingWidget', ['requestNotificationChannel', function(requestNotificationChannel) {
+        return {
+            restrict: "E",
+            scope: {},
+            replace: true,
+            template: "<div class='loadingOverlay'><a><div id='spinWrapper'></div></a></div>",
+            controller: function($scope, $element) {
+                $scope.spinner = null;
+                $scope.spinRunning = false;
+                $scope.opts = {
+                    lines: 15, // The number of lines to draw
+                    length: 27, // The length of each line
+                    width: 8, // The line thickness
+                    radius: 60, // The radius of the inner circle
+                    corners: 1, // Corner roundness (0..1)
+                    rotate: 0, // The rotation offset
+                    direction: 1, // 1: clockwise, -1: counterclockwise
+                    color: '#000', // #rgb or #rrggbb or array of colors
+                    speed: 0.6, // Rounds per second
+                    trail: 24, // Afterglow percentage
+                    shadow: true, // Whether to render a shadow
+                    hwaccel: true, // Whether to use hardware acceleration
+                    className: 'spinner', // The CSS class to assign to the spinner
+                    zIndex: 2e9, // The z-index (defaults to 2000000000)
+                    top: 'auto', // Top position relative to parent in px
+                    left: 'auto' // Left position relative to parent in px
+                };
+                var initSpin = function() {
+                    $scope.spinner = new Spinner($scope.opts).spin();
+                }
+                $scope.endSpin = function() {
+                    if ($scope.spinner)
+                        $scope.spinner.stop();
+                    $scope.spinRunning = false;
+                }
+                $scope.spin = function() {
+                    if ($scope.spinRunning) return;
+                    var target = $element.find('#spinWrapper');
+                    if ($scope.spinner == null)
+                        initSpin();
+                    $scope.spinner.spin(target[0]);
+                    $scope.spinRunning = true;
+                }
+            },
+            link: function(scope, element) {
+                // hide the element initially
+                element.hide();
+
+                var startRequestHandler = function() {
+                    // got the request start notification, show the element
+                    element.show();
+                    scope.spin();
+                };
+
+                var endRequestHandler = function() {
+                    // got the request start notification, show the element
+                    element.hide();
+                    scope.endSpin();
+                };
+
+                requestNotificationChannel.onRequestStarted(scope, startRequestHandler);
+
+                requestNotificationChannel.onRequestEnded(scope, endRequestHandler);
+            }
+        };
+    }]).directive('onFinishRender', ["$timeout", 'requestNotificationChannel', function($timeout, requestNotificationChannel) {
+        return {
+            restrict: 'A',
+            controller: function() {
+                requestNotificationChannel.requestStarted();
+            },
+            link: function(scope, element, attr) {
+                if (scope.$last === true) {
+                    $timeout(function() {
+                        requestNotificationChannel.requestEnded('list');
+                    });
+                }
+            }
+        };
+    }
+    ]
+    )

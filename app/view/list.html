@@ -20,7 +20,7 @@
                 </form>
             </div>
         </div>
-        <table id="playerList" class="table table-hover table-striped">
+        <table  id="playerList" class="table table-hover table-striped">
             <thead>
             <tr>
                 <td class="col-md-3">{{'Preview'| i18n }}</td>
@@ -32,7 +32,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
+            <tr  on-finish-render  ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
                 <td><img class="playerThumb" src="{{item.thumbnailUrl}}"/></td>
                 <td><a data-ng-click="goToEditPage(item)" ng-href="edit/{{item.id}}">{{item.name}}</a>
                     <span class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
@@ -78,7 +78,7 @@
                     <small> per page</small>
                 </form>
             </div>
-            <pagination ng-class='{disabled: filtered.length >= 1 }' previous-text='&laquo;' next-text='&raquo;'
+            <pagination ng-show='filtered.length >= 1' previous-text='&laquo;' next-text='&raquo;'
                         page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
         </div>
     </div>

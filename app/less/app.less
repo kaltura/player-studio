@@ -1,9 +1,13 @@
 /* app stylesheet */
-body, .jumbotron{font-size:16px;}
+body, .jumbotron {
+  font-size: 16px;
+}
+
 .scroller-inner > .container {
   margin: auto;
   max-width: 95%;
 }
+
 .playerThumb {
   width: 300px;
 }
@@ -23,11 +27,11 @@ body, .jumbotron{font-size:16px;}
   overflow-y: hidden;
 }
 
-
-.colorinput,#mp-menu  .mp-level  label input[type="text"].colorinput {
+.colorinput, #mp-menu .mp-level label input[type="text"].colorinput {
   width: 50px;
   float: right;
 }
+
 .colorExample {
   display: block;
   width: 25px;
@@ -82,4 +86,24 @@ body, .jumbotron{font-size:16px;}
 .relative {
   position: relative;
 }
-.fullheight{height:100%;}
+
+.fullheight {
+  height: 100%;
+}
+
+#spinWrapper {
+  top: 50%;
+  left:50%;
+  position: absolute;
+}
+
+.loadingOverlay {
+  height: 100%;
+  width: 100%;
+  background: #B1B1B1;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
