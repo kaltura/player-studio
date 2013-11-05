@@ -6,7 +6,6 @@ KMCModule.controller('PlayerListCtrl',
     ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile","$window", 'localStorageService','requestNotificationChannel',
         function (apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window, localStorageService,requestNotificationChannel) {
 			// Check if we have ks in locaclstorage
-            requestNotificationChannel.requestStarted('list');
 			var ks = localStorageService.get('ks');
 			if ( !ks ) { //navigate to login
 				$location.path( "/login" );

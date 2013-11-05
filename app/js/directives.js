@@ -322,7 +322,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
         return {
             restrict: 'A',
             controller: function() {
-                requestNotificationChannel.requestStarted();
+                requestNotificationChannel.requestStarted('list');
             },
             link: function(scope, element, attr) {
                 if (scope.$last === true) {
