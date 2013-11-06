@@ -147,7 +147,7 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
     .factory('editableProperties', ['$http', function($http) {
         return $http.get('js/services/editableProperties.json');
     }])
-    .factory('ApiService', ['$q', '$timeout', '$location' , 'playerCache', 'requestNotificationChannel', function($q, $timeout, $location, playerCache, requestNotificationChannel) {
+    .factory('apiService', ['$q', '$timeout', '$location' , 'playerCache', 'requestNotificationChannel', function($q, $timeout, $location, playerCache, requestNotificationChannel) {
         return{
             apiObj: null,
             getClient: function() {
@@ -156,6 +156,9 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
                     this.apiObj = new kWidget.api();
                 }
                 return this.apiObj;
+            },
+            unSetks:function(){
+                delete this.apiObj;
             },
             setKs: function(ks) {
                 this.getClient().setKs(ks);

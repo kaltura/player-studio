@@ -5,21 +5,12 @@
 KMCModule.controller('PlayerListCtrl',
     ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile","$window", 'localStorageService','requestNotificationChannel',
         function (apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window, localStorageService,requestNotificationChannel) {
-			// Check if we have ks in locaclstorage
-			var ks = localStorageService.get('ks');
-			if ( !ks ) { //navigate to login
-				return $location.path( "/login" );
-			} else {
-				apiService.setKs( ks );
-			}
             requestNotificationChannel.requestStarted('list');
             $rootScope.lang = 'en-US';
             $scope.search = '';
             $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
             $scope.maxSize = 5;
-
-
             var request = {
 				'filter:tagsMultiLikeOr' : 'kdp3',
 				'filter:orderBy'  : '-updatedAt',

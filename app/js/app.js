@@ -18,6 +18,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
     var $http,
         interceptor = ['$q', '$injector', function ($q, $injector) {
             var notificationChannel;
+
             function success(response) {
                 // get $http via $injector because of circular dependency problem
                 $http = $http || $injector.get('$http');
@@ -58,8 +59,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
     $routeProvider.when('/login', {
             templateUrl: 'view/login.html',
             controller: 'LoginCtrl',
-            resolve: {'apiService': function (ApiService) {
-                return ApiService;
+            resolve: {'apiService': function (apiService) {
+                return apiService;
             }
             }
         }
@@ -67,8 +68,15 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
     $routeProvider.when('/list', {
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
-            resolve: {'apiService': function (ApiService) {
-                return ApiService;
+            resolve: {'apiService': function (apiService, localStorageService, $location) {
+                // Check if we have ks in locaclstorage
+                var ks = localStorageService.get('ks');
+                if (!ks) { //navigate to login
+                    return $location.path("/login");
+                } else {
+                    apiService.setKs(ks);
+                }
+                return apiService;
             }
             }
         }
@@ -101,7 +109,16 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
             }
         }
     );
+    $routeProvider.when('/logout', {
+        resolve: {'logout': function (localStorageService, apiService, $location) {
+            if (localStorageService.isSupported()) {
+                localStorageService.clearAll();
+            }
+            apiService.unSetks();
+            $location.path('/login');
+        }}
 
+    });
     $routeProvider.otherwise({
         redirectTo: '/list'
     });
