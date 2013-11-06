@@ -84,6 +84,9 @@ body > section,
   list-style: none;
   padding: 0;
 }
+#mp-mainlevel ul li {
+  margin-bottom: 10px;
+}
 #mp-mainlevel a.icon {
   color: #fff;
   display: block;

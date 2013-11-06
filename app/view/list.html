@@ -15,9 +15,9 @@
             </div>
             <div class="col-md-4">
                 <form class="form-inline" id="listsearch" role="search">
-                    <input type="text" typeahead="player.name for player in data | filter:$viewValue | limitTo:8" class="form-control" placeholder="{{'Search by name or tag'| i18n}}"
-                           ng-model="search">
-                </form>
+                <input type="text" typeahead="player.name for player in data | filter:$viewValue | limitTo:8" class="form-control" placeholder="{{'Search by name or tag'| i18n}}"
+                       ng-model="search">
+            </form>
             </div>
         </div>
         <table  id="playerList" class="table table-hover table-striped">

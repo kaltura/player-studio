@@ -97,7 +97,6 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
                     this.getClient().doRequest(params, function(data) {
                         //timeout will trigger another $digest cycle that will trigger the "then" function
                         $timeout(function() {
-
                             if (data.code) {
                                 if (data.code == "INVALID_KS") {
                                     $location.path("/login");

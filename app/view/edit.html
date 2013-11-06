@@ -1,9 +1,19 @@
 <!-- Push Wrapper -->
 <menu-head></menu-head>
 <div id="outerWrap">
-    <div  id="mp-pusher">
+    <div id="mp-pusher">
         <!-- mp-menu -->
-        <navmenu data="data.settings"/>
+        <navmenu data="data.settings">
+            <menu-level pagename='search' label='Menu Search'>
+                <li>
+                    <form class="form-inline" id="menuSearch" role="search">
+                        <input ng-controller='menuSearchCtl' type="text" typeahead="item for item in menuData | filter:$viewValue "
+                               class="fullwidth form-control"  placeholder="{{'Search for menu property'| i18n}}"
+                               ng-model='menuSearch'>
+                    </form>
+                </li>
+            </menu-level>
+        </navmenu>
         <!-- /mp-menu -->
         <div class="wrapper">
             <div class="jumbotron">

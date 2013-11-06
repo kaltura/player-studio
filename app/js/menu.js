@@ -16,8 +16,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             menuEvent: 0,
             setMenu: function (setTo) {
                 menuSVC.menuEvent++;
-                console.log(menuSVC.menuEvent);
-                menuSVC.menuScope.$broadcast('menuChange', setTo);
+                    menuSVC.menuScope.$parent.$broadcast('menuChange', setTo);
             },
             buildMenuItem: function (item, targetMenu, BaseData, parentMenu) {
                 var originAppendPos = angular.element(targetMenu).find('ul[ng-transclude]:first');
@@ -94,9 +93,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 }
             }
         };
-        window.menuSVC = menuSVC;
         return menuSVC;
-    }]).directive('navmenu', ['menuSvc','$compile' , function (menuSvc,$compile) {
+    }]).directive('navmenu', ['menuSvc' , function (menuSvc) {
         return  {
             template: "<nav id='mp-menu'>" +
                 "<div id='mp-inner'>" +
@@ -109,26 +107,39 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             restrict: 'E',
             scope: {data: '='},
             transclude: true,
-            compile: function (tElement ) {
-                    var BaseData = 'data';
-                    var menuJsonObj = menuSvc.get(); // gets the  editableProperties json
-                    var menuList = tElement.find('ul[ng-transclude]:first');
-                    angular.forEach(menuJsonObj, function (value) {
-                        menuSvc.buildMenuItem(value, menuList, BaseData);
-                    });
-                    return function ($scope, $element) {
-                        //open first level
-                        $element.find('#mp-base >ul > li > div.mp-level').addClass('mp-level-open');
-                    }
-
+            compile: function (tElement) {
+                var BaseData = 'data';
+                var menuJsonObj = menuSvc.get(); // gets the  editableProperties json
+                var menuList = tElement.find('ul[ng-transclude]:first');
+                angular.forEach(menuJsonObj, function (value) {
+                    menuSvc.buildMenuItem(value, menuList, BaseData);
+                });
+                return function ($scope, $element) {
+                    //open first level
+                    $element.find('#mp-base >ul > li:first > div.mp-level').addClass('mp-level-open');
+                }
             },
             controller: function ($scope, $element, $attrs) {
-                $scope.currentPage = 'Root Level';
                 menuSvc.menuScope = $scope;
             }
 
         }
-    }]).
+    }]).controller('menuSearchCtl',function ($scope, menuSvc) {
+        var menuObj = menuSvc.get();
+        $scope.menuData = [];
+        var getLabels = function (obj) {
+            angular.forEach(obj, function (value, key) {
+                $scope.menuData[key] = value.label;
+                if (value.children) {
+                    getLabels(value.children);
+                }
+            });
+        };
+        getLabels(menuObj);
+        $scope.searchMenuFn = function (value) {
+            //TODO: move to search page by result
+        }
+    }).
     directive('menuLevel', ['menuSvc', function (menuSvc) {
         return  {
             template: "<li>" +
@@ -142,12 +153,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 "</li>",
             replace: true,
             restrict: 'E',
-            link: function ($scope, $element, $attrs) {
-                $scope.currentPage = $attrs['label'];
+            controller: function ($scope) {
                 $scope.goBack = function () {
                     $scope.isOnTop = false;
                 }
-                $scope.label = $attrs.label;
                 $scope.openLevel = function (arg) {
                     if (typeof arg == 'undefined')
                         $scope.isOnTop = true;
@@ -162,6 +171,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     }
                 }
                 $scope.isOnTop = false;
+            },
+            link: function ($scope, $element) {
                 $scope.$on('menuChange', function (event, arg) {
                     $scope.openLevel(arg);
                 });
@@ -189,20 +200,28 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
     }]).directive('menuHead', ['menuSvc', '$compile', function (menuSvc, $compile) {
         return {
             restrict: 'E',
-            template: "<div id='mp-mainlevel'><ul></ul></div>",
+            template: "<div id='mp-mainlevel'><ul><li><a class='icon icon-TabSearch'  ng-click='showSearchMenu()' tooltip-placement='right' tooltip='Search for menu properties'></a></li></ul></div>",
             replace: true,
-            link: function (scope, iElement, iAttrs) {
-                var ul = iElement.find('ul');
+            scope: {},
+            controller: function ($scope) {
+                $scope.showSearchMenu = function () {
+                    menuSvc.setMenu('search');
+                }
+            },
+            compile: function (tElemnt, tAttr, transclude) {
+                var ul = tElemnt.find('ul');
                 var elements = menuSvc.get();
-                angular.forEach(elements, function (value, key) {
+                var compiledContents;
+                angular.forEach(elements, function (value) {
                     var elm = angular.element('<li></li>');
                     elm.html('<a class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
                     elm.on('click', function () {
                         menuSvc.setMenu(value.model);
                     });
-                    $compile(elm)(scope).appendTo(ul);
-
-                })
+                    ul.append(elm);
+                });
+                return  function () {
+                }
             }
         }
     }]);
