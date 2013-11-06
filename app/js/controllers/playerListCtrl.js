@@ -3,8 +3,8 @@
 /* Controllers */
 
 KMCModule.controller('PlayerListCtrl',
-    ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile","$window", 'localStorageService','requestNotificationChannel',
-        function (apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile,$window, localStorageService,requestNotificationChannel) {
+    ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel',
+        function (apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel) {
             requestNotificationChannel.requestStarted('list');
             $rootScope.lang = 'en-US';
             $scope.search = '';
@@ -12,25 +12,25 @@ KMCModule.controller('PlayerListCtrl',
             $scope.currentPage = 1;
             $scope.maxSize = 5;
             var request = {
-				'filter:tagsMultiLikeOr' : 'kdp3',
-				'filter:orderBy'  : '-updatedAt',
-				'filter:objectTypeEqual': '1',
-				'filter:objectType': 'KalturaUiConfFilter',
-				'page:objectType': 'KalturaFilterPager',
-				'pager:pageIndex': '1',
-				'pager:pageSize': $scope.maxSize,
-				'service' : 'uiConf',
-				'action' : 'list'
-			};
+                'filter:tagsMultiLikeOr': 'kdp3',
+                'filter:orderBy': '-updatedAt',
+                'filter:objectTypeEqual': '1',
+                'filter:objectType': 'KalturaUiConfFilter',
+                //this was removed to allow client side paging,
+                // else we need another request to know the totalSize
+                // so we can make a pager that does requests per page
+                //
+//				'page:objectType': 'KalturaFilterPager',
+//				'pager:pageIndex': '1',
+//				'pager:pageSize': $scope.maxSize,
+                'service': 'uiConf',
+                'action': 'list'
+            };
 
-			apiService.doRequest( request ).then( function(data) {
-
-				$scope.data = data.objects;
-				$scope.calculateTotalItems();
-			});
-
-
-            //$scope.data = apiService.data.objects;
+            apiService.doRequest(request).then(function (data) {
+                $scope.data = data.objects;
+                $scope.calculateTotalItems();
+            });
 
             $scope.playerVersions = [
                 {"label": "1.0", "url": "", "value": "1.0"},
@@ -38,19 +38,19 @@ KMCModule.controller('PlayerListCtrl',
                 {"label": "2.0.1rc2", "url": '', "value": "2.0.1"}
             ]
             $scope.requiredVersion = '201';
-            $scope.filterd = $filter('filter')($scope.data, $scope.search);
-			//TODO fix total count!
+            $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
+            //TODO fix total count!
             $scope.calculateTotalItems = function () {
-				if ( $scope.filterd )
-              	  $scope.totalItems = $scope.filterd.length;
-				else
-					$scope.totalItems = 0;
+                if ($scope.filtered)
+                    $scope.totalItems = $scope.filtered.length;
+                else
+                    $scope.totalItems = $scope.data.length;
                 return $scope.totalItems;
             };
             $scope.checkVersionNeedsUpgrade = function (itemVersion) {
-				if ( ! itemVersion ) {
-					return false;
-				}
+                if (!itemVersion) {
+                    return false;
+                }
                 itemVersion = itemVersion.replace(/\./g, '');
                 if (itemVersion >= $scope.requiredVersion)
                     return false
@@ -78,7 +78,7 @@ KMCModule.controller('PlayerListCtrl',
                 'Saving changes to this player upgrade, some features and \n' +
                 'design may be lost. (read more about upgrading players)');
             $scope.goToEditPage = function (item) {
-				//TODO filter according to what? we don't have "version" field
+                //TODO filter according to what? we don't have "version" field
                 if (!$scope.checkVersionNeedsUpgrade(item.version)) {
                     $location.path('/edit/' + item.id);
                     return false;
@@ -111,9 +111,12 @@ KMCModule.controller('PlayerListCtrl',
 
 
             $scope.duplicate = function (item) {
+//                TODO:will need to get the current ID and move it to the edit page with duplicate flag (save as new)
                 $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
             };
+            //TODO: preview action...
             $scope.delete = function (item) {
+                //TODO: api call for delete
                 var modal = $modal.open({
                     templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
@@ -134,6 +137,7 @@ KMCModule.controller('PlayerListCtrl',
                 });
             };
             $scope.update = function (item) {
+                //TODO: api call for update
                 var text = '<span>Updating the player -- TEXT MISSING -- current version </span>';
                 var modal = $modal.open({
                     templateUrl: 'template/dialog/message.html',

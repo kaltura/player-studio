@@ -78,7 +78,7 @@
                     <small> per page</small>
                 </form>
             </div>
-            <pagination ng-show='filtered.length >= 1' previous-text='&laquo;' next-text='&raquo;'
+            <pagination ng-show='totalPages > 1' previous-text='&laquo;' next-text='&raquo;'
                         page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
         </div>
     </div>
