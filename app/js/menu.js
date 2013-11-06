@@ -13,10 +13,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             get: function () {
                 return menudata;
             },
-            menuEvent: 0,
+            currentPage: 'basicSettings',
             setMenu: function (setTo) {
-                menuSVC.menuEvent++;
-                    menuSVC.menuScope.$parent.$broadcast('menuChange', setTo);
+                menuSVC.currentPage = setTo;
+                menuSVC.menuScope.$parent.$broadcast('menuChange', setTo);
             },
             buildMenuItem: function (item, targetMenu, BaseData, parentMenu) {
                 var originAppendPos = angular.element(targetMenu).find('ul[ng-transclude]:first');
@@ -197,30 +197,40 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             },
             transclude: 'true'
         };
-    }]).directive('menuHead', ['menuSvc', '$compile', function (menuSvc, $compile) {
+    }]).directive('menuHead', ['menuSvc', function (menuSvc) {
         return {
             restrict: 'E',
-            template: "<div id='mp-mainlevel'><ul><li><a class='icon icon-TabSearch'  ng-click='showSearchMenu()' tooltip-placement='right' tooltip='Search for menu properties'></a></li></ul></div>",
+            template: "<div id='mp-mainlevel'><ul>" +
+                "</ul></div>",
             replace: true,
+            transclude: true,
             scope: {},
-            controller: function ($scope) {
-                $scope.showSearchMenu = function () {
+            controller: function ($scope, $element) {
+                $scope.showSearchMenu = function (e) {
                     menuSvc.setMenu('search');
+                    $(e.target).addClass('active');
+                    $(e.target).parent('li').siblings('li').find('a').removeClass('active');
                 }
+
             },
-            compile: function (tElemnt, tAttr, transclude) {
+            compile: function (tElemnt, attr, transclude) {
                 var ul = tElemnt.find('ul');
                 var elements = menuSvc.get();
-                var compiledContents;
-                angular.forEach(elements, function (value) {
+                angular.forEach(elements, function (value, key) {
                     var elm = angular.element('<li></li>');
                     elm.html('<a class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
                     elm.on('click', function () {
                         menuSvc.setMenu(value.model);
+                        elm.find('a').addClass('active');
+                        elm.siblings('li').find('a').removeClass('active');
                     });
-                    ul.append(elm);
+                    if (key == 0) elm.find('a').addClass('active');
+                    elm.appendTo(ul);
                 });
-                return  function () {
+                return  function ($scope, $element) {
+                    transclude($scope, function (transItem) {
+                        ul.prepend(transItem);
+                    });
                 }
             }
         }

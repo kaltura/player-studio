@@ -10,7 +10,7 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.data = PlayerData.data;
             $scope.menuShown = true;
             $scope.$watch(function () {
-                return menuSvc.menuEvent
+                return menuSvc.currentPage;
             }, function () {
                 if (!$scope.menuShown) {
                     $scope.menuShown = true;

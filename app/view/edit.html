@@ -1,5 +1,9 @@
 <!-- Push Wrapper -->
-<menu-head></menu-head>
+<menu-head>
+    <li><a class='icon icon-TabSearch' ng-click='showSearchMenu($event)' tooltip-placement='right'
+           tooltip='Search for menu properties'></a>
+    </li>
+</menu-head>
 <div id="outerWrap">
     <div id="mp-pusher">
         <!-- mp-menu -->
@@ -7,8 +11,9 @@
             <menu-level pagename='search' label='Menu Search'>
                 <li>
                     <form class="form-inline" id="menuSearch" role="search">
-                        <input ng-controller='menuSearchCtl' type="text" typeahead="item for item in menuData | filter:$viewValue "
-                               class="fullwidth form-control"  placeholder="{{'Search for menu property'| i18n}}"
+                        <input ng-controller='menuSearchCtl' type="text"
+                               typeahead="item for item in menuData | filter:$viewValue "
+                               class="fullwidth form-control" placeholder="{{'Search for menu property'| i18n}}"
                                ng-model='menuSearch'>
                     </form>
                 </li>
