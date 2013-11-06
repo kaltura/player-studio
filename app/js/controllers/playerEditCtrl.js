@@ -3,13 +3,15 @@
 /* Controllers */
 
 KMCModule.controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter',
-        function ($scope, PlayerData, $routeParams, $filter) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc',
+        function ($scope, PlayerData, $routeParams, $filter, menuSvc) {
             $scope.playerId = $routeParams.id;
             $scope.title = $filter('i18n')('Edit player');
             $scope.data = PlayerData.data;
             $scope.menuShown = true;
-            $scope.$on('menuChange', function () {
+            $scope.$watch(function () {
+                return menuSvc.menuEvent
+            }, function () {
                 if (!$scope.menuShown) {
                     $scope.menuShown = true;
                 }

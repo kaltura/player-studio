@@ -1,7 +1,7 @@
 'use strict';
 /* Menu */
 var KMCMenu = angular.module('KMC.menu', []);
-KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', function (editableProperties, $rootScope, $compile) {
+KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) {
         var menudata = null;
         var promise = editableProperties
             .success(function (data) {
@@ -13,18 +13,21 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
             get: function () {
                 return menudata;
             },
+            menuEvent: 0,
             setMenu: function (setTo) {
+                menuSVC.menuEvent++;
+                console.log(menuSVC.menuEvent);
                 menuSVC.menuScope.$broadcast('menuChange', setTo);
             },
-            buildMenuItem: function (item, targetMenu, BaseData,parentMenu) {
+            buildMenuItem: function (item, targetMenu, BaseData, parentMenu) {
                 var originAppendPos = angular.element(targetMenu).find('ul[ng-transclude]:first');
                 if (originAppendPos.length < 1)
                     originAppendPos = targetMenu;
                 switch (item.type) {
                     case  'menu':
                         var originModel = angular.element(targetMenu).attr('model') ? angular.element(targetMenu).attr('model') : BaseData;
-                        var parentLabel =(parentMenu) ? parentMenu.label : 'Top';
-                        var parent = writeFormElement(item, '<menu-level pagename="' + item.model + '" parent-menu="'+parentLabel+'"/>', originAppendPos, originModel);
+                        var parentLabel = (parentMenu) ? parentMenu.label : 'Top';
+                        var parent = writeFormElement(item, '<menu-level pagename="' + item.model + '" parent-menu="' + parentLabel + '"/>', originAppendPos, originModel);
                         var modelStr = originModel + '.' + item.model;
                         for (var j = 0; j < item.children.length; j++) {
                             var subitem = item.children[j];
@@ -45,25 +48,26 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
                                     writeFormElement(subitem, '<model-text/>', parent, modelStr);
                                     break;
                                 case 'menu':
-                                    menuSVC.buildMenuItem(subitem, parent, BaseData,item);
+                                    menuSVC.buildMenuItem(subitem, parent, BaseData, item);
                                     break;
                             }
                         }
+                        return parent;
                         break;
                     case 'select' :
-                        writeFormElement(item, '<model-select/>', originAppendPos);
+                        return writeFormElement(item, '<model-select/>', originAppendPos);
                         break;
                     case 'checkbox' :
-                        writeFormElement(item, '<model-checbox/>', originAppendPos);
+                        return writeFormElement(item, '<model-checbox/>', originAppendPos);
                         break;
                     case 'color' :
-                        writeFormElement(item, '<model-color/>', originAppendPos);
+                        return writeFormElement(item, '<model-color/>', originAppendPos);
                         break;
                     case 'text' :
-                        writeFormElement(item, '<model-text/>', originAppendPos);
+                        return  writeFormElement(item, '<model-text/>', originAppendPos);
                         break;
                     case 'number':
-                        writeFormElement(item, '<model-number/>', originAppendPos);
+                        return writeFormElement(item, '<model-number/>', originAppendPos);
                         break;
                 }
                 function writeFormElement(item, directive, appendTo, parentModel) {
@@ -90,8 +94,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
                 }
             }
         };
+        window.menuSVC = menuSVC;
         return menuSVC;
-    }]).directive('navmenu', ["$compile", '$parse', 'menuSvc' , function ($compile, $parse, menuSvc) {
+    }]).directive('navmenu', ['menuSvc','$compile' , function (menuSvc,$compile) {
         return  {
             template: "<nav id='mp-menu'>" +
                 "<div id='mp-inner'>" +
@@ -104,22 +109,22 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
             restrict: 'E',
             scope: {data: '='},
             transclude: true,
-            compile: function (tElement) {
-                var BaseData = 'data';
-                var menuObj = menuSvc.get(); // gets the  editableProperties json
-                var menuList = tElement.find('ul[ng-transclude]:first');
-                angular.forEach(menuObj, function (value) {
-                    menuSvc.buildMenuItem(value, menuList, BaseData);
-                });
-                return function ($scope, $element) {
-                    //open first level
-                    $element.find('#mp-base >ul > li > div.mp-level').addClass('mp-level-open');
-                }
+            compile: function (tElement ) {
+                    var BaseData = 'data';
+                    var menuJsonObj = menuSvc.get(); // gets the  editableProperties json
+                    var menuList = tElement.find('ul[ng-transclude]:first');
+                    angular.forEach(menuJsonObj, function (value) {
+                        menuSvc.buildMenuItem(value, menuList, BaseData);
+                    });
+                    return function ($scope, $element) {
+                        //open first level
+                        $element.find('#mp-base >ul > li > div.mp-level').addClass('mp-level-open');
+                    }
+
             },
             controller: function ($scope, $element, $attrs) {
                 $scope.currentPage = 'Root Level';
                 menuSvc.menuScope = $scope;
-
             }
 
         }
@@ -176,7 +181,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
             scope: {
                 'label': '@',
                 'pagename': '@',
-                'parentMenu' :'@',
+                'parentMenu': '@',
                 'description': '@'
             },
             transclude: 'true'

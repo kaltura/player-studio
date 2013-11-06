@@ -85,9 +85,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
                     return  PlayerService.getPlayer($route.current.params.id);
                 },
                 'editProperties': 'editableProperties',
-                'menuSvc': function (menuSvc) {
-                    return menuSvc.promise;
-                }
+                'menuSvc': 'menuSvc'
             }
         }
     );
