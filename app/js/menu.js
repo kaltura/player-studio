@@ -1,118 +1,97 @@
 'use strict';
 /* Menu */
 var KMCMenu = angular.module('KMC.menu', []);
-KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', function(editableProperties, $rootScope, $compile) {
-    var menudata = null;
-    var promise = editableProperties
-        .success(function(data) {
-            menudata = data;
-        });
-    var menuSVC = {
-        promise: promise,
-        get: function() {
-            return menudata;
-        },
-        setMenu: function(setTo) {
-            $rootScope.$broadcast('menuChange', setTo);
-        },
-        renderMenuItems: function(item, origin, BaseData, scope) {
-            var originAppendPos = origin.find('ul[ng-transclude]:first');
-            if (originAppendPos.length < 1)
-                originAppendPos = origin;
-            switch (item.type) {
-                case  'menu':
-                    var originModel = origin.attr('model') ? origin.attr('model') : BaseData;
-                    var parent = renderFormElement(item, '<menu-level pagename=' + item.model + '/>', originAppendPos, originModel);
-                    var modelStr = originModel + '.' + item.model;
-                    for (var j = 0; j < item.children.length; j++) {
-                        var subitem = item.children[j];
-                        var subappendPos = parent.find('ul[ng-transclude]:first');
-                        switch (subitem.type) {
-                            case 'checkbox' :
-                                renderFormElement(subitem, '<model-checbox/>', subappendPos, modelStr);
-                                break;
-                            case 'select' :
-                                renderFormElement(subitem, '<model-select/>', subappendPos, modelStr);
-                                break;
-                            case 'color' :
-                                renderFormElement(subitem, '<model-color/>', subappendPos, modelStr);
-                                break;
-                            case 'number':
-                                renderFormElement(subitem, '<model-number/>', subappendPos, modelStr);
-                                break;
-                            case 'text':
-                                renderFormElement(subitem, '<model-text/>', subappendPos, modelStr);
-                                break;
-                            case 'menu':
-                                menuSVC.renderMenuItems(subitem, parent, BaseData, scope);
-                                break;
+KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', function (editableProperties, $rootScope, $compile) {
+        var menudata = null;
+        var promise = editableProperties
+            .success(function (data) {
+                menudata = data;
+            });
+        var menuSVC = {
+            promise: promise,
+            menuScope: {},
+            get: function () {
+                return menudata;
+            },
+            setMenu: function (setTo) {
+                menuSVC.menuScope.$broadcast('menuChange', setTo);
+            },
+            buildMenuItem: function (item, targetMenu, BaseData,parentMenu) {
+                var originAppendPos = angular.element(targetMenu).find('ul[ng-transclude]:first');
+                if (originAppendPos.length < 1)
+                    originAppendPos = targetMenu;
+                switch (item.type) {
+                    case  'menu':
+                        var originModel = angular.element(targetMenu).attr('model') ? angular.element(targetMenu).attr('model') : BaseData;
+                        var parentLabel =(parentMenu) ? parentMenu.label : 'Top';
+                        var parent = writeFormElement(item, '<menu-level pagename="' + item.model + '" parent-menu="'+parentLabel+'"/>', originAppendPos, originModel);
+                        var modelStr = originModel + '.' + item.model;
+                        for (var j = 0; j < item.children.length; j++) {
+                            var subitem = item.children[j];
+                            switch (subitem.type) {
+                                case 'checkbox' :
+                                    writeFormElement(subitem, '<model-checbox/>', parent, modelStr);
+                                    break;
+                                case 'select' :
+                                    writeFormElement(subitem, '<model-select/>', parent, modelStr);
+                                    break;
+                                case 'color' :
+                                    writeFormElement(subitem, '<model-color/>', parent, modelStr);
+                                    break;
+                                case 'number':
+                                    writeFormElement(subitem, '<model-number/>', parent, modelStr);
+                                    break;
+                                case 'text':
+                                    writeFormElement(subitem, '<model-text/>', parent, modelStr);
+                                    break;
+                                case 'menu':
+                                    menuSVC.buildMenuItem(subitem, parent, BaseData,item);
+                                    break;
+                            }
                         }
-                    }
-                    break;
-                case 'select' :
-                    renderFormElement(item, '<model-select/>', originAppendPos);
-                    break;
-                case 'checkbox' :
-                    renderFormElement(item, '<model-checbox/>', originAppendPos);
-                    break;
-                case 'color' :
-                    renderFormElement(item, '<model-color/>', originAppendPos);
-                    break;
-                case 'text' :
-                    renderFormElement(item, '<model-text/>', originAppendPos);
-                    break;
-                case 'number':
-                    renderFormElement(item, '<model-number/>', originAppendPos);
-                    break;
-            }
-            function renderFormElement(item, directive, appendTo, parentModel) {
-                var elm = angular.element(directive);
-                angular.forEach(item, function(value, key) {
-                    if (key != 'model' && (typeof value == 'string' || typeof value == 'number')) {
-                        elm.attr(key, value);
-                    } else {
-                        if (key == 'options' && typeof value == 'object')
-                            if (Array.isArray(value))
-                                elm.attr(key, JSON.stringify(value));
-                    }
-                });
-                if (typeof parentModel != "undefined") {
-                    var subModelStr = parentModel + '.' + item.model;
-                    elm.attr('model', subModelStr);
+                        break;
+                    case 'select' :
+                        writeFormElement(item, '<model-select/>', originAppendPos);
+                        break;
+                    case 'checkbox' :
+                        writeFormElement(item, '<model-checbox/>', originAppendPos);
+                        break;
+                    case 'color' :
+                        writeFormElement(item, '<model-color/>', originAppendPos);
+                        break;
+                    case 'text' :
+                        writeFormElement(item, '<model-text/>', originAppendPos);
+                        break;
+                    case 'number':
+                        writeFormElement(item, '<model-number/>', originAppendPos);
+                        break;
                 }
-                else {
-                    elm.attr('model', BaseData + '.' + item.model);
-                }
-                if (item.type != 'menu')
-                    elm = $('<li/>').html(elm);
-                var compiled = $compile(elm)(scope).appendTo(appendTo);
-                return compiled;
-            }
-        }
-    };
-    return menuSVC;
-
-}]).directive('menuHead', ['menuSvc', '$compile', function(menuSvc, $compile) {
-        return {
-            restrict: 'E',
-            template: "<div id='mp-mainlevel'><ul></ul></div>",
-            replace: true,
-            link: function(scope, iElement, iAttrs) {
-                var ul = iElement.find('ul');
-                var elements = menuSvc.get();
-                angular.forEach(elements, function(value, key) {
-                    var elm = angular.element('<li></li>');
-                    elm.html('<a class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
-                    elm.on('click', function() {
-                        menuSvc.setMenu(value.model);
+                function writeFormElement(item, directive, appendTo, parentModel) {
+                    var elm = angular.element(directive);
+                    angular.forEach(item, function (value, key) {
+                        if (key != 'model' && (typeof value == 'string' || typeof value == 'number')) {
+                            elm.attr(key, value);
+                        } else {
+                            if (key == 'options' && typeof value == 'object')
+                                if (Array.isArray(value))
+                                    elm.attr(key, JSON.stringify(value));
+                        }
                     });
-                    $compile(elm)(scope).appendTo(ul);
-
-                })
+                    if (typeof parentModel != "undefined") {
+                        var subModelStr = parentModel + '.' + item.model;
+                        elm.attr('model', subModelStr);
+                    }
+                    else {
+                        elm.attr('model', BaseData + '.' + item.model);
+                    }
+                    if (item.type != 'menu')
+                        elm = $('<li/>').html(elm);
+                    return (elm).appendTo(appendTo);
+                }
             }
-        }
-    }])
-    .directive('navmenu', ["$compile", '$parse', 'menuSvc' , function($compile, $parse, menuSvc) {
+        };
+        return menuSVC;
+    }]).directive('navmenu', ["$compile", '$parse', 'menuSvc' , function ($compile, $parse, menuSvc) {
         return  {
             template: "<nav id='mp-menu'>" +
                 "<div id='mp-inner'>" +
@@ -123,27 +102,34 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
                 "</nav>",
             replace: true,
             restrict: 'E',
+            scope: {data: '='},
             transclude: true,
-            controller: function($scope, $element, $attrs) {
-                var BaseData = $attrs['data'];
-                var menuObj = menuSvc.get();
-                var menuList = $element.find('ul[ng-transclude]:first');
-                angular.forEach(menuObj, function(value, key) {
-                    menuSvc.renderMenuItems(value, menuList, BaseData, $scope);
+            compile: function (tElement) {
+                var BaseData = 'data';
+                var menuObj = menuSvc.get(); // gets the  editableProperties json
+                var menuList = tElement.find('ul[ng-transclude]:first');
+                angular.forEach(menuObj, function (value) {
+                    menuSvc.buildMenuItem(value, menuList, BaseData);
                 });
+                return function ($scope, $element) {
+                    //open first level
+                    $element.find('#mp-base >ul > li > div.mp-level').addClass('mp-level-open');
+                }
+            },
+            controller: function ($scope, $element, $attrs) {
+                $scope.currentPage = 'Root Level';
+                menuSvc.menuScope = $scope;
 
-            }, link: function($scope, $element, $attrs) {
-                //open first level
-                $element.find('#mp-base >ul > li > div.mp-level').addClass('mp-level-open');
             }
+
         }
     }]).
-    directive('menuLevel', ['menuSvc', function(menuSvc) {
+    directive('menuLevel', ['menuSvc', function (menuSvc) {
         return  {
             template: "<li>" +
                 "<a class='menu-level-trigger' data-ng-click='openLevel()'>{{label}}</a>" +
                 "<div class='mp-level'>" +
-                "<a class='mp-back' ng-click='goBack()' ng-show='isOnTop'>Back</a>" +
+                "<a class='mp-back' ng-click='goBack()' ng-show='isOnTop'>Back to {{parentMenu}}</a>" +
                 "<h2>{{label}}</h2>" +
                 "<span class='levelDesc'>{{description}}</span>" +
                 "<ul ng-transclude=''></ul>" +
@@ -151,11 +137,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
                 "</li>",
             replace: true,
             restrict: 'E',
-            controller: function($scope, $element) {
-                $scope.goBack = function() {
+            link: function ($scope, $element, $attrs) {
+                $scope.currentPage = $attrs['label'];
+                $scope.goBack = function () {
                     $scope.isOnTop = false;
                 }
-                $scope.openLevel = function(arg) {
+                $scope.label = $attrs.label;
+                $scope.openLevel = function (arg) {
                     if (typeof arg == 'undefined')
                         $scope.isOnTop = true;
 
@@ -169,10 +157,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
                     }
                 }
                 $scope.isOnTop = false;
-                $scope.$on('menuChange', function(event, arg) {
+                $scope.$on('menuChange', function (event, arg) {
                     $scope.openLevel(arg);
                 });
-                $scope.$watch('isOnTop', function(newVal, oldVal) {
+                $scope.$watch('isOnTop', function (newVal, oldVal) {
                     if (newVal != oldVal) {
                         if (newVal) { // open
                             $element.parents('.mp-level:first').addClass('mp-level-in-stack');
@@ -188,8 +176,28 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$rootScope', '$compile', func
             scope: {
                 'label': '@',
                 'pagename': '@',
+                'parentMenu' :'@',
                 'description': '@'
             },
             transclude: 'true'
         };
+    }]).directive('menuHead', ['menuSvc', '$compile', function (menuSvc, $compile) {
+        return {
+            restrict: 'E',
+            template: "<div id='mp-mainlevel'><ul></ul></div>",
+            replace: true,
+            link: function (scope, iElement, iAttrs) {
+                var ul = iElement.find('ul');
+                var elements = menuSvc.get();
+                angular.forEach(elements, function (value, key) {
+                    var elm = angular.element('<li></li>');
+                    elm.html('<a class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
+                    elm.on('click', function () {
+                        menuSvc.setMenu(value.model);
+                    });
+                    $compile(elm)(scope).appendTo(ul);
+
+                })
+            }
+        }
     }]);
