@@ -1,5 +1,6 @@
 'use strict';
 /* Menu */
+
 var KMCMenu = angular.module('KMC.menu', []);
 KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) {
         var menudata = null;
@@ -71,6 +72,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 }
                 function writeFormElement(item, directive, appendTo, parentModel) {
                     var elm = angular.element(directive);
+                    elm.attr('highlight', item.model);
                     angular.forEach(item, function (value, key) {
                         if (key != 'model' && (typeof value == 'string' || typeof value == 'number')) {
                             elm.attr(key, value);
@@ -91,9 +93,55 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         elm = $('<li/>').html(elm);
                     return (elm).appendTo(appendTo);
                 }
+            },
+            menuSearch: function (searchValue) {
+                var search = function (path, obj, target) {
+                    var found = false;
+                    for (var k in obj) {
+                        if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
+                            if (obj[k] === target)
+                                return  path + "['" + k + "']"
+                            else if (typeof obj[k] === "object") {
+                                var result = search(path + "['" + k + "']", obj[k], target);
+                                if (result)
+                                    return result;
+                            }
+                    }
+                    return false;
+                }
+                var foundLabel = search('menudata', menudata, searchValue);
+                if (foundLabel) {
+                    var foundModel = eval(foundLabel.substr(0, foundLabel.lastIndexOf("['label']"))).model;
+                    var lastMenu = foundLabel.substr(0, foundLabel.lastIndexOf("['children']"));
+                    var menuPage = eval(lastMenu);
+                    menuSVC.menuScope.$broadcast('highlight', foundModel);
+                    menuSVC.setMenu(menuPage.model);
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
+
         };
         return menuSVC;
+    }]).directive('highlight', ['$timeout', function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, iElem, iAttr) {
+                scope.$on('highlight', function (e, data) {
+                    if (iAttr.highlight == data) {
+                        var originalBorder = iElem.css('border') || 'none';
+                        var originalMargin = iElem.css('margin') || 'none';
+                        iElem.css({'borderStyle':'solid','borderWidth': '2px','borderRadius':'10px','margin':'-4px 0'});
+                        iElem.animate({'borderColor': '#FD0210'}, 1000);
+                        $timeout(function () {
+                            iElem.css({'border': originalBorder,'margin':originalMargin});
+                        }, 4000);
+                    }
+                })
+            }
+        }
     }]).directive('navmenu', ['menuSvc' , function (menuSvc) {
         return  {
             template: "<nav id='mp-menu'>" +
@@ -127,7 +175,20 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
     }]).controller('menuSearchCtl',function ($scope, menuSvc) {
         var menuObj = menuSvc.get();
         $scope.menuData = [];
-        var getLabels = function (obj) {
+        $scope.menuSearch = '';
+        $scope.$watch('menuSearch',function(newVal,oldVal){
+            if (newVal!=oldVal){
+                $scope.notFound=false;
+            }
+        })
+        $scope.searchMenuFn = function () {
+            $scope.notFound =false;
+            var searchResult = menuSvc.menuSearch($scope.menuSearch);
+            if (!searchResult)
+                $scope.notFound = true;
+
+        }
+        var getLabels = function (obj) { // for autocomplete
             angular.forEach(obj, function (value, key) {
                 $scope.menuData[key] = value.label;
                 if (value.children) {
@@ -136,10 +197,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             });
         };
         getLabels(menuObj);
-        $scope.searchMenuFn = function (value) {
-            //TODO: move to search page by result
-        }
-    }).
+    }
+).
     directive('menuLevel', ['menuSvc', function (menuSvc) {
         return  {
             template: "<li>" +

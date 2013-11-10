@@ -2,4 +2,4 @@ logs/*
 !.gitkeep
 .idea/*
 .idea/watcherTasks.xml
-studio2JuneAI (6).docx
+*.docx

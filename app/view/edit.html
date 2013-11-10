@@ -9,12 +9,12 @@
         <!-- mp-menu -->
         <navmenu data="data.settings">
             <menu-level pagename='search' label='Menu Search'>
-                <li>
-                    <form class="form-inline" id="menuSearch" role="search">
-                        <input ng-controller='menuSearchCtl' type="text"
+                <li class="nohover">
+                    <form ng-controller='menuSearchCtl'  class="form-inline" id="menuSearch"  ng-submit="searchMenuFn(value)" role="search">
+                        <input type="text"
                                typeahead="item for item in menuData | filter:$viewValue "
                                class="fullwidth form-control" placeholder="{{'Search for menu property'| i18n}}"
-                               ng-model='menuSearch'>
+                               ng-model='menuSearch'><span class="help-block" ng-show="notFound">{{ 'The property was not found '| i18n}}</span>
                     </form>
                 </li>
             </menu-level>
