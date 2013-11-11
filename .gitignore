@@ -2,4 +2,3 @@ logs/*
 !.gitkeep
 .idea/*
 .idea/watcherTasks.xml
-*.docx

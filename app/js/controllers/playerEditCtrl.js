@@ -8,30 +8,8 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.playerId = $routeParams.id;
             $scope.title = $filter('i18n')('Edit player');
             $scope.data = PlayerData.data;
-            $scope.menuShown = true;
-            $scope.$watch(function () {
-                return menuSvc.currentPage;
-            }, function () {
-                if (!$scope.menuShown) {
-                    $scope.menuShown = true;
-                }
-            });
-            $scope.togglemenu = function () {
-                $scope.menuShown = !$scope.menuShown;
-            }
-            $scope.$watch('menuShown', function (newVal, oldVal) {
-                if (newVal != oldVal) {
-                    if (newVal) { //close
-                        $('#mp-pusher').animate(
-                            {'left': '30%'},
-                            { duration: 200, queue: true });
-                    }
-                    else {//open
-                        $('#mp-pusher').animate(
-                            {'left': '0'},
-                            { duration: 200, queue: true });
 
-                    }
-                }
-            })
         }]);
+KMCModule.controller('editPageDataCntrl',['$scope',function($scope){
+
+}]);

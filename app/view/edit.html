@@ -1,11 +1,11 @@
 <!-- Push Wrapper -->
 <menu-head>
-    <li><a class='icon icon-TabSearch' ng-click='showSearchMenu($event)' tooltip-placement='right'
+    <li><a menupage='search' class='icon icon-TabSearch'  tooltip-placement='right'
            tooltip='Search for menu properties'></a>
     </li>
 </menu-head>
 <div id="outerWrap">
-    <div id="mp-pusher">
+    <div id="mp-pusher" ng-controller="menuCntrl">
         <!-- mp-menu -->
         <navmenu data="data.settings">
             <menu-level pagename='search' label='Menu Search'>
@@ -32,7 +32,7 @@
 
                 <p>use the menu (3 bars icon) to navigate through editable properties.</p>
             </div>
-            <div class="container">
+            <div class="container" ng-controller="editPageDataCntrl">
                 <pre>{{data}}</pre>
             </div>
         </div>

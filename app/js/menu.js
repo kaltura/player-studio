@@ -2,6 +2,39 @@
 /* Menu */
 
 var KMCMenu = angular.module('KMC.menu', []);
+KMCMenu.controller('menuCntrl',['menuSvc','$scope',function(menuSvc,$scope){
+    $scope.menuShown = true;
+    $scope.$on('menuChange',function(){
+        $scope.menuShown = true;
+    });
+    $scope.$watch(function () {
+        return menuSvc.currentPage;
+    }, function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            if (!$scope.menuShown) {
+                $scope.menuShown = true;
+            }
+        }
+    });
+    $scope.togglemenu = function () {
+        $scope.menuShown = !$scope.menuShown;
+    }
+    $scope.$watch('menuShown', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            if (newVal) { //close
+                $('#mp-pusher').animate(
+                    {'left': '30%'},
+                    { duration: 200, queue: true });
+            }
+            else {//open
+                $('#mp-pusher').animate(
+                    {'left': '0'},
+                    { duration: 200, queue: true });
+
+            }
+        }
+    })
+}]);
 KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) {
         var menudata = null;
         var promise = editableProperties
@@ -133,16 +166,17 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     if (iAttr.highlight == data) {
                         var originalBorder = iElem.css('border') || 'none';
                         var originalMargin = iElem.css('margin') || 'none';
-                        iElem.css({'borderStyle':'solid','borderWidth': '2px','borderRadius':'10px','margin':'-4px 0'});
+                        iElem.css({'borderStyle': 'solid', 'borderWidth': '2px', 'borderRadius': '10px', 'margin': '-4px 0'});
                         iElem.animate({'borderColor': '#FD0210'}, 1000);
                         $timeout(function () {
-                            iElem.css({'border': originalBorder,'margin':originalMargin});
+                            iElem.css({'border': originalBorder, 'margin': originalMargin});
                         }, 4000);
                     }
                 })
             }
         }
     }]).directive('navmenu', ['menuSvc' , function (menuSvc) {
+
         return  {
             template: "<nav id='mp-menu'>" +
                 "<div id='mp-inner'>" +
@@ -176,13 +210,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
         var menuObj = menuSvc.get();
         $scope.menuData = [];
         $scope.menuSearch = '';
-        $scope.$watch('menuSearch',function(newVal,oldVal){
-            if (newVal!=oldVal){
-                $scope.notFound=false;
+        $scope.$watch('menuSearch', function (newVal, oldVal) {
+            if (newVal != oldVal) {
+                $scope.notFound = false;
             }
         })
         $scope.searchMenuFn = function () {
-            $scope.notFound =false;
+            $scope.notFound = false;
             var searchResult = menuSvc.menuSearch($scope.menuSearch);
             if (!searchResult)
                 $scope.notFound = true;
@@ -265,30 +299,33 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             transclude: true,
             scope: {},
             controller: function ($scope, $element) {
-                $scope.showSearchMenu = function (e) {
-                    menuSvc.setMenu('search');
-                    $(e.target).addClass('active');
-                    $(e.target).parent('li').siblings('li').find('a').removeClass('active');
-                }
-
+                $scope.changeActiveItem = function (element) {
+                    var menuitem = $(element);
+                    if (menuitem.length && menuitem.is('a') && menuitem.parent('li')) {
+                        $(menuitem).addClass('active');
+                        $(menuitem).parent('li').siblings('li').find('a').removeClass('active');
+                    }
+                };
             },
-            compile: function (tElemnt, attr, transclude) {
-                var ul = tElemnt.find('ul');
+            compile: function (tElement, attr, transclude) {
+                var ul = tElement.find('ul');
                 var elements = menuSvc.get();
                 angular.forEach(elements, function (value, key) {
                     var elm = angular.element('<li></li>');
-                    elm.html('<a class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
-                    elm.on('click', function () {
-                        menuSvc.setMenu(value.model);
-                        elm.find('a').addClass('active');
-                        elm.siblings('li').find('a').removeClass('active');
-                    });
-                    if (key == 0) elm.find('a').addClass('active');
+                    elm.html('<a menupage="' + value.model + '" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
+                    if (key == 0) elm.find('a').addClass('active');// set first icon active
                     elm.appendTo(ul);
                 });
                 return  function ($scope, $element) {
                     transclude($scope, function (transItem) {
                         ul.prepend(transItem);
+                    });
+                    $element.find('a[menupage]').each(function(){
+                        $(this).click(function(){
+                                var model = $(this).attr('menupage');
+                                menuSvc.setMenu(model);
+                                $scope.changeActiveItem(this);
+                        })
                     });
                 }
             }
