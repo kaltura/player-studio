@@ -34,6 +34,10 @@
             </div>
             <div class="container" ng-controller="editPageDataCntrl">
                 <pre>{{data}}</pre>
+                <dropdown-radio highlight="radiosize" label="Radio Size" type="radio" default="0"
+                                options="editableproperties[0][children][2][children][2][options]"
+                                model="data.basicDisplay.controlBar.radiosize">
+                </dropdown-radio>
             </div>
         </div>
     </div>

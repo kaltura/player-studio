@@ -66,6 +66,26 @@
                         "stepsize": 5
                     },
                     {
+                        "label": "Radio Size",
+                        "type": "radio",
+                        "default": 0,
+                        "options": [
+                            {
+                                "label": "None",
+                                "value": 0
+                            },
+                            {
+                                "label": "Normal & Big",
+                                "value": 1
+                            },
+                            {
+                                "label": "Small,Normal & Big",
+                                "value": 2
+                            }
+                        ],
+                        "model": "radiosize"
+                    },
+                    {
                         "label": "Size",
                         "type": "select",
                         "default": "0",

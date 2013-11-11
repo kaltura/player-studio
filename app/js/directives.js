@@ -17,7 +17,58 @@ angular.module('KMC.directives', ['colorpicker.module'])
 
             }
         }
-    }])
+    }]).directive('dropdownRadio', function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<div class="form-element">' +
+                '<div class="header">{{ label }}<i class="pull-right glyphicon glyphicon-chevron-right"></i></div>' +
+                '<div class="collapsable" style="height:0;overflow: hidden"> ' +
+                '<label  ng-repeat="option in options" >' +
+                '<input value="{{ option.value }}" type="radio" ng-model="model"/>{{ option.label }}</label>' +
+                '</div>' +
+                '</div>',
+            scope: {
+                options: '&',
+                label: '@'
+            },
+            controller: function ($scope, $element, $attrs) {
+                $scope.subOpen = false;
+                $scope.$watch('subOpen', function (newVal, oldVal) {
+                    if (newVal != oldVal) {
+                        $scope.toggleSubSection();
+                    }
+                })
+                $scope.toggleSubSection = function () {
+                    $scope.subOpen = !$scope.subOpen;
+                    if ($scope.subOpen == true)
+                        $element.find('.collapsable').css('height', '100%');
+                    else
+                        $element.find('.collapsable').css('height', '0');
+                }
+                $scope.options = [
+                    {
+                        "label": "None",
+                        "value": 0
+                    },
+                    {
+                        "label": "Normal & Big",
+                        "value": 1
+                    },
+                    {
+                        "label": "Small,Normal & Big",
+                        "value": 2
+                    }
+                ]
+            },
+            link: function (scope, element, attributes) {
+                element.on('click', 'div.header', function (e) {
+                    $(this).find('i').toggleClass('glyphicon-chevron-down glyphicon-chevron-right');
+                    $scope.toggleSubSection();
+                });
+            }
+        }
+    })
     .directive('modelColor',function () {
         return  {
             restrict: 'E',
