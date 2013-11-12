@@ -1,11 +1,10 @@
 [
     {
         "label": "Basic Display",
-        "description": "short tab description can be placed here",
         "type": "menu",
+        "description": "basic settings let you set bla bla bla\n lorem ipsum test goes here",
         "model": "basicDisplay",
-        "description":"basic settings let you set bla bla bla\n lorem ipsum test goes here",
-        "icon":"TabBasicSettings",
+        "icon": "TabBasicSettings",
         "children": [
             {
                 "label": "Player Display Name",
@@ -15,97 +14,455 @@
                 "default": "New Player"
             },
             {
-                "label": "Top overlay",
+                "label": "Last Update",
+                "type": "readonly",
+                "model": "lastUpdated"
+            },
+            {
+                "label": "Player Preview Entry",
+                "type": "entryselector",
+                "model": "previewEntry"
+            },
+            {
+                "label": "Player Tags",
+                "type": "tags",
+                "model": "tags\n"
+            },
+            {
+                "label": "Update Player",
+                "type": "button",
+                "model": "playerUpdate"
+            },
+            {
+                "label": "Advanced",
                 "type": "menu",
-                "model": "topOverlay",
+                "model": "advanced",
                 "children": [
                     {
-                        "label": "Title",
-                        "type": "checkbox",
-                        "default": true,
-                        "model": "title"
+                        "type": "featuremenu",
+                        "model": "transport",
+                        "label": "Transport",
+                        "children": [
+                            {
+                                "options": {
+                                    "": {
+                                        "label": "2mbs",
+                                        "value": 2
+                                    }
+                                },
+                                "type": "dropdown",
+                                "label": "Prefered Bitrate",
+                                "model": "preferedFlavorBR"
+                            },
+                            {
+                                "options": {
+                                    "": {
+                                        "label": "option",
+                                        "value": 0.75
+                                    }
+                                },
+                                "type": "dropdown",
+                                "label": "Delivery type",
+                                "model": "deliveryType"
+                            }
+                        ]
                     },
                     {
-                        "label": "Info",
-                        "type": "checkbox",
-                        "default": true,
-                        "model": "info"
+                        "options": {
+                            "": {
+                                "label": "4 / 3",
+                                "value": "narrow"
+                            }
+                        },
+                        "type": "dropdown",
+                        "label": "Aspect Ratio",
+                        "model": "aspectRatio"
                     },
                     {
-                        "label": "Share",
-                        "type": "checkbox",
-                        "default": true,
-                        "model": "share"
+                        "type": "featuremenu",
+                        "model": "deviceSpecific",
+                        "label": "Device Specific Flags",
+                        "children": [
+                            {
+                                "type": "checkbox",
+                                "label": "Html Controls on iPad",
+                                "model": "ipadHTMLcontrols"
+                            },
+                            {
+                                "type": "checkbox",
+                                "label": "Native Controls Fullscreen",
+                                "model": "nativeFullscreenControls"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Look and Feel",
+        "icon": "TabLookAndFeel",
+        "description": "look and feel let you set bla bla bla\n lorem ipsum test goes here",
+        "type": "menu",
+        "model": "lookAndFeel",
+        "children": [
+            {
+                "type": "featuremenu",
+                "model": "title",
+                "label": "Title Label",
+                "children": [
+                    {
+                        "options": {
+                            "": {
+                                "label": "Right",
+                                "value": "right"
+                            }
+                        },
+                        "type": "radio",
+                        "label": "Align",
+                        "model": "align"
                     },
                     {
-                        "label": "Color",
-                        "type": "color",
-                        "default": "#fff",
-                        "model": "color"
+                        "options": {
+                            "": {
+                                "label": "option",
+                                "value": 0.75
+                            }
+                        },
+                        "type": "dropdown",
+                        "label": "Delivery type",
+                        "model": "deliveryType"
+                    },
+                    {
+                        "label": "Template",
+                        "model": "titleTemplate",
+                        "default": "'<span data-bind=”{mediaProxy.entry.name}”></span>'",
+                        "type": "modaltextbox"
+                    },
+                    {
+                        "options": {
+                            "": {
+                                "label": "videoHolder",
+                                "value": "videoHolder"
+                            }
+                        },
+                        "type": "dropdown",
+                        "label": "Container",
+                        "model": "titleContainer"
+                    },
+                    {
+                        "default": ".titleLabel",
+                        "model": "titleCSSclass",
+                        "label": "CSS class",
+                        "type": "readonly"
                     }
                 ]
             },
             {
-                "label": "Control Bar",
-                "type": "menu",
+                "type": "featuremenu",
                 "model": "controlBar",
+                "label": "Control Bar",
                 "children": [
                     {
-                        "label": "Volume",
-                        "type": "checkbox",
-                        "default": true,
-                        "model": "volume"
-                    },
-                    {
-                        "label": "Initial Volume",
-                        "type": "number",
-                        "default": 80,
-                        "model": "initialvolume",
-                        "from": 0,
-                        "to": 100,
-                        "stepsize": 5
-                    },
-                    {
                         "label": "Size",
-                        "type": "select",
-                        "default": "0",
+                        "showTextEntry": true,
+                        "type": "slider",
+                        "default": "100%,30px",
+                        "model": "controlBarSize"
+                    },
+                    {
+                        "type": "featuremenu",
+                        "model": "controlBarVolume",
+                        "label": "Volume Control",
+                        "children": [
+                            {
+                                "options": [
+                                    {
+                                        "label": "Horizontal",
+                                        "value": 0
+                                    },
+                                    {
+                                        "label": "Vertical",
+                                        "value": 1
+                                    }
+                                ],
+                                "label": "Volume Slider direction",
+                                "type": "radio",
+                                "default": 0,
+                                "model": "controlBarVolumeDirection"
+                            },
+                            {
+                                "label": "Initial Volume",
+                                "type": "number",
+                                "default": 80,
+                                "model": "initialvolume",
+                                "from": 0,
+                                "to": 100,
+                                "stepsize": 5
+                            }
+                        ]
+                    },
+                    {
+                        "type": "featuremenu",
+                        "model": "logo",
+                        "label": "Logo",
+                        "children": [
+                            {
+                                "model": "order",
+                                "default": 0,
+                                "type": "text"
+                            },
+                            {
+                                "options": {
+                                    "": {
+                                        "label": "Right",
+                                        "value": "right"
+                                    }
+                                },
+                                "type": "radio",
+                                "label": "Align",
+                                "model": "align"
+                            },
+                            {
+                                "model": "priority",
+                                "label": "Display Priority",
+                                "options": [
+                                    {
+                                        "label": "Low",
+                                        "value": 0
+                                    },
+                                    {
+                                        "label": "Medium",
+                                        "value": 1
+                                    },
+                                    {
+                                        "label": "High",
+                                        "value": 2
+                                    }
+                                ],
+                                "type": "dropdown"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "featuremenu",
+                        "model": "flavor",
+                        "label": "Flavor Selector",
+                        "children": [
+                            {
+                                "model": "order",
+                                "default": 0,
+                                "type": "text"
+                            },
+                            {
+                                "options": {
+                                    "": {
+                                        "label": "Right",
+                                        "value": "right"
+                                    }
+                                },
+                                "type": "radio",
+                                "label": "Align",
+                                "model": "align"
+                            },
+                            {
+                                "model": "priority",
+                                "label": "Display Priority",
+                                "options": [
+                                    {
+                                        "label": "Low",
+                                        "value": 0
+                                    },
+                                    {
+                                        "label": "Medium",
+                                        "value": 1
+                                    },
+                                    {
+                                        "label": "High",
+                                        "value": 2
+                                    }
+                                ],
+                                "type": "dropdown"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "featuremenu",
+                        "model": "playbackRate",
+                        "label": "Playback Rate Selector",
+                        "children": [
+                            {
+                                "model": "order",
+                                "default": 0,
+                                "type": "text"
+                            },
+                            {
+                                "options": {
+                                    "": {
+                                        "label": "Right",
+                                        "value": "right"
+                                    }
+                                },
+                                "type": "radio",
+                                "label": "Align",
+                                "model": "align"
+                            },
+                            {
+                                "model": "priority",
+                                "label": "Display Priority",
+                                "options": [
+                                    {
+                                        "label": "Low",
+                                        "value": 0
+                                    },
+                                    {
+                                        "label": "Medium",
+                                        "value": 1
+                                    },
+                                    {
+                                        "label": "High",
+                                        "value": 2
+                                    }
+                                ],
+                                "type": "dropdown"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "featuremenu",
+                        "model": "flagContent",
+                        "label": "Flag Content",
+                        "children": [
+                            {
+                                "model": "order",
+                                "default": 0,
+                                "type": "text"
+                            },
+                            {
+                                "options": {
+                                    "": {
+                                        "label": "Right",
+                                        "value": "right"
+                                    }
+                                },
+                                "type": "radio",
+                                "label": "Align",
+                                "model": "align"
+                            },
+                            {
+                                "model": "priority",
+                                "label": "Display Priority",
+                                "options": [
+                                    {
+                                        "label": "Low",
+                                        "value": 0
+                                    },
+                                    {
+                                        "label": "Medium",
+                                        "value": 1
+                                    },
+                                    {
+                                        "label": "High",
+                                        "value": 2
+                                    }
+                                ],
+                                "type": "dropdown"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "featuremenu",
+                "model": "watermark",
+                "label": "Watermark",
+                "children": [
+                    {
+                        "label": "Watermark Logo URL",
+                        "model": "watermarkURL",
+                        "validation": "url",
+                        "type": "text"
+                    },
+                    {
                         "options": [
                             {
-                                "label": "None",
-                                "value": 0
+                                "label": "Top Left",
+                                "value": "top,left"
                             },
                             {
-                                "label": "Normal & Big",
-                                "value": 1
-                            },
-                            {
-                                "label": "Small,Normal & Big",
-                                "value": 2
+                                "label": "Top Right",
+                                "value": "top,right"
                             }
                         ],
-                        "model": "size"
-                    },
-                    {
-                        "label": "Counters",
-                        "type": "checkbox",
-                        "default": false,
-                        "model": "counters"
-                    },
-                    {
-                        "label": "Quality",
-                        "type": "checkbox",
-                        "default": true,
-                        "model": "quality"
-                    },
-                    {
-                        "label": "Fullscreen",
-                        "type": "checkbox",
-                        "default": true,
-                        "model": "fullscreen"
+                        "label": "Position",
+                        "type": "dropdown",
+                        "default": "top,left",
+                        "model": "watermarkPosition"
                     }
-
                 ]
-
+            },
+            {
+                "type": "featuremenu",
+                "model": "stylesAndColors",
+                "label": "Styles & Colors",
+                "children": [
+                    {
+                        "label": "ControlBar Background",
+                        "model": "controlBarColor",
+                        "default": "#000",
+                        "type": "color"
+                    },
+                    {
+                        "label": "Playhead Scurbber",
+                        "model": "playheadColor",
+                        "default": "#fff",
+                        "type": "color"
+                    },
+                    {
+                        "label": "Focus Color",
+                        "model": "focusColor",
+                        "default": "#fff",
+                        "type": "color"
+                    },
+                    {
+                        "type": "featuremenu",
+                        "model": "textColor",
+                        "label": "textColor",
+                        "children": [
+                            {
+                                "label": "Text Color",
+                                "model": "textColorValue",
+                                "default": "#fff",
+                                "type": "color"
+                            },
+                            {
+                                "options": [
+                                    {
+                                        "label": "Ariel",
+                                        "value": "ariel"
+                                    },
+                                    {
+                                        "label": "Helvetica",
+                                        "value": "helvetica"
+                                    }
+                                ],
+                                "label": "Font name",
+                                "type": "dropdown",
+                                "default": "ariel",
+                                "model": "fontName"
+                            },
+                            {
+                                "label": "Base Fone Size",
+                                "type": "number",
+                                "default": 1,
+                                "model": "fontSize",
+                                "from": 0.1,
+                                "to": 5,
+                                "stepsize": 0.1
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }
