@@ -39,13 +39,14 @@ KMCModule.controller('PlayerListCtrl',
             ]
             $scope.requiredVersion = '201';
             $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
-            //TODO fix total count!
+
             $scope.calculateTotalItems = function () {
                 if ($scope.filtered)
                     $scope.totalItems = $scope.filtered.length;
-                else
+                else if ($scope.data) {
                     $scope.totalItems = $scope.data.length;
-                return $scope.totalItems;
+                    return $scope.totalItems;
+                }
             };
             $scope.checkVersionNeedsUpgrade = function (itemVersion) {
                 if (!itemVersion) {
@@ -58,8 +59,9 @@ KMCModule.controller('PlayerListCtrl',
                     return true
             }
 
-            $scope.title = $filter('i18n')('players list');
+           // $scope.title = $filter('i18n')('Players list');
             $scope.showSubTitle = true;
+            $scope.defaultThumbnailUrl = 'img/mockPlayerThumb.png';
             $scope.$watch('search', function (newValue, oldValue) {
                 $scope.showSubTitle = newValue;
                 if (newValue.length > 0) {
@@ -67,7 +69,7 @@ KMCModule.controller('PlayerListCtrl',
                 }
                 else {
                     if (oldValue)
-                        $scope.title = $filter('i18n')('players list');
+                        $scope.title = $filter('i18n')('Players list');
                 }
 
                 $timeout(function () {

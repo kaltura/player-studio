@@ -67,7 +67,7 @@ angular.module('localization', [])
                     // build the url to retrieve the localized resource file
                     var url = localize.url || localize.buildUrl();
                     // request the resource file
-                    $http({
+                    return $http({
                         method: "GET",
                         url: url,
                         cache: false
