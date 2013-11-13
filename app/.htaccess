@@ -7,4 +7,4 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} !index
     RewriteCond %{REQUEST_URI} !.*\.(css¦js|html|png)
-    RewriteRule (.*) index.html [L]
+    RewriteRule (.*) index.php [L]

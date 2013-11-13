@@ -2,7 +2,7 @@
 <html lang="en" ng-app="KMCModule">
     <head>
         <meta charset="utf-8">
-		<base id="baseHref" href="/"/>
+		<base id="baseHref" href="<?php echo dirname($_SERVER['REQUEST_URI'])?>>"/>
         <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
         <!--change this base tag to the root of your app URL-->
         <title>Player Studio - JS Version</title>
@@ -24,10 +24,6 @@
             }
         </style>
         <![endif]-->
-        <script type="text/javascript">
-            var element = document.getElementById("baseHref");
-           // element.setAttribute("href", window.location.href.toString().split(window.location.host)[1]);
-        </script>
         <!-- TODO move to ini file -->
         <script type="text/javascript" src="http://kgit.html5video.org/tags/v2.0.0.rc7/mwEmbedLoader.php"></script>
         <link rel="stylesheet" href="bower_components/select2/select2.css">
