@@ -1,0 +1,12 @@
+<div class="form-element">
+    <div class="header" data-toggle="collapse" data-target="#{{id}}">
+        <span class="featureLabel">{{ label }}</span>
+        <i class="pull-right glyphicon glyphicon-chevron-right"></i>
+        <span class="pull-right" ng-if="featureCheckbox">
+            <input class="prettyCheckbox" type="checkbox" ng-model="model"/>
+        </span>
+    </div>
+    <div class="collapse" id="{{id}}">
+        <ng-transclude></ng-transclude>
+    </div>
+</div>

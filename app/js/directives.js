@@ -17,58 +17,32 @@ angular.module('KMC.directives', ['colorpicker.module'])
 
             }
         }
-    }]).directive('dropdownRadio', function () {
+    }]).directive('modelRadio', function () {
         return {
             restrict: 'E',
             replace: true,
             template: '<div class="form-element">' +
-                '<div class="header">{{ label }}<i class="pull-right glyphicon glyphicon-chevron-right"></i></div>' +
-                '<div class="collapsable" style="height:0;overflow: hidden"> ' +
+                '<div class="radioLabel">{{ label }}</div>' +
+                '<div class="form-group">' +
                 '<label  ng-repeat="option in options" >' +
-                '<input value="{{ option.value }}" type="radio" ng-model="model"/>{{ option.label }}</label>' +
-                '</div>' +
-                '</div>',
+                '<input value="{{ option.value }}"  type="radio" ng-model="model"/>{{ option.label }}</label>' +
+                '</div></div>',
             scope: {
-                options: '&',
-                label: '@'
+                model: '=',
+                label: '@',
             },
             controller: function ($scope, $element, $attrs) {
-                $scope.subOpen = false;
-                $scope.$watch('subOpen', function (newVal, oldVal) {
-                    if (newVal != oldVal) {
-                        $scope.toggleSubSection();
-                    }
-                })
-                $scope.toggleSubSection = function () {
-                    $scope.subOpen = !$scope.subOpen;
-                    if ($scope.subOpen == true)
-                        $element.find('.collapsable').css('height', '100%');
-                    else
-                        $element.find('.collapsable').css('height', '0');
+                if (typeof $attrs.options != 'undefined') {
+                    $scope.options = JSON.parse($attrs.options);
                 }
-                $scope.options = [
-                    {
-                        "label": "None",
-                        "value": 0
-                    },
-                    {
-                        "label": "Normal & Big",
-                        "value": 1
-                    },
-                    {
-                        "label": "Small,Normal & Big",
-                        "value": 2
-                    }
-                ]
+
             },
             link: function (scope, element, attributes) {
-                element.on('click', 'div.header', function (e) {
-                    $(this).find('i').toggleClass('glyphicon-chevron-down glyphicon-chevron-right');
-                    $scope.toggleSubSection();
-                });
+                element.find('input').attr('name', scope.model);
             }
         }
     })
+
     .directive('modelColor',function () {
         return  {
             restrict: 'E',
@@ -95,7 +69,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             },
             // $parent.model is used because tooltip is creating an isolate scope.
             template: "<label ><i class='icon {{icon}}'></i>" +
-                "<input class='form-control' tooltip-placement='right' tooltip='{{label}}' type='text' ng-model='$parent.model'/></label>"        };
+                "<input class='form-control' tooltip='{{label}}' type='text' ng-model='$parent.model'/></label>"        };
     }).directive('modelSelect',function () {
         return {
             replace: true,
@@ -107,11 +81,20 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 selectOpts: '@'
             },
             link: function ($scope, $element, $attrs) {
+
                 if (typeof $attrs.options != 'undefined') {
                     $scope.options = JSON.parse($attrs.options);
                 }
+
             },
             controller: function ($scope, $element, $attrs) {
+                if (!$scope.selectOpts) {
+                    $scope.selectOpts = {};
+                }
+                if (!$attrs.showSearch) {
+                    $scope.selectOpts.minimumResultsForSearch = -1;
+                }
+                $scope.uiselectOpts = JSON.stringify($scope.selectOpts);
                 $scope.options = [];
                 if ($scope.model == '' || typeof $scope.model == 'undefined') {
                     $scope.model = $attrs.initvalue;
@@ -124,27 +107,27 @@ angular.module('KMC.directives', ['colorpicker.module'])
             },
 
             template: '<label>{{label}}' +
-                '<select ui-select2="selectOpts" ng-model="model" ng-options="item.value as item.label for item in options"> ' +
+                '<select ui-select2="{{uiselectOpts}}" ng-model="model" ng-options="item.value as item.label for item in options"> ' +
                 '</select></label>'
         }
     }
-).
-    directive('modelChecbox',function () {
-        return  {
-            template: '<label>{{label}}' +
-                '<div class="clearfix prettyCheck prettycheckbox">' +
+).directive('prettyCheckbox',function () {
+        return {
+            restrict: 'AC',
+            replace: true,
+            template: '<div class="clearfix prettycheckbox">' +
                 '<input type="checkbox" class="pretty-checkable" ng-model="model">' +
                 '<a href="#" class=""></a>' +
-                '</div></label>',
-            replace: true,
-            restrict: 'E',
-            scope: {
-                label: '@',
-                model: "="
+                '</div>',
+            controller: function ($scope) {
+                if (typeof $scope.model == 'undefined') {
+                    $scope.model = {};
+                }
             },
             link: function (scope, iElement, iAttrs) {
+
                 var input = iElement.find('input').hide();
-                input.on('change', function () {
+                scope.$watch('model', function () {
                     $(iElement).find('a').toggleClass('checked');
                 });
                 iElement.on('click', 'a', function (e) {
@@ -152,6 +135,19 @@ angular.module('KMC.directives', ['colorpicker.module'])
                     input.trigger('click');
                     return false;
                 })
+            }
+        }
+    }).
+    directive('modelCheckbox',function () {
+        return  {
+            template: '<label>{{label}}' +
+                '<input type="checkbox" class="prettyCheckbox" model="{{model}}">' +
+                '</label>',
+            replace: true,
+            restrict: 'E',
+            scope: {
+                label: '@',
+                model: "="
             }
         };
     }).directive('modelNumber', function () {
@@ -170,6 +166,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             },
             link: function ($scope, $element, $attrs) {
 
+
                 var $spinner = $element.find('input').spinedit({
                     minimum: parseInt($scope.from),
                     maximum: parseInt($scope.to),
@@ -187,14 +184,13 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 });
             },
             controller: function ($scope, $element, $attrs) {
-                if (!$attrs.from) $scope.from = 0;
-                else $scope.from = $attrs.from;
-                if (!$attrs.to) $scope.to = 10;
-                $scope.to = $attrs.to;
-                if (!$attrs.stepsize) $scope.stepsize = 1;
-                $scope.stepsize = $attrs.stepsize;
-                if (!$attrs.numberofdecimals) $scope.numberofdecimals = 0;
-                $scope.numberofdecimals = $attrs.numberofdecimals;
+                var def = {
+                    from: 0,
+                    to: 10,
+                    stepsize: 1,
+                    numberOfDecimals: 0
+                }
+                $scope.options = angular.extend(def, $scope);
                 if (typeof $scope.model != 'undefined') {
                     $scope.initvalue = $scope.model;
                 } else {

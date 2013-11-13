@@ -23,21 +23,6 @@ body,
   overflow-x: scroll;
   overflow-y: hidden;
 }
-.colorinput,
-#mp-menu .mp-level label input[type="text"].colorinput {
-  width: 50px;
-  float: right;
-}
-.colorExample {
-  display: block;
-  width: 25px;
-  height: 25px;
-  float: right;
-  border: grey;
-  margin-right: 10px;
-  background-color: azure;
-  outline: 3px double black;
-}
 #playerList tr td .alert {
   padding: 0;
   margin: 0;

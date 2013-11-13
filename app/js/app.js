@@ -3,11 +3,12 @@
 window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
-    ['localization', 'KMC.controllers', 'KMC.filters',
-    'KMC.services', 'KMC.directives', 'ui.bootstrap',
-    'ui.select2', 'LocalStorageModule','KMC.menu']);
+    ['localization', 'ngRoute', 'KMC.controllers', 'KMC.filters',
+        'KMC.services', 'KMC.directives', 'ui.bootstrap',
+        'ui.select2', 'LocalStorageModule', 'KMC.menu']);
 
-KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
+KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
+    $tooltipProvider.options({ placement: 'right', 'appendToBody': true });
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     //request loading indication///
@@ -57,7 +58,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
             controller: 'LoginCtrl',
             resolve: {'apiService': function (apiService) {
                 return apiService;
-            }
+            }, 'localize': 'localize'
             }
         }
     );
@@ -85,7 +86,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', functi
                     return  PlayerService.getPlayer($route.current.params.id);
                 },
                 'editProperties': 'editableProperties',
-                'menuSvc': 'menuSvc'
+                'menuSvc': 'menuSvc',
+                'localize': 'localize'
             }
         }
     );

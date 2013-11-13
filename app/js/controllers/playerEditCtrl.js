@@ -3,8 +3,8 @@
 /* Controllers */
 
 KMCModule.controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc',
-        function ($scope, PlayerData, $routeParams, $filter, menuSvc) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter',
+        function ($scope, PlayerData, $routeParams, $filter) {
             $scope.playerId = $routeParams.id;
             $scope.title = $filter('i18n')('Edit player');
             $scope.data = PlayerData.data;

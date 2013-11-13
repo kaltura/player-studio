@@ -41,7 +41,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             .success(function (data) {
                 menudata = data;
             });
-        var menuSVC = {
+        var menuSvc = {
             promise: promise,
             menuScope: {},
             get: function () {
@@ -49,67 +49,98 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             },
             currentPage: 'basicSettings',
             setMenu: function (setTo) {
-                menuSVC.currentPage = setTo;
-                menuSVC.menuScope.$parent.$broadcast('menuChange', setTo);
+                menuSvc.currentPage = setTo;
+                menuSvc.menuScope.$parent.$broadcast('menuChange', setTo);
             },
-            buildMenuItem: function (item, targetMenu, BaseData, parentMenu) {
+            buildMenu: function (baseData) {
+                var menuJsonObj = menuSvc.get(); // gets the  editableProperties json
+                var menuElm = angular.element('<ul></ul>');
+                angular.forEach(menuJsonObj, function (value) {
+                    menuElm.append(menuSvc.buildMenuItem(value, menuElm, baseData));
+                });
+                return menuElm;
+            },
+            buildMenuItem: function (item, targetMenu, BaseData, parentModel) {
                 var originAppendPos = angular.element(targetMenu).find('ul[ng-transclude]:first');
                 if (originAppendPos.length < 1)
                     originAppendPos = targetMenu;
+                var elm = '';
                 switch (item.type) {
                     case  'menu':
                         var originModel = angular.element(targetMenu).attr('model') ? angular.element(targetMenu).attr('model') : BaseData;
-                        var parentLabel = (parentMenu) ? parentMenu.label : 'Top';
-                        var parent = writeFormElement(item, '<menu-level pagename="' + item.model + '" parent-menu="' + parentLabel + '"/>', originAppendPos, originModel);
-                        var modelStr = originModel + '.' + item.model;
-                        for (var j = 0; j < item.children.length; j++) {
-                            var subitem = item.children[j];
-                            switch (subitem.type) {
-                                case 'checkbox' :
-                                    writeFormElement(subitem, '<model-checbox/>', parent, modelStr);
-                                    break;
-                                case 'select' :
-                                    writeFormElement(subitem, '<model-select/>', parent, modelStr);
-                                    break;
-                                case 'color' :
-                                    writeFormElement(subitem, '<model-color/>', parent, modelStr);
-                                    break;
-                                case 'number':
-                                    writeFormElement(subitem, '<model-number/>', parent, modelStr);
-                                    break;
-                                case 'text':
-                                    writeFormElement(subitem, '<model-text/>', parent, modelStr);
-                                    break;
-                                case 'menu':
-                                    menuSVC.buildMenuItem(subitem, parent, BaseData, item);
-                                    break;
-                                case 'radio':
-                                    return writeFormElement(subitem, '<dropdown-radio/>', parent, modelStr);
-                                    break;
-                            }
-                        }
-                        return parent;
+                        var parentLabel = (parentModel) ? parentModel.label : 'Top';
+                        var parentMenu = writeFormElement(item, '<menu-level pagename="' + item.model + '" parent-menu="' + parentLabel + '"/>', originModel);
+                        elm = writeChildren(item, parentMenu, true);
                         break;
-                    case 'select' :
-                        return writeFormElement(item, '<model-select/>', originAppendPos);
+                    case 'dropdown' :
+                        elm = writeFormElement(item, '<model-select/>', originAppendPos);
                         break;
                     case 'checkbox' :
-                        return writeFormElement(item, '<model-checbox/>', originAppendPos);
+                        elm = writeFormElement(item, '<model-checkbox/>', originAppendPos);
                         break;
                     case 'color' :
-                        return writeFormElement(item, '<model-color/>', originAppendPos);
+                        elm = writeFormElement(item, '<model-color/>', originAppendPos);
                         break;
                     case 'text' :
-                        return  writeFormElement(item, '<model-text/>', originAppendPos);
+                        elm = writeFormElement(item, '<model-text/>', originAppendPos);
                         break;
                     case 'number':
-                        return writeFormElement(item, '<model-number/>', originAppendPos);
+                        elm = writeFormElement(item, '<model-number/>', originAppendPos);
+                        break;
+                    case 'featuremenu':
+                        elm = writeChildren(item, writeFormElement(item, '<feature-menu/>', originAppendPos));
                         break;
                     case 'radio':
-                        return writeFormElement(item, '<dropdown-radio/>', originAppendPos);
+                        elm = writeFormElement(item, '<model-radio/>', originAppendPos);
                         break;
                 }
-                function writeFormElement(item, directive, appendTo, parentModel) {
+                return elm;
+
+                function writeChildren(item, parent, eachInLi) {
+                    var modelStr = originModel + '.' + item.model;
+                    if (typeof parent == 'undefined') {
+                        parent = angular.element('<li></li>');
+                    }
+                    for (var j = 0; j < item.children.length; j++) {
+                        var subitem = item.children[j];
+                        switch (subitem.type) {
+                            case 'checkbox' :
+                                parent.append(writeFormElement(subitem, '<model-checkbox/>', modelStr));
+                                break;
+                            case 'dropdown' :
+                                parent.append(writeFormElement(subitem, '<model-select/>', modelStr));
+                                break;
+                            case 'color' :
+                                parent.append(writeFormElement(subitem, '<model-color/>', modelStr));
+                                break;
+                            case 'number':
+                                parent.append(writeFormElement(subitem, '<model-number/>', modelStr));
+                                break;
+                            case 'text':
+                                parent.append(writeFormElement(subitem, '<model-text/>', modelStr));
+                                break;
+                            case 'featuremenu':
+                                var fm = writeFormElement(subitem, '<feature-menu/>', modelStr);
+                                fm.append(writeChildren(subitem).contents());
+                                parent.append(fm);
+                                break;
+                            case 'menu':
+                                parent.append(menuSvc.buildMenuItem(subitem, parent, item.model, item));
+                                break;
+                            case 'radio':
+                                parent.append(writeFormElement(subitem, '<model-radio/>', modelStr));
+                                break;
+                        }
+                    }
+                    if (eachInLi == true) {
+                        parent.children().each(function () {
+                            $(this).wrap('<li>');
+                        });
+                    }
+                    return parent;
+                }
+
+                function writeFormElement(item, directive, parentModel) {
                     var elm = angular.element(directive);
                     elm.attr('highlight', item.model);
                     angular.forEach(item, function (value, key) {
@@ -128,9 +159,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     else {
                         elm.attr('model', BaseData + '.' + item.model);
                     }
-                    if (item.type != 'menu')
-                        elm = $('<li/>').html(elm);
-                    return (elm).appendTo(appendTo);
+                    return elm;
                 }
             },
             menuSearch: function (searchValue) {
@@ -151,11 +180,28 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 var foundLabel = search('menudata', menudata, searchValue);
                 if (foundLabel) {
                     var foundModel = eval(foundLabel.substr(0, foundLabel.lastIndexOf("['label']"))).model;
-                    var lastMenu = foundLabel.substr(0, foundLabel.lastIndexOf("['children']"));
+                    var lastChild = foundLabel.lastIndexOf("['children']");
+                    var lastMenu = foundLabel.substr(0, lastChild);
                     var menuPage = eval(lastMenu);
-                    menuSVC.menuScope.$broadcast('highlight', foundModel);
-                    menuSVC.setMenu(menuPage.model);
-                    return true;
+                    var featureMenu = [];
+                    if (typeof menuPage == 'object') {
+                        if (menuPage.type == 'featuremenu') {
+                            while (typeof menuPage == 'object' && menuPage.type == 'featuremenu') {
+                                featureMenu.push(menuPage);
+                                lastChild = lastMenu.lastIndexOf("['children']");
+                                menuPage = eval(lastMenu.substr(0, lastChild));
+                                lastMenu = foundLabel.substr(0, lastChild);
+                            }
+                        }
+                        menuSvc.menuScope.$broadcast('highlight', foundModel);
+                        menuSvc.setMenu(menuPage.model);
+                        if (featureMenu.length){
+                            angular.forEach(featureMenu,function(value){
+                                menuSvc.menuScope.$broadcast('openFeature', value.model);
+                            })
+                        }
+                        return true;
+                    }
                 }
                 else {
                     return false;
@@ -163,8 +209,40 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             }
 
         };
-        return menuSVC;
-    }]).directive('highlight', ['$timeout', function ($timeout) {
+        return menuSvc;
+    }]).directive('featureMenu',function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'template/formcontrols/featuremenu.html',
+            transclude: true,
+            scope: {
+                model: '@',
+                label: '@'
+
+            },
+            controller: function ($scope, $element, $attrs) {
+                $scope.featureCheckbox = ($attrs.featureCheckbox) ? $attrs.featureCheckbox : true;
+                $scope.id = $scope.model.replace(/\./g, '_');
+
+            },
+            compile: function (tElement, tAttr, transclude) {
+                return  function (scope, element, attributes) {
+                    transclude(scope, function (clone) {
+                        element.find('ng-transclude').replaceWith(clone);
+                    })
+                    element.on('show.bs.collapse hide.bs.collapse', function () {
+                        $(this).find('i.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+                    });
+                    scope.$on('openFeature', function (e, args) {
+                        if (args == (scope.model.split('.').pop())) {
+                            element.find('.header').trigger('click');
+                        }
+                    })
+                }
+            }
+        }
+    }).directive('highlight', ['$timeout', function ($timeout) {
         return {
             restrict: 'A',
             link: function (scope, iElem, iAttr) {
@@ -181,13 +259,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 })
             }
         }
-    }]).directive('navmenu', ['menuSvc' , function (menuSvc) {
+    }]).directive('navmenu', ['menuSvc' , '$compile', function (menuSvc, $compile) {
 
         return  {
-            template: "<nav id='mp-menu'>" +
+            template: "<nav  ng-form name='playerEdit' id='mp-menu'>" +
                 "<div id='mp-inner'>" +
                 "<div id='mp-base' class='mp-level'>" +
-                "<ul ng-transclude=''></ul>" +
+                "<ul ng-transclude></ul>" +
                 "</div>" +
                 "</div>" +
                 "</nav>",
@@ -195,16 +273,16 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             restrict: 'E',
             scope: {data: '='},
             transclude: true,
-            compile: function (tElement) {
-                var BaseData = 'data';
-                var menuJsonObj = menuSvc.get(); // gets the  editableProperties json
-                var menuList = tElement.find('ul[ng-transclude]:first');
-                angular.forEach(menuJsonObj, function (value) {
-                    menuSvc.buildMenuItem(value, menuList, BaseData);
-                });
+            compile: function (tElement, tAttrs, transclude) {
+                var menuElem = tElement.find('ul[ng-transclude]:first');
+                var menuData = menuSvc.buildMenu('data');
                 return function ($scope, $element) {
-                    //open first level
+                    // menuElem.append(menuData.html());
+                    $compile(menuData.contents())($scope, function (clone) {
+                        menuElem.prepend(clone);
+                    });
                     $element.find('#mp-base >ul > li:first > div.mp-level').addClass('mp-level-open');
+
                 }
             },
             controller: function ($scope, $element, $attrs) {
@@ -241,20 +319,20 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
 ).
     directive('menuLevel', ['menuSvc', function (menuSvc) {
         return  {
-            template: "<li>" +
-                "<a class='menu-level-trigger' data-ng-click='openLevel()'>{{label}}</a>" +
+            template: "<li><a class='menu-level-trigger' data-ng-click='openLevel()'>{{label}}</a>" +
                 "<div class='mp-level'>" +
                 "<a class='mp-back' ng-click='goBack()' ng-show='isOnTop'>Back to {{parentMenu}}</a>" +
                 "<h2>{{label}}</h2>" +
                 "<span class='levelDesc'>{{description}}</span>" +
-                "<ul ng-transclude=''></ul>" +
-                "</div>" +
-                "</li>",
+                "<ul ng-transclude></ul>" +
+                "</div></li>",
             replace: true,
+            transclude: 'true',
             restrict: 'E',
-            controller: function ($scope) {
+            controller: function ($scope, $element) {
                 $scope.goBack = function () {
                     $scope.isOnTop = false;
+                    $element.parents('.mp-level').addClass('mp-level-open'); // TODO: should be impoved to use more angular way...
                 }
                 $scope.openLevel = function (arg) {
                     if (typeof arg == 'undefined')
@@ -271,32 +349,36 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 }
                 $scope.isOnTop = false;
             },
-            link: function ($scope, $element) {
-                $scope.$on('menuChange', function (event, arg) {
-                    $scope.openLevel(arg);
-                });
-                $scope.$watch('isOnTop', function (newVal, oldVal) {
-                    if (newVal != oldVal) {
-                        if (newVal) { // open
-                            $element.parents('.mp-level:first').addClass('mp-level-in-stack');
-                            $element.children('.mp-level').addClass('mp-level-open');
+            compile: function (telement, tattr, transclude) {
+                return  function ($scope, $element) {
+
+                    $scope.$on('menuChange', function (event, arg) {
+                        $scope.openLevel(arg);
+                    });
+                    $scope.$watch('isOnTop', function (newVal, oldVal) {
+                        if (newVal != oldVal) {
+                            if (newVal) { // open
+                                $element.parents('.mp-level:first').addClass('mp-level-in-stack');
+                                $element.children('.mp-level').addClass('mp-level-open');
+                            }
+                            else { //close
+                                $element.find('.mp-level').removeClass('mp-level-open');
+                                $element.parents('.mp-level').removeClass('mp-level-in-stack');
+                            }
                         }
-                        else { //close
-                            $element.find('.mp-level').removeClass('mp-level-open');
-                            $element.parents('.mp-level').removeClass('mp-level-in-stack');
-                        }
-                    }
-                });
+                    });
+                }
             },
             scope: {
                 'label': '@',
                 'pagename': '@',
                 'parentMenu': '@',
                 'description': '@'
-            },
-            transclude: 'true'
+            }
+
         };
-    }]).directive('menuHead', ['menuSvc', function (menuSvc) {
+    }]).
+    directive('menuHead', ['menuSvc', function (menuSvc) {
         return {
             restrict: 'E',
             template: "<div id='mp-mainlevel'><ul>" +

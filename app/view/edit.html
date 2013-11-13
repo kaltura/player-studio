@@ -1,6 +1,6 @@
 <!-- Push Wrapper -->
 <menu-head>
-    <li><a menupage='search' class='icon icon-TabSearch'  tooltip-placement='right'
+    <li><a menupage='search' class='icon icon-TabSearch' tooltip-placement='right'
            tooltip='Search for menu properties'></a>
     </li>
 </menu-head>
@@ -10,7 +10,8 @@
         <navmenu data="data.settings">
             <menu-level pagename='search' label='Menu Search'>
                 <li class="nohover">
-                    <form ng-controller='menuSearchCtl'  class="form-inline" id="menuSearch"  ng-submit="searchMenuFn(value)" role="search">
+                    <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
+                          ng-submit="searchMenuFn(value)" role="search">
                         <input type="text"
                                typeahead="item for item in menuData | filter:$viewValue "
                                class="fullwidth form-control" placeholder="{{'Search for menu property'| i18n}}"
@@ -34,10 +35,6 @@
             </div>
             <div class="container" ng-controller="editPageDataCntrl">
                 <pre>{{data}}</pre>
-                <dropdown-radio highlight="radiosize" label="Radio Size" type="radio" default="0"
-                                options="editableproperties[0][children][2][children][2][options]"
-                                model="data.basicDisplay.controlBar.radiosize">
-                </dropdown-radio>
             </div>
         </div>
     </div>

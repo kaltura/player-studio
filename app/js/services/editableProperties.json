@@ -26,7 +26,7 @@
             {
                 "label": "Player Tags",
                 "type": "tags",
-                "model": "tags\n"
+                "model": "tags"
             },
             {
                 "label": "Update Player",
@@ -44,23 +44,29 @@
                         "label": "Transport",
                         "children": [
                             {
-                                "options": {
-                                    "": {
+                                "options": [
+                                    {
                                         "label": "2mbs",
-                                        "value": 2
+                                        "value": "2"
+                                    },
+                                    {
+                                        "label": "1mbs",
+                                        "value": "1"
                                     }
-                                },
+                                ],
+                                "initvalue": "1",
                                 "type": "dropdown",
                                 "label": "Prefered Bitrate",
                                 "model": "preferedFlavorBR"
                             },
                             {
-                                "options": {
-                                    "": {
+                                "options": [
+                                    {
                                         "label": "option",
-                                        "value": 0.75
+                                        "value": "0.75"
                                     }
-                                },
+                                ],
+                                "initvalue": "0.75",
                                 "type": "dropdown",
                                 "label": "Delivery type",
                                 "model": "deliveryType"
@@ -68,12 +74,18 @@
                         ]
                     },
                     {
-                        "options": {
-                            "": {
-                                "label": "4 / 3",
+                        "options": [
+                            {
+                                "label": "4/3",
                                 "value": "narrow"
+                            },
+                            {
+                                "label": "16/9",
+                                "value": "wide"
                             }
-                        },
+                        ],
+                        "showSearch": false,
+                        "initvalue": "wide",
                         "type": "dropdown",
                         "label": "Aspect Ratio",
                         "model": "aspectRatio"
@@ -101,34 +113,44 @@
     },
     {
         "label": "Look and Feel",
-        "icon": "TabLookAndFeel",
+        "icon": "TabLookandFeel",
         "description": "look and feel let you set bla bla bla\n lorem ipsum test goes here",
         "type": "menu",
         "model": "lookAndFeel",
         "children": [
             {
-                "type": "featuremenu",
+                "type": "menu",
                 "model": "title",
                 "label": "Title Label",
                 "children": [
                     {
-                        "options": {
-                            "": {
+                        "options": [
+                            {
                                 "label": "Right",
                                 "value": "right"
+                            },
+                            {
+                                "label": "Center",
+                                "value": "center"
+                            },
+                            {
+                                "label": "Left",
+                                "value": "left"
                             }
-                        },
+                        ],
+                        "initvalue": "right",
                         "type": "radio",
                         "label": "Align",
                         "model": "align"
                     },
                     {
-                        "options": {
-                            "": {
+                        "options": [
+                            {
                                 "label": "option",
-                                "value": 0.75
+                                "value": "0.75"
                             }
-                        },
+                        ],
+                        "initvalue": "0.75",
                         "type": "dropdown",
                         "label": "Delivery type",
                         "model": "deliveryType"
@@ -136,16 +158,21 @@
                     {
                         "label": "Template",
                         "model": "titleTemplate",
-                        "default": "'<span data-bind=”{mediaProxy.entry.name}”></span>'",
+                        "default": "<span data-bind=”{mediaProxy.entry.name}”></span>",
                         "type": "modaltextbox"
                     },
                     {
-                        "options": {
-                            "": {
+                        "options": [
+                            {
                                 "label": "videoHolder",
                                 "value": "videoHolder"
+                            },
+                            {
+                                "label": "ContentHolder",
+                                "value": "contentHolder"
                             }
-                        },
+                        ],
+                        "initvalue": "videoHolder",
                         "type": "dropdown",
                         "label": "Container",
                         "model": "titleContainer"
@@ -159,7 +186,7 @@
                 ]
             },
             {
-                "type": "featuremenu",
+                "type": "menu",
                 "model": "controlBar",
                 "label": "Control Bar",
                 "children": [
@@ -179,16 +206,16 @@
                                 "options": [
                                     {
                                         "label": "Horizontal",
-                                        "value": 0
+                                        "value": "0"
                                     },
                                     {
                                         "label": "Vertical",
-                                        "value": 1
+                                        "value": "1"
                                     }
                                 ],
                                 "label": "Volume Slider direction",
                                 "type": "radio",
-                                "default": 0,
+                                "initvalue": "0",
                                 "model": "controlBarVolumeDirection"
                             },
                             {
@@ -209,16 +236,27 @@
                         "children": [
                             {
                                 "model": "order",
-                                "default": 0,
-                                "type": "text"
+                                "initvalue": 0,
+                                "type": "text",
+                                "label":"Order for Logo",
+                                "icon": "icon-TabMonetization"
                             },
                             {
-                                "options": {
-                                    "": {
+                                "options": [
+                                    {
                                         "label": "Right",
                                         "value": "right"
+                                    },
+                                    {
+                                        "label": "Center",
+                                        "value": "center"
+                                    },
+                                    {
+                                        "label": "Left",
+                                        "value": "left"
                                     }
-                                },
+                                ],
+                                "initvalue": "right",
                                 "type": "radio",
                                 "label": "Align",
                                 "model": "align"
@@ -229,17 +267,18 @@
                                 "options": [
                                     {
                                         "label": "Low",
-                                        "value": 0
+                                        "value": "0"
                                     },
                                     {
                                         "label": "Medium",
-                                        "value": 1
+                                        "value": "1"
                                     },
                                     {
                                         "label": "High",
-                                        "value": 2
+                                        "value": "2"
                                     }
                                 ],
+                                "initvalue": "1",
                                 "type": "dropdown"
                             }
                         ]
@@ -252,15 +291,26 @@
                             {
                                 "model": "order",
                                 "default": 0,
+                                "label":"Order for Flavor Selector",
+                                "icon": "icon-TabMonetization",
                                 "type": "text"
                             },
                             {
-                                "options": {
-                                    "": {
+                                "options": [
+                                    {
                                         "label": "Right",
                                         "value": "right"
+                                    },
+                                    {
+                                        "label": "Center",
+                                        "value": "center"
+                                    },
+                                    {
+                                        "label": "Left",
+                                        "value": "left"
                                     }
-                                },
+                                ],
+                                "initvalue": "right",
                                 "type": "radio",
                                 "label": "Align",
                                 "model": "align"
@@ -271,17 +321,18 @@
                                 "options": [
                                     {
                                         "label": "Low",
-                                        "value": 0
+                                        "value": "0"
                                     },
                                     {
                                         "label": "Medium",
-                                        "value": 1
+                                        "value": "1"
                                     },
                                     {
                                         "label": "High",
-                                        "value": 2
+                                        "value": "2"
                                     }
                                 ],
+                                "initvalue":"1",
                                 "type": "dropdown"
                             }
                         ]
@@ -293,16 +344,27 @@
                         "children": [
                             {
                                 "model": "order",
-                                "default": 0,
-                                "type": "text"
+                                "default": "0",
+                                "type": "text",
+                                "label": "Order for Playback Rate Selector",
+                                "icon":"icon-TabMonetization"
                             },
                             {
-                                "options": {
-                                    "": {
+                                "options": [
+                                    {
                                         "label": "Right",
                                         "value": "right"
+                                    },
+                                    {
+                                        "label": "Center",
+                                        "value": "center"
+                                    },
+                                    {
+                                        "label": "Left",
+                                        "value": "left"
                                     }
-                                },
+                                ],
+                                "initvalue": "right",
                                 "type": "radio",
                                 "label": "Align",
                                 "model": "align"
@@ -313,17 +375,18 @@
                                 "options": [
                                     {
                                         "label": "Low",
-                                        "value": 0
+                                        "value": "0"
                                     },
                                     {
                                         "label": "Medium",
-                                        "value": 1
+                                        "value": "1"
                                     },
                                     {
                                         "label": "High",
-                                        "value": 2
+                                        "value": "2"
                                     }
                                 ],
+                                "initvalue": "1",
                                 "type": "dropdown"
                             }
                         ]
@@ -336,15 +399,26 @@
                             {
                                 "model": "order",
                                 "default": 0,
-                                "type": "text"
+                                "type": "text",
+                                "label": "Order for Flag Content",
+                                "icon":"icon-TabMonetization"
                             },
                             {
-                                "options": {
-                                    "": {
+                                "options": [
+                                    {
                                         "label": "Right",
                                         "value": "right"
+                                    },
+                                    {
+                                        "label": "Center",
+                                        "value": "center"
+                                    },
+                                    {
+                                        "label": "Left",
+                                        "value": "left"
                                     }
-                                },
+                                ],
+                                "initvalue": "right",
                                 "type": "radio",
                                 "label": "Align",
                                 "model": "align"
@@ -355,17 +429,18 @@
                                 "options": [
                                     {
                                         "label": "Low",
-                                        "value": 0
+                                        "value": "0"
                                     },
                                     {
                                         "label": "Medium",
-                                        "value": 1
+                                        "value": "1"
                                     },
                                     {
                                         "label": "High",
-                                        "value": 2
+                                        "value": "2"
                                     }
                                 ],
+                                "initvalue": "1",
                                 "type": "dropdown"
                             }
                         ]
@@ -373,12 +448,13 @@
                 ]
             },
             {
-                "type": "featuremenu",
+                "type": "menu",
                 "model": "watermark",
                 "label": "Watermark",
                 "children": [
                     {
                         "label": "Watermark Logo URL",
+                        "icon": "icon-defult",
                         "model": "watermarkURL",
                         "validation": "url",
                         "type": "text"
@@ -396,13 +472,13 @@
                         ],
                         "label": "Position",
                         "type": "dropdown",
-                        "default": "top,left",
+                        "initvalue": "top,left",
                         "model": "watermarkPosition"
                     }
                 ]
             },
             {
-                "type": "featuremenu",
+                "type": "menu",
                 "model": "stylesAndColors",
                 "label": "Styles & Colors",
                 "children": [
@@ -448,7 +524,7 @@
                                 ],
                                 "label": "Font name",
                                 "type": "dropdown",
-                                "default": "ariel",
+                                "initvalue": "ariel",
                                 "model": "fontName"
                             },
                             {

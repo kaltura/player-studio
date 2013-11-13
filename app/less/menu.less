@@ -1,4 +1,5 @@
 //layout
+
 html, body, body > section, .scroller, .wrapper {
   height: 100%;
 }
@@ -23,6 +24,7 @@ html, body, body > section, .scroller, .wrapper {
 .scroller,
 .wrapper {
   position: relative;
+  overflow: hidden;
 }
 
 #mp-pusher {
@@ -69,10 +71,12 @@ html, body, body > section, .scroller, .wrapper {
   ul {
     list-style: none;
     padding: 0;
-    li{margin-bottom: 10px;}
+    li {
+      margin-bottom: 10px;
+    }
   }
 
-    a.icon {
+  a.icon {
     color: #fff;
     display: block;
     padding: 8px;
@@ -105,7 +109,7 @@ html, body, body > section, .scroller, .wrapper {
   z-index: 100;
 }
 
-.mp-level .mp-level.mp-level-open {
+.mp-level.mp-level-open,.mp-level.mp-level-in-stack {
   left: 0;
 
 }
@@ -146,6 +150,8 @@ html, body, body > section, .scroller, .wrapper {
 
 /* content style */
 #mp-menu {
+  overflow-x: hidden;
+  overflow-y: auto;
   ul {
     margin: 0;
     padding: 0;
@@ -173,38 +179,78 @@ html, body, body > section, .scroller, .wrapper {
     font-family: arial, sans-serif;
     font-weight: normal;
   }
-  .spinEdit > label,.form-element{
-    padding: 0.7em 1em 0.7em 1.8em;
-    width: 100%;
-  }
-  .mp-level li > label {
-    padding: 0.7em 1em 0.7em 1.8em;
-    display: block;
-    clear: both;
-    min-height: 30px;
-    margin-bottom: -1px;
-    color: #666;
-    i.icon {
-      float: left;
-      vertical-align: bottom;
-      line-height: 1.4em;
-      display: inline;
-      font-size: 22px
-    }
-    input[type="text"] {
-      float: left;
-      margin-left: 5%;
-      width: 85%;
-    }
-    input[type="checkbox"], div.select2-container, .prettyCheck, .spinEdit input.small {
-      float: right;
-      z-index: 10;
-    }
-    .prettyCheck a {
-      float: right;
-      width: 25px;
-    }
+  .mp-level li {
+    label, .form-element {
+      padding: 0.7em 1em 0.7em 1.8em;
+      display: block;
+      clear: both;
+      min-height: 30px;
+      margin-bottom: -1px;
+      color: #666;
+      i.icon {
+        float: left;
+        vertical-align: bottom;
+        line-height: 1.4em;
+        display: inline;
+        font-size: 22px
+      }
+      i.pull-right.glyphicon {
+        padding-top: 4px;
+        margin-left: 10px;
+      }
+      input[type="text"] {
+        float: left;
+        margin-left: 5%;
+        width: 85%;
+      }
+      input[type="checkbox"], div.select2-container, .prettycheckbox, .spinEdit input.small {
+        float: right;
+        z-index: 10;
+      }
+      .prettycheckbox a {
+        float: right;
+        width: 25px;
+      }
+      div.in, div.collapse, div.collapsing {
+        &:not(.tooltip) {
+          padding-right: 9px;
+          width: 100%;
+        }
+      }
+     &[type="radio"] {
+        label {
+          padding: 2px;
+          float: left;
+          margin: 5px;
+          float: left;
+          display: inline;
+          clear: none;
 
+        }
+        input {margin:4px;}
+      }
+      .colorinput, input[type="text"].colorinput {
+        width: 50px;
+        float: right;
+      }
+
+      .colorExample {
+        display: block;
+        width: 25px;
+        height: 25px;
+        float: right;
+        border: grey;
+        margin-right: 10px;
+        background-color: azure;
+        outline: 3px double black;
+      }
+       .form-group{
+        text-align: center;
+        margin: auto;
+        width: 247px;
+        height: 30px;
+      }
+    }
   }
 
   ul li {

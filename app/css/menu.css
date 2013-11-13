@@ -23,6 +23,7 @@ body > section,
 .scroller,
 .wrapper {
   position: relative;
+  overflow: hidden;
 }
 #mp-pusher {
   left: 30%;
@@ -54,31 +55,22 @@ body > section,
   z-index: 1000;
   background: #323232;
   /* Old browsers */
-
   /* IE9 SVG, needs conditional override of 'filter' to 'none' */
-
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzMyMzIzMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzMDMwMzAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
   background: -moz-linear-gradient(left, #323232 0%, #303030 100%);
   /* FF3.6+ */
-
   background: -webkit-gradient(linear, left top, right top, color-stop(0%, #323232), color-stop(100%, #303030));
   /* Chrome,Safari4+ */
-
   background: -webkit-linear-gradient(left, #323232 0%, #303030 100%);
   /* Chrome10+,Safari5.1+ */
-
   background: -o-linear-gradient(left, #323232 0%, #303030 100%);
   /* Opera 11.10+ */
-
   background: -ms-linear-gradient(left, #323232 0%, #303030 100%);
   /* IE10+ */
-
   background: linear-gradient(to right, #323232 0%, #303030 100%);
   /* W3C */
-
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#323232', endColorstr='#303030', GradientType=1);
   /* IE6-8 */
-
 }
 #mp-mainlevel ul {
   list-style: none;
@@ -114,7 +106,8 @@ body > section,
   left: -100%;
   z-index: 100;
 }
-.mp-level .mp-level.mp-level-open {
+.mp-level.mp-level-open,
+.mp-level.mp-level-in-stack {
   left: 0;
 }
 #mp-pusher,
@@ -147,6 +140,10 @@ body > section,
   content: '';
 }
 /* content style */
+#mp-menu {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 #mp-menu ul {
   margin: 0;
   padding: 0;
@@ -173,12 +170,8 @@ body > section,
   font-family: arial, sans-serif;
   font-weight: normal;
 }
-#mp-menu .spinEdit > label,
-#mp-menu .form-element {
-  padding: 0.7em 1em 0.7em 1.8em;
-  width: 100%;
-}
-#mp-menu .mp-level li > label {
+#mp-menu .mp-level li label,
+#mp-menu .mp-level li .form-element {
   padding: 0.7em 1em 0.7em 1.8em;
   display: block;
   clear: both;
@@ -186,28 +179,86 @@ body > section,
   margin-bottom: -1px;
   color: #666;
 }
-#mp-menu .mp-level li > label i.icon {
+#mp-menu .mp-level li label i.icon,
+#mp-menu .mp-level li .form-element i.icon {
   float: left;
   vertical-align: bottom;
   line-height: 1.4em;
   display: inline;
   font-size: 22px;
 }
-#mp-menu .mp-level li > label input[type="text"] {
+#mp-menu .mp-level li label i.pull-right.glyphicon,
+#mp-menu .mp-level li .form-element i.pull-right.glyphicon {
+  padding-top: 4px;
+  margin-left: 10px;
+}
+#mp-menu .mp-level li label input[type="text"],
+#mp-menu .mp-level li .form-element input[type="text"] {
   float: left;
   margin-left: 5%;
   width: 85%;
 }
-#mp-menu .mp-level li > label input[type="checkbox"],
-#mp-menu .mp-level li > label div.select2-container,
-#mp-menu .mp-level li > label .prettyCheck,
-#mp-menu .mp-level li > label .spinEdit input.small {
+#mp-menu .mp-level li label input[type="checkbox"],
+#mp-menu .mp-level li .form-element input[type="checkbox"],
+#mp-menu .mp-level li label div.select2-container,
+#mp-menu .mp-level li .form-element div.select2-container,
+#mp-menu .mp-level li label .prettycheckbox,
+#mp-menu .mp-level li .form-element .prettycheckbox,
+#mp-menu .mp-level li label .spinEdit input.small,
+#mp-menu .mp-level li .form-element .spinEdit input.small {
   float: right;
   z-index: 10;
 }
-#mp-menu .mp-level li > label .prettyCheck a {
+#mp-menu .mp-level li label .prettycheckbox a,
+#mp-menu .mp-level li .form-element .prettycheckbox a {
   float: right;
   width: 25px;
+}
+#mp-menu .mp-level li label div.in:not(.tooltip),
+#mp-menu .mp-level li .form-element div.in:not(.tooltip),
+#mp-menu .mp-level li label div.collapse:not(.tooltip),
+#mp-menu .mp-level li .form-element div.collapse:not(.tooltip),
+#mp-menu .mp-level li label div.collapsing:not(.tooltip),
+#mp-menu .mp-level li .form-element div.collapsing:not(.tooltip) {
+  padding-right: 9px;
+  width: 100%;
+}
+#mp-menu .mp-level li label[type="radio"] label,
+#mp-menu .mp-level li .form-element[type="radio"] label {
+  padding: 2px;
+  margin: 5px;
+  float: left;
+  display: inline;
+  clear: none;
+}
+#mp-menu .mp-level li label[type="radio"] input,
+#mp-menu .mp-level li .form-element[type="radio"] input {
+  margin: 4px;
+}
+#mp-menu .mp-level li label .colorinput,
+#mp-menu .mp-level li .form-element .colorinput,
+#mp-menu .mp-level li label input[type="text"].colorinput,
+#mp-menu .mp-level li .form-element input[type="text"].colorinput {
+  width: 50px;
+  float: right;
+}
+#mp-menu .mp-level li label .colorExample,
+#mp-menu .mp-level li .form-element .colorExample {
+  display: block;
+  width: 25px;
+  height: 25px;
+  float: right;
+  border: grey;
+  margin-right: 10px;
+  background-color: azure;
+  outline: 3px double black;
+}
+#mp-menu .mp-level li label .form-group,
+#mp-menu .mp-level li .form-element .form-group {
+  text-align: center;
+  margin: auto;
+  width: 247px;
+  height: 30px;
 }
 #mp-menu ul li {
   display: block;

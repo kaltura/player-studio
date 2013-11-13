@@ -1,14 +1,13 @@
 {
   "name": "prettycheckable",
   "homepage": "https://github.com/arthurgouveia/prettyCheckable",
-  "_release": "99291874b2",
+  "_release": "0135c8c2fc",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "99291874b282b25aea562a9af32a0c1772617a4e"
+    "commit": "0135c8c2fcc4f28554d78c8d81c21943cae60728"
   },
   "_source": "git://github.com/arthurgouveia/prettyCheckable.git",
   "_target": "*",
-  "_originalSource": "prettycheckable",
-  "_direct": true
+  "_originalSource": "prettycheckable"
 }
