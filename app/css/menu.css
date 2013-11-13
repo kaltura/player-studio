@@ -173,7 +173,8 @@ body > section,
   font-family: arial, sans-serif;
   font-weight: normal;
 }
-#mp-menu .spinEdit > label {
+#mp-menu .spinEdit > label,
+#mp-menu .form-element {
   padding: 0.7em 1em 0.7em 1.8em;
   width: 100%;
 }

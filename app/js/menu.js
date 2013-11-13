@@ -2,9 +2,9 @@
 /* Menu */
 
 var KMCMenu = angular.module('KMC.menu', []);
-KMCMenu.controller('menuCntrl',['menuSvc','$scope',function(menuSvc,$scope){
+KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope) {
     $scope.menuShown = true;
-    $scope.$on('menuChange',function(){
+    $scope.$on('menuChange', function () {
         $scope.menuShown = true;
     });
     $scope.$watch(function () {
@@ -83,6 +83,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                                 case 'menu':
                                     menuSVC.buildMenuItem(subitem, parent, BaseData, item);
                                     break;
+                                case 'radio':
+                                    return writeFormElement(subitem, '<dropdown-radio/>', parent, modelStr);
+                                    break;
                             }
                         }
                         return parent;
@@ -101,6 +104,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         break;
                     case 'number':
                         return writeFormElement(item, '<model-number/>', originAppendPos);
+                        break;
+                    case 'radio':
+                        return writeFormElement(item, '<dropdown-radio/>', originAppendPos);
                         break;
                 }
                 function writeFormElement(item, directive, appendTo, parentModel) {
@@ -320,11 +326,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     transclude($scope, function (transItem) {
                         ul.prepend(transItem);
                     });
-                    $element.find('a[menupage]').each(function(){
-                        $(this).click(function(){
-                                var model = $(this).attr('menupage');
-                                menuSvc.setMenu(model);
-                                $scope.changeActiveItem(this);
+                    $element.find('a[menupage]').each(function () {
+                        $(this).click(function () {
+                            var model = $(this).attr('menupage');
+                            menuSvc.setMenu(model);
+                            $scope.changeActiveItem(this);
                         })
                     });
                 }
