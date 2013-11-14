@@ -2,7 +2,7 @@
 <html lang="en" ng-app="KMCModule">
     <head>
         <meta charset="utf-8">
-		<base id="baseHref" href="<?php echo dirname($_SERVER['REQUEST_URI'])?>>"/>
+		<base id="baseHref" href="<?php echo dirname($_SERVER['REQUEST_URI'])?>/app"/>
         <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
         <!--change this base tag to the root of your app URL-->
         <title>Player Studio - JS Version</title>
