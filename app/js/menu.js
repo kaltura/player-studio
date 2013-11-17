@@ -106,7 +106,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         elm = writeChildren(item, parentMenu, true);
                         break;
                     case 'featuremenu':
-                        elm = writeChildren(item, writeFormElement(item, '<feature-menu/>', originAppendPos));
+                        elm = writeChildren(item, writeFormElement(item, '<feature-menu/>', originAppendPos, originModel));
                         break;
                     default :
                         var directive = JSON2directiveDictionary(item.type);
@@ -118,10 +118,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 return elm;
 
                 function writeChildren(item, parent, eachInLi) {
-                    var modelStr = originModel + '.' + item.model;
-                    if (typeof parent == 'undefined') {
-                        parent = angular.element('<li></li>');
-                    }
+                    var parentModelStr = parent.attr('model');
                     for (var j = 0; j < item.children.length; j++) {
                         var subitem = item.children[j];
                         switch (subitem.type) {
@@ -129,14 +126,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                                 parent.append(menuSvc.buildMenuItem(subitem, parent, item.model, item));
                                 break;
                             case 'featuremenu':
-                                var fm = writeFormElement(subitem, '<feature-menu/>', modelStr);
-                                fm.append(writeChildren(subitem).contents());
-                                parent.append(fm);
+                                parent.append(writeChildren(subitem, writeFormElement(subitem, '<feature-menu/>', parentModelStr)));
                                 break;
                             default :
                                 var directive = JSON2directiveDictionary(subitem.type);
                                 if (directive)
-                                    parent.append(writeFormElement(subitem, directive, modelStr));
+                                    parent.append(writeFormElement(subitem, directive, parentModelStr));
                                 break;
                         }
                     }
@@ -233,24 +228,28 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
 
         };
         return menuSvc;
-    }]).directive('featureMenu',function () {
+    }]).directive('featureMenu',function ($parse) {
         return {
             restrict: 'E',
             replace: true,
             templateUrl: 'template/formcontrols/featuremenu.html',
             transclude: true,
-            scope: {
-                model: '@',
-                label: '@'
-
-            },
             controller: function ($scope, $element, $attrs) {
-                $scope.featureCheckbox = ($attrs.featureCheckbox) ? $attrs.featureCheckbox : true;
-                $scope.id = $scope.model.replace(/\./g, '_');
-
+                $scope.label = $attrs['label'];
+                if ($attrs.featureCheckbox != false) { //undefined is ok
+                    $scope.featureModelCon = $parse($attrs['model'] + '._featureEnabled');
+                    $scope.featureModel = $scope.featureModelCon($scope);
+                    $scope.featureCheckbox = ($attrs.featureCheckbox) ? $attrs.featureCheckbox : true;
+                }
+                $scope.id = $attrs['model'].replace(/\./g, '_');
             },
+            scope: true,
             compile: function (tElement, tAttr, transclude) {
                 return  function (scope, element, attributes) {
+                    scope.$watch('featureModel', function (newVal, oldVal) {
+                        if (newVal != oldVal)
+                            scope.featureModelCon.assign(scope, newVal);
+                    })
                     transclude(scope, function (clone) {
                         element.find('ng-transclude').replaceWith(clone);
                     })
@@ -258,7 +257,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         $(this).find('.header i.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
                     });
                     scope.$on('openFeature', function (e, args) {
-                        if (args == (scope.model.split('.').pop())) {
+                        if (args == (attributes['model'].split('.').pop())) {
                             element.find('.header').trigger('click');
                         }
                     })

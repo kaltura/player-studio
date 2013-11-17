@@ -29,7 +29,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 '</div></div>',
             scope: {
                 model: '=',
-                label: '@',
+                label: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 if (typeof $attrs.options != 'undefined') {
@@ -115,19 +115,14 @@ angular.module('KMC.directives', ['colorpicker.module'])
         return {
             restrict: 'AC',
             replace: true,
+            scope:true,
             template: '<div class="clearfix prettycheckbox">' +
-                '<input type="checkbox" class="pretty-checkable" ng-model="model">' +
+                '<input type="checkbox" class="pretty-checkable" ng-model="$parent.model">' +
                 '<a href="#" class=""></a>' +
                 '</div>',
-            controller: function ($scope) {
-                if (typeof $scope.model == 'undefined') {
-                    $scope.model = {};
-                }
-            },
             link: function (scope, iElement, iAttrs) {
-
                 var input = iElement.find('input').hide();
-                scope.$watch('model', function () {
+                scope.$watch('$parent.model', function () {
                     $(iElement).find('a').toggleClass('checked');
                 });
                 iElement.on('click', 'a', function (e) {
@@ -165,9 +160,9 @@ angular.module('KMC.directives', ['colorpicker.module'])
             restrict: 'E',
             replace: 'true',
             controller: function ($scope) {
-                $scope.check = function(action){
+                $scope.check = function (action) {
                     // for update button.. checks if needed
-                 return   menuSvc.checkAction(action);
+                    return   menuSvc.checkAction(action);
                 }
                 $scope.btnAction = function (action) {
                     menuSvc.doAction(action);

@@ -2,8 +2,8 @@
     <div class="header" data-toggle="collapse" data-target="#{{id}}">
         <span class="featureLabel">{{ label }}</span>
         <i class="pull-right glyphicon glyphicon-chevron-right"></i>
-        <span class="pull-right" ng-if="featureCheckbox">
-            <input class="prettyCheckbox" type="checkbox" ng-model="model"/>
+        <span class="pull-right" ng-if="featureCheckbox" >
+            <input class="prettyCheckbox"  model="{{ $parent.featureModel }}" type="checkbox"/>
         </span>
     </div>
     <div class="collapse" id="{{id}}">

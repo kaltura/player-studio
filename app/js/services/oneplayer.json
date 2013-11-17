@@ -14,18 +14,16 @@
         "basicDisplay": {
             "version": "1.2",
             "name": "Widescreen player - light skin - with live support",
-            "radio":0,
-            "lastUpdated":"02/13/2014",
-            "topOverlay": {
-                "title": true,
-                "share": true,
-                "info": true,
-                "color": "#fff"},
+            "radio": 0,
+            "lastUpdated": "02/13/2014"
+        },
+        "lookAndFeel": {
             "controlBar": {
-                "volume": true,"size": 1, "initialvolume":"80","counters": true, "quality": true, "fullscreen": true
+                "controlBarVolume": {
+                    "_featureEnabled": true,
+                    "initialvolume": 50
+                }
             }
-
-
         }
     }
 }
