@@ -116,7 +116,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
     });
     $routeProvider.otherwise({
-        redirectTo: '/list'
+        redirectTo: '/login'
     });
 }]);
 

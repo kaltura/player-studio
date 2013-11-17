@@ -2,7 +2,7 @@
 <html lang="en" ng-app="KMCModule">
     <head>
         <meta charset="utf-8">
-		<base id="baseHref" href="<?php echo dirname($_SERVER['REQUEST_URI'])?>/app"/>
+		<base id="baseHref" href="<?php echo dirname($_SERVER['REQUEST_URI'])?>"/>
         <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
         <!--change this base tag to the root of your app URL-->
         <title>Player Studio - JS Version</title>
@@ -31,7 +31,7 @@
         <script type="text/javascript" src="bower_components/select2/select2.js"></script>
         <!--1.07-->
         <!--<script src="lib/angular/angular.js"></script>-->
-        <!--1.2rc3-->
+        <!--1.2-->
         <script type="text/javascript" src="bower_components/angular/angular.js"></script>
         <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
         <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
