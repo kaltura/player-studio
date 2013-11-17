@@ -4,25 +4,24 @@
     padding: 2px;
     margin-right: 20px;
 }
-.spinEdit label >div {padding: 0;}
-.spinEdit .input-group{
+
+.spinEdit label > div {
+    padding: 0;
+}
+
+.spinEdit .input-group {
     top: -5px;
     right: 0px;
-    float:right;
+    float: right;
 }
+
 .spinEdit input.small {
-    width: 50px;
-
+    width: 50px!important;
 }
-
 
 div.spinedit {
-
-  position: absolute;
-right: 2px;
-
-
-    
+    position: absolute;
+    right: 2px;
 
     padding: 0 14px 0px 4px;
 }

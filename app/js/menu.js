@@ -232,7 +232,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         element.find('ng-transclude').replaceWith(clone);
                     })
                     element.on('show.bs.collapse hide.bs.collapse', function () {
-                        $(this).find('i.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+                        $(this).find('.header i.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
                     });
                     scope.$on('openFeature', function (e, args) {
                         if (args == (scope.model.split('.').pop())) {

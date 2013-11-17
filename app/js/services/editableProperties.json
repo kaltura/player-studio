@@ -502,8 +502,8 @@
                     },
                     {
                         "type": "featuremenu",
-                        "model": "textColor",
-                        "label": "textColor",
+                        "model": "textOptions",
+                        "label": "Text Options",
                         "children": [
                             {
                                 "label": "Text Color",
@@ -528,13 +528,14 @@
                                 "model": "fontName"
                             },
                             {
-                                "label": "Base Fone Size",
+                                "label": "Base Font Size (ems)",
                                 "type": "number",
                                 "default": 1,
                                 "model": "fontSize",
                                 "from": 0.1,
                                 "to": 5,
-                                "stepsize": 0.1
+                                "stepsize": 0.1,
+                                "numberOfDecimals":1
                             }
                         ]
                     }
