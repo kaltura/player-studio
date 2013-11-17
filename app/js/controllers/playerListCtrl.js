@@ -4,7 +4,7 @@
 
 KMCModule.controller('PlayerListCtrl',
     ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel',
-        function (apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel) {
+        function(apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel) {
             requestNotificationChannel.requestStarted('list');
             $rootScope.lang = 'en-US';
             $scope.search = '';
@@ -27,7 +27,7 @@ KMCModule.controller('PlayerListCtrl',
                 'action': 'list'
             };
 
-            apiService.doRequest(request).then(function (data) {
+            apiService.doRequest(request).then(function(data) {
                 $scope.data = data.objects;
                 $scope.calculateTotalItems();
             });
@@ -40,7 +40,7 @@ KMCModule.controller('PlayerListCtrl',
             $scope.requiredVersion = '201';
             $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
 
-            $scope.calculateTotalItems = function () {
+            $scope.calculateTotalItems = function() {
                 if ($scope.filtered)
                     $scope.totalItems = $scope.filtered.length;
                 else if ($scope.data) {
@@ -48,7 +48,7 @@ KMCModule.controller('PlayerListCtrl',
                     return $scope.totalItems;
                 }
             };
-            $scope.checkVersionNeedsUpgrade = function (itemVersion) {
+            $scope.checkVersionNeedsUpgrade = function(itemVersion) {
                 if (!itemVersion) {
                     return false;
                 }
@@ -59,10 +59,15 @@ KMCModule.controller('PlayerListCtrl',
                     return true
             }
 
-           // $scope.title = $filter('i18n')('Players list');
+            // $scope.title = $filter('i18n')('Players list');
             $scope.showSubTitle = true;
+            $scope.getThumbnail = function(item) {
+                if (typeof item.thumbnailUrl != 'undefined')
+                    return item.thumbnailUrl; // TODO: prehaps some checking on the URL validity?
+                else return $scope.defaultThumbnailUrl;
+            };
             $scope.defaultThumbnailUrl = 'img/mockPlayerThumb.png';
-            $scope.$watch('search', function (newValue, oldValue) {
+            $scope.$watch('search', function(newValue, oldValue) {
                 $scope.showSubTitle = newValue;
                 if (newValue.length > 0) {
                     $scope.title = $filter('i18n')('search for') + ' "' + newValue + '"';
@@ -72,14 +77,14 @@ KMCModule.controller('PlayerListCtrl',
                         $scope.title = $filter('i18n')('Players list');
                 }
 
-                $timeout(function () {
+                $timeout(function() {
                     $scope.calculateTotalItems();
                 }, 100);
             });
             $scope.oldVersionEditText = $filter('i18n')('Warning this player is out of date. \n' +
                 'Saving changes to this player upgrade, some features and \n' +
                 'design may be lost. (read more about upgrading players)');
-            $scope.goToEditPage = function (item) {
+            $scope.goToEditPage = function(item) {
                 //TODO filter according to what? we don't have "version" field
                 if (!$scope.checkVersionNeedsUpgrade(item.version)) {
                     $location.path('/edit/' + item.id);
@@ -89,7 +94,7 @@ KMCModule.controller('PlayerListCtrl',
                         templateUrl: 'template/dialog/message.html',
                         controller: 'ModalInstanceCtrl',
                         resolve: {
-                            settings: function () {
+                            settings: function() {
                                 return {
                                     'title': 'Edit confirmation',
                                     'message': $scope.oldVersionEditText
@@ -97,33 +102,33 @@ KMCModule.controller('PlayerListCtrl',
                             }
                         }
                     })
-                    modal.result.then(function (result) {
+                    modal.result.then(function(result) {
                         if (result) { // here we should move though an upgrade process before reaching the edit.
                             return  $location.url('edit/' + item.id);
                         }
 
-                    }, function () {
+                    }, function() {
                         return $log.info('edit when outdated modal dismissed at: ' + new Date());
                     });
                 }
             };
-            $scope.newPlayer = function () {
+            $scope.newPlayer = function() {
                 $location.path('/new');
             };
 
 
-            $scope.duplicate = function (item) {
+            $scope.duplicate = function(item) {
 //                TODO:will need to get the current ID and move it to the edit page with duplicate flag (save as new)
                 $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
             };
             //TODO: preview action...
-            $scope.delete = function (item) {
+            $scope.delete = function(item) {
                 //TODO: api call for delete
                 var modal = $modal.open({
                     templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
-                        settings: function () {
+                        settings: function() {
                             return {
                                 'title': 'Delete confirmation',
                                 'message': 'Are you sure you want to delete the player?'
@@ -131,21 +136,21 @@ KMCModule.controller('PlayerListCtrl',
                         }
                     }
                 });
-                modal.result.then(function (result) {
+                modal.result.then(function(result) {
                     if (result)
                         $scope.data.splice($scope.data.indexOf(item), 1);
-                }, function () {
+                }, function() {
                     $log.info('Delete modal dismissed at: ' + new Date());
                 });
             };
-            $scope.update = function (item) {
+            $scope.update = function(item) {
                 //TODO: api call for update
                 var text = '<span>Updating the player -- TEXT MISSING -- current version </span>';
                 var modal = $modal.open({
                     templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
-                        settings: function () {
+                        settings: function() {
                             return {
                                 'title': 'Update confirmation',
                                 'message': text + item.version
@@ -153,12 +158,12 @@ KMCModule.controller('PlayerListCtrl',
                         }
                     }
                 });
-                modal.result.then(function (result) {
+                modal.result.then(function(result) {
                     if (result) {
                         $log.info('update modal confirmed for item version ' + item.version + 'at: ' + new Date());
                     }
 
-                }, function () {
+                }, function() {
                     $log.info('update modal dismissed at: ' + new Date());
                 });
             };
