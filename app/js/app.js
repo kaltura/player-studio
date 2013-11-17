@@ -117,8 +117,16 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
     });
     $routeProvider.otherwise({
-        redirectTo: '/login'
+        resolve: {'res': function (localStorageService, $location) {
+            var ks = localStorageService.get('ks');
+            if (!ks) { //navigate to login
+                return $location.path("/login");
+            }
+            else
+                return $location.path('/list');
+        }}
     });
-}]);
+}])
+;
 
 
