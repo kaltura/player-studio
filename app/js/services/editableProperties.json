@@ -29,8 +29,14 @@
                 "model": "tags"
             },
             {
+                "label": "Version",
+                "type": "readonly",
+                "model": "version"
+            },
+            {
                 "label": "Update Player",
                 "type": "button",
+                "action" : "update",
                 "model": "playerUpdate"
             },
             {

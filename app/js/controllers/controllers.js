@@ -4,7 +4,7 @@
 //
 angular.module('KMC.controllers', [])
     .controller('ModalInstanceCtrl',
-    function ($scope, $modalInstance, settings, $compile) {
+    function ($scope, $modalInstance, settings) {
         $scope.title = '';
         $scope.message = '';
         $scope.buttons = [

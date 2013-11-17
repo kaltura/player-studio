@@ -75,6 +75,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 }
                 return apiService;
             }
+
             }
         }
     );

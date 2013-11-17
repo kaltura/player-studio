@@ -152,15 +152,32 @@ angular.module('KMC.directives', ['colorpicker.module'])
         };
     }).directive('readOnly',function () {
         return {
-            restrict:'E',
-            replace:'true',
-            link: function () {
-            },
+            restrict: 'E',
+            replace: 'true',
             scope: {
                 model: '=',
                 label: '@'
             },
             template: '<label>{{ label }}<i class="icon {{icon}}"></i><span class="form-control" disabled>{{ model }}</span> </label>'
+        }
+    }).directive('modelButton',function (menuSvc) {
+        return {
+            restrict: 'E',
+            replace: 'true',
+            controller: function ($scope) {
+                $scope.check = function(action){
+                    // for update button.. checks if needed
+                 return   menuSvc.checkAction(action);
+                }
+                $scope.btnAction = function (action) {
+                    menuSvc.doAction(action);
+                }
+            },
+            scope: {
+                label: '@',
+                action: '@'
+            },
+            template: '<label ng-if="check(action)"><i class="icon {{icon}}"></i><button type="button" ng-click="btnAction(action)" class="btn btn-default">{{ label }}</button></label>'
         }
     }).directive('modelNumber', function () {
         return{

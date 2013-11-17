@@ -41,6 +41,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             .success(function (data) {
                 menudata = data;
             });
+
         var JSON2directiveDictionary = function (jsonName) {
             //this is now the single place one need to edit in order to add a directive to the menu generator
             switch (jsonName) {
@@ -67,6 +68,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     break;
                 case 'radio':
                     return '<model-radio/>';
+                    break;
+                case 'button':
+                    return '<model-button/>';
                     break;
             }
         };
@@ -210,6 +214,21 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 else {
                     return false;
                 }
+            },
+            actions: [],
+            registerAction: function (callStr, dataFn) {
+                menuSvc.actions[callStr] = dataFn;
+            },
+            doAction: function (action, arg) {
+                if (typeof menuSvc.actions[action] == "function") {
+                    menuSvc.actions[action].call(arg);
+                }
+            },
+            checkAction: function (action) {
+                if (typeof menuSvc.actions[action] == "function") {
+                    return true;
+                }
+                return false;
             }
 
         };
@@ -275,7 +294,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 "</nav>",
             replace: true,
             restrict: 'E',
-            scope: {data: '='},
+            scope: {data: '=', 'actions': '&'},
             transclude: true,
             compile: function (tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('ul[ng-transclude]:first');

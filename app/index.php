@@ -38,6 +38,7 @@
     <!--1.2-->
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
     <script src="lib/sprintf.js"></script>
     <script src="lib/localize.js"></script>
