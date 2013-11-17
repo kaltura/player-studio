@@ -25,7 +25,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 '<div class="radioLabel">{{ label }}</div>' +
                 '<div class="form-group">' +
                 '<label  ng-repeat="option in options" >' +
-                '<input value="{{ option.value }}"  type="radio" ng-model="model"/>{{ option.label }}</label>' +
+                '<input value="{{ option.value }}"  type="radio" ng-model="$parent.model"/>{{ option.label }}</label>' +
                 '</div></div>',
             scope: {
                 model: '=',
