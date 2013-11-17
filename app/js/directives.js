@@ -150,6 +150,10 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 model: "="
             }
         };
+    }).directive('readOnly',function () {
+        return {
+            template: '<label>{{ label }}<span class="form-control">{{ {{model}} }}</span> </label>'
+        }
     }).directive('modelNumber', function () {
         return{
             templateUrl: 'template/spinedit/spinedit.html',
@@ -157,7 +161,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             restrict: 'EA',
             scope: {
                 model: "=",
-                label :"@"
+                label: "@"
             },
             link: function ($scope, $element, $attrs) {
                 console.log($scope);

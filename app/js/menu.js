@@ -41,6 +41,35 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             .success(function (data) {
                 menudata = data;
             });
+        var JSON2directiveDictionary = function (jsonName) {
+            //this is now the single place one need to edit in order to add a directive to the menu generator
+            switch (jsonName) {
+                case 'dropdown' :
+                    return  '<model-select/>';
+                    break;
+                case 'checkbox' :
+                    return '<model-checkbox/>';
+                    break;
+                case 'color' :
+                    return  '<model-color/>';
+                    break;
+                case 'text' :
+                    return  '<model-text/>';
+                    break;
+                case 'number':
+                    return  '<model-number/>';
+                    break;
+                case 'readonly':
+                    return '<read-only/>';
+                    break;
+                case 'featuremenu':
+                    return '<feature-menu/>';
+                    break;
+                case 'radio':
+                    return '<model-radio/>';
+                    break;
+            }
+        };
         var menuSvc = {
             promise: promise,
             menuScope: {},
@@ -72,27 +101,15 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         var parentMenu = writeFormElement(item, '<menu-level pagename="' + item.model + '" parent-menu="' + parentLabel + '"/>', originModel);
                         elm = writeChildren(item, parentMenu, true);
                         break;
-                    case 'dropdown' :
-                        elm = writeFormElement(item, '<model-select/>', originAppendPos);
-                        break;
-                    case 'checkbox' :
-                        elm = writeFormElement(item, '<model-checkbox/>', originAppendPos);
-                        break;
-                    case 'color' :
-                        elm = writeFormElement(item, '<model-color/>', originAppendPos);
-                        break;
-                    case 'text' :
-                        elm = writeFormElement(item, '<model-text/>', originAppendPos);
-                        break;
-                    case 'number':
-                        elm = writeFormElement(item, '<model-number/>', originAppendPos);
-                        break;
                     case 'featuremenu':
                         elm = writeChildren(item, writeFormElement(item, '<feature-menu/>', originAppendPos));
                         break;
-                    case 'radio':
-                        elm = writeFormElement(item, '<model-radio/>', originAppendPos);
+                    default :
+                        var directive = JSON2directiveDictionary(item.type);
+                        if (directive)
+                            elm = writeFormElement(item, JSON2directiveDictionary(item.type), originAppendPos);
                         break;
+
                 }
                 return elm;
 
@@ -104,31 +121,18 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     for (var j = 0; j < item.children.length; j++) {
                         var subitem = item.children[j];
                         switch (subitem.type) {
-                            case 'checkbox' :
-                                parent.append(writeFormElement(subitem, '<model-checkbox/>', modelStr));
-                                break;
-                            case 'dropdown' :
-                                parent.append(writeFormElement(subitem, '<model-select/>', modelStr));
-                                break;
-                            case 'color' :
-                                parent.append(writeFormElement(subitem, '<model-color/>', modelStr));
-                                break;
-                            case 'number':
-                                parent.append(writeFormElement(subitem, '<model-number/>', modelStr));
-                                break;
-                            case 'text':
-                                parent.append(writeFormElement(subitem, '<model-text/>', modelStr));
+                            case 'menu':
+                                parent.append(menuSvc.buildMenuItem(subitem, parent, item.model, item));
                                 break;
                             case 'featuremenu':
                                 var fm = writeFormElement(subitem, '<feature-menu/>', modelStr);
                                 fm.append(writeChildren(subitem).contents());
                                 parent.append(fm);
                                 break;
-                            case 'menu':
-                                parent.append(menuSvc.buildMenuItem(subitem, parent, item.model, item));
-                                break;
-                            case 'radio':
-                                parent.append(writeFormElement(subitem, '<model-radio/>', modelStr));
+                            default :
+                                var directive = JSON2directiveDictionary(subitem.type);
+                                if (directive)
+                                    parent.append(writeFormElement(subitem, directive, modelStr));
                                 break;
                         }
                     }
@@ -195,8 +199,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         }
                         menuSvc.menuScope.$broadcast('highlight', foundModel);
                         menuSvc.setMenu(menuPage.model);
-                        if (featureMenu.length){
-                            angular.forEach(featureMenu,function(value){
+                        if (featureMenu.length) {
+                            angular.forEach(featureMenu, function (value) {
                                 menuSvc.menuScope.$broadcast('openFeature', value.model);
                             })
                         }
