@@ -13,6 +13,7 @@
         "basicDisplay": {
             "name": "Widescreen player - light skin - with live support",
             "radio":0,
+            "lastUpdated":"02/13/2014",
             "topOverlay": {
                 "title": true,
                 "share": true,

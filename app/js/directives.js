@@ -152,7 +152,15 @@ angular.module('KMC.directives', ['colorpicker.module'])
         };
     }).directive('readOnly',function () {
         return {
-            template: '<label>{{ label }}<span class="form-control">{{ {{model}} }}</span> </label>'
+            restrict:'E',
+            replace:'true',
+            link: function () {
+            },
+            scope: {
+                model: '=',
+                label: '@'
+            },
+            template: '<label>{{ label }}<i class="icon {{icon}}"></i><span class="form-control" disabled>{{ model }}</span> </label>'
         }
     }).directive('modelNumber', function () {
         return{
@@ -164,7 +172,6 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 label: "@"
             },
             link: function ($scope, $element, $attrs) {
-                console.log($scope);
                 var $spinner = $element.find('input').spinedit({
                     minimum: parseFloat($scope.from),
                     maximum: parseFloat($scope.to),
