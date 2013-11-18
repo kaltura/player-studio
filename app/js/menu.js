@@ -237,7 +237,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             controller: function ($scope, $element, $attrs) {
                 $scope.label = $attrs['label'];
                 if ($attrs.featureCheckbox != false) { //undefined is ok
-                    $scope.featureModelCon = $parse($attrs['model'] + '._featureEnabled');
+                    $scope.modelPath = ($attrs['model'] + '._featureEnabled');
+                    $scope.featureModelCon = $parse($scope.modelPath);
                     $scope.featureModel = $scope.featureModelCon($scope);
                     $scope.featureCheckbox = ($attrs.featureCheckbox) ? $attrs.featureCheckbox : true;
                 }

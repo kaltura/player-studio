@@ -3,7 +3,7 @@
         <span class="featureLabel">{{ label }}</span>
         <i class="pull-right glyphicon glyphicon-chevron-right"></i>
         <span class="pull-right" ng-if="featureCheckbox" >
-            <input class="prettyCheckbox"  model="{{ $parent.featureModel }}" type="checkbox"/>
+            <input class="prettyCheckbox" model="$parent.featureModel" ng-model="$parent.featureModel" type="checkbox"/>
         </span>
     </div>
     <div class="collapse" id="{{id}}">

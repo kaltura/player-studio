@@ -114,29 +114,40 @@ angular.module('KMC.directives', ['colorpicker.module'])
 ).directive('prettyCheckbox',function () {
         return {
             restrict: 'AC',
-            replace: true,
-            scope:true,
-            template: '<div class="clearfix prettycheckbox">' +
-                '<input type="checkbox" class="pretty-checkable" ng-model="$parent.model">' +
-                '<a href="#" class=""></a>' +
-                '</div>',
-            link: function (scope, iElement, iAttrs) {
-                var input = iElement.find('input').hide();
-                scope.$watch('$parent.model', function () {
-                    $(iElement).find('a').toggleClass('checked');
-                });
-                iElement.on('click', 'a', function (e) {
-                    e.preventDefault();
-                    input.trigger('click');
-                    return false;
-                })
+            priority: 1000,
+            transclude: 'element',
+            compile: function (tElement, tAttrs, transclude) {
+                return  function (scope, iElement, iAttr) {
+                    var wrapper = angular.element('<div class="clearfix prettycheckbox"></div>');
+                    var clickHandler = wrapper.append('<a href="#" class=""></a>');
+                    transclude(scope, function (clone) {
+                        return wrapper.append(clone);
+                    });
+                    iElement.replaceWith(wrapper);
+                    var input = wrapper.find('input').hide();
+                    clickHandler.on('click', 'a', function (e) {
+                        e.preventDefault();
+                        input.trigger('click');
+                        return false;
+                    });
+                    var watchProp = 'model'
+                    if (typeof iAttr['model'] != 'undefined') {
+                        watchProp = iAttr['model'];
+                    }
+                    scope.$watch(function () {
+                        return scope.$eval(watchProp);
+                    }, function (newVal, oldVal) {
+                        if (newVal != oldVal)
+                            $(wrapper).find('a').toggleClass('checked');
+                    });
+                }
             }
         }
     }).
     directive('modelCheckbox',function () {
         return  {
             template: '<label>{{label}}' +
-                '<input type="checkbox" class="prettyCheckbox" model="{{model}}">' +
+                '<input type="checkbox" class="prettyCheckbox" ng-model="model">' +
                 '</label>',
             replace: true,
             restrict: 'E',
