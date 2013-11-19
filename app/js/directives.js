@@ -68,8 +68,8 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 icon: '@'
             },
             // $parent.model is used because tooltip is creating an isolate scope.
-            template: "<label ><i class='icon {{icon}}'></i>" +
-                "<input class='form-control' tooltip='{{label}}' type='text' ng-model='$parent.model'/></label>"        };
+            template: "<label ><i ng-if='icon' class='icon {{icon}}'></i>" +
+                "<span class='inputHolder'><input class='form-control' tooltip='{{label}}' type='text' ng-model='$parent.model'/></span></label>"        };
     }).directive('modelSelect',function () {
         return {
             replace: true,
@@ -83,7 +83,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             link: function ($scope, $element, $attrs) {
 
                 if (typeof $attrs.options != 'undefined') {
-                    $scope.options = JSON.parse($attrs.options);
+                    $scope.options = angular.fromJson($attrs.options);
                 }
 
             },
@@ -94,7 +94,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 if (!$attrs.showSearch) {
                     $scope.selectOpts.minimumResultsForSearch = -1;
                 }
-                $scope.uiselectOpts = JSON.stringify($scope.selectOpts);
+                $scope.uiselectOpts = angular.toJson($scope.selectOpts);
                 $scope.options = [];
                 if ($scope.model == '' || typeof $scope.model == 'undefined') {
                     $scope.model = $attrs.initvalue;

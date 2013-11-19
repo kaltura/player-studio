@@ -1,46 +1,75 @@
 .spinEdit input {
     width: 99%;
-    border-radius: 3px;
-    padding: 2px;
+    padding: 14px;
     margin-right: 20px;
+    display: block;
+    height: 31px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #aaa;
+    white-space: nowrap;
+    line-height: 26px;
+    color: #444;
+    text-decoration: none;
+    border-radius: 4px;
+    background-clip: padding-box;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #fff;
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eee), color-stop(0.5, #fff));
+    background-image: -webkit-linear-gradient(center bottom, #eee 0%, #fff 50%);
+    background-image: -moz-linear-gradient(center bottom, #eee 0%, #fff 50%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
+    background-image: linear-gradient(top, #fff 0%, #eee 50%);
 }
 
 .spinEdit label > div {
     padding: 0;
 }
-
-.spinEdit .input-group {
-    top: -5px;
-    right: 0px;
+.spinEdit .input-group{
+    margin-right: -3px;
+}
+.spinEdit .input-group-addon {
     float: right;
+    z-index: 100;
+    border:1px solid #AAA;
+    border-left:none;
+    border-radius: 4px;
+    top: 1px;
+    right: 2px;
 }
 
 .spinEdit input.small {
-    width: 50px!important;
+    width: 50px !important;
+    line-height: 26px;
 }
 
 div.spinedit {
     position: absolute;
-    right: 2px;
-
-    padding: 0 14px 0px 4px;
+    right: 0px;
+    padding: 0 16px 0px 4px;
 }
 
 div.spinedit .glyphicon-chevron-up,
 div.spinedit .glyphicon-chevron-down {
+    line-height: 13px;
     cursor: pointer;
     float: left;
     position: relative;
 }
 
 div.spinedit .glyphicon-chevron-up {
-    top: -3px;
+    top: -2px;
     left: 0px;
 }
 
 div.spinedit .glyphicon-chevron-down {
     top: 0px;
     left: -1px;
+    border-top: 1px solid black;
 }
 
 

@@ -9,7 +9,6 @@
             {
                 "label": "Player Display Name",
                 "type": "text",
-                "icon": "icon-book",
                 "model": "name",
                 "default": "New Player"
             },
@@ -41,7 +40,8 @@
             },
             {
                 "label": "Advanced",
-                "type": "menu",
+                "type": "featuremenu",
+                "featureCheckbox":"false",
                 "model": "advanced",
                 "children": [
                     {
@@ -125,7 +125,7 @@
         "model": "lookAndFeel",
         "children": [
             {
-                "type": "menu",
+                "type": "featuremenu",
                 "model": "title",
                 "label": "Title Label",
                 "children": [
@@ -192,7 +192,7 @@
                 ]
             },
             {
-                "type": "menu",
+                "type": "featuremenu",
                 "model": "controlBar",
                 "label": "Control Bar",
                 "children": [
@@ -454,7 +454,7 @@
                 ]
             },
             {
-                "type": "menu",
+                "type": "featuremenu",
                 "model": "watermark",
                 "label": "Watermark",
                 "children": [
@@ -484,7 +484,7 @@
                 ]
             },
             {
-                "type": "menu",
+                "type": "featuremenu",
                 "model": "stylesAndColors",
                 "label": "Styles & Colors",
                 "children": [

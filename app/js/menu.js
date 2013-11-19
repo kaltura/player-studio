@@ -2,10 +2,40 @@
 /* Menu */
 
 var KMCMenu = angular.module('KMC.menu', []);
-KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope) {
-    $scope.menuShown = true;
+KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', '$window', function (menuSvc, $scope, $window) {
+    var getWidth = function () {
+        return $('#mp-menu').width();
+    }
+    var closeMenu = function () {
+        var width = getWidth();
+        $('#mp-pusher').animate(
+            {'left': '0'},
+            { duration: 200, queue: true });
+        $('#mp-menu').animate({'left': '-' + width});
+    }
+    var resetMenu = function () {
+        var width = getWidth();
+        $('#mp-pusher').css({'left': width});
+        $('#mp-menu').css({'left': -width});
+    }
+    var openMenu = function () {
+        var width = getWidth();
+        $('#mp-pusher').animate(
+            {'left': width},
+            { duration: 200, queue: true });
+        $('#mp-menu').animate({'left': -width});
+    }
+    $scope.menuShown = true; //initial value
+    resetMenu();
+    $(window).resize(function () {
+        if ($scope.menuShown == true)
+            resetMenu();
+        else {
+            closeMenu();
+        }
+    })
     $scope.$on('menuChange', function () {
-        $scope.menuShown = true;
+//        $scope.menuShown = true;
     });
     $scope.$watch(function () {
         return menuSvc.currentPage;
@@ -19,18 +49,14 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope)
     $scope.togglemenu = function () {
         $scope.menuShown = !$scope.menuShown;
     }
+
     $scope.$watch('menuShown', function (newVal, oldVal) {
         if (newVal != oldVal) {
-            if (newVal) { //close
-                $('#mp-pusher').animate(
-                    {'left': '30%'},
-                    { duration: 200, queue: true });
+            if (newVal) {
+                openMenu();
             }
-            else {//open
-                $('#mp-pusher').animate(
-                    {'left': '0'},
-                    { duration: 200, queue: true });
-
+            else {
+                closeMenu();
             }
         }
     })
@@ -152,7 +178,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         } else {
                             if (key == 'options' && typeof value == 'object')
                                 if (Array.isArray(value))
-                                    elm.attr(key, JSON.stringify(value));
+                                    elm.attr(key, angular.toJson(value));
                         }
                     });
                     if (typeof parentModel != "undefined") {
@@ -236,11 +262,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             transclude: true,
             controller: function ($scope, $element, $attrs) {
                 $scope.label = $attrs['label'];
-                if ($attrs.featureCheckbox != false) { //undefined is ok
+                $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
+                if ($scope.featureCheckbox) {
                     $scope.modelPath = ($attrs['model'] + '._featureEnabled');
                     $scope.featureModelCon = $parse($scope.modelPath);
                     $scope.featureModel = $scope.featureModelCon($scope);
-                    $scope.featureCheckbox = ($attrs.featureCheckbox) ? $attrs.featureCheckbox : true;
                 }
                 $scope.id = $attrs['model'].replace(/\./g, '_');
             },
@@ -254,8 +280,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     transclude(scope, function (clone) {
                         element.find('ng-transclude').replaceWith(clone);
                     })
-                    element.on('show.bs.collapse hide.bs.collapse', function () {
-                        $(this).find('.header i.glyphicon').toggleClass('glyphicon-chevron-right glyphicon-chevron-down');
+                    element.on('show.bs.collapse hide.bs.collapse', function (e) {
+                        if (e.target.id == scope.id)
+                            $(this).find('.header:first i.glyphicon').toggleClass('rotate90');
                     });
                     scope.$on('openFeature', function (e, args) {
                         if (args == (attributes['model'].split('.').pop())) {
@@ -316,18 +343,22 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
     }]).controller('menuSearchCtl',function ($scope, menuSvc) {
         var menuObj = menuSvc.get();
         $scope.menuData = [];
-        $scope.menuSearch = '';
-        $scope.$watch('menuSearch', function (newVal, oldVal) {
-            if (newVal != oldVal) {
-                $scope.notFound = false;
-            }
-        })
-        $scope.searchMenuFn = function () {
+        $scope.checkSearch = function (val) {
+            if (val)
+                console.log(val);
             $scope.notFound = false;
+            if ($scope.menuSearch) {
+                $scope.searchMenuFn();
+            }
+        }
+        $scope.menuSearch = '';
+        $scope.searchMenuFn = function () {
             var searchResult = menuSvc.menuSearch($scope.menuSearch);
             if (!searchResult)
                 $scope.notFound = true;
-
+            else {
+                $scope.menuSearch = ''; //reset for next time
+            }
         }
         var getLabels = function (obj) { // for autocomplete
             angular.forEach(obj, function (value, key) {

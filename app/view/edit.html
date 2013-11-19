@@ -12,8 +12,8 @@
                 <li class="nohover">
                     <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
                           ng-submit="searchMenuFn(value)" role="search">
-                        <input type="text"
-                               typeahead="item for item in menuData | filter:$viewValue "
+                        <input ng-change="checkSearch()" type="text"
+                               typeahead="item for item in menuData | filter:$viewValue " data-typeaheadOnSelect="checkSearch()"
                                class="fullwidth form-control" placeholder="{{'Search for menu property'| i18n}}"
                                ng-model='menuSearch'><span class="help-block" ng-show="notFound">{{ 'The property was not found '| i18n}}</span>
                     </form>

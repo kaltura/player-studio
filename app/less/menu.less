@@ -38,6 +38,7 @@ html, body, body > section, .scroller, .wrapper {
   left: -30%;
   width: 30%;
   height: 100%;
+  min-width: 260px;
   #mp-inner {
     height: 100%;
     margin-left: 60px;
@@ -81,16 +82,19 @@ html, body, body > section, .scroller, .wrapper {
     display: block;
     padding: 8px;
     width: 100%;
+    text-align: center;
     height: 50px;
-    font-size: 250%;
+    font-size: 180%;
     //    border-bottom: 2px solid #eee;
     opacity: 0.18;
-    &:hover, &.active {
+    &:hover {
       opacity: 0.5;
       text-decoration: none;
     }
+    &.active {
+      opacity: 1;
+    }
   }
-
 }
 
 .mp-level {
@@ -109,7 +113,7 @@ html, body, body > section, .scroller, .wrapper {
   z-index: 100;
 }
 
-.mp-level.mp-level-open,.mp-level.mp-level-in-stack {
+.mp-level.mp-level-open, .mp-level.mp-level-in-stack {
   left: 0;
 
 }
@@ -183,16 +187,70 @@ html, body, body > section, .scroller, .wrapper {
     label, .form-element {
       padding: 0.7em 1em 0.7em 1.8em;
       display: block;
+      text-align: left;
       clear: both;
+      font-weight: normal;
+      font-size: 13px;
       min-height: 30px;
       margin-bottom: -1px;
       color: #666;
+      .inputHolder {
+        float: left;
+        width: 100%;
+      }
+
       i.icon {
         float: left;
         vertical-align: bottom;
         line-height: 1.4em;
+        margin-right: 5%;
         display: inline;
-        font-size: 22px
+        font-size: 22px;
+        & + .inputHolder {
+          width: 85%;
+        }
+      }
+      &[type="featuremenu"] {
+        div.header {
+          .featureLabel {
+            color: #000000;
+          }
+          font-weight: bold;
+          margin-bottom: 10px;
+          i.pull-left.glyphicon {
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            -ms-transition: all 0.3s;
+            -o-transition: all 0.3s;
+            transition: all 0.3s;
+            margin-left: -20px;
+          }
+          span.pull-right {
+            //checkbox
+            margin-top: -6px;
+          }
+        }
+        div.in, div.collapse, div.collapsing {
+          &:not(.tooltip) {
+            width: 100%;
+            label, div.form-element {
+              .featureLabel {
+                font-weight: normal;
+                color: #666
+              }
+              padding-right: 0;
+              padding-left: 0;
+
+            }
+
+          }
+        }
+      }
+      &[type="readonly"] span {
+        margin-top: 10px;
+      }
+      &[type="button"] {
+        text-align: center;
       }
       i.pull-right.glyphicon {
         padding-top: 4px;
@@ -200,10 +258,10 @@ html, body, body > section, .scroller, .wrapper {
       }
       input[type="text"] {
         float: left;
-        margin-left: 5%;
-        width: 85%;
+        box-shadow: -1px 1px 0px #ccc inset;
+        width: 100%;
       }
-      input[type="checkbox"], div.select2-container, .prettycheckbox, .spinEdit input.small {
+      input[type="checkbox"],div.input-group, div.select2-container, .prettycheckbox, .spinEdit input.small {
         float: right;
         z-index: 10;
       }
@@ -211,23 +269,26 @@ html, body, body > section, .scroller, .wrapper {
         float: right;
         width: 25px;
       }
-      div.in, div.collapse, div.collapsing {
-        &:not(.tooltip) {
-          padding-right: 9px;
-          width: 100%;
-        }
-      }
-     &[type="radio"] {
+      &[type="radio"] {
         label {
           padding: 2px;
-          float: left;
-          margin: 5px;
+          margin: 6px 0;
+          margin-right: 32px;
           float: left;
           display: inline;
           clear: none;
 
         }
-        input {margin:4px;}
+        input {
+          margin: 4px;
+        }
+        .form-group {
+          text-align: center;
+          margin-left: 10px;
+          label:last-child:nth-child(2) {
+            float: right;
+          }
+        }
       }
       .colorinput, input[type="text"].colorinput {
         width: 50px;
@@ -244,7 +305,7 @@ html, body, body > section, .scroller, .wrapper {
         background-color: azure;
         outline: 3px double black;
       }
-       .form-group{
+      .form-group {
         text-align: center;
         margin: auto;
         width: 247px;
@@ -253,7 +314,7 @@ html, body, body > section, .scroller, .wrapper {
     }
   }
 
-  ul li {
+  ul:not(.dropdown-menu) > li {
     display: block;
     min-height: 50px;
     &:not(.nohover):hover {
@@ -274,6 +335,22 @@ html, body, body > section, .scroller, .wrapper {
         float: right;
         content: "\e080";
         color: black;
+      }
+    }
+  }
+  ul.dropdown-menu {
+    border-radius: 5px;
+    li {
+      border-radius: 5px;
+      a {
+        font-weight: light;
+        border-radius: 3px;
+        background-color: #eee;
+        border-bottom: 1px solid #666;
+        color: #666;
+        &:hover, .active {
+          background-color: white;
+        }
       }
     }
   }
@@ -301,6 +378,23 @@ html, body, body > section, .scroller, .wrapper {
     content: "\e079";
     color: black;
   }
-
 }
 
+.rotate90 {
+  transform: rotate(90deg);
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari and Chrome */
+}
+
+.triangle {
+  margin-left: 10px;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 5px 0 5px 8.7px;
+  border-color: transparent transparent transparent #000000;
+}
+
+.glyphicon-play {
+  color: #000;
+}

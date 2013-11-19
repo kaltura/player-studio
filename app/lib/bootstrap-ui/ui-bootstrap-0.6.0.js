@@ -3022,21 +3022,21 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       //SUPPORTED ATTRIBUTES (OPTIONS)
 
       //minimal no of characters that needs to be entered before typeahead kicks-in
-      var minSearch = originalScope.$eval(attrs.typeaheadMinLength) || 1;
+      var minSearch = originalScope.$eval(attrs.typeaheadminlength) || 1;
 
       //minimal wait time after last character typed before typehead kicks-in
-      var waitTime = originalScope.$eval(attrs.typeaheadWaitMs) || 0;
+      var waitTime = originalScope.$eval(attrs.typeaheadwaitms) || 0;
 
       //should it restrict model values to the ones selected from the popup only?
-      var isEditable = originalScope.$eval(attrs.typeaheadEditable) !== false;
+      var isEditable = originalScope.$eval(attrs.typeaheadeditable) !== false;
 
       //binding to a variable that indicates if matches are being retrieved asynchronously
-      var isLoadingSetter = $parse(attrs.typeaheadLoading).assign || angular.noop;
+      var isLoadingSetter = $parse(attrs.typeaheadloading).assign || angular.noop;
 
       //a callback executed when a match is selected
-      var onSelectCallback = $parse(attrs.typeaheadOnSelect);
+      var onSelectCallback = $parse(attrs.typeaheadonselect);
 
-      var inputFormatter = attrs.typeaheadInputFormatter ? $parse(attrs.typeaheadInputFormatter) : undefined;
+      var inputFormatter = attrs.typeaheadinputformatter ? $parse(attrs.typeaheadinputformatter) : undefined;
 
       //INTERNAL VARIABLES
 
@@ -3057,8 +3057,8 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         position: 'position'
       });
       //custom item template
-      if (angular.isDefined(attrs.typeaheadTemplateUrl)) {
-        popUpEl.attr('template-url', attrs.typeaheadTemplateUrl);
+      if (angular.isDefined(attrs.typeaheadtemplateurl)) {
+        popUpEl.attr('template-url', attrs.typeaheadtemplateurl);
       }
 
       //create a child scope for the typeahead directive so we are not polluting original scope

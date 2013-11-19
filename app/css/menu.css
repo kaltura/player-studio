@@ -35,6 +35,7 @@ body > section,
   left: -30%;
   width: 30%;
   height: 100%;
+  min-width: 260px;
 }
 #mp-menu #mp-inner {
   height: 100%;
@@ -55,31 +56,22 @@ body > section,
   z-index: 1000;
   background: #323232;
   /* Old browsers */
-
   /* IE9 SVG, needs conditional override of 'filter' to 'none' */
-
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzMyMzIzMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzMDMwMzAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
   background: -moz-linear-gradient(left, #323232 0%, #303030 100%);
   /* FF3.6+ */
-
   background: -webkit-gradient(linear, left top, right top, color-stop(0%, #323232), color-stop(100%, #303030));
   /* Chrome,Safari4+ */
-
   background: -webkit-linear-gradient(left, #323232 0%, #303030 100%);
   /* Chrome10+,Safari5.1+ */
-
   background: -o-linear-gradient(left, #323232 0%, #303030 100%);
   /* Opera 11.10+ */
-
   background: -ms-linear-gradient(left, #323232 0%, #303030 100%);
   /* IE10+ */
-
   background: linear-gradient(to right, #323232 0%, #303030 100%);
   /* W3C */
-
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#323232', endColorstr='#303030', GradientType=1);
   /* IE6-8 */
-
 }
 #mp-mainlevel ul {
   list-style: none;
@@ -93,14 +85,17 @@ body > section,
   display: block;
   padding: 8px;
   width: 100%;
+  text-align: center;
   height: 50px;
-  font-size: 250%;
+  font-size: 180%;
   opacity: 0.18;
 }
-#mp-mainlevel a.icon:hover,
-#mp-mainlevel a.icon.active {
+#mp-mainlevel a.icon:hover {
   opacity: 0.5;
   text-decoration: none;
+}
+#mp-mainlevel a.icon.active {
+  opacity: 1;
 }
 .mp-level {
   position: absolute;
@@ -183,18 +178,99 @@ body > section,
 #mp-menu .mp-level li .form-element {
   padding: 0.7em 1em 0.7em 1.8em;
   display: block;
+  text-align: left;
   clear: both;
+  font-weight: normal;
+  font-size: 13px;
   min-height: 30px;
   margin-bottom: -1px;
   color: #666;
+}
+#mp-menu .mp-level li label .inputHolder,
+#mp-menu .mp-level li .form-element .inputHolder {
+  float: left;
+  width: 100%;
 }
 #mp-menu .mp-level li label i.icon,
 #mp-menu .mp-level li .form-element i.icon {
   float: left;
   vertical-align: bottom;
   line-height: 1.4em;
+  margin-right: 5%;
   display: inline;
   font-size: 22px;
+}
+#mp-menu .mp-level li label i.icon + .inputHolder,
+#mp-menu .mp-level li .form-element i.icon + .inputHolder {
+  width: 85%;
+}
+#mp-menu .mp-level li label[type="featuremenu"] div.header,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+#mp-menu .mp-level li label[type="featuremenu"] div.header .featureLabel,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.header .featureLabel {
+  color: #000000;
+}
+#mp-menu .mp-level li label[type="featuremenu"] div.header i.pull-left.glyphicon,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.header i.pull-left.glyphicon {
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  margin-left: -20px;
+}
+#mp-menu .mp-level li label[type="featuremenu"] div.header span.pull-right,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.header span.pull-right {
+  margin-top: -6px;
+}
+#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip),
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip),
+#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip),
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip),
+#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip),
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) {
+  width: 100%;
+}
+#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip) label,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip) label,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip) label,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip) label,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip) label,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) label,
+#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip) div.form-element,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip) div.form-element,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip) div.form-element,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip) div.form-element,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element {
+  padding-right: 0;
+  padding-left: 0;
+}
+#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element .featureLabel {
+  font-weight: normal;
+  color: #666666;
+}
+#mp-menu .mp-level li label[type="readonly"] span,
+#mp-menu .mp-level li .form-element[type="readonly"] span {
+  margin-top: 10px;
+}
+#mp-menu .mp-level li label[type="button"],
+#mp-menu .mp-level li .form-element[type="button"] {
+  text-align: center;
 }
 #mp-menu .mp-level li label i.pull-right.glyphicon,
 #mp-menu .mp-level li .form-element i.pull-right.glyphicon {
@@ -204,11 +280,13 @@ body > section,
 #mp-menu .mp-level li label input[type="text"],
 #mp-menu .mp-level li .form-element input[type="text"] {
   float: left;
-  margin-left: 5%;
-  width: 85%;
+  box-shadow: -1px 1px 0px #cccccc inset;
+  width: 100%;
 }
 #mp-menu .mp-level li label input[type="checkbox"],
 #mp-menu .mp-level li .form-element input[type="checkbox"],
+#mp-menu .mp-level li label div.input-group,
+#mp-menu .mp-level li .form-element div.input-group,
 #mp-menu .mp-level li label div.select2-container,
 #mp-menu .mp-level li .form-element div.select2-container,
 #mp-menu .mp-level li label .prettycheckbox,
@@ -223,19 +301,11 @@ body > section,
   float: right;
   width: 25px;
 }
-#mp-menu .mp-level li label div.in:not(.tooltip),
-#mp-menu .mp-level li .form-element div.in:not(.tooltip),
-#mp-menu .mp-level li label div.collapse:not(.tooltip),
-#mp-menu .mp-level li .form-element div.collapse:not(.tooltip),
-#mp-menu .mp-level li label div.collapsing:not(.tooltip),
-#mp-menu .mp-level li .form-element div.collapsing:not(.tooltip) {
-  padding-right: 9px;
-  width: 100%;
-}
 #mp-menu .mp-level li label[type="radio"] label,
 #mp-menu .mp-level li .form-element[type="radio"] label {
   padding: 2px;
-  margin: 5px;
+  margin: 6px 0;
+  margin-right: 32px;
   float: left;
   display: inline;
   clear: none;
@@ -243,6 +313,15 @@ body > section,
 #mp-menu .mp-level li label[type="radio"] input,
 #mp-menu .mp-level li .form-element[type="radio"] input {
   margin: 4px;
+}
+#mp-menu .mp-level li label[type="radio"] .form-group,
+#mp-menu .mp-level li .form-element[type="radio"] .form-group {
+  text-align: center;
+  margin-left: 10px;
+}
+#mp-menu .mp-level li label[type="radio"] .form-group label:last-child:nth-child(2),
+#mp-menu .mp-level li .form-element[type="radio"] .form-group label:last-child:nth-child(2) {
+  float: right;
 }
 #mp-menu .mp-level li label .colorinput,
 #mp-menu .mp-level li .form-element .colorinput,
@@ -269,25 +348,25 @@ body > section,
   width: 247px;
   height: 30px;
 }
-#mp-menu ul li {
+#mp-menu ul:not(.dropdown-menu) > li {
   display: block;
   min-height: 50px;
 }
-#mp-menu ul li:not(.nohover):hover {
+#mp-menu ul:not(.dropdown-menu) > li:not(.nohover):hover {
   background: rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 -1px rgba(0, 0, 0, 0);
 }
-#mp-menu ul li a.menu-level-trigger {
+#mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger {
   padding: 0.7em 1em 0.7em 1.8em;
   width: 100%;
   float: left;
   display: block;
   color: #666;
 }
-#mp-menu ul li a.menu-level-trigger:hover {
+#mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger:hover {
   text-decoration: none;
 }
-#mp-menu ul li a.menu-level-trigger:after {
+#mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger:after {
   position: relative;
   top: 1px;
   display: inline-block;
@@ -299,6 +378,23 @@ body > section,
   float: right;
   content: "\e080";
   color: black;
+}
+#mp-menu ul.dropdown-menu {
+  border-radius: 5px;
+}
+#mp-menu ul.dropdown-menu li {
+  border-radius: 5px;
+}
+#mp-menu ul.dropdown-menu li a {
+  font-weight: light;
+  border-radius: 3px;
+  background-color: #eee;
+  border-bottom: 1px solid #666;
+  color: #666;
+}
+#mp-menu ul.dropdown-menu li a:hover,
+#mp-menu ul.dropdown-menu li a .active {
+  background-color: white;
 }
 #mp-menu .mp-back {
   background: rgba(0, 0, 0, 0.1);
@@ -327,4 +423,22 @@ body > section,
   line-height: 1;
   content: "\e079";
   color: black;
+}
+.rotate90 {
+  transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  /* IE 9 */
+  -webkit-transform: rotate(90deg);
+  /* Safari and Chrome */
+}
+.triangle {
+  margin-left: 10px;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 5px 0 5px 8.7px;
+  border-color: transparent transparent transparent #000000;
+}
+.glyphicon-play {
+  color: #000;
 }
