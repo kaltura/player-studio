@@ -47,6 +47,14 @@ angular.module('KMC.directives', ['colorpicker.module'])
         return  {
             restrict: 'E',
             replace: true,
+            controller: function ($scope, $element, $attrs) {
+                if (typeof  $scope.model == 'undefined') {
+                    if ($attrs.initvalue)
+                        $scope.model = $attrs.initvalue;
+                    else
+                        $scope.model = '#fff';
+                }
+            },
             scope: {
                 class: '@',
                 label: '@',
@@ -54,7 +62,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
             },
             template: '<label>{{label}} \n\
                                 <input colorpicker class="colorinput {{class}}" type="text" ng-model="model" />\n\
-                                <span class="colorExample" style="background-color: {{model}}"></span>\n\
+                                <span class="colorExample" ng-style="{\'background-color\': model}"></span>\n\
                             </label>'
         };
     }).directive('modelText',function () {
