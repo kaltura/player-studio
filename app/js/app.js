@@ -66,19 +66,22 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
             resolve: {'apiService': function (apiService, localStorageService, $location) {
-                // Check if we have ks in locaclstorage
-                var ks = localStorageService.get('ks');
-                if (!ks) { //navigate to login
-                    return $location.path("/login");
-                } else {
-                    apiService.setKs(ks);
-                }
-                return apiService;
+                return ksCheck(apiService, localStorageService, $location);
             }
 
             }
         }
     );
+    var ksCheck = function (apiService, localStorageService, $location) {
+        // Check if we have ks in locaclstorage
+        var ks = localStorageService.get('ks');
+        if (!ks) { //navigate to login
+            return $location.path("/login");
+        } else {
+            apiService.setKs(ks);
+        }
+        return apiService;
+    }
     $routeProvider.when('/edit/:id',
         {templateUrl: 'view/edit.html',
             controller: 'PlayerEditCtrl',
@@ -88,7 +91,10 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 },
                 'editProperties': 'editableProperties',
                 'menuSvc': 'menuSvc',
-                'localize': 'localize'
+                'localize': 'localize',
+                'apiService': function (apiService, localStorageService, $location) {
+                    return ksCheck(apiService, localStorageService, $location);
+                }
             }
         }
     );

@@ -35,13 +35,19 @@
             {
                 "label": "Update Player",
                 "type": "button",
-                "action" : "update",
+                "action": "update",
                 "model": "playerUpdate"
+            },
+            {
+                "label": "Choose preview entry",
+                "type": "dropdown",
+                "dataSource": "userEntries",
+                "model": "previewentry"
             },
             {
                 "label": "Advanced",
                 "type": "featuremenu",
-                "featureCheckbox":"false",
+                "featureCheckbox": "false",
                 "model": "advanced",
                 "children": [
                     {
@@ -244,7 +250,7 @@
                                 "model": "order",
                                 "initvalue": 0,
                                 "type": "text",
-                                "label":"Order for Logo",
+                                "label": "Order for Logo",
                                 "icon": "icon-TabMonetization"
                             },
                             {
@@ -297,7 +303,7 @@
                             {
                                 "model": "order",
                                 "default": 0,
-                                "label":"Order for Flavor Selector",
+                                "label": "Order for Flavor Selector",
                                 "icon": "icon-TabMonetization",
                                 "type": "text"
                             },
@@ -338,7 +344,7 @@
                                         "value": "2"
                                     }
                                 ],
-                                "initvalue":"1",
+                                "initvalue": "1",
                                 "type": "dropdown"
                             }
                         ]
@@ -353,7 +359,7 @@
                                 "default": "0",
                                 "type": "text",
                                 "label": "Order for Playback Rate Selector",
-                                "icon":"icon-TabMonetization"
+                                "icon": "icon-TabMonetization"
                             },
                             {
                                 "options": [
@@ -407,7 +413,7 @@
                                 "default": 0,
                                 "type": "text",
                                 "label": "Order for Flag Content",
-                                "icon":"icon-TabMonetization"
+                                "icon": "icon-TabMonetization"
                             },
                             {
                                 "options": [
@@ -541,7 +547,7 @@
                                 "from": 0.1,
                                 "to": 5,
                                 "stepsize": 0.1,
-                                "numberOfDecimals":1
+                                "numberOfDecimals": 1
                             }
                         ]
                     }

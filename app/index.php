@@ -59,7 +59,6 @@
     <script src="js/controllers/playerEditCtrl.js"></script>
     <script src="js/controllers/LoginCtrl.js"></script>
     <script src="js/controllers/playerCreateCtrl.js"></script>
-
 </head>
 <body class="scroller">
 <loading-widget></loading-widget>

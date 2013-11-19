@@ -117,6 +117,13 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($root
                 }
                 return key;
             },
+            listMedia: function () {
+                var request = {
+                    'service': 'media',
+                    'action': 'list'
+                };
+                return this.doRequest(request);
+            },
             doRequest: function (params) {
                 //Creating a deferred object
                 var deferred = $q.defer();
