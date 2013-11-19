@@ -24,8 +24,8 @@ angular.module('KMC.directives', ['colorpicker.module'])
             template: '<div class="form-element">' +
                 '<div class="radioLabel">{{ label }}</div>' +
                 '<div class="form-group">' +
-                '<label  ng-repeat="option in options" >' +
-                '<input value="{{ option.value }}"  type="radio" ng-model="$parent.model"/>{{ option.label }}</label>' +
+                '<label ng-repeat="option in options" >' +
+                '<input value="{{ option.value }}"  type="radio" pretty-radio ng-model="$parent.model"/><span class="optionLabel"> {{ option.label }}</span></label>' +
                 '</div></div>',
             scope: {
                 model: '=',
@@ -136,6 +136,39 @@ angular.module('KMC.directives', ['colorpicker.module'])
                     }
                     scope.$watch(function () {
                         return scope.$eval(watchProp);
+                    }, function (newVal, oldVal) {
+                        if (newVal != oldVal)
+                            $(wrapper).find('a').toggleClass('checked');
+                    });
+                }
+            }
+        }
+    }).directive('prettyRadio',function () {
+        return {
+            restrict: 'AC',
+            priority: 1000,
+            transclude: 'element',
+            compile: function (tElement, tAttrs, transclude) {
+                return  function (scope, iElement, iAttr) {
+                    var wrapper = angular.element('<span class="clearfix prettyradio"></span>');
+                    var clickHandler = wrapper.append('<a href="#" class=""></a>');
+                    var watchProp = 'model'
+                    if (typeof iAttr['model'] != 'undefined') {
+                        watchProp = iAttr['model'];
+                    }
+                    transclude(scope, function (clone) {
+                        return wrapper.append(clone);
+                    });
+                    iElement.replaceWith(wrapper);
+                    var input = wrapper.find('input').hide();
+                    clickHandler.on('click', 'a', function (e) {
+                        e.preventDefault();
+                        input.trigger('click');
+                        input.trigger('click'); // it beats me why it needs 2 but it does.
+                        return false;
+                    });
+                    scope.$watch(function () {
+                        return scope.$eval(watchProp) == input.val();
                     }, function (newVal, oldVal) {
                         if (newVal != oldVal)
                             $(wrapper).find('a').toggleClass('checked');

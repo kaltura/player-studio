@@ -272,11 +272,15 @@ html, body, body > section, .scroller, .wrapper {
       &[type="radio"] {
         label {
           padding: 2px;
-          margin: 6px 0;
-          margin-right: 32px;
+          margin:  0;
+          margin-right: 18px;
           float: left;
           display: inline;
           clear: none;
+        .optionLabel{
+          bottom: 8px;
+          position: relative;
+        }
 
         }
         input {
@@ -284,7 +288,6 @@ html, body, body > section, .scroller, .wrapper {
         }
         .form-group {
           text-align: center;
-          margin-left: 10px;
           label:last-child:nth-child(2) {
             float: right;
           }

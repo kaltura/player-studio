@@ -304,11 +304,16 @@ body > section,
 #mp-menu .mp-level li label[type="radio"] label,
 #mp-menu .mp-level li .form-element[type="radio"] label {
   padding: 2px;
-  margin: 6px 0;
-  margin-right: 32px;
+  margin: 0;
+  margin-right: 18px;
   float: left;
   display: inline;
   clear: none;
+}
+#mp-menu .mp-level li label[type="radio"] label .optionLabel,
+#mp-menu .mp-level li .form-element[type="radio"] label .optionLabel {
+  bottom: 8px;
+  position: relative;
 }
 #mp-menu .mp-level li label[type="radio"] input,
 #mp-menu .mp-level li .form-element[type="radio"] input {
@@ -317,7 +322,6 @@ body > section,
 #mp-menu .mp-level li label[type="radio"] .form-group,
 #mp-menu .mp-level li .form-element[type="radio"] .form-group {
   text-align: center;
-  margin-left: 10px;
 }
 #mp-menu .mp-level li label[type="radio"] .form-group label:last-child:nth-child(2),
 #mp-menu .mp-level li .form-element[type="radio"] .form-group label:last-child:nth-child(2) {
