@@ -47,7 +47,7 @@
             {
                 "label": "Advanced",
                 "type": "featuremenu",
-                "featureCheckbox": "false",
+                "feature-checkbox": "false",
                 "model": "advanced",
                 "children": [
                     {
