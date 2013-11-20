@@ -97,6 +97,19 @@
 .colorpicker.alpha .colorpicker-alpha {
   display: block;
 }
+.colorpicker-color-value {
+    height: 20px;
+    margin-top:5px;
+    margin-bottom: 5px;
+    clear:both;
+}
+.colorpicker-color-value input{
+    width: 120px;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    border-radius: 2px;
+    border: 1px solid #aaa;}
 .colorpicker-color {
   height: 10px;
   margin-top: 5px;

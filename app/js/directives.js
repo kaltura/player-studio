@@ -61,7 +61,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 model: "="
             },
             template: '<label>{{label}} \n\
-                                <input colorpicker class="colorinput {{class}}" type="text" ng-model="model" />\n\
+                                <input colorpicker class="colorinput {{class}} hidden" type="text" ng-model="model" />\n\
                                 <span class="colorExample" ng-style="{\'background-color\': model}"></span>\n\
                             </label>'
         };
@@ -205,7 +205,7 @@ angular.module('KMC.directives', ['colorpicker.module'])
                 model: '=',
                 label: '@'
             },
-            template: '<label>{{ label }}<i class="icon {{icon}}"></i><span class="form-control" disabled>{{ model }}</span> </label>'
+            template: '<label><span class="control-label">{{ label }}</span><i ng-if="icon" class="icon {{icon}}"></i><span class="form-control" disabled>{{ model }}</span> </label>'
         }
     }).directive('modelButton',function (menuSvc) {
         return {

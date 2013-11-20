@@ -16,7 +16,7 @@ body > section,
   line-height: 1;
 }
 #outerWrap {
-  margin-left: 60px;
+  margin-left: 56px;
   overflow-x: hidden;
   height: 100%;
 }
@@ -39,7 +39,7 @@ body > section,
 }
 #mp-menu #mp-inner {
   height: 100%;
-  margin-left: 60px;
+  margin-left: 56px;
 }
 .separator {
   display: block;
@@ -51,7 +51,7 @@ body > section,
 #mp-mainlevel {
   height: 100%;
   padding-top: 20px;
-  width: 60px;
+  width: 56px;
   position: absolute;
   z-index: 1000;
   background: #323232;
@@ -167,7 +167,8 @@ body > section,
 }
 #mp-menu h2 {
   margin: 0;
-  padding: 1em;
+  padding: 18px;
+  padding-bottom: 11px;
   color: #000000;
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
   font-weight: bold;
@@ -175,13 +176,16 @@ body > section,
   font-size: 18px;
 }
 #mp-menu .levelDesc {
-  margin: 0 40px;
+  margin: 0 20px;
   display: block;
   font-size: 13px;
   margin-bottom: 10px;
   color: #777;
   font-family: arial, sans-serif;
   font-weight: normal;
+}
+#mp-menu .mp-level li {
+  clear: both;
 }
 #mp-menu .mp-level li label,
 #mp-menu .mp-level li .form-element {
@@ -276,6 +280,18 @@ body > section,
 #mp-menu .mp-level li label[type="readonly"] span,
 #mp-menu .mp-level li .form-element[type="readonly"] span {
   margin-top: 10px;
+  font-size: 13px;
+  height: 28px;
+  width: auto;
+}
+#mp-menu .mp-level li label[type="readonly"] span:first-child,
+#mp-menu .mp-level li .form-element[type="readonly"] span:first-child {
+  float: left;
+}
+#mp-menu .mp-level li label[type="readonly"] span:last-child,
+#mp-menu .mp-level li .form-element[type="readonly"] span:last-child {
+  float: right;
+  margin-top: 5px;
 }
 #mp-menu .mp-level li label[type="button"],
 #mp-menu .mp-level li .form-element[type="button"] {
@@ -289,8 +305,10 @@ body > section,
 #mp-menu .mp-level li label input[type="text"],
 #mp-menu .mp-level li .form-element input[type="text"] {
   float: left;
+  font-size: 13px;
   box-shadow: -1px 1px 0px #cccccc inset;
   width: 100%;
+  height: 28px;
 }
 #mp-menu .mp-level li label input[type="checkbox"],
 #mp-menu .mp-level li .form-element input[type="checkbox"],
@@ -373,8 +391,10 @@ body > section,
   padding: 0.7em 1em 0.7em 1.8em;
   width: 100%;
   float: left;
+  font-size: 13px;
+  font-weight: bold;
   display: block;
-  color: #666;
+  color: #000;
 }
 #mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger:hover {
   text-decoration: none;

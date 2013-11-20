@@ -217,6 +217,9 @@ angular.module('colorpicker.module', [])
             '<div class="colorpicker-hue"><i></i></div>' +
             '<div class="colorpicker-alpha"><i></i></div>' +
             '<div class="colorpicker-color"><div /></div>' +
+              '<div class="colorpicker-color-value"><div />' +
+              '<input readonly="readonly" value="{{model}}" />'+
+              '</div>' +
             '</div>',
           colorpickerTemplate = angular.element(template),
           pickerColor = Color,
@@ -246,6 +249,7 @@ angular.module('colorpicker.module', [])
         if(ngModel) {
           ngModel.$render = function () {
             elem.val(ngModel.$viewValue);
+
           };
           $scope.$watch(attrs.ngModel, function() {
             update();
@@ -368,8 +372,8 @@ angular.module('colorpicker.module', [])
           colorpickerTemplate
             .addClass('colorpicker-visible')
             .css({
-              'top': helper.getOffset(elem[0]).top + elem[0].offsetHeight - document.body.scrollTop + 'px',
-              'left': helper.getOffset(elem[0]).left - document.body.scrollLeft + 'px'
+              'top': helper.getOffset($(elem).next()[0]).top + $(elem).next()[0].offsetHeight - document.body.scrollTop + 'px',
+              'left': helper.getOffset($(elem).next()[0]).left - document.body.scrollLeft + 'px'
             });
         });
 
