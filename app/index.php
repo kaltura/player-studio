@@ -16,9 +16,6 @@
 <!--    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">-->
     <!-- Latest compiled and minified JavaScript -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="css/app.css"/>
-    <link rel="stylesheet" href="css/menu.css"/>
-    <link rel="stylesheet" href="css/icons.css"/>
     <link rel='stylesheet' href='lib/colorpicker/css/colorpicker.css'/>
     <link rel='stylesheet' href='lib/spinedit/css/bootstrap-spinedit.css'/>
     <!--[if gte IE 9]>
@@ -31,7 +28,11 @@
     <!-- TODO move to ini file -->
     <script type="text/javascript" src="http://kgit.html5video.org/tags/v2.0.0.rc7/mwEmbedLoader.php"></script>
     <link rel="stylesheet" href="bower_components/select2/select2.css">
-    <link rel="stylesheet" href="bower_components/prettycheckable/dist/prettyCheckable.css">
+    <link rel="stylesheet" href="lib/prettycheckable/dist/prettyCheckable.css">
+<!--    app stylesheets-->
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/menu.css"/>
+    <link rel="stylesheet" href="css/icons.css"/>
     <script type="text/javascript" src="bower_components/select2/select2.js"></script>
     <!--1.07-->
     <!--<script src="lib/angular/angular.js"></script>-->

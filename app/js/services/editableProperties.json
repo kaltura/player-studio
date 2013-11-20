@@ -9,6 +9,7 @@
             {
                 "label": "Player Display Name",
                 "type": "text",
+                "icon" :"icon-book",
                 "model": "name",
                 "default": "New Player"
             },
@@ -16,11 +17,6 @@
                 "label": "Last Update",
                 "type": "readonly",
                 "model": "lastUpdated"
-            },
-            {
-                "label": "Player Preview Entry",
-                "type": "entryselector",
-                "model": "previewEntry"
             },
             {
                 "label": "Player Tags",
@@ -40,7 +36,7 @@
             },
             {
                 "label": "Choose preview entry",
-                "type": "dropdown",
+                "type": "select2data",
                 "dataSource": "userEntries",
                 "model": "previewentry"
             },

@@ -5,7 +5,7 @@ window.lang = 'en-US';
 var KMCModule = angular.module('KMCModule',
     ['localization', 'ngRoute', 'KMC.controllers', 'KMC.filters',
         'KMC.services', 'KMC.directives', 'ui.bootstrap',
-        'ui.select2', 'LocalStorageModule', 'KMC.menu']);
+       , 'LocalStorageModule', 'KMC.menu']);
 
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
     $tooltipProvider.options({ placement: 'right', 'appendToBody': true,'popupDelay':800 });
