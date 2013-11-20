@@ -31,6 +31,7 @@
             {
                 "label": "Update Player",
                 "type": "button",
+                "btn-class":"btn-primary",
                 "action": "update",
                 "model": "playerUpdate"
             },

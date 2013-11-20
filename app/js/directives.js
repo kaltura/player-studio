@@ -253,10 +253,11 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 }
             },
             scope: {
-                label: '@',
-                action: '@'
+                'label': '@',
+                'action': '@',
+                "btnClass" :'@'
             },
-            template: '<label ng-if="check(action)"><i class="icon {{icon}}"></i><button type="button" ng-click="btnAction(action)" class="btn btn-default">{{ label }}</button></label>'
+            template: '<label ng-if="check(action)"><i class="icon {{icon}}"></i><button type="button" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}" >{{ label }}</button></label>'
         }
     }).directive('modelNumber', function() {
         return{
