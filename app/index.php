@@ -5,15 +5,16 @@
     <base id="baseHref" href="<?php
     $dir = dirname($_SERVER['REQUEST_URI']);
     $dir = str_replace('\\', '/', $dir);
+    if ($dir != '/') $dir .= '/';
     echo $dir;
-    ?>/"/>
+    ?>"/>
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
     <!--change this base tag to the root of your app URL-->
     <title>Player Studio - JS Version</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <!-- Optional theme -->
-<!--    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">-->
+    <!--    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">-->
     <!-- Latest compiled and minified JavaScript -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <link rel='stylesheet' href='lib/colorpicker/css/colorpicker.css'/>
@@ -29,7 +30,7 @@
     <script type="text/javascript" src="http://kgit.html5video.org/tags/v2.0.0.rc7/mwEmbedLoader.php"></script>
     <link rel="stylesheet" href="bower_components/select2/select2.css">
     <link rel="stylesheet" href="lib/prettycheckable/dist/prettyCheckable.css">
-<!--    app stylesheets-->
+    <!--    app stylesheets-->
     <link rel="stylesheet" href="css/app.css"/>
     <link rel="stylesheet" href="css/menu.css"/>
     <link rel="stylesheet" href="css/icons.css"/>
