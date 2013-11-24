@@ -85,20 +85,73 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 'label': "@",
                 'model': "=",
                 'icon': '@',
-                'source': '@',
                 'initvalue': '@'
             },
             controller: function($scope, $element, $attrs) {
                 $scope.selectOpts = {};
-                $scope.addOption = function(data) {
-                    angular.extend($scope.selectOpts, data);
+                $scope.selectOpts['data'] = menuSvc.doAction($attrs.source);
+
+                if ($attrs.query) {
+                    $scope.selectOpts['data'].results = [];
+                    $scope.selectOpts['query'] = menuSvc.getAction($attrs.query);
                 }
-                $scope.selectOpts['data'] = menuSvc.doAction($scope.source)
                 $scope.selectOpts['width'] = $attrs.width;
-                $scope.uiselectOpts = angular.toJson($scope.selectOpts);
             },
             template: "<label>{{label}}<i ng-if='icon' class='icon {{icon}}'></i>" +
-                '<input type="hidden" ui-select2="{{uiselectOpts}}" ng-model="model"> ' +
+                '<input type="hidden" ui-select2="selectOpts" ng-model="model"> ' +
+                '</label>',
+            compile: function(tElement, tAttr) {
+                if (tAttr.showEntriesThumbs == 'true') {
+                    tElement.find('input').attr('list-entries-thumbs', "true")
+                }
+                if (tAttr.placeholder)
+                    tElement.find('input').attr('data-placeholder', tAttr.placeholder);
+
+                return function(scope, element) {
+                }
+
+            }
+        }
+    }]).directive('entriesLoader', ['apiService', function(apiService) {
+        return {
+            replace: true,
+            restrict: "E",
+            scope: {
+                'label': "@",
+                'model': "=",
+                'icon': '@',
+                'source': '@',
+                'initvalue': '@'
+            },
+            controller: function($scope, $element, $attrs) {
+                $scope.options = [];
+                $scope.userEntries = [];
+                apiService.listMedia().then(function(data) {
+                    $scope.userEntries = data;
+                });
+                $scope.$watch('userEntries', function() {
+                    if ($scope.userEntries)
+                        if (typeof $scope.userEntries.objects != 'undefined') {
+                            angular.forEach($scope.userEntries.objects, function(value) {
+                                $scope.options.push({'id': value.id, 'text': value.name});
+                            });
+                        }
+                });
+                $scope.selectOpts = { data: [], query: function(query) {
+                    var data = {results: []};
+                    console.log(query.term);
+                    angular.forEach($scope.options, function(item, key) {
+                        if (query.term.toUpperCase() === item.text.substring(0, query.term.length).toUpperCase()) {
+                            data.results.push(item);
+                        }
+                    });
+                    query.callback(data);
+                }
+                };
+                $scope.selectOpts['width'] = $attrs.width;
+            },
+            template: "<label>{{label}}<i ng-if='icon' class='icon {{icon}}'></i>" +
+                '<input type="hidden"  data-placeholder="Pick a entry" ui-select2="selectOpts"  ng-model="model"> ' +
                 '</label>',
             compile: function(tElement, tAttr) {
                 if (tAttr.showEntriesThumbs == 'true') {
@@ -110,7 +163,9 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             }
         }
     }])
-    .directive('listEntriesThumbs', function() {
+    .
+    directive('listEntriesThumbs', function() {
+        //not finished
         return {
             restrict: 'A',
             controller: function($scope, $element, $attrs) {

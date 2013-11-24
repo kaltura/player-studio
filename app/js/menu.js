@@ -101,6 +101,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 case 'button':
                     return '<model-button/>';
                     break;
+                case 'entriesloader':
+                    return '<entries-loader/>';
+                    break;
             }
         };
         var menuSvc = {
@@ -261,6 +264,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     var retData = menuSvc.actions[action].funcData.apply(menuSvc.actions[action].applyOn, arg);
                     return  retData;
                 }
+            },
+            getAction: function(action) {
+                return menuSvc.actions[action];
             },
             checkAction: function(action) {
                 if (typeof menuSvc.actions[action] == "function") {

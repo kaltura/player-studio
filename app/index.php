@@ -6,7 +6,10 @@
     $dir = dirname($_SERVER['REQUEST_URI']);
     $dir = str_replace('\\', '/', $dir);
     if ($dir != '/') $dir .= '/';
-    echo $dir;
+    if (file_exists($dir . index . php))
+        echo $dir;
+    else
+        echo '/';
     ?>"/>
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
     <!--change this base tag to the root of your app URL-->

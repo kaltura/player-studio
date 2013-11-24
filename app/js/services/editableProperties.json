@@ -39,8 +39,10 @@
                 "label": "Choose preview entry",
                 "type": "select2data",
                 "source": "listEntries",
+                "query": "queryEntries",
                 "width": "200px",
-                "model": "previewentry"
+                "model": "previewentry",
+                "data-placeholder":"Pick a entry"
             },
             {
                 "label": "Advanced",
