@@ -84,5 +84,8 @@ body,
   overflow: auto;
 }
 .forceRightRadius {
-  border-radius: 0px 4px 4px 0px!important;
+  border-radius: 0px 4px 4px 0px !important;
+}
+#kplayer {
+  margin: auto;
 }
