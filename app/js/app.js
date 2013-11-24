@@ -94,7 +94,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 'localize': 'localize',
                 'userEntries': function(apiService,localStorageService,$location) {
                     ksCheck(apiService,localStorageService,$location);
-                    return apiService.listMedia();
+                    return apiService.listMedia(); // should only load the first 20...
                 }
             }
         }
