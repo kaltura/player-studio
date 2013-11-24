@@ -9,7 +9,7 @@
             {
                 "label": "Player Display Name",
                 "type": "text",
-                "icon" :"icon-book",
+                "icon": "icon-book",
                 "model": "name",
                 "default": "New Player"
             },
@@ -31,14 +31,15 @@
             {
                 "label": "Update Player",
                 "type": "button",
-                "btn-class":"btn-primary",
+                "btn-class": "btn-primary",
                 "action": "update",
                 "model": "playerUpdate"
             },
             {
                 "label": "Choose preview entry",
                 "type": "select2data",
-                "dataSource": "userEntries",
+                "source": "listEntries",
+                "width": "200px",
                 "model": "previewentry"
             },
             {

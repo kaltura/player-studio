@@ -240,12 +240,26 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 }
             },
             actions: [],
-            registerAction: function(callStr, dataFn) {
-                menuSvc.actions[callStr] = dataFn;
+            registerAction: function(callStr, dataFn, context) {
+                if (typeof dataFn == "function") {
+                    if (!context)
+                        menuSvc.actions[callStr] = dataFn;
+                    else {
+                        menuSvc.actions[callStr] = {applyOn: context, funcData: dataFn};
+                    }
+                } else if (typeof dataFn == "object") {
+                    menuSvc.actions[callStr] = {applyOn: dataFn, funcData: function() {
+                        return dataFn;
+                    }};
+                }
             },
             doAction: function(action, arg) {
                 if (typeof menuSvc.actions[action] == "function") {
-                    menuSvc.actions[action].call(arg);
+                    return  menuSvc.actions[action].call(arg);
+                }
+                else if (typeof menuSvc.actions[action] == "object" && typeof menuSvc.actions[action].funcData == "function") {
+                    var retData = menuSvc.actions[action].funcData.apply(menuSvc.actions[action].applyOn, arg);
+                    return  retData;
                 }
             },
             checkAction: function(action) {
@@ -257,7 +271,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
 
         };
         return menuSvc;
-    }]).directive('featureMenu',function($parse) {
+    }]).
+    directive('featureMenu',function($parse) {
         return {
             restrict: 'E',
             replace: true,

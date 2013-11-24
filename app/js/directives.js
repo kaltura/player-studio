@@ -77,39 +77,59 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             // $parent.model is used because tooltip is creating an isolate scope.
             template: "<label ><i ng-if='icon' class='icon {{icon}}'></i>" +
                 "<span class='inputHolder'><input class='form-control' tooltip='{{label}}' type='text' ng-model='$parent.model'/></span></label>"        };
-    }).directive('select2Data', [function() {
+    }).directive('select2Data', ['menuSvc', function(menuSvc) {
         return {
             replace: true,
             restrict: "E",
             scope: {
-                label: "@",
-                model: "=",
-                icon: '@',
-                dataSource: '@',
-                initvalue: '@',
-                selectOpts: '@'
+                'label': "@",
+                'model': "=",
+                'icon': '@',
+                'source': '@',
+                'initvalue': '@'
             },
             controller: function($scope, $element, $attrs) {
-                if (!$scope.selectOpts) {
-                    $scope.selectOpts = {};
+                $scope.selectOpts = {};
+                $scope.addOption = function(data) {
+                    angular.extend($scope.selectOpts, data);
                 }
+                $scope.selectOpts['data'] = menuSvc.doAction($scope.source)
+                $scope.selectOpts['width'] = $attrs.width;
                 $scope.uiselectOpts = angular.toJson($scope.selectOpts);
-                angular.forEach($scope.$eval($scope.dataSource), function(value, key) {
-                    $scope.data[value.id] = value.name;
-                })
-                $scope.dataJson = function() {
-                    return angular.toJson($scope.data);
-                }
             },
             template: "<label>{{label}}<i ng-if='icon' class='icon {{icon}}'></i>" +
-                '<input type="hidden" ui-select2="{{uiselectOpts}}" ng-model="model" data="{{dataJson}}"> ' +
+                '<input type="hidden" ui-select2="{{uiselectOpts}}" ng-model="model"> ' +
                 '</label>',
-            link: function(scope, element, attr) {
-                console.log(attr['data']);
-            }
+            compile: function(tElement, tAttr) {
+                if (tAttr.showEntriesThumbs == 'true') {
+                    tElement.find('input').attr('list-entries-thumbs', "true")
+                }
+                return function(scope, element) {
+                }
 
+            }
         }
     }])
+    .directive('listEntriesThumbs', function() {
+        return {
+            restrict: 'A',
+            controller: function($scope, $element, $attrs) {
+                if ($attrs.listEntriesThumbs == 'true') {
+                    var format = function(player) {
+                        if (!player.thumbnailUrl) return player.name;
+                        return "<img class='thumb' src='" + player.thumbnailUrl + "'/>" + player.name
+                    }
+                    $scope.addOption({
+                        formatResult: format,
+                        formatSelection: format,
+                        escapeMarkup: function(m) {
+                            return m;
+                        }
+                    });
+                }
+            }
+        }
+    })
     .directive('modelSelect',function() {
         return {
             replace: true,
@@ -255,7 +275,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             scope: {
                 'label': '@',
                 'action': '@',
-                "btnClass" :'@'
+                "btnClass": '@'
             },
             template: '<label ng-if="check(action)"><i class="icon {{icon}}"></i><button type="button" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}" >{{ label }}</button></label>'
         }
