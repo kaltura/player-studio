@@ -7,21 +7,100 @@
         "icon": "TabBasicSettings",
         "children": [
             {
-                "label": "Player Display Name",
+                "label": "Player's Name",
                 "type": "text",
-                "icon": "icon-book",
                 "model": "name",
-                "default": "New Player"
-            },
-            {
-                "label": "Last Update",
-                "type": "readonly",
-                "model": "lastUpdated"
+                "default": "New Player",
+                "endline": "true"
             },
             {
                 "label": "Player Tags",
                 "type": "tags",
                 "model": "tags"
+            },
+            {
+                "label": "Preview entry",
+                "type": "select2data",
+                "source": "listEntries",
+                "query": "queryEntries",
+                "width": "200px",
+                "model": "previewentry",
+                "data-placeholder": "Pick a entry"
+            },
+
+            {
+                "type": "featuremenu",
+                "model": "transport",
+                "label": "Transport",
+                "children": [
+                    {
+                        "options": [
+                            {
+                                "label": "2mbs",
+                                "value": "2"
+                            },
+                            {
+                                "label": "1mbs",
+                                "value": "1"
+                            }
+                        ],
+                        "initvalue": "1",
+                        "type": "dropdown",
+                        "label": "Prefered Bitrate",
+                        "model": "preferedFlavorBR"
+                    },
+                    {
+                        "options": [
+                            {
+                                "label": "option",
+                                "value": "0.75"
+                            }
+                        ],
+                        "initvalue": "0.75",
+                        "type": "dropdown",
+                        "label": "Delivery type",
+                        "model": "deliveryType"
+                    }
+                ]
+            },
+            {
+                "options": [
+                    {
+                        "label": "4/3",
+                        "value": "narrow"
+                    },
+                    {
+                        "label": "16/9",
+                        "value": "wide"
+                    }
+                ],
+                "showSearch": false,
+                "initvalue": "wide",
+                "type": "dropdown",
+                "label": "Aspect Ratio",
+                "model": "aspectRatio"
+            },
+            {
+                "type": "featuremenu",
+                "model": "deviceSpecific",
+                "label": "Device Specific Flags",
+                "children": [
+                    {
+                        "type": "checkbox",
+                        "label": "Html Controls on iPad",
+                        "model": "ipadHTMLcontrols"
+                    },
+                    {
+                        "type": "checkbox",
+                        "label": "Native Controls Fullscreen",
+                        "model": "nativeFullscreenControls"
+                    }
+                ]
+            },
+            {
+                "label": "Last Update",
+                "type": "readonly",
+                "model": "lastUpdated"
             },
             {
                 "label": "Version",
@@ -34,92 +113,6 @@
                 "btn-class": "btn-primary",
                 "action": "update",
                 "model": "playerUpdate"
-            },
-            {
-                "label": "Choose preview entry",
-                "type": "select2data",
-                "source": "listEntries",
-                "query": "queryEntries",
-                "width": "200px",
-                "model": "previewentry",
-                "data-placeholder":"Pick a entry"
-            },
-            {
-                "label": "Advanced",
-                "type": "featuremenu",
-                "feature-checkbox": "false",
-                "model": "advanced",
-                "children": [
-                    {
-                        "type": "featuremenu",
-                        "model": "transport",
-                        "label": "Transport",
-                        "children": [
-                            {
-                                "options": [
-                                    {
-                                        "label": "2mbs",
-                                        "value": "2"
-                                    },
-                                    {
-                                        "label": "1mbs",
-                                        "value": "1"
-                                    }
-                                ],
-                                "initvalue": "1",
-                                "type": "dropdown",
-                                "label": "Prefered Bitrate",
-                                "model": "preferedFlavorBR"
-                            },
-                            {
-                                "options": [
-                                    {
-                                        "label": "option",
-                                        "value": "0.75"
-                                    }
-                                ],
-                                "initvalue": "0.75",
-                                "type": "dropdown",
-                                "label": "Delivery type",
-                                "model": "deliveryType"
-                            }
-                        ]
-                    },
-                    {
-                        "options": [
-                            {
-                                "label": "4/3",
-                                "value": "narrow"
-                            },
-                            {
-                                "label": "16/9",
-                                "value": "wide"
-                            }
-                        ],
-                        "showSearch": false,
-                        "initvalue": "wide",
-                        "type": "dropdown",
-                        "label": "Aspect Ratio",
-                        "model": "aspectRatio"
-                    },
-                    {
-                        "type": "featuremenu",
-                        "model": "deviceSpecific",
-                        "label": "Device Specific Flags",
-                        "children": [
-                            {
-                                "type": "checkbox",
-                                "label": "Html Controls on iPad",
-                                "model": "ipadHTMLcontrols"
-                            },
-                            {
-                                "type": "checkbox",
-                                "label": "Native Controls Fullscreen",
-                                "model": "nativeFullscreenControls"
-                            }
-                        ]
-                    }
-                ]
             }
         ]
     },
@@ -152,7 +145,6 @@
                         ],
                         "initvalue": "right",
                         "type": "radio",
-                        "label": "Align",
                         "model": "align"
                     },
                     {
@@ -225,7 +217,6 @@
                                         "value": "1"
                                     }
                                 ],
-                                "label": "Volume Slider direction",
                                 "type": "radio",
                                 "initvalue": "0",
                                 "model": "controlBarVolumeDirection"
@@ -270,7 +261,6 @@
                                 ],
                                 "initvalue": "right",
                                 "type": "radio",
-                                "label": "Align",
                                 "model": "align"
                             },
                             {
@@ -324,7 +314,6 @@
                                 ],
                                 "initvalue": "right",
                                 "type": "radio",
-                                "label": "Align",
                                 "model": "align"
                             },
                             {
@@ -378,7 +367,6 @@
                                 ],
                                 "initvalue": "right",
                                 "type": "radio",
-                                "label": "Align",
                                 "model": "align"
                             },
                             {
@@ -432,7 +420,6 @@
                                 ],
                                 "initvalue": "right",
                                 "type": "radio",
-                                "label": "Align",
                                 "model": "align"
                             },
                             {

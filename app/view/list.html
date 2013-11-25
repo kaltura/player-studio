@@ -21,72 +21,80 @@
                 </form>
             </div>
         </div>
-        <div class="row maxViewPort">
-            <table id="playerList" class="table table-hover table-striped">
-                <thead>
-                <tr>
-                    <td class="col-md-3">{{'Preview'| i18n }}</td>
-                    <td class="col-md-3">{{ 'Name' | i18n }}</td>
-                    <td>{{ 'ID' | i18n }}</td>
-                    <td>{{ 'Save Date' | i18n }}</td>
-                    <td>{{ 'Creation Date' | i18n }}</td>
-                    <td>{{ 'Actions' | i18n }}</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr on-finish-render
-                    ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
-                    <td><img class="playerThumb"
-                             ng-src="{{getThumbnail(item)}}"/></td>
-                    <td><a data-ng-click="goToEditPage(item)" ng-href="edit/{{item.id}}">{{item.name}}</a>
-                    <span class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
-                        <small>{{'This player is out dated - please update'| i18n}}</small>
-                    </span>
-                    </td>
-                    <td>{{item.id}}</td>
-                    <td><span class="timeago" timestamp="{{item.createdAt}}"></span></td>
-                    <td><span class="timeago" timestamp="{{item.updatedAt}}"></span></td>
-                    <td class="actionBtns">
-                        <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
-                                class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}
-                        </button>
-                        <button type="button" class="btn btn-link" ng-click="delete(item)"><span
-                                class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}
-                        </button>
-                        <button type="button" class="btn btn-link" ng-click="preview(item)"><span
-                                class="glyphicon glyphicon-eye-open"></span> {{'Preview'| i18n}}
-                        </button>
-                        <button type="button" class="btn btn-link" ng-show="checkVersionNeedsUpgrade(item.version)"
-                                ng-click="update(item)"><span class="glyphicon glyphicon-edit"></span> {{'Update'|
-                            i18n}}
-                        </button>
-                        <i class="glyphicon glyphicon-ok-circle" tooltip="{{'The player version is upto date'|i18n}}"
-                           ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="row text-center">
-            <div class="pull-right">
-                <form class="form-inline" role="form">
-                    <label class="" for="maxSizeSelect">
-                        <small> {{filtered.length}} Players in total, Show</small>
-                    </label>
-
-                    <div class="form-group">
-                        <select class="form-control" id="maxSizeSelect" ng-model="maxSize">
-                            <option>5</option>
-                            <option>10</option>
-                            <option>15</option>
-                            <option>20</option>
-                        </select>
-                    </div>
-                    <small> per page</small>
-                </form>
+        <div id='playerList' class="row maxViewPort">
+            <div class="row">
+                <div class="col-md-3 col-sm-4 col-xs-4">{{'Preview'| i18n }}</div>
+                <div class="col-xs-3">{{ 'Name' | i18n }}</div>
+                <div class="col-xs-1">{{ 'ID' | i18n }}</div>
+                <div class="col-xs-1">{{ 'Save Date' | i18n }}</div>
+                <div class="col-md-1 visible-lg">{{ 'Creation Date' | i18n }}</div>
+                <div class="col-xs-3">{{ 'Actions' | i18n }}</div>
             </div>
-            <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
-                        page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
+            <div class="scrollable">
+                <perfect-scrollbar suppress-scroll-x="true" id='scrollTarget'>
+                    <div class="row" on-finish-render
+                         ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
+                        <div class="col-md-3 col-sm-4 col-xs-4"><img class="playerThumb"
+                                                                     ng-src="{{getThumbnail(item)}}"/></div>
+                        <div class="col-xs-3"><a data-ng-click="goToEditPage(item)"
+                                                 ng-href="edit/{{item.id}}">{{item.name}}</a>
+
+                            <div class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
+                                <small>{{' This player is out dated
+                                    - please update'| i18n}}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-xs-1">{{item.id}}</div>
+                        <div class="col-xs-1"><span class="timeago" timestamp="{{item.createdAt}}"></span></div>
+                        <div class="visible-lg col-md-1"><span class="timeago"
+                                                               timestamp="{{item.updatedAt}}"></span>
+                        </div>
+                        <div class="actionBtns col-xs-3">
+                            <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
+                                    class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}
+                            </button>
+                            <button type="button" class="btn btn-link" ng-click="delete(item)"><span
+                                    class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}
+                            </button>
+                            <button type="button" class="btn btn-link" ng-click="preview(item)"><span
+                                    class="glyphicon glyphicon-eye-open"></span> {{'Preview'| i18n}}
+                            </button>
+                            <button type="button" class="btn btn-link"
+                                    ng-show="checkVersionNeedsUpgrade(item.version)"
+                                    ng-click="update(item)"><span class="glyphicon glyphicon-edit"></span>
+                                {{'Update'|
+                                i18n}}
+                            </button>
+                            <i class="glyphicon glyphicon-ok-circle"
+                               tooltip="{{'The player version is upto date'|i18n}}"
+                               ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div>
         </div>
     </div>
+    <div class="row text-center">
+        <div class="pull-right">
+            <form class="form-inline" role="form">
+                <label class="" for="maxSizeSelect">
+                    <small> {{filtered.length}} Players in total, Show</small>
+                </label>
+
+                <div class="form-group">
+                    <select class="form-control" id="maxSizeSelect" ng-model="maxSize">
+                        <option>5</option>
+                        <option>10</option>
+                        <option>15</option>
+                        <option>20</option>
+                    </select>
+                </div>
+                <small> per page</small>
+            </form>
+        </div>
+        <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
+                    page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
+    </div>
+</div>
 </div>

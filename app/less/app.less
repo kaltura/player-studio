@@ -9,7 +9,11 @@ body, .jumbotron {
 }
 
 .playerThumb {
-  width: 300px;
+  width: 100%;
+
+  //  @media (max-width: 989px) {
+  //    width:200px;
+  //  }
 }
 
 .playerTemplate {
@@ -27,7 +31,7 @@ body, .jumbotron {
   overflow-y: hidden;
 }
 
-#playerList tr td {
+#playerList div > div {
   .alert {
     padding: 0;
     margin: 0;
@@ -36,10 +40,12 @@ body, .jumbotron {
   }
   &.actionBtns {
     button {
-      width: 100px;
+      width: 116px;
+      text-align: left;
     }
     i {
-      padding-left: 20px;
+      width: 126px;
+      padding-left: 12px;
       color: green;
     }
   }
@@ -98,7 +104,7 @@ body, .jumbotron {
 
 .maxViewPort {
   height: 80%;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .forceRightRadius {
@@ -107,4 +113,28 @@ body, .jumbotron {
 
 #kplayer {
   margin: auto;
+}
+
+.scrollable {
+  height: 100%;
+  width: auto;
+  overflow: hidden;
+  position: static;
+  > div {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    > div {
+      height: 100%
+    }
+  }
+}
+
+.merged .input-group-addon {
+  border-right: 0px;
+  background-color: #FFFFFF;
+}
+.merged input {
+  border-left: 0px;
+  background-color: #FFFFFF;
 }

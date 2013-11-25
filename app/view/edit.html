@@ -13,7 +13,7 @@
                     <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
                           ng-submit="searchMenuFn(value)" role="search">
                         <div class="form-group">
-                            <div class="input-group">
+                            <div class="input-group merged">
                                 <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
                                 <input ng-change="checkSearch()" type="text"
                                        typeahead="item for item in menuData | filter:$viewValue "
