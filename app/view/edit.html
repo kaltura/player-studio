@@ -7,7 +7,7 @@
 <div id="outerWrap">
     <div id="mp-pusher" ng-controller="menuCntrl">
         <!-- mp-menu -->
-        <navmenu data="data.settings">
+        <navmenu data="data.settings" ng-iscroll>
             <menu-level pagename='search' label='Menu Search'>
                 <li class="nohover">
                     <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
@@ -43,7 +43,7 @@
                 <p>use the menu (3 bars icon) to navigate through editable properties.</p>
             </div>
             <div class="container" ng-controller="editPageDataCntrl">
-                <div id="kplayer" style="width: 400px; height: 333px;" itemprop="video" itemscope
+                <div id="kplayer" style="width: 100%; min-height: 480px;" itemprop="video" itemscope
                      itemtype="http://schema.org/VideoObject"></div>
             </div>
             <pre>{{data}}</pre>

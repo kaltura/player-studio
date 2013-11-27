@@ -38,9 +38,12 @@
     <link rel="stylesheet" href="css/app.css"/>
     <link rel="stylesheet" href="css/menu.css"/>
     <link rel="stylesheet" href="css/icons.css"/>
-    <script type="text/javascript" src="lib/angular-perfect-scrollbar-master/dependencies/jquery.mousewheel.js"></script>
-    <script type="text/javascript" src="lib/angular-perfect-scrollbar-master/dependencies/perfect-scrollbar.js"></script>
-    <script type="text/javascript" src="lib/iscroll-4/src/iscroll.js"></script>
+    <script type="text/javascript"
+            src="lib/angular-perfect-scrollbar-master/dependencies/jquery.mousewheel.js"></script>
+    <script type="text/javascript"
+            src="lib/angular-perfect-scrollbar-master/dependencies/perfect-scrollbar.js"></script>
+    <!--  v4  <script type="text/javascript" src="lib/iscroll-4/src/iscroll.js"></script>-->
+    <script type="text/javascript" src="bower_components/iscroll/build/iscroll.js"></script>
     <script type="text/javascript" src="bower_components/select2/select2.js"></script>
     <!--1.07-->
     <!--<script src="lib/angular/angular.js"></script>-->
@@ -49,7 +52,9 @@
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
-    <script type="text/javascript" src="bower_components/ng-iScroll/src/ng-iscroll.js"></script>
+    <!--    <script type="text/javascript" src="bower_components/ng-iScroll/src/ng-iscroll.js"></script>-->
+    <script type="text/javascript" src="lib/ng-iScroll-1.2b/src/ng-iscroll.js"></script>
+
     <script type="text/javascript" src="lib/angular-perfect-scrollbar-master/src/angular-perfect-scrollbar.js"></script>
     <script src="lib/sprintf.js"></script>
     <script src="lib/localize.js"></script>

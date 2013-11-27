@@ -30,8 +30,8 @@
                 <div class="col-md-1 visible-lg">{{ 'Creation Date' | i18n }}</div>
                 <div class="col-xs-3">{{ 'Actions' | i18n }}</div>
             </div>
-            <div class="scrollable">
-                <perfect-scrollbar suppress-scroll-x="true" id='scrollTarget'>
+            <div class="scroller" ng-iscroll="1" ng-iscroll-delay='500' >
+                <div>
                     <div class="row" on-finish-render
                          ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
                         <div class="col-md-3 col-sm-4 col-xs-4"><img class="playerThumb"
@@ -71,30 +71,29 @@
                                ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
                         </div>
                     </div>
-                </perfect-scrollbar>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row text-center">
-        <div class="pull-right">
-            <form class="form-inline" role="form">
-                <label class="" for="maxSizeSelect">
-                    <small> {{filtered.length}} Players in total, Show</small>
-                </label>
+        <div class="row text-center">
+            <div class="pull-right">
+                <form class="form-inline" role="form">
+                    <label class="padTop" for="maxSizeSelect">
+                        <small> {{filtered.length}} Players in total, Show</small>
+                    </label>
 
-                <div class="form-group">
-                    <select class="form-control" id="maxSizeSelect" ng-model="maxSize">
-                        <option>5</option>
-                        <option>10</option>
-                        <option>15</option>
-                        <option>20</option>
-                    </select>
-                </div>
-                <small> per page</small>
-            </form>
+                    <div class="form-group">
+                        <select class="form-control" id="maxSizeSelect" ng-model="maxSize">
+                            <option>5</option>
+                            <option>10</option>
+                            <option>15</option>
+                            <option>20</option>
+                        </select>
+                    </div>
+                    <small> per page</small>
+                </form>
+            </div>
+            <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
+                        page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
         </div>
-        <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
-                    page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
     </div>
-</div>
 </div>
