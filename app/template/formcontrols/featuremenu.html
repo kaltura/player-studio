@@ -1,10 +1,10 @@
 <div class="form-element">
+     <span class="pull-right" ng-if="featureCheckbox">
+            <input class="prettyCheckbox" model="$parent.featureModel" ng-model="$parent.featureModel" type="checkbox"/>
+     </span>
     <div class="header" data-toggle="collapse" data-target="#{{id}}">
         <span class="featureLabel">{{ label }}</span>
         <i class="glyphicon glyphicon-play"></i>
-        <span class="pull-right" ng-if="featureCheckbox" >
-            <input class="prettyCheckbox" model="$parent.featureModel" ng-model="$parent.featureModel" type="checkbox"/>
-        </span>
     </div>
     <div class="collapse" id="{{id}}">
         <ng-transclude></ng-transclude>

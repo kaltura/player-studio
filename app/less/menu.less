@@ -39,6 +39,7 @@ html, body, body > section, .scroller, .wrapper {
   width: 30%;
   height: 100%;
   min-width: 260px;
+  background: #eee;
   #mp-inner {
     height: 100%;
     margin-left: 56px;
@@ -55,7 +56,7 @@ html, body, body > section, .scroller, .wrapper {
 
 #mp-mainlevel {
   height: 100%;
-  padding-top: 20px;
+  padding-top: 25px;
   width: 56px;
   position: absolute;
   z-index: 1000;
@@ -103,8 +104,8 @@ html, body, body > section, .scroller, .wrapper {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
   background: #eee;
+  height: 100%;
 
 }
 
@@ -164,21 +165,29 @@ html, body, body > section, .scroller, .wrapper {
   #mp-base > ul > li > div.mp-level > a.mp-back {
     display: none;
   }
-  hr {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #fff;
-    clear: both;
-    margin-top: 15px;
-    margin-bottom: 0px;
-
-  }
-  label[type="text"] hr {
-    margin-top: 40px;
+  label, div.form-element {
+    hr {
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #fff;
+      clear: both;
+      margin-top: 16px;
+      margin-bottom: 0px;
+    }
+    &[type="text"], &[type="select2data"] {
+      hr {
+        margin-top: 42px;
+      }
+    }
+    &[type="dropdown"] {
+      hr {
+        margin-top: 20px;
+      }
+    }
   }
   h2 {
     margin: 0;
-    padding: 18px;
-    padding-top: 34px;
+    padding: 0.7em;
+    padding-top: 24px;
     padding-bottom: 11px;
     color: #000000;
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
@@ -198,14 +207,13 @@ html, body, body > section, .scroller, .wrapper {
   .mp-level li {
     clear: both;
     label, .form-element {
-      padding: 0.7em 1em 0.7em 1.8em;
+      padding: 0.6em 1em;
       display: block;
       text-align: left;
       clear: both;
       font-weight: normal;
       font-size: 13px;
-      min-height: 30px;
-      margin-bottom: -1px;
+      margin-bottom: 0px;
       color: #555555;
       .inputHolder {
         float: left;
@@ -229,7 +237,7 @@ html, body, body > section, .scroller, .wrapper {
             color: #009dff;
           }
           font-weight: bold;
-          margin-bottom: 10px;
+
           i.glyphicon {
             -webkit-transition: all 0.3s;
             -moz-transition: all 0.3s;
@@ -237,13 +245,17 @@ html, body, body > section, .scroller, .wrapper {
             -o-transition: all 0.3s;
             transition: all 0.3s;
             color: #009dff;
+            font-size: 10px;
           }
-          span.pull-right {
-            //checkbox
-            margin-top: -6px;
+        }
+        span.pull-right {
+          //checkbox
+          .prettycheckbox a {
+            margin-top: -5px;
           }
         }
         div.in, div.collapse, div.collapsing {
+          margin-top: 10px;
           &:not(.tooltip) {
             width: 100%;
             label, div.form-element {
@@ -259,18 +271,31 @@ html, body, body > section, .scroller, .wrapper {
           }
         }
       }
-      &[type="readonly"] {
-        span {
-          margin-top: 10px;
-          font-size: 13px;
-          height: 28px;
-          width: auto;
-          &:first-child {
-            float: left;
+      &[type="readonly"], &[type="infoaction"] {
+        .button-wrapper {
+          float: right;
+          button {
+            background: #009dff;
+            border-color:#0086d9;
+            &:hover, &:focus, &:active {
+              background: #067ec9;
+              border-color: #0086d9;
+            }
           }
-          &:last-child {
-            float: right;
-            margin-top: 5px;
+        }
+        span {
+          width: auto;
+          &.control-data {
+            text-align: center;
+            &.infodata {
+              float: left;
+              text-align: left;
+              padding-left: 5%;
+            }
+          }
+          &:first-child {
+            min-width: 80px;
+            float: left;
           }
         }
       }
@@ -284,26 +309,39 @@ html, body, body > section, .scroller, .wrapper {
       input[type="text"] {
         float: left;
         font-size: 13px;
-        box-shadow: -1px 1px 0px #ccc inset;
-        width: 100%;
+         width: 100%;
         height: 28px;
       }
       input[type="checkbox"], div.input-group, div.select2-container, .prettycheckbox, .spinEdit input.small {
         float: right;
         z-index: 10;
       }
+
+      &[type="dropdown"] {
+        span.control-label {
+          height: 1em;
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
       .prettycheckbox a {
         float: right;
+        margin-top: -6px;
         width: 25px;
+        height: 25px;
       }
       &[type="radio"] {
         label {
           padding: 1px;
           margin: 0;
-          margin-right: 16px;
+          width: 33%;
           float: left;
           display: inline;
           clear: none;
+          text-align: center;
+          &:first-child {
+            text-align: left;
+          }
           .optionLabel {
             bottom: 8px;
             position: relative;
@@ -314,11 +352,18 @@ html, body, body > section, .scroller, .wrapper {
           margin: 4px;
         }
         .form-group {
-          text-align: center;
-          label:last-child:nth-child(2) {
+
+          label:last-child {
             float: right;
+            text-align: right;
           }
         }
+      }
+      .form-group {
+        text-align: center;
+        margin: auto;
+        width: 100%;
+        height: 30px;
       }
       .colorinput, input[type="text"].colorinput {
         width: 50px;
@@ -331,15 +376,9 @@ html, body, body > section, .scroller, .wrapper {
         height: 25px;
         float: right;
         border: grey;
-        margin-right: 10px;
+        margin-right: 4px;
         background-color: azure;
         outline: 3px double black;
-      }
-      .form-group {
-        text-align: center;
-        margin: auto;
-        width: 85%;
-        height: 30px;
       }
     }
   }
@@ -348,13 +387,13 @@ html, body, body > section, .scroller, .wrapper {
     display: block;
     min-height: 40px;
     a.menu-level-trigger {
-      padding: 0.7em 1em 24px 1.8em;
+      padding: 0.6em 1em;
       width: 100%;
       float: left;
       font-size: 13px;
       font-weight: bold;
       display: block;
-      color: #000;
+      color: #009dff;
 
       &:hover {
         text-decoration: none;
@@ -363,10 +402,11 @@ html, body, body > section, .scroller, .wrapper {
         .booticon;
         float: right;
         content: "\e080";
-        color: black;
+        color: #009dff;
       }
     }
   }
+
   ul.dropdown-menu {
     border-radius: 5px;
     li {
@@ -409,6 +449,7 @@ html, body, body > section, .scroller, .wrapper {
     content: "\e079";
     color: black;
   }
+
 }
 
 .rotate90 {
@@ -456,6 +497,12 @@ html, body, body > section, .scroller, .wrapper {
 
 .select2-results .select2-result-label {
   border-top: 1px solid #ddd;
+}
+
+.select2-results .select2-no-results {
+  background: #fff;
+  padding-left: 7px;
+  color: #555;
 }
 
 .form-control, .input-group-addon {

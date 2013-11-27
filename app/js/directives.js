@@ -1,13 +1,13 @@
 'use strict';
 /* Directives */
 angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
-    .directive('timeago', [function () {
+    .directive('timeago', [function() {
         return {
             scope: {timestamp: '@'},
             restrict: 'C',
-            link: function (scope, iElement, iAttrs) {
+            link: function(scope, iElement, iAttrs) {
                 if (typeof $.timeago == 'function')
-                    scope.$watch('timestamp', function (newVal, oldVal) {
+                    scope.$watch('timestamp', function(newVal, oldVal) {
                             if (newVal) {
                                 var date = scope.timestamp * 1000;
                                 iElement.text($.timeago(date));
@@ -17,7 +17,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
 
             }
         }
-    }]).directive('modelRadio', function () {
+    }]).directive('modelRadio', function() {
         return {
             restrict: 'E',
             replace: true,
@@ -31,23 +31,23 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 model: '=',
                 label: '@'
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 if (typeof $attrs.options != 'undefined') {
                     $scope.options = JSON.parse($attrs.options);
                 }
 
             },
-            link: function (scope, element, attributes) {
+            link: function(scope, element, attributes) {
                 element.find('input').attr('name', scope.model);
             }
         }
     })
 
-    .directive('modelColor',function () {
+    .directive('modelColor',function() {
         return  {
             restrict: 'E',
             replace: true,
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 if (typeof  $scope.model == 'undefined') {
                     if ($attrs.initvalue)
                         $scope.model = $attrs.initvalue;
@@ -65,7 +65,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                                 <span class="colorExample" ng-style="{\'background-color\': model}"></span>\n\
                             </label>'
         };
-    }).directive('modelText',function () {
+    }).directive('modelText',function() {
         return {
             replace: true,
             restrict: 'E',
@@ -74,7 +74,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 model: "=",
                 icon: '@'
             },
-            compile: function (tElement, tAttr) {
+            compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
@@ -82,7 +82,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             // $parent.model is used because tooltip is creating an isolate scope.
             template: "<label >{{label}}:<i ng-if='icon' class='icon {{icon}}'></i>" +
                 "<span class='inputHolder'><input class='form-control' tooltip='{{label}}' type='text' ng-model='$parent.model'/></span></label>"        };
-    }).directive('select2Data', ['menuSvc', function (menuSvc) {
+    }).directive('select2Data', ['menuSvc', function(menuSvc) {
         return {
             replace: true,
             restrict: "E",
@@ -92,7 +92,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 'icon': '@',
                 'initvalue': '@'
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 $scope.selectOpts = {};
                 $scope.selectOpts['data'] = menuSvc.doAction($attrs.source);
 
@@ -105,84 +105,36 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             template: "<label>{{label}}<i ng-if='icon' class='icon {{icon}}'></i>" +
                 '<input type="hidden" ui-select2="selectOpts" ng-model="model"> ' +
                 '</label>',
-            compile: function (tElement, tAttr) {
+            compile: function(tElement, tAttr) {
+                if (tAttr['endline'] == 'true') {
+                    tElement.append('<hr/>');
+                }
                 if (tAttr.showEntriesThumbs == 'true') {
                     tElement.find('input').attr('list-entries-thumbs', "true")
                 }
                 if (tAttr.placeholder)
                     tElement.find('input').attr('data-placeholder', tAttr.placeholder);
 
-                return function (scope, element) {
+                return function(scope, element) {
                 }
 
             }
         }
-    }]).directive('entriesLoader', ['apiService', function (apiService) {
-        return {
-            replace: true,
-            restrict: "E",
-            scope: {
-                'label': "@",
-                'model': "=",
-                'icon': '@',
-                'source': '@',
-                'initvalue': '@'
-            },
-            controller: function ($scope, $element, $attrs) {
-                $scope.options = [];
-                $scope.userEntries = [];
-                apiService.listMedia().then(function (data) {
-                    $scope.userEntries = data;
-                });
-                $scope.$watch('userEntries', function () {
-                    if ($scope.userEntries)
-                        if (typeof $scope.userEntries.objects != 'undefined') {
-                            angular.forEach($scope.userEntries.objects, function (value) {
-                                $scope.options.push({'id': value.id, 'text': value.name});
-                            });
-                        }
-                });
-                $scope.selectOpts = { data: [], query: function (query) {
-                    var data = {results: []};
-                    console.log(query.term);
-                    angular.forEach($scope.options, function (item, key) {
-                        if (query.term.toUpperCase() === item.text.substring(0, query.term.length).toUpperCase()) {
-                            data.results.push(item);
-                        }
-                    });
-                    query.callback(data);
-                }
-                };
-                $scope.selectOpts['width'] = $attrs.width;
-            },
-            template: "<label>{{label}}<i ng-if='icon' class='icon {{icon}}'></i>" +
-                '<input type="hidden"  data-placeholder="Pick a entry" ui-select2="selectOpts"  ng-model="model"> ' +
-                '</label>',
-            compile: function (tElement, tAttr) {
-                if (tAttr.showEntriesThumbs == 'true') {
-                    tElement.find('input').attr('list-entries-thumbs', "true")
-                }
-                return function (scope, element) {
-                }
-
-            }
-        }
-    }])
-    .
-    directive('listEntriesThumbs', function () {
+    }]).
+    directive('listEntriesThumbs', function() {
         //not finished
         return {
             restrict: 'A',
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 if ($attrs.listEntriesThumbs == 'true') {
-                    var format = function (player) {
+                    var format = function(player) {
                         if (!player.thumbnailUrl) return player.name;
                         return "<img class='thumb' src='" + player.thumbnailUrl + "'/>" + player.name
                     }
                     $scope.addOption({
                         formatResult: format,
                         formatSelection: format,
-                        escapeMarkup: function (m) {
+                        escapeMarkup: function(m) {
                             return m;
                         }
                     });
@@ -190,7 +142,33 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             }
         }
     })
-    .directive('modelSelect',function () {
+    .directive('infoAction', function(menuSvc) {
+        return {
+            restrict: 'E',
+            replace: 'true',
+            controller: function($scope, $element, $attrs) {
+                $scope.check = function(action) {
+                    // for update button.. checks if needed
+                    return   menuSvc.checkAction(action);
+                }
+                $scope.btnAction = function(action) {
+                    menuSvc.doAction(action);
+                }
+            },
+            scope: {
+                'model': '=',
+                'btnLabel': '@',
+                'btnClass': '@',
+                'action': '@',
+                'label': '@'
+            },
+            template: '<label><span class="control-label">{{ label }}</span><i ng-if="icon" class="icon {{icon}}"></i>' +
+                '<span class="button-wrapper"><button type="button" ng-if="check(action)" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}" >{{ btnLabel }}</button></span>' +
+                '<span class="infodata control-data">{{ model }}</span>' +
+                '</label>'
+        }
+    })
+    .directive('modelSelect',function() {
         return {
             replace: true,
             restrict: 'E',
@@ -200,14 +178,19 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 initvalue: '@',
                 selectOpts: '@'
             },
-            link: function ($scope, $element, $attrs) {
-
-                if (typeof $attrs.options != 'undefined') {
-                    $scope.options = angular.fromJson($attrs.options);
+            compile: function(tElement, tAttr) {
+                if (tAttr['endline'] == 'true') {
+                    tElement.append('<hr/>');
                 }
+                return function($scope, $element, $attrs) {
 
+                    if (typeof $attrs.options != 'undefined') {
+                        $scope.options = angular.fromJson($attrs.options);
+                    }
+
+                }
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 if (!$scope.selectOpts) {
                     $scope.selectOpts = {};
                 }
@@ -220,32 +203,33 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     $scope.model = $attrs.initvalue;
                 }
 
-                this.setOptions = function (optsArr) {
+                this.setOptions = function(optsArr) {
                     $scope.options = optsArr;
 
                 }
             },
 
-            template: '<label>{{label}}' +
+            template: '<label><span class="control-label">{{label}}</span>' +
                 '<select ui-select2="{{uiselectOpts}}" ng-model="model" ng-options="item.value as item.label for item in options"> ' +
                 '</select></label>'
         }
     }
-).directive('prettyCheckbox',function () {
+).
+    directive('prettyCheckbox',function() {
         return {
             restrict: 'AC',
             priority: 1000,
             transclude: 'element',
-            compile: function (tElement, tAttrs, transclude) {
-                return  function (scope, iElement, iAttr) {
-                    var wrapper = angular.element('<div class="clearfix prettycheckbox"></div>');
+            compile: function(tElement, tAttrs, transclude) {
+                return  function(scope, iElement, iAttr) {
+                    var wrapper = angular.element('<div class="prettycheckbox"></div>');
                     var clickHandler = wrapper.append('<a href="#" class=""></a>');
-                    transclude(scope, function (clone) {
+                    transclude(scope, function(clone) {
                         return wrapper.append(clone);
                     });
                     iElement.replaceWith(wrapper);
                     var input = wrapper.find('input').hide();
-                    clickHandler.on('click', 'a', function (e) {
+                    clickHandler.on('click', 'a', function(e) {
                         e.preventDefault();
                         input.trigger('click');
                         return false;
@@ -254,42 +238,42 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     if (typeof iAttr['model'] != 'undefined') {
                         watchProp = iAttr['model'];
                     }
-                    scope.$watch(function () {
+                    scope.$watch(function() {
                         return scope.$eval(watchProp);
-                    }, function (newVal, oldVal) {
+                    }, function(newVal, oldVal) {
                         if (newVal != oldVal)
                             $(wrapper).find('a').toggleClass('checked');
                     });
                 }
             }
         }
-    }).directive('prettyRadio',function () {
+    }).directive('prettyRadio',function() {
         return {
             restrict: 'AC',
             priority: 1000,
             transclude: 'element',
-            compile: function (tElement, tAttrs, transclude) {
-                return  function (scope, iElement, iAttr) {
+            compile: function(tElement, tAttrs, transclude) {
+                return  function(scope, iElement, iAttr) {
                     var wrapper = angular.element('<span class="clearfix prettyradio"></span>');
                     var clickHandler = wrapper.append('<a href="#" class=""></a>');
                     var watchProp = 'model'
                     if (typeof iAttr['model'] != 'undefined') {
                         watchProp = iAttr['model'];
                     }
-                    transclude(scope, function (clone) {
+                    transclude(scope, function(clone) {
                         return wrapper.append(clone);
                     });
                     iElement.replaceWith(wrapper);
                     var input = wrapper.find('input').hide();
-                    clickHandler.on('click', 'a', function (e) {
+                    clickHandler.on('click', 'a', function(e) {
                         e.preventDefault();
                         input.trigger('click');
                         input.trigger('click'); // it beats me why it needs 2 but it does.
                         return false;
                     });
-                    scope.$watch(function () {
+                    scope.$watch(function() {
                         return scope.$eval(watchProp) == input.val();
-                    }, function (newVal, oldVal) {
+                    }, function(newVal, oldVal) {
                         if (newVal != oldVal)
                             $(wrapper).find('a').toggleClass('checked');
                     });
@@ -297,7 +281,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             }
         }
     }).
-    directive('modelCheckbox',function () {
+    directive('modelCheckbox',function() {
         return  {
             template: '<label>{{label}}' +
                 '<input type="checkbox" class="prettyCheckbox" ng-model="model">' +
@@ -309,7 +293,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 model: "="
             }
         };
-    }).directive('readOnly',function () {
+    }).directive('readOnly',function() {
         return {
             restrict: 'E',
             replace: 'true',
@@ -317,18 +301,18 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 model: '=',
                 label: '@'
             },
-            template: '<label><span class="control-label">{{ label }}</span><i ng-if="icon" class="icon {{icon}}"></i><span class="form-control" disabled>{{ model }}</span> </label>'
+            template: '<label><span class="control-label">{{ label }}</span><i ng-if="icon" class="icon {{icon}}"></i><span class="control-data infodata">{{ model }}</span> </label>'
         }
-    }).directive('modelButton',function (menuSvc) {
+    }).directive('modelButton',function(menuSvc) {
         return {
             restrict: 'E',
             replace: 'true',
-            controller: function ($scope) {
-                $scope.check = function (action) {
+            controller: function($scope) {
+                $scope.check = function(action) {
                     // for update button.. checks if needed
                     return   menuSvc.checkAction(action);
                 }
-                $scope.btnAction = function (action) {
+                $scope.btnAction = function(action) {
                     menuSvc.doAction(action);
                 }
             },
@@ -339,7 +323,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             },
             template: '<label ng-if="check(action)"><i class="icon {{icon}}"></i><button type="button" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}" >{{ label }}</button></label>'
         }
-    }).directive('modelNumber', function () {
+    }).directive('modelNumber', function() {
         return{
             templateUrl: 'template/spinedit/spinedit.html',
             replace: true,
@@ -348,7 +332,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 model: "=",
                 label: "@"
             },
-            link: function ($scope, $element, $attrs) {
+            link: function($scope, $element, $attrs) {
                 var $spinner = $element.find('input').spinedit({
                     minimum: parseFloat($scope.from),
                     maximum: parseFloat($scope.to),
@@ -356,16 +340,16 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     value: parseFloat($scope.initvalue),
                     numberOfDecimals: parseFloat($scope.numberofdecimals)
                 });
-                $spinner.on("valueChanged", function (e) {
+                $spinner.on("valueChanged", function(e) {
                     if (typeof e.value == 'number') {
-                        $scope.$apply(function () {
+                        $scope.$apply(function() {
                             $scope.model = e.value;
                         });
                     }
 
                 });
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: function($scope, $element, $attrs) {
                 var def = {
                     from: 5,
                     to: 10,
@@ -374,7 +358,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 }
                 var keys = ['from', 'to', 'stepsize', 'numberofdecimals'];
 
-                angular.forEach(keys, function (keyName) {
+                angular.forEach(keys, function(keyName) {
                     if (!$attrs[keyName]) $scope[keyName] = def[keyName];
                     else $scope[keyName] = $attrs[keyName];
                 });
@@ -388,13 +372,13 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             }
         }
     })
-    .directive('loadingWidget', ['requestNotificationChannel', function (requestNotificationChannel) {
+    .directive('loadingWidget', ['requestNotificationChannel', function(requestNotificationChannel) {
         return {
             restrict: "E",
             scope: {},
             replace: true,
             template: "<div class='loadingOverlay'><a><div id='spinWrapper'></div></a></div>",
-            controller: function ($scope, $element) {
+            controller: function($scope, $element) {
                 $scope.spinner = null;
                 $scope.spinRunning = false;
                 $scope.opts = {
@@ -415,15 +399,15 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     top: 'auto', // Top position relative to parent in px
                     left: 'auto' // Left position relative to parent in px
                 };
-                var initSpin = function () {
+                var initSpin = function() {
                     $scope.spinner = new Spinner($scope.opts).spin();
                 }
-                $scope.endSpin = function () {
+                $scope.endSpin = function() {
                     if ($scope.spinner)
                         $scope.spinner.stop();
                     $scope.spinRunning = false;
                 }
-                $scope.spin = function () {
+                $scope.spin = function() {
                     if ($scope.spinRunning) return;
                     var target = $element.find('#spinWrapper');
                     if ($scope.spinner == null)
@@ -432,17 +416,17 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     $scope.spinRunning = true;
                 }
             },
-            link: function (scope, element) {
+            link: function(scope, element) {
                 // hide the element initially
                 element.hide();
 
-                var startRequestHandler = function () {
+                var startRequestHandler = function() {
                     // got the request start notification, show the element
                     element.show();
                     scope.spin();
                 };
 
-                var endRequestHandler = function () {
+                var endRequestHandler = function() {
                     // got the request start notification, show the element
                     element.hide();
                     scope.endSpin();
@@ -453,13 +437,13 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 requestNotificationChannel.onRequestEnded(scope, endRequestHandler);
             }
         };
-    }]).directive('onFinishRender', ["$timeout", 'requestNotificationChannel', function ($timeout, requestNotificationChannel) {
+    }]).directive('onFinishRender', ["$timeout", 'requestNotificationChannel', function($timeout, requestNotificationChannel) {
         // requieres having requestNotificationChannel.requestStarted('list'); in parent controller
         return {
             restrict: 'A',
-            link: function (scope, element, attr) {
+            link: function(scope, element, attr) {
                 if (scope.$last === true) {
-                    $timeout(function () {
+                    $timeout(function() {
                         requestNotificationChannel.requestEnded('list');
                     });
                 }

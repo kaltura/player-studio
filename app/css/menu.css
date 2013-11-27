@@ -36,6 +36,7 @@ body > section,
   width: 30%;
   height: 100%;
   min-width: 260px;
+  background: #eee;
 }
 #mp-menu #mp-inner {
   height: 100%;
@@ -50,28 +51,37 @@ body > section,
 }
 #mp-mainlevel {
   height: 100%;
-  padding-top: 20px;
+  padding-top: 25px;
   width: 56px;
   position: absolute;
   z-index: 1000;
   background: #323232;
   /* Old browsers */
+
   /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzMyMzIzMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzMDMwMzAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
   background: -moz-linear-gradient(left, #323232 0%, #303030 100%);
   /* FF3.6+ */
+
   background: -webkit-gradient(linear, left top, right top, color-stop(0%, #323232), color-stop(100%, #303030));
   /* Chrome,Safari4+ */
+
   background: -webkit-linear-gradient(left, #323232 0%, #303030 100%);
   /* Chrome10+,Safari5.1+ */
+
   background: -o-linear-gradient(left, #323232 0%, #303030 100%);
   /* Opera 11.10+ */
+
   background: -ms-linear-gradient(left, #323232 0%, #303030 100%);
   /* IE10+ */
+
   background: linear-gradient(to right, #323232 0%, #303030 100%);
   /* W3C */
+
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#323232', endColorstr='#303030', GradientType=1);
   /* IE6-8 */
+
 }
 #mp-mainlevel ul {
   list-style: none;
@@ -103,8 +113,8 @@ body > section,
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
   background: #eee;
+  height: 100%;
 }
 .mp-level .mp-level {
   left: -100%;
@@ -156,20 +166,28 @@ body > section,
 #mp-menu #mp-base > ul > li > div.mp-level > a.mp-back {
   display: none;
 }
-#mp-menu hr {
+#mp-menu label hr,
+#mp-menu div.form-element hr {
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #fff;
   clear: both;
-  margin-top: 15px;
+  margin-top: 16px;
   margin-bottom: 0px;
 }
-#mp-menu label[type="text"] hr {
-  margin-top: 40px;
+#mp-menu label[type="text"] hr,
+#mp-menu div.form-element[type="text"] hr,
+#mp-menu label[type="select2data"] hr,
+#mp-menu div.form-element[type="select2data"] hr {
+  margin-top: 42px;
+}
+#mp-menu label[type="dropdown"] hr,
+#mp-menu div.form-element[type="dropdown"] hr {
+  margin-top: 20px;
 }
 #mp-menu h2 {
   margin: 0;
-  padding: 18px;
-  padding-top: 34px;
+  padding: 0.7em;
+  padding-top: 24px;
   padding-bottom: 11px;
   color: #000000;
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
@@ -191,14 +209,13 @@ body > section,
 }
 #mp-menu .mp-level li label,
 #mp-menu .mp-level li .form-element {
-  padding: 0.7em 1em 0.7em 1.8em;
+  padding: 0.6em 1em;
   display: block;
   text-align: left;
   clear: both;
   font-weight: normal;
   font-size: 13px;
-  min-height: 30px;
-  margin-bottom: -1px;
+  margin-bottom: 0px;
   color: #555555;
 }
 #mp-menu .mp-level li label .inputHolder,
@@ -222,7 +239,6 @@ body > section,
 #mp-menu .mp-level li label[type="featuremenu"] div.header,
 #mp-menu .mp-level li .form-element[type="featuremenu"] div.header {
   font-weight: bold;
-  margin-bottom: 10px;
 }
 #mp-menu .mp-level li label[type="featuremenu"] div.header .featureLabel,
 #mp-menu .mp-level li .form-element[type="featuremenu"] div.header .featureLabel {
@@ -236,10 +252,19 @@ body > section,
   -o-transition: all 0.3s;
   transition: all 0.3s;
   color: #009dff;
+  font-size: 10px;
 }
-#mp-menu .mp-level li label[type="featuremenu"] div.header span.pull-right,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.header span.pull-right {
-  margin-top: -6px;
+#mp-menu .mp-level li label[type="featuremenu"] span.pull-right .prettycheckbox a,
+#mp-menu .mp-level li .form-element[type="featuremenu"] span.pull-right .prettycheckbox a {
+  margin-top: -5px;
+}
+#mp-menu .mp-level li label[type="featuremenu"] div.in,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.in,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapse,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse,
+#mp-menu .mp-level li label[type="featuremenu"] div.collapsing,
+#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing {
+  margin-top: 10px;
 }
 #mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip),
 #mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip),
@@ -279,21 +304,60 @@ body > section,
   font-weight: normal;
   color: #555555;
 }
+#mp-menu .mp-level li label[type="readonly"] .button-wrapper,
+#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper,
+#mp-menu .mp-level li label[type="infoaction"] .button-wrapper,
+#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper {
+  float: right;
+}
+#mp-menu .mp-level li label[type="readonly"] .button-wrapper button,
+#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper button,
+#mp-menu .mp-level li label[type="infoaction"] .button-wrapper button,
+#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper button {
+  background: #009dff;
+  border-color: #0086d9;
+}
+#mp-menu .mp-level li label[type="readonly"] .button-wrapper button:hover,
+#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper button:hover,
+#mp-menu .mp-level li label[type="infoaction"] .button-wrapper button:hover,
+#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper button:hover,
+#mp-menu .mp-level li label[type="readonly"] .button-wrapper button:focus,
+#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper button:focus,
+#mp-menu .mp-level li label[type="infoaction"] .button-wrapper button:focus,
+#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper button:focus,
+#mp-menu .mp-level li label[type="readonly"] .button-wrapper button:active,
+#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper button:active,
+#mp-menu .mp-level li label[type="infoaction"] .button-wrapper button:active,
+#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper button:active {
+  background: #067ec9;
+  border-color: #0086d9;
+}
 #mp-menu .mp-level li label[type="readonly"] span,
-#mp-menu .mp-level li .form-element[type="readonly"] span {
-  margin-top: 10px;
-  font-size: 13px;
-  height: 28px;
+#mp-menu .mp-level li .form-element[type="readonly"] span,
+#mp-menu .mp-level li label[type="infoaction"] span,
+#mp-menu .mp-level li .form-element[type="infoaction"] span {
   width: auto;
 }
-#mp-menu .mp-level li label[type="readonly"] span:first-child,
-#mp-menu .mp-level li .form-element[type="readonly"] span:first-child {
-  float: left;
+#mp-menu .mp-level li label[type="readonly"] span.control-data,
+#mp-menu .mp-level li .form-element[type="readonly"] span.control-data,
+#mp-menu .mp-level li label[type="infoaction"] span.control-data,
+#mp-menu .mp-level li .form-element[type="infoaction"] span.control-data {
+  text-align: center;
 }
-#mp-menu .mp-level li label[type="readonly"] span:last-child,
-#mp-menu .mp-level li .form-element[type="readonly"] span:last-child {
-  float: right;
-  margin-top: 5px;
+#mp-menu .mp-level li label[type="readonly"] span.control-data.infodata,
+#mp-menu .mp-level li .form-element[type="readonly"] span.control-data.infodata,
+#mp-menu .mp-level li label[type="infoaction"] span.control-data.infodata,
+#mp-menu .mp-level li .form-element[type="infoaction"] span.control-data.infodata {
+  float: left;
+  text-align: left;
+  padding-left: 5%;
+}
+#mp-menu .mp-level li label[type="readonly"] span:first-child,
+#mp-menu .mp-level li .form-element[type="readonly"] span:first-child,
+#mp-menu .mp-level li label[type="infoaction"] span:first-child,
+#mp-menu .mp-level li .form-element[type="infoaction"] span:first-child {
+  min-width: 80px;
+  float: left;
 }
 #mp-menu .mp-level li label[type="button"],
 #mp-menu .mp-level li .form-element[type="button"] {
@@ -308,7 +372,6 @@ body > section,
 #mp-menu .mp-level li .form-element input[type="text"] {
   float: left;
   font-size: 13px;
-  box-shadow: -1px 1px 0px #cccccc inset;
   width: 100%;
   height: 28px;
 }
@@ -325,19 +388,32 @@ body > section,
   float: right;
   z-index: 10;
 }
+#mp-menu .mp-level li label[type="dropdown"] span.control-label,
+#mp-menu .mp-level li .form-element[type="dropdown"] span.control-label {
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+}
 #mp-menu .mp-level li label .prettycheckbox a,
 #mp-menu .mp-level li .form-element .prettycheckbox a {
   float: right;
+  margin-top: -6px;
   width: 25px;
+  height: 25px;
 }
 #mp-menu .mp-level li label[type="radio"] label,
 #mp-menu .mp-level li .form-element[type="radio"] label {
   padding: 1px;
   margin: 0;
-  margin-right: 16px;
+  width: 33%;
   float: left;
   display: inline;
   clear: none;
+  text-align: center;
+}
+#mp-menu .mp-level li label[type="radio"] label:first-child,
+#mp-menu .mp-level li .form-element[type="radio"] label:first-child {
+  text-align: left;
 }
 #mp-menu .mp-level li label[type="radio"] label .optionLabel,
 #mp-menu .mp-level li .form-element[type="radio"] label .optionLabel {
@@ -348,13 +424,17 @@ body > section,
 #mp-menu .mp-level li .form-element[type="radio"] input {
   margin: 4px;
 }
-#mp-menu .mp-level li label[type="radio"] .form-group,
-#mp-menu .mp-level li .form-element[type="radio"] .form-group {
-  text-align: center;
-}
-#mp-menu .mp-level li label[type="radio"] .form-group label:last-child:nth-child(2),
-#mp-menu .mp-level li .form-element[type="radio"] .form-group label:last-child:nth-child(2) {
+#mp-menu .mp-level li label[type="radio"] .form-group label:last-child,
+#mp-menu .mp-level li .form-element[type="radio"] .form-group label:last-child {
   float: right;
+  text-align: right;
+}
+#mp-menu .mp-level li label .form-group,
+#mp-menu .mp-level li .form-element .form-group {
+  text-align: center;
+  margin: auto;
+  width: 100%;
+  height: 30px;
 }
 #mp-menu .mp-level li label .colorinput,
 #mp-menu .mp-level li .form-element .colorinput,
@@ -370,29 +450,22 @@ body > section,
   height: 25px;
   float: right;
   border: grey;
-  margin-right: 10px;
+  margin-right: 4px;
   background-color: azure;
   outline: 3px double black;
-}
-#mp-menu .mp-level li label .form-group,
-#mp-menu .mp-level li .form-element .form-group {
-  text-align: center;
-  margin: auto;
-  width: 85%;
-  height: 30px;
 }
 #mp-menu ul:not(.dropdown-menu) > li {
   display: block;
   min-height: 40px;
 }
 #mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger {
-  padding: 0.7em 1em 24px 1.8em;
+  padding: 0.6em 1em;
   width: 100%;
   float: left;
   font-size: 13px;
   font-weight: bold;
   display: block;
-  color: #000;
+  color: #009dff;
 }
 #mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger:hover {
   text-decoration: none;
@@ -408,7 +481,7 @@ body > section,
   line-height: 1;
   float: right;
   content: "\e080";
-  color: black;
+  color: #009dff;
 }
 #mp-menu ul.dropdown-menu {
   border-radius: 5px;
@@ -460,8 +533,10 @@ body > section,
   transform: rotate(90deg);
   -ms-transform: rotate(90deg);
   /* IE 9 */
+
   -webkit-transform: rotate(90deg);
   /* Safari and Chrome */
+
 }
 .triangle {
   margin-left: 10px;
@@ -499,6 +574,11 @@ body > section,
 }
 .select2-results .select2-result-label {
   border-top: 1px solid #ddd;
+}
+.select2-results .select2-no-results {
+  background: #fff;
+  padding-left: 7px;
+  color: #555;
 }
 .form-control,
 .input-group-addon {

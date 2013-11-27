@@ -23,11 +23,29 @@
                 "type": "select2data",
                 "source": "listEntries",
                 "query": "queryEntries",
-                "width": "200px",
+                "endline": "true",
+                "width": "100%",
                 "model": "previewentry",
                 "data-placeholder": "Pick a entry"
             },
-
+            {
+                "options": [
+                    {
+                        "label": "4/3",
+                        "value": "narrow"
+                    },
+                    {
+                        "label": "16/9",
+                        "value": "wide"
+                    }
+                ],
+                "showSearch": false,
+                "initvalue": "wide",
+                "type": "dropdown",
+                "label": "Aspect Ratio",
+                "endline": "true",
+                "model": "aspectRatio"
+            },
             {
                 "type": "featuremenu",
                 "model": "transport",
@@ -64,23 +82,6 @@
                 ]
             },
             {
-                "options": [
-                    {
-                        "label": "4/3",
-                        "value": "narrow"
-                    },
-                    {
-                        "label": "16/9",
-                        "value": "wide"
-                    }
-                ],
-                "showSearch": false,
-                "initvalue": "wide",
-                "type": "dropdown",
-                "label": "Aspect Ratio",
-                "model": "aspectRatio"
-            },
-            {
                 "type": "featuremenu",
                 "model": "deviceSpecific",
                 "label": "Device Specific Flags",
@@ -103,16 +104,12 @@
                 "model": "lastUpdated"
             },
             {
-                "label": "Version",
-                "type": "readonly",
-                "model": "version"
-            },
-            {
-                "label": "Update Player",
-                "type": "button",
-                "btn-class": "btn-primary",
+                "label": "Version:",
+                "btn-label": "Update Player",
+                "type": "infoAction",
+                "btn-class": "btn-xs btn-primary",
                 "action": "update",
-                "model": "playerUpdate"
+                "model": "version"
             }
         ]
     },
@@ -236,14 +233,8 @@
                         "type": "featuremenu",
                         "model": "logo",
                         "label": "Logo",
+                        "order":0,
                         "children": [
-                            {
-                                "model": "order",
-                                "initvalue": 0,
-                                "type": "text",
-                                "label": "Order for Logo",
-                                "icon": "icon-TabMonetization"
-                            },
                             {
                                 "options": [
                                     {
@@ -289,14 +280,8 @@
                         "type": "featuremenu",
                         "model": "flavor",
                         "label": "Flavor Selector",
+                        "order":0,
                         "children": [
-                            {
-                                "model": "order",
-                                "default": 0,
-                                "label": "Order for Flavor Selector",
-                                "icon": "icon-TabMonetization",
-                                "type": "text"
-                            },
                             {
                                 "options": [
                                     {
@@ -342,14 +327,8 @@
                         "type": "featuremenu",
                         "model": "playbackRate",
                         "label": "Playback Rate Selector",
+                        "order":0,
                         "children": [
-                            {
-                                "model": "order",
-                                "default": "0",
-                                "type": "text",
-                                "label": "Order for Playback Rate Selector",
-                                "icon": "icon-TabMonetization"
-                            },
                             {
                                 "options": [
                                     {
@@ -395,14 +374,8 @@
                         "type": "featuremenu",
                         "model": "flagContent",
                         "label": "Flag Content",
+                        "order":0,
                         "children": [
-                            {
-                                "model": "order",
-                                "default": 0,
-                                "type": "text",
-                                "label": "Order for Flag Content",
-                                "icon": "icon-TabMonetization"
-                            },
                             {
                                 "options": [
                                     {
@@ -453,7 +426,6 @@
                 "children": [
                     {
                         "label": "Watermark Logo URL",
-                        "icon": "icon-defult",
                         "model": "watermarkURL",
                         "validation": "url",
                         "type": "text"
