@@ -22,6 +22,7 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <link rel='stylesheet' href='lib/colorpicker/css/colorpicker.css'/>
     <link rel='stylesheet' href='lib/spinedit/css/bootstrap-spinedit.css'/>
+    <link rel='stylesheet' href='lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css'/>
     <!--[if gte IE 9]>
     <style type="text/css">
         .gradient {
@@ -42,6 +43,8 @@
             src="lib/angular-perfect-scrollbar-master/dependencies/jquery.mousewheel.js"></script>
     <script type="text/javascript"
             src="lib/angular-perfect-scrollbar-master/dependencies/perfect-scrollbar.js"></script>
+    <script type="text/javascript"
+            src="lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.js"></script>
     <!--  v4  <script type="text/javascript" src="lib/iscroll-4/src/iscroll.js"></script>-->
     <script type="text/javascript" src="bower_components/iscroll/build/iscroll.js"></script>
     <script type="text/javascript" src="bower_components/select2/select2.js"></script>
@@ -54,7 +57,6 @@
     <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
     <!--    <script type="text/javascript" src="bower_components/ng-iScroll/src/ng-iscroll.js"></script>-->
     <script type="text/javascript" src="lib/ng-iScroll-1.2b/src/ng-iscroll.js"></script>
-
     <script type="text/javascript" src="lib/angular-perfect-scrollbar-master/src/angular-perfect-scrollbar.js"></script>
     <script src="lib/sprintf.js"></script>
     <script src="lib/localize.js"></script>

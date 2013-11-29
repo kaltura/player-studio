@@ -353,6 +353,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 "</nav>",
             replace: true,
             restrict: 'E',
+            priority:1000,
             scope: {data: '=', 'actions': '&'},
             transclude: true,
             compile: function(tElement, tAttrs, transclude) {

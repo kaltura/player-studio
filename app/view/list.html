@@ -30,46 +30,44 @@
                 <div class="col-md-1 visible-lg">{{ 'Creation Date' | i18n }}</div>
                 <div class="col-xs-3">{{ 'Actions' | i18n }}</div>
             </div>
-            <div class="scroller" ng-iscroll="1" ng-iscroll-delay='500' >
-                <div>
-                    <div class="row" on-finish-render
-                         ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
-                        <div class="col-md-3 col-sm-4 col-xs-4"><img class="playerThumb"
-                                                                     ng-src="{{getThumbnail(item)}}"/></div>
-                        <div class="col-xs-3"><a data-ng-click="goToEditPage(item)"
-                                                 ng-href="edit/{{item.id}}">{{item.name}}</a>
+            <div class="scroller" mcustom-scrollbar>
+                <div class="row" on-finish-render
+                     ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
+                    <div class="col-md-3 col-sm-4 col-xs-4"><img class="playerThumb"
+                                                                 ng-src="{{getThumbnail(item)}}"/></div>
+                    <div class="col-xs-3"><a data-ng-click="goToEditPage(item)"
+                                             ng-href="edit/{{item.id}}">{{item.name}}</a>
 
-                            <div class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
-                                <small>{{' This player is out dated
-                                    - please update'| i18n}}
-                                </small>
-                            </div>
+                        <div class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
+                            <small>{{' This player is out dated
+                                - please update'| i18n}}
+                            </small>
                         </div>
-                        <div class="col-xs-1">{{item.id}}</div>
-                        <div class="col-xs-1"><span class="timeago" timestamp="{{item.createdAt}}"></span></div>
-                        <div class="visible-lg col-md-1"><span class="timeago"
-                                                               timestamp="{{item.updatedAt}}"></span>
-                        </div>
-                        <div class="actionBtns col-xs-3">
-                            <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
-                                    class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}
-                            </button>
-                            <button type="button" class="btn btn-link" ng-click="delete(item)"><span
-                                    class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}
-                            </button>
-                            <button type="button" class="btn btn-link" ng-click="preview(item)"><span
-                                    class="glyphicon glyphicon-eye-open"></span> {{'Preview'| i18n}}
-                            </button>
-                            <button type="button" class="btn btn-link"
-                                    ng-show="checkVersionNeedsUpgrade(item.version)"
-                                    ng-click="update(item)"><span class="glyphicon glyphicon-edit"></span>
-                                {{'Update'|
-                                i18n}}
-                            </button>
-                            <i class="glyphicon glyphicon-ok-circle"
-                               tooltip="{{'The player version is upto date'|i18n}}"
-                               ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
-                        </div>
+                    </div>
+                    <div class="col-xs-1">{{item.id}}</div>
+                    <div class="col-xs-1"><span class="timeago" timestamp="{{item.createdAt}}"></span></div>
+                    <div class="visible-lg col-md-1"><span class="timeago"
+                                                           timestamp="{{item.updatedAt}}"></span>
+                    </div>
+                    <div class="actionBtns col-xs-3">
+                        <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
+                                class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}
+                        </button>
+                        <button type="button" class="btn btn-link" ng-click="delete(item)"><span
+                                class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}
+                        </button>
+                        <button type="button" class="btn btn-link" ng-click="preview(item)"><span
+                                class="glyphicon glyphicon-eye-open"></span> {{'Preview'| i18n}}
+                        </button>
+                        <button type="button" class="btn btn-link"
+                                ng-show="checkVersionNeedsUpgrade(item.version)"
+                                ng-click="update(item)"><span class="glyphicon glyphicon-edit"></span>
+                            {{'Update'|
+                            i18n}}
+                        </button>
+                        <i class="glyphicon glyphicon-ok-circle"
+                           tooltip="{{'The player version is upto date'|i18n}}"
+                           ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
                     </div>
                 </div>
             </div>
