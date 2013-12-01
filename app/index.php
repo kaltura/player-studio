@@ -2,13 +2,15 @@
 <html lang="en" ng-app="KMCModule">
 <head>
     <meta charset="utf-8">
-    <base id="baseHref" href="<?php
+    <base href="<?php
     $dir = $_SERVER['REQUEST_URI'];
     $dir = str_replace('\\', '/', $dir);
     if ($dir != '/') $dir .= '/';
-    // remove every after /app/ to work with url actions
-    $dirParts = explode( '/app', $dir );
-    echo $dirParts[0] . '/app/';
+    if (strpos($dir, '/app') > 0) {
+        // remove every after /app/ to work with url actions - NOTICE app does not exit if using virtual host directly to the app directory
+        $dirParts = explode('/app', $dir);
+        echo $dirParts[0] . '/app/';
+    } else echo "/";
     ?>"/>
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
     <!--change this base tag to the root of your app URL-->
