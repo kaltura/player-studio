@@ -3,10 +3,11 @@
 /* Controllers */
 
 KMCModule.controller('LoginCtrl',
-	['$scope', 'apiService', '$location','localStorageService',
-		function ( $scope, apiService , $location , localStorageService) {
-            $scope.formError=false;
-            $scope.formHelpMsg = '';
+	['$scope', 'apiService', '$location','localStorageService','requestNotificationChannel',
+		function ( $scope, apiService , $location , localStorageService,requestNotificationChannel) {
+            requestNotificationChannel.requestEnded('list'); // if coming from list this would stop the spinner
+            $scope.formError=true;
+            $scope.formHelpMsg = 'You must login to use this application';
             $scope.email = '';
             $scope.pwd= '';
 			$scope.login = function () {
