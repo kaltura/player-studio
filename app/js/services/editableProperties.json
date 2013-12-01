@@ -16,7 +16,8 @@
             {
                 "label": "Player Tags",
                 "type": "tags",
-                "model": "tags"
+                "model": "tags",
+                "source" :"getTags"
             },
             {
                 "label": "Preview entry",

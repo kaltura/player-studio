@@ -191,11 +191,11 @@ body > section,
   font-family: arial, sans-serif;
   font-weight: normal;
 }
-#mp-menu .mp-level li {
+#mp-menu .mp-level ul[ng-transclude] > li {
   clear: both;
 }
-#mp-menu .mp-level li label,
-#mp-menu .mp-level li .form-element {
+#mp-menu .mp-level ul[ng-transclude] > li label,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element {
   padding: 0.6em 1em;
   display: block;
   text-align: left;
@@ -205,13 +205,13 @@ body > section,
   margin-bottom: 0px;
   color: #555555;
 }
-#mp-menu .mp-level li label .inputHolder,
-#mp-menu .mp-level li .form-element .inputHolder {
+#mp-menu .mp-level ul[ng-transclude] > li label .inputHolder,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element .inputHolder {
   float: left;
   width: 100%;
 }
-#mp-menu .mp-level li label i.icon,
-#mp-menu .mp-level li .form-element i.icon {
+#mp-menu .mp-level ul[ng-transclude] > li label i.icon,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element i.icon {
   float: left;
   vertical-align: bottom;
   line-height: 1.4em;
@@ -219,20 +219,20 @@ body > section,
   display: inline;
   font-size: 22px;
 }
-#mp-menu .mp-level li label i.icon + .inputHolder,
-#mp-menu .mp-level li .form-element i.icon + .inputHolder {
+#mp-menu .mp-level ul[ng-transclude] > li label i.icon + .inputHolder,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element i.icon + .inputHolder {
   width: 85%;
 }
-#mp-menu .mp-level li label[type="featuremenu"] div.header,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.header {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.header,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.header {
   font-weight: bold;
 }
-#mp-menu .mp-level li label[type="featuremenu"] div.header .featureLabel,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.header .featureLabel {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.header .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.header .featureLabel {
   color: #009dff;
 }
-#mp-menu .mp-level li label[type="featuremenu"] div.header i.glyphicon,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.header i.glyphicon {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.header i.glyphicon,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.header i.glyphicon {
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   -ms-transition: all 0.3s;
@@ -241,155 +241,160 @@ body > section,
   color: #009dff;
   font-size: 10px;
 }
-#mp-menu .mp-level li label[type="featuremenu"] span.pull-right .prettycheckbox a,
-#mp-menu .mp-level li .form-element[type="featuremenu"] span.pull-right .prettycheckbox a {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] span.pull-right .prettycheckbox a,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] span.pull-right .prettycheckbox a {
   margin-top: -5px;
 }
-#mp-menu .mp-level li label[type="featuremenu"] div.in,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.in,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapse,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapsing,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.in,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.in,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapse,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapse,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapsing,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapsing {
   margin-top: 10px;
 }
-#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip),
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip),
-#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip),
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip),
-#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip),
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.in:not(.tooltip),
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.in:not(.tooltip),
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapse:not(.tooltip),
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapse:not(.tooltip),
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapsing:not(.tooltip),
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) {
   width: 100%;
 }
-#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip) label,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip) label,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip) label,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip) label,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip) label,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) label,
-#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip) div.form-element,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip) div.form-element,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip) div.form-element,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip) div.form-element,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.in:not(.tooltip) label,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.in:not(.tooltip) label,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapse:not(.tooltip) label,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapse:not(.tooltip) label,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapsing:not(.tooltip) label,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) label,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.in:not(.tooltip) div.form-element,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.in:not(.tooltip) div.form-element,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapse:not(.tooltip) div.form-element,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapse:not(.tooltip) div.form-element,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element {
   padding-right: 0;
   padding-left: 0;
 }
-#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip) label .featureLabel,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip) label .featureLabel,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip) label .featureLabel,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip) label .featureLabel,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip) label .featureLabel,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) label .featureLabel,
-#mp-menu .mp-level li label[type="featuremenu"] div.in:not(.tooltip) div.form-element .featureLabel,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.in:not(.tooltip) div.form-element .featureLabel,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapse:not(.tooltip) div.form-element .featureLabel,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapse:not(.tooltip) div.form-element .featureLabel,
-#mp-menu .mp-level li label[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element .featureLabel,
-#mp-menu .mp-level li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element .featureLabel {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.in:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.in:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapse:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapse:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapsing:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) label .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.in:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.in:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapse:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapse:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element .featureLabel,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="featuremenu"] div.collapsing:not(.tooltip) div.form-element .featureLabel {
   font-weight: normal;
   color: #555555;
 }
-#mp-menu .mp-level li label[type="readonly"] .button-wrapper,
-#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper,
-#mp-menu .mp-level li label[type="infoaction"] .button-wrapper,
-#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] .button-wrapper,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] .button-wrapper,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] .button-wrapper,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] .button-wrapper {
   float: right;
 }
-#mp-menu .mp-level li label[type="readonly"] .button-wrapper button,
-#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper button,
-#mp-menu .mp-level li label[type="infoaction"] .button-wrapper button,
-#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper button {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] .button-wrapper button,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] .button-wrapper button,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] .button-wrapper button,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] .button-wrapper button {
   background: #009dff;
   border-color: #0086d9;
 }
-#mp-menu .mp-level li label[type="readonly"] .button-wrapper button:hover,
-#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper button:hover,
-#mp-menu .mp-level li label[type="infoaction"] .button-wrapper button:hover,
-#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper button:hover,
-#mp-menu .mp-level li label[type="readonly"] .button-wrapper button:focus,
-#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper button:focus,
-#mp-menu .mp-level li label[type="infoaction"] .button-wrapper button:focus,
-#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper button:focus,
-#mp-menu .mp-level li label[type="readonly"] .button-wrapper button:active,
-#mp-menu .mp-level li .form-element[type="readonly"] .button-wrapper button:active,
-#mp-menu .mp-level li label[type="infoaction"] .button-wrapper button:active,
-#mp-menu .mp-level li .form-element[type="infoaction"] .button-wrapper button:active {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] .button-wrapper button:hover,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] .button-wrapper button:hover,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] .button-wrapper button:hover,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] .button-wrapper button:hover,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] .button-wrapper button:focus,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] .button-wrapper button:focus,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] .button-wrapper button:focus,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] .button-wrapper button:focus,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] .button-wrapper button:active,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] .button-wrapper button:active,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] .button-wrapper button:active,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] .button-wrapper button:active {
   background: #067ec9;
   border-color: #0086d9;
 }
-#mp-menu .mp-level li label[type="readonly"] span,
-#mp-menu .mp-level li .form-element[type="readonly"] span,
-#mp-menu .mp-level li label[type="infoaction"] span,
-#mp-menu .mp-level li .form-element[type="infoaction"] span {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] span,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] span,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] span,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] span {
   width: auto;
 }
-#mp-menu .mp-level li label[type="readonly"] span.control-data,
-#mp-menu .mp-level li .form-element[type="readonly"] span.control-data,
-#mp-menu .mp-level li label[type="infoaction"] span.control-data,
-#mp-menu .mp-level li .form-element[type="infoaction"] span.control-data {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] span.control-data,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] span.control-data,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] span.control-data,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] span.control-data {
   text-align: center;
 }
-#mp-menu .mp-level li label[type="readonly"] span.control-data.infodata,
-#mp-menu .mp-level li .form-element[type="readonly"] span.control-data.infodata,
-#mp-menu .mp-level li label[type="infoaction"] span.control-data.infodata,
-#mp-menu .mp-level li .form-element[type="infoaction"] span.control-data.infodata {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] span.control-data.infodata,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] span.control-data.infodata,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] span.control-data.infodata,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] span.control-data.infodata {
   float: left;
   text-align: left;
   padding-left: 5%;
 }
-#mp-menu .mp-level li label[type="readonly"] span:first-child,
-#mp-menu .mp-level li .form-element[type="readonly"] span:first-child,
-#mp-menu .mp-level li label[type="infoaction"] span:first-child,
-#mp-menu .mp-level li .form-element[type="infoaction"] span:first-child {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="readonly"] span:first-child,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="readonly"] span:first-child,
+#mp-menu .mp-level ul[ng-transclude] > li label[type="infoaction"] span:first-child,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="infoaction"] span:first-child {
   min-width: 80px;
   float: left;
 }
-#mp-menu .mp-level li label[type="button"],
-#mp-menu .mp-level li .form-element[type="button"] {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="button"],
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="button"] {
   text-align: center;
 }
-#mp-menu .mp-level li label i.pull-right.glyphicon,
-#mp-menu .mp-level li .form-element i.pull-right.glyphicon {
+#mp-menu .mp-level ul[ng-transclude] > li label i.pull-right.glyphicon,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element i.pull-right.glyphicon {
   padding-top: 4px;
   margin-left: 10px;
 }
-#mp-menu .mp-level li label input[type="text"],
-#mp-menu .mp-level li .form-element input[type="text"] {
+#mp-menu .mp-level ul[ng-transclude] > li label input[type="text"],
+#mp-menu .mp-level ul[ng-transclude] > li .form-element input[type="text"] {
   float: left;
   font-size: 13px;
   width: 100%;
   height: 28px;
 }
-#mp-menu .mp-level li label input[type="checkbox"],
-#mp-menu .mp-level li .form-element input[type="checkbox"],
-#mp-menu .mp-level li label div.input-group,
-#mp-menu .mp-level li .form-element div.input-group,
-#mp-menu .mp-level li label div.select2-container,
-#mp-menu .mp-level li .form-element div.select2-container,
-#mp-menu .mp-level li label .prettycheckbox,
-#mp-menu .mp-level li .form-element .prettycheckbox,
-#mp-menu .mp-level li label .spinEdit input.small,
-#mp-menu .mp-level li .form-element .spinEdit input.small {
+#mp-menu .mp-level ul[ng-transclude] > li label input[type="checkbox"],
+#mp-menu .mp-level ul[ng-transclude] > li .form-element input[type="checkbox"],
+#mp-menu .mp-level ul[ng-transclude] > li label div.input-group,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element div.input-group,
+#mp-menu .mp-level ul[ng-transclude] > li label div.select2-container,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element div.select2-container,
+#mp-menu .mp-level ul[ng-transclude] > li label .prettycheckbox,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element .prettycheckbox,
+#mp-menu .mp-level ul[ng-transclude] > li label .spinEdit input.small,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element .spinEdit input.small {
   float: right;
   z-index: 10;
 }
-#mp-menu .mp-level li label[type="dropdown"] span.control-label,
-#mp-menu .mp-level li .form-element[type="dropdown"] span.control-label {
+#mp-menu .mp-level ul[ng-transclude] > li label div.fullwidth > .select2-container,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element div.fullwidth > .select2-container {
+  float: none;
+  width: 100%;
+}
+#mp-menu .mp-level ul[ng-transclude] > li label[type="dropdown"] span.control-label,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="dropdown"] span.control-label {
   height: 1em;
   display: inline-block;
   vertical-align: middle;
 }
-#mp-menu .mp-level li label .prettycheckbox a,
-#mp-menu .mp-level li .form-element .prettycheckbox a {
+#mp-menu .mp-level ul[ng-transclude] > li label .prettycheckbox a,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element .prettycheckbox a {
   float: right;
   margin-top: -6px;
   width: 25px;
   height: 25px;
 }
-#mp-menu .mp-level li label[type="radio"] label,
-#mp-menu .mp-level li .form-element[type="radio"] label {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="radio"] label,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="radio"] label {
   padding: 1px;
   margin: 0;
   width: 33%;
@@ -398,40 +403,40 @@ body > section,
   clear: none;
   text-align: center;
 }
-#mp-menu .mp-level li label[type="radio"] label:first-child,
-#mp-menu .mp-level li .form-element[type="radio"] label:first-child {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="radio"] label:first-child,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="radio"] label:first-child {
   text-align: left;
 }
-#mp-menu .mp-level li label[type="radio"] label .optionLabel,
-#mp-menu .mp-level li .form-element[type="radio"] label .optionLabel {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="radio"] label .optionLabel,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="radio"] label .optionLabel {
   bottom: 8px;
   position: relative;
 }
-#mp-menu .mp-level li label[type="radio"] input,
-#mp-menu .mp-level li .form-element[type="radio"] input {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="radio"] input,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="radio"] input {
   margin: 4px;
 }
-#mp-menu .mp-level li label[type="radio"] .form-group label:last-child,
-#mp-menu .mp-level li .form-element[type="radio"] .form-group label:last-child {
+#mp-menu .mp-level ul[ng-transclude] > li label[type="radio"] .form-group label:last-child,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element[type="radio"] .form-group label:last-child {
   float: right;
   text-align: right;
 }
-#mp-menu .mp-level li label .form-group,
-#mp-menu .mp-level li .form-element .form-group {
+#mp-menu .mp-level ul[ng-transclude] > li label .form-group,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element .form-group {
   text-align: center;
   margin: auto;
   width: 100%;
   height: 30px;
 }
-#mp-menu .mp-level li label .colorinput,
-#mp-menu .mp-level li .form-element .colorinput,
-#mp-menu .mp-level li label input[type="text"].colorinput,
-#mp-menu .mp-level li .form-element input[type="text"].colorinput {
+#mp-menu .mp-level ul[ng-transclude] > li label .colorinput,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element .colorinput,
+#mp-menu .mp-level ul[ng-transclude] > li label input[type="text"].colorinput,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element input[type="text"].colorinput {
   width: 50px;
   float: right;
 }
-#mp-menu .mp-level li label .colorExample,
-#mp-menu .mp-level li .form-element .colorExample {
+#mp-menu .mp-level ul[ng-transclude] > li label .colorExample,
+#mp-menu .mp-level ul[ng-transclude] > li .form-element .colorExample {
   display: block;
   width: 25px;
   height: 25px;
@@ -441,11 +446,11 @@ body > section,
   background-color: azure;
   outline: 3px double black;
 }
-#mp-menu ul:not(.dropdown-menu) > li {
+#mp-menu ul[ng-transclude] > li {
   display: block;
   min-height: 40px;
 }
-#mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger {
+#mp-menu ul[ng-transclude] > li a.menu-level-trigger {
   padding: 0.6em 1em;
   width: 100%;
   float: left;
@@ -454,10 +459,10 @@ body > section,
   display: block;
   color: #009dff;
 }
-#mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger:hover {
+#mp-menu ul[ng-transclude] > li a.menu-level-trigger:hover {
   text-decoration: none;
 }
-#mp-menu ul:not(.dropdown-menu) > li a.menu-level-trigger:after {
+#mp-menu ul[ng-transclude] > li a.menu-level-trigger:after {
   position: relative;
   top: 1px;
   display: inline-block;

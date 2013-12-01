@@ -153,6 +153,32 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
 
             }
         }
+    }]).directive('modelTags', ['menuSvc', function (menuSvc) {
+        return {
+            replace: true,
+            restrict: "E",
+            scope: {
+                'label': "@",
+                'model': "=",
+                'icon': '@'
+            },
+            controller: function ($scope, $element, $attrs) {
+                $scope.selectOpts = {simple_tags: true, 'multiple': true, tokenSeparators: [",", " "]};
+                $scope.selectOpts['tags'] = menuSvc.doAction($attrs.source);
+
+            },
+            template: "<label>{{label}}<div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>" +
+                '<input type="text" ui-select2="selectOpts" ng-model="model"> </div>' +
+                '</label>',
+            compile: function (tElement, tAttr) {
+                if (tAttr['endline'] == 'true') {
+                    tElement.append('<hr/>');
+                }
+                return function (scope, element) {
+                }
+
+            }
+        }
     }]).
     directive('listEntriesThumbs', function () {
         //not finished

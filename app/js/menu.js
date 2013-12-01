@@ -71,6 +71,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
         var JSON2directiveDictionary = function (jsonName) {
             //this is now the single place one need to edit in order to add a directive to the menu generator
             switch (jsonName) {
+                case 'tags' :
+                    return '<model-tags/>';
+                    break;
                 case 'select2data' :
                     return '<select2-data/>';
                     break;
@@ -140,7 +143,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             },
             getData: function (model) {
                 var modelStr = model.split('.').pop();
-                return searchModelStr('',menudata,modelStr);
+                return searchModelStr('', menudata, modelStr);
             },
             currentPage: 'basicSettings',
             setMenu: function (setTo) {
