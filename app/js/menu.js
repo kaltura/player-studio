@@ -106,11 +106,41 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     break;
             }
         };
+        var search = function (path, obj, target) {
+            for (var k in obj) {
+                if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
+                    if (obj[k] === target)
+                        return  path + "['" + k + "']"
+                    else if (typeof obj[k] === "object") {
+                        var result = search(path + "['" + k + "']", obj[k], target);
+                        if (result)
+                            return result;
+                    }
+            }
+            return false;
+        }
+        var searchModelStr = function (path, obj, target) {
+            for (var k in obj) {
+                if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
+                    if (typeof obj[k].model != 'undefined' && obj[k].model == target)
+                        return obj[k];
+                    else if (typeof obj[k] === "object") {
+                        var result = searchModelStr(path + "['" + k + "']", obj[k], target);
+                        if (result)
+                            return result;
+                    }
+            }
+            return false;
+        }
         var menuSvc = {
             promise: promise,
             menuScope: {},
             get: function () {
                 return menudata;
+            },
+            getData: function (model) {
+                var modelStr = model.split('.').pop();
+                return searchModelStr('',menudata,modelStr);
             },
             currentPage: 'basicSettings',
             setMenu: function (setTo) {
@@ -181,10 +211,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     angular.forEach(item, function (value, key) {
                         if (key != 'model' && (typeof value == 'string' || typeof value == 'number')) {
                             elm.attr(key, value);
-                        } else {
-                            if (key == 'options' && typeof value == 'object')
-                                if (Array.isArray(value))
-                                    elm.attr(key, angular.toJson(value));
                         }
                     });
                     if (typeof parentModel != "undefined") {
@@ -198,20 +224,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 }
             },
             menuSearch: function (searchValue) {
-                var search = function (path, obj, target) {
-                    var found = false;
-                    for (var k in obj) {
-                        if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
-                            if (obj[k] === target)
-                                return  path + "['" + k + "']"
-                            else if (typeof obj[k] === "object") {
-                                var result = search(path + "['" + k + "']", obj[k], target);
-                                if (result)
-                                    return result;
-                            }
-                    }
-                    return false;
-                }
                 var foundLabel = search('menudata', menudata, searchValue);
                 if (foundLabel) {
                     var foundModel = eval(foundLabel.substr(0, foundLabel.lastIndexOf("['label']"))).model;

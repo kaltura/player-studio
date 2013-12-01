@@ -11,7 +11,6 @@ KMCModule.controller('PlayerListCtrl',
             $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
             $scope.maxSize = 5;
-            $scope.$parent.myScrollOptions = {hideScrollbar: false, vScroll:true,snap: 'div.row',vScrollbar: true,bounce:true};
             var request = {
                 'filter:tagsMultiLikeOr': 'kdp3',
                 'filter:orderBy': '-updatedAt',

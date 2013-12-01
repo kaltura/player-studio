@@ -55,14 +55,14 @@
                         "options": [
                             {
                                 "label": "2mbs",
-                                "value": "2"
+                                "value": 2
                             },
                             {
                                 "label": "1mbs",
-                                "value": "1"
+                                "value": 1
                             }
                         ],
-                        "initvalue": "1",
+                        "initvalue": 1,
                         "type": "dropdown",
                         "label": "Prefered Bitrate",
                         "model": "preferedFlavorBR"
@@ -233,7 +233,7 @@
                         "type": "featuremenu",
                         "model": "logo",
                         "label": "Logo",
-                        "order":0,
+                        "order": 0,
                         "children": [
                             {
                                 "options": [
@@ -280,7 +280,7 @@
                         "type": "featuremenu",
                         "model": "flavor",
                         "label": "Flavor Selector",
-                        "order":0,
+                        "order": 0,
                         "children": [
                             {
                                 "options": [
@@ -327,7 +327,7 @@
                         "type": "featuremenu",
                         "model": "playbackRate",
                         "label": "Playback Rate Selector",
-                        "order":0,
+                        "order": 0,
                         "children": [
                             {
                                 "options": [
@@ -374,7 +374,7 @@
                         "type": "featuremenu",
                         "model": "flagContent",
                         "label": "Flag Content",
-                        "order":0,
+                        "order": 0,
                         "children": [
                             {
                                 "options": [

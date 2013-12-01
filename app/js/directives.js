@@ -3,7 +3,7 @@
 angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
     .directive('mcustomScrollbar', ['$timeout', function ($timeout) {
         return{
-            priority:0,
+            priority: 0,
             restrict: 'AC',
             controller: function ($scope, $element, $attrs) {
                 $scope.$on('layoutChange', function () {
@@ -21,11 +21,11 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     autoHideScrollbar: true,
                     contentTouchScroll: true,
                     theme: 'dark',
-                    advanced:{
-                        updateOnBrowserResize:true
+                    advanced: {
+                        updateOnBrowserResize: true
                     }
                 };
-                angular.extend(opts,options);
+                angular.extend(opts, options);
                 $timeout(function () {
 
                     if (typeof $().mCustomScrollbar == 'function') {
@@ -52,7 +52,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
 
             }
         }
-    }]).directive('modelRadio', function () {
+    }]).directive('modelRadio', function (menuSvc) {
         return {
             restrict: 'E',
             replace: true,
@@ -67,10 +67,8 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 label: '@'
             },
             controller: function ($scope, $element, $attrs) {
-                if (typeof $attrs.options != 'undefined') {
-                    $scope.options = JSON.parse($attrs.options);
-                }
-
+                var menuData = menuSvc.getData($attrs.model);
+                $scope.options = menuData.options;
             },
             link: function (scope, element, attributes) {
                 element.find('input').attr('name', scope.model);
@@ -203,7 +201,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 '</label>'
         }
     })
-    .directive('modelSelect',function () {
+    .directive('modelSelect',function (menuSvc) {
         return {
             replace: true,
             restrict: 'E',
@@ -218,11 +216,8 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     tElement.append('<hr/>');
                 }
                 return function ($scope, $element, $attrs) {
-
-                    if (typeof $attrs.options != 'undefined') {
-                        $scope.options = angular.fromJson($attrs.options);
-                    }
-
+                    var menuData = menuSvc.getData($attrs.model);
+                    $scope.options = menuData.options;
                 }
             },
             controller: function ($scope, $element, $attrs) {
@@ -245,7 +240,8 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             },
 
             template: '<label><span class="control-label">{{label}}</span>' +
-                '<select ui-select2="{{uiselectOpts}}" ng-model="model" ng-options="item.value as item.label for item in options"> ' +
+                '<select ui-select2="{{uiselectOpts}}" ng-model="model"> ' +
+                '<option value=item.value" ng-repeat="item in options">{{item.label}}</option>' +
                 '</select></label>'
         }
     }
