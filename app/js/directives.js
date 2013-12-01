@@ -153,16 +153,40 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
 
             }
         }
-    }]).directive('modelEdit', ['menuSvc', function (menuSvc) {
+    }]).directive('modelEdit', ['$modal' , function ($modal) {
         return {replace: true,
             restrict: "E",
+            require: 'ngModel',
             scope: {
                 'label': "@",
                 'model': "=",
                 'icon': '@'
             },
             controller: function ($scope, $element, $attrs) {
-
+                if (typeof  $scope.model == 'undefined')
+                    $scope.model = '';
+                $scope.modelValue = $scope.model;
+                $scope.doModal = function () {
+                    var modal = $modal.open({
+                            templateUrl: 'template/dialog/textarea.html',
+                            controller: 'ModalInstanceCtrl',
+                            resolve: {
+                                settings: function () {
+                                    return {
+                                        'close': function (result, value) {
+                                            modal.close(result)
+                                            $scope.model = value;
+                                        },
+                                        'title': $attrs.label,
+                                        'message': function () {
+                                            return {message: $scope.modelValue};
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
             },
             template: "<label>{{label}}<div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>" +
                 '<input type="text" ng-model="model" ng-click="doModal()"/> </div>' +
@@ -177,7 +201,8 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             }
 
         }
-    }]).directive('modelTags', ['menuSvc', function (menuSvc) {
+    }]).
+    directive('modelTags', ['menuSvc', function (menuSvc) {
         return {
             replace: true,
             restrict: "E",

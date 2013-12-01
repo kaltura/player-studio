@@ -11,12 +11,15 @@ angular.module('KMC.controllers', [])
             {result: false, label: 'Cancel', cssClass: 'btn-default'},
             {result: true, label: 'OK', cssClass: 'btn-primary'}
         ];
-        angular.extend($scope, settings);
         $scope.close = function (result) {
-            $modalInstance.close(result);
+            $modalInstance.close($scope);
+
         };
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+        angular.extend($scope, settings);
+
     }
-);
+)
+;
