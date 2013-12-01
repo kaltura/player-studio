@@ -44,6 +44,11 @@ KMCModule.controller('PlayerListCtrl',
                     $scope.$broadcast('layoutChange');
                 }
             })
+            $scope.$watch('currentPage', function (newVal, oldVal) {
+                if (newVal != oldVal) {
+                    $scope.$broadcast('layoutChange');
+                }
+            })
 
             $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
 

@@ -6,10 +6,16 @@ body, .jumbotron {
 .jumbotron {
   padding-top: 26px;
 }
-.alert{text-align: center;padding:5px;}
-.padTop{
+
+.alert {
+  text-align: center;
+  padding: 5px;
+}
+
+.padTop {
   padding-top: 15px;
 }
+
 .scroller-inner > .container {
   margin: auto;
   max-width: 95%;
@@ -38,26 +44,30 @@ body, .jumbotron {
   overflow-y: hidden;
 }
 
-#playerList div > div {
-  .alert {
-    padding: 0;
-    margin: 0;
-    display: block;
-    font-size: 75%;
-  }
-  &.actionBtns {
-    button {
-      width: 116px;
-      text-align: left;
+#playerList {
+  margin-bottom: -150px;
+  div > div {
+    .alert {
+      padding: 0;
+      margin: 0;
+      display: block;
+      font-size: 75%;
     }
-    i {
-      width: 126px;
-      padding-left: 12px;
-      color: green;
+    &.actionBtns {
+      button {
+        width: 116px;
+        text-align: left;
+      }
+      i {
+        width: 126px;
+        padding-left: 12px;
+        color: green;
+      }
     }
   }
 }
 
+#maxSizeSelect{max-width: 40px;}
 /* for bootstrap Angular UI*/
 .nav, .pagination, .carousel a {
   cursor: pointer;
@@ -110,8 +120,10 @@ body, .jumbotron {
 }
 
 .maxViewPort {
-  height: 80%;
+  height: 73%;
   overflow: hidden;
+  @media (max-width: 767px) { height: 62%; }
+  @media (max-width: 480px) { height: 50%; }
 }
 
 .forceRightRadius {

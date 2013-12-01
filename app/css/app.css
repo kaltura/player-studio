@@ -33,6 +33,9 @@ body,
   overflow-x: scroll;
   overflow-y: hidden;
 }
+#playerList {
+  margin-bottom: -150px;
+}
 #playerList div > div .alert {
   padding: 0;
   margin: 0;
@@ -47,6 +50,9 @@ body,
   width: 126px;
   padding-left: 12px;
   color: green;
+}
+#maxSizeSelect {
+  max-width: 40px;
 }
 /* for bootstrap Angular UI*/
 .nav,
@@ -92,8 +98,18 @@ body,
   z-index: 999;
 }
 .maxViewPort {
-  height: 80%;
+  height: 73%;
   overflow: hidden;
+}
+@media (max-width: 767px) {
+  .maxViewPort {
+    height: 62%;
+  }
+}
+@media (max-width: 480px) {
+  .maxViewPort {
+    height: 50%;
+  }
 }
 .forceRightRadius {
   border-radius: 0px 4px 4px 0px !important;

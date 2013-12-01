@@ -14,17 +14,20 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 })
             },
             link: function (scope, element, attr) {
+                var options = scope.$eval(attr['mcustomScrollbar']);
+                var opts = {
+                    horizontalScroll: false,
+                    mouseWheel: true,
+                    autoHideScrollbar: true,
+                    contentTouchScroll: true,
+                    theme: 'dark',
+                    advanced:{
+                        updateOnBrowserResize:true
+                    }
+                };
+                angular.extend(opts,options);
                 $timeout(function () {
-                    var opts = {
-                        horizontalScroll: false,
-                        mouseWheel: true,
-                        autoHideScrollbar: true,
-                        contentTouchScroll: true,
-                        theme: 'dark',
-                        advanced:{
-                            updateOnBrowserResize:true
-                        }
-                    };
+
                     if (typeof $().mCustomScrollbar == 'function') {
                         scope.scroller = element.mCustomScrollbar(opts);
                     }
