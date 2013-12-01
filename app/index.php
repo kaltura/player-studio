@@ -7,7 +7,7 @@
     $dir = str_replace('\\', '/', $dir);
     if ($dir != '/') $dir .= '/';
     if (strpos($dir, '/app') > 0) {
-        // remove every after /app/ to work with url actions - NOTICE app does not exit if using virtual host directly to the app directory
+        // remove every after /app/ to work with url actions - NOTICE "/app" does not exist if using virtual host directly to the app directory
         $dirParts = explode('/app', $dir);
         echo $dirParts[0] . '/app/';
     } else echo "/";
