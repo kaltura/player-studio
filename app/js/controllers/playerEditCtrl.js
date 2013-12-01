@@ -13,7 +13,7 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.userEntries = userEntries;
             $scope.tags = [
                 {id: "testing", text: 'testing'},
-                {id: "1", text: 'one'}
+                {id: "1", text: 'one'} // needs to be a string!
             ];
             menuSvc.registerAction('getTags', function () {
                 return $scope.tags;

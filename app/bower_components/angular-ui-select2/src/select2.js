@@ -61,7 +61,7 @@ angular.module('ui.select2', []).value('uiSelect2Config', {}).directive('uiSelec
 
                     if (opts.simple_tags) {
                         model = [];
-                        if (typeof angular_data != 'object')
+                        if (typeof angular_data != 'object') /// code added by Nadav, TODO:to be made into a pull request to angular ui
                             angular_data = angular_data.split(',');
                         angular.forEach(
                             angular_data,

@@ -153,6 +153,30 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
 
             }
         }
+    }]).directive('modelEdit', ['menuSvc', function (menuSvc) {
+        return {replace: true,
+            restrict: "E",
+            scope: {
+                'label': "@",
+                'model': "=",
+                'icon': '@'
+            },
+            controller: function ($scope, $element, $attrs) {
+
+            },
+            template: "<label>{{label}}<div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>" +
+                '<input type="text" ng-model="model" ng-click="doModal()"/> </div>' +
+                '</label>',
+            compile: function (tElement, tAttr) {
+                if (tAttr['endline'] == 'true') {
+                    tElement.append('<hr/>');
+                }
+                return function (scope, element) {
+                }
+
+            }
+
+        }
     }]).directive('modelTags', ['menuSvc', function (menuSvc) {
         return {
             replace: true,
@@ -168,7 +192,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
 
             },
             template: "<label>{{label}}<div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>" +
-                '<input type="text" ui-select2="selectOpts" ng-model="model"> </div>' +
+                '<input type="text" ui-select2="selectOpts" ng-model="model"/> </div>' +
                 '</label>',
             compile: function (tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {

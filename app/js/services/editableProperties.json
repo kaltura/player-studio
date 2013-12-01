@@ -14,10 +14,16 @@
                 "endline": "true"
             },
             {
+                "label": "Long Description",
+                "type": "modaledit",
+                "model": "description",
+                "placeholder":"Enter player description"
+            },
+            {
                 "label": "Player Tags",
                 "type": "tags",
                 "model": "tags",
-                "source" :"getTags"
+                "source": "getTags"
             },
             {
                 "label": "Preview entry",
