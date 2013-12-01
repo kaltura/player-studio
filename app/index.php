@@ -51,7 +51,7 @@
     <script src="lib/sprintf.js"></script>
     <script src="lib/localize.js"></script>
     <script src="lib/spin.min.js"></script>
-    <script src="lib/bootstrap-ui/ui-bootstrap-0.6.0.js"></script>
+    <script src="lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.7.0.js"></script>
     <script src="lib/spinedit/js/bootstrap-spinedit.js"></script>
     <script src="lib/colorpicker/js/bootstrap-colorpicker-module.js"></script>
     <script src="lib/localStorage/angular-local-storage.js"></script>

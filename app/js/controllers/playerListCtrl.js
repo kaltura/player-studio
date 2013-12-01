@@ -11,8 +11,7 @@ KMCModule.controller('PlayerListCtrl',
             $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
             $scope.maxSize = 5;
-            $scope.$parent.myScrollOptions = {scrollY: true, scrollX: false, momentum: false, bounce: false, snap: false
-            };
+            $scope.$parent.myScrollOptions = {hideScrollbar: false, vScroll:true,snap: 'div.row',vScrollbar: true,bounce:true};
             var request = {
                 'filter:tagsMultiLikeOr': 'kdp3',
                 'filter:orderBy': '-updatedAt',
@@ -28,28 +27,16 @@ KMCModule.controller('PlayerListCtrl',
                 'service': 'uiConf',
                 'action': 'list'
             };
-//real data
-            apiService.doRequest(request).then(function (data) {
-                $scope.data = data.objects;
-                $scope.calculateTotalItems();
-            });
-//mock data
-//            PlayerService.getPlayers().success(function (data) {
+            //real data
+//            apiService.doRequest(request).then(function (data) {
 //                $scope.data = data.objects;
 //                $scope.calculateTotalItems();
 //            });
-            //end
-            $scope.$watch('maxSize', function (newVal, oldVal) {
-                if (newVal != oldVal) {
-                    $scope.$broadcast('layoutChange');
-                }
-            })
-            $scope.$watch('currentPage', function (newVal, oldVal) {
-                if (newVal != oldVal) {
-                    $scope.$broadcast('layoutChange');
-                }
-            })
-
+            //mock data
+            PlayerService.getPlayers().success(function (data) {
+                $scope.data = data.objects;
+                $scope.calculateTotalItems();
+            });
             $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
 
 
@@ -61,7 +48,6 @@ KMCModule.controller('PlayerListCtrl',
             $scope.requiredVersion = '201';
 
             $scope.calculateTotalItems = function () {
-                $scope.$broadcast('layoutChange');
                 if ($scope.filtered)
                     $scope.totalItems = $scope.filtered.length;
                 else if ($scope.data) {
@@ -80,7 +66,7 @@ KMCModule.controller('PlayerListCtrl',
                     return true
             }
 
-// $scope.title = $filter('i18n')('Players list');
+            // $scope.title = $filter('i18n')('Players list');
             $scope.showSubTitle = true;
             $scope.getThumbnail = function (item) {
                 if (typeof item.thumbnailUrl != 'undefined')
@@ -105,7 +91,8 @@ KMCModule.controller('PlayerListCtrl',
             $scope.oldVersionEditText = $filter('i18n')('Warning this player is out of date. \n' +
                 'Saving changes to this player upgrade, some features and \n' +
                 'design may be lost. (read more about upgrading players)');
-            $scope.goToEditPage = function (item) {
+            $scope.goToEditPage = function (item,$event) {
+                $event.preventDefault();
                 //TODO filter according to what? we don't have "version" field
                 if (!$scope.checkVersionNeedsUpgrade(item.version)) {
                     $location.path('/edit/' + item.id);
@@ -140,7 +127,7 @@ KMCModule.controller('PlayerListCtrl',
 //                TODO:will need to get the current ID and move it to the edit page with duplicate flag (save as new)
                 $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
             };
-//TODO: preview action...
+            //TODO: preview action...
             $scope.delete = function (item) {
                 //TODO: api call for delete
                 var modal = $modal.open({

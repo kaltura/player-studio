@@ -36,7 +36,7 @@
                          ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
                         <div class="col-md-3 col-sm-4 col-xs-4"><img class="playerThumb"
                                                                      ng-src="{{getThumbnail(item)}}"/></div>
-                        <div class="col-xs-3"><a data-ng-click="goToEditPage(item)"
+                        <div class="col-xs-3"><a data-ng-click="goToEditPage(item,$event)"
                                                  ng-href="edit/{{item.id}}">{{item.name}}</a>
 
                             <div class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
