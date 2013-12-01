@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="css/menu.css"/>
     <link rel="stylesheet" href="css/icons.css"/>
     <script type="text/javascript"
-            src="lib/malihu_custon_scrollbar/jquery.mousewheel.js"></script>
+            src="lib/malihu_custon_scrollbar/jquery.mousewheel.min.js"></script>
     <script type="text/javascript"
             src="lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.js"></script>
     <script type="text/javascript" src="bower_components/select2/select2.js"></script>
