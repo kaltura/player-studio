@@ -3,13 +3,12 @@
 <head>
     <meta charset="utf-8">
     <base id="baseHref" href="<?php
-    $dir = dirname($_SERVER['REQUEST_URI']);
+    $dir = $_SERVER['REQUEST_URI'];
     $dir = str_replace('\\', '/', $dir);
     if ($dir != '/') $dir .= '/';
-    if (file_exists($dir . 'index.php'))
-        echo $dir;
-    else
-        echo '/';
+    // remove every after /app/ to work with url actions
+    $dirParts = explode( '/app', $dir );
+    echo $dirParts[0] . '/app/';
     ?>"/>
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
     <!--change this base tag to the root of your app URL-->
