@@ -8,11 +8,11 @@
     <div id="mp-pusher" ng-controller="menuCntrl">
         <!-- mp-menu -->
         <navmenu data="data.settings">
-            <menu-level pagename='search' label='Menu Search'>
-                <li class="nohover">
+            <menu-level pagename='search' label='Menu Search' >
+                <li class="nohover ">
                     <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
                           ng-submit="searchMenuFn(value)" role="search">
-                        <div class="form-group">
+                        <div class="form-group ">
                             <div class="input-group merged">
                                 <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
                                 <input ng-change="checkSearch()" type="text"
