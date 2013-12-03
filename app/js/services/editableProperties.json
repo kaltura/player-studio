@@ -182,7 +182,7 @@
                         ],
                         "initvalue": "videoHolder",
                         "type": "dropdown",
-                        "label": "Container",
+                        "label": "Display location",
                         "model": "titleContainer"
                     },
                     {

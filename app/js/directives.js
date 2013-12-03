@@ -22,7 +22,8 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     contentTouchScroll: true,
                     theme: 'dark',
                     advanced: {
-                        updateOnBrowserResize: true
+                        updateOnBrowserResize: true,
+                        updateOnContentResize:true,
                     }
                 };
                 angular.extend(opts, options);
