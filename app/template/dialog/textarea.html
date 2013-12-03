@@ -4,9 +4,9 @@
         <h4 class="modal-title">{{title}}</h4>
     </div>
     <div class="modal-body">
-        <textarea class="fullwidth" ng-model="modelValue" >{{message.message}</textarea>
+        <textarea class="fullwidth" rows='10' ng-model="message" >{{message}}</textarea>
     </div>
     <div class="modal-footer">
-        <button ng-repeat="btn in buttons" ng-click="close(btn.result,modelValue)" class="btn" ng-class="btn.cssClass">{{ btn.label}}</button>
+        <button ng-repeat="btn in buttons" ng-click="close(btn.result,message)" class="btn" ng-class="btn.cssClass">{{ btn.label}}</button>
     </div>
 </div>
