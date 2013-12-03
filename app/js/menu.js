@@ -5,26 +5,26 @@ var KMCMenu = angular.module('KMC.menu', []);
 KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', '$window', function(menuSvc, $scope, $window) {
     var getWidth = function() {
         return $('#mp-menu').width();
-    }
+    };
     var closeMenu = function() {
         var width = getWidth();
         $('#mp-pusher').animate(
             {'left': '0'},
             { duration: 200, queue: true });
         $('#mp-menu').animate({'left': '-' + width});
-    }
+    };
     var resetMenu = function() {
         var width = getWidth();
         $('#mp-pusher').css({'left': width});
         $('#mp-menu').css({'left': -width});
-    }
+    };
     var openMenu = function() {
         var width = getWidth();
         $('#mp-pusher').animate(
             {'left': width},
             { duration: 200, queue: true });
         $('#mp-menu').animate({'left': -width});
-    }
+    };
     $scope.menuShown = true; //initial value
     resetMenu();
     $(window).resize(function() {
@@ -33,7 +33,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', '$window', function(menuSv
         else {
             closeMenu();
         }
-    })
+    });
     $scope.$on('menuChange', function() {
         $scope.menuShown = true;
     });
@@ -48,7 +48,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', '$window', function(menuSv
     });
     $scope.togglemenu = function() {
         $scope.menuShown = !$scope.menuShown;
-    }
+    };
 
     $scope.$watch('menuShown', function(newVal, oldVal) {
         if (newVal != oldVal) {
@@ -116,15 +116,15 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             for (var k in obj) {
                 if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
                     if (obj[k] == target)
-                        return  path + "['" + k + "']"
-                    else if (typeof obj[k] == "object" || typeof obj[k] == "Array" ) {
+                        return  path + "['" + k + "']";
+                    else if (typeof obj[k] == "object" || typeof obj[k] == "Array") {
                         var result = search(path + "['" + k + "']", obj[k], target);
                         if (result)
                             return result;
                     }
             }
             return false;
-        }
+        };
         var searchModelStr = function(path, obj, target) {
             for (var k in obj) {
                 if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
@@ -137,7 +137,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     }
             }
             return false;
-        }
+        };
         var menuSvc = {
             promise: promise,
             menuScope: {},
@@ -209,7 +209,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     }
                     if (eachInLi == true) {
                         parent.children().each(function() {
-                            $(this).wrap('<li>');
+                            if (!$(this).is('li'))
+                                $(this).wrap('<li>');
                         });
                     }
                     return parent;
@@ -330,10 +331,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                                     element.find('#' + scope.id).collapse('toggle');
                             }
                         }
-                    })
+                    });
                     transclude(scope, function(clone) {
                         element.find('ng-transclude').replaceWith(clone);
-                    })
+                    });
                     element.on('show.bs.collapse hide.bs.collapse', function(e) {
                         if (e.target.id == scope.id)
                             $(this).find('.header:first i.glyphicon').toggleClass('rotate90');
@@ -393,7 +394,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             $timeout(function() {
                                 $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
                             }, 500);
-                    })
+                    });
                     menuSvc.setMenu('basicDisplay');
                 }
             },
@@ -415,7 +416,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             if ($scope.menuSearch) {
                 $scope.searchMenuFn();
             }
-        }
+        };
         $scope.menuSearch = '';
         $scope.searchMenuFn = function() {
             var searchResult = menuSvc.menuSearch($scope.menuSearch);
@@ -424,7 +425,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             else {
                 $scope.menuSearch = ''; //reset for next time
             }
-        }
+        };
         var getLabels = function(obj) { // for autocomplete
             angular.forEach(obj, function(value, key) {
                 $scope.menuData.push(value.label);
@@ -443,7 +444,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 "<a class='mp-back' ng-click='goBack()' ng-show='parentPage'>Back to {{parentLabel}}</a>" +
                 "<h2>{{label}}</h2>" +
                 "<span class='levelDesc'>{{description}}</span>" +
-                "<ul ng-transclude></ul>" +
+                "<ul class='menuList' ng-transclude></ul>" +
                 "</div></li>",
             replace: true,
             transclude: 'true',
@@ -452,10 +453,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 $scope.selfOpenLevel = function() {
                     menuSvc.setMenu($attrs.pagename);
                     //  $scope.openLevel();
-                }
+                };
                 $scope.goBack = function() {
                     menuSvc.setMenu($attrs.parentPage);//call the parent
-                }
+                };
                 $scope.openLevel = function(arg) {
                     if (typeof arg == 'undefined')
                         return $scope.isOnTop = true;
@@ -464,10 +465,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                         return  $scope.isOnTop = true;
                     }
                     return $scope.isOnTop = false;
-                }
+                };
                 $scope.isOnTop = false;
             },
-            compile: function(telement, tattr, transclude) {
+            compile: function(tElement, tAttr, transclude) {
+                if (tAttr['endline'] == 'true') {
+                    tElement.append('<hr/>');
+                }
                 return  function($scope, $element) {
                     $scope.$on('menuChange', function(event, arg) {
                         $scope.openLevel(arg);

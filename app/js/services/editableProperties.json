@@ -130,6 +130,7 @@
             {
                 "type": "menu",
                 "model": "title",
+                "endline":"true",
                 "label": "Title Label",
                 "children": [
                     {
@@ -195,6 +196,7 @@
             },
             {
                 "type": "menu",
+                "endline":"true",
                 "model": "controlBar",
                 "label": "Control Bar",
                 "children": [
@@ -429,6 +431,7 @@
             {
                 "type": "menu",
                 "model": "watermark",
+                "endline":"true",
                 "label": "Watermark",
                 "children": [
                     {
@@ -457,6 +460,7 @@
             },
             {
                 "type": "menu",
+                "endline":"true",
                 "model": "stylesAndColors",
                 "label": "Styles & Colors",
                 "children": [

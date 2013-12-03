@@ -21,7 +21,7 @@
                 </form>
             </div>
         </div>
-        <div id='playerList' class="row fullheight">
+        <div id='playerList' class="fullheight">
             <div class="row">
                 <div class="col-md-3 col-sm-4 col-xs-4">{{'Preview'| i18n }}</div>
                 <div class="col-xs-3">{{ 'Name' | i18n }}</div>
@@ -30,7 +30,7 @@
                 <div class="col-md-1 visible-lg">{{ 'Creation Date' | i18n }}</div>
                 <div class="col-xs-3">{{ 'Actions' | i18n }}</div>
             </div>
-            <div class="row scrollerWrap maxViewPort">
+            <div class=" scrollerWrap maxViewPort">
                 <div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
                     <div class="row" on-finish-render
                          ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
