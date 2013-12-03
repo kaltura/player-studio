@@ -115,9 +115,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
         var search = function(path, obj, target) {
             for (var k in obj) {
                 if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
-                    if (obj[k] === target)
+                    if (obj[k] == target)
                         return  path + "['" + k + "']"
-                    else if (typeof obj[k] === "object") {
+                    else if (typeof obj[k] == "object" || typeof obj[k] == "Array" ) {
                         var result = search(path + "['" + k + "']", obj[k], target);
                         if (result)
                             return result;
@@ -427,7 +427,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
         }
         var getLabels = function(obj) { // for autocomplete
             angular.forEach(obj, function(value, key) {
-                $scope.menuData[key] = value.label;
+                $scope.menuData.push(value.label);
                 if (value.children) {
                     getLabels(value.children);
                 }

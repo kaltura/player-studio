@@ -3283,7 +3283,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       var dismissClickHandler = function (evt) {
         if (element[0] !== evt.target) {
           resetMatches();
-          scope.$digest();
+//          scope.$digest();
         }
       };
 
