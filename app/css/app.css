@@ -53,6 +53,8 @@ body,
 }
 #maxSizeSelect {
   max-width: 40px;
+  padding: 0;
+  text-align: left;
 }
 /* for bootstrap Angular UI*/
 .nav,
