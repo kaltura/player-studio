@@ -1,0 +1,122 @@
+#list {
+  > #header {
+    position: absolute;
+    width: 96%;
+    @media (max-width: 767px) {
+      width: 92%;
+    }
+    @media (max-width: 480px) {
+      width: 90%;
+    }
+  }
+  .scrollable {
+    height: 100%;
+    width: auto;
+    overflow: hidden;
+    position: static;
+    > div {
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      > div {
+        height: 100%
+      }
+    }
+  }
+
+  #listsearch ul.typeahead.dropdown-menu {
+    max-width: 360px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+  .maxViewPort {
+    height: 80%;
+    overflow: hidden;
+    @media (max-width: 767px) {
+      height: 62%;
+    }
+    @media (max-width: 480px) {
+      height: 50%;
+    }
+  }
+
+  #kplayer {
+    margin: auto;
+  }
+
+  #playerList {
+    height: 88%;//there's 2% (26x) padding...
+    margin-top: 130px;
+    @media (max-width: 767px) {
+      height: 86%;
+      margin-top: 150px;
+    }
+    @media (max-width: 480px) {
+      margin-top: 160px;
+    }
+    > div.row:last-child {
+      margin: 0;
+      margin-top: 10px;
+      border-top: 3px solid #f1f1e9;
+    }
+    #tableHead {
+      border-bottom: 3px solid #f1f1e9;
+      margin: 0;
+      margin-bottom: 15px;
+      div {
+        white-space: nowrap;
+        font-weight: bold;
+      }
+    }
+    div.row {
+      border-bottom: 2px solid #ebf1f4;
+      &:last-child {
+        border-bottom: none;
+      }
+      .alert {
+        padding: 0;
+        margin: 0;
+        color: #272727;
+        background: #e3e09d;
+        display: block;
+        font-size: 13px;
+      }
+      .actionBtns {
+        > .inner {
+          max-width: 300px;
+          margin: auto;
+        }
+        button {
+          width: 116px;
+          text-align: left;
+        }
+        i {
+          display: inline-block;
+          width: 116px;
+          padding-left: 12px;
+          color: #12aa16;
+          clear: both;
+        }
+      }
+    }
+    .mCustomScrollBox {
+      .mCSB_draggerRail {
+        background: #ffffff;
+      }
+      .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+        width: 11px;
+      }
+      &:hover {
+        .mCSB_dragger {
+          background: #f1f1e9;
+        }
+      }
+    }
+    #maxSizeSelect {
+      max-width: 40px;
+      padding: 0;
+      text-align: left
+    }
+  }
+}

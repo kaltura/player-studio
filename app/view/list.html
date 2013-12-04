@@ -1,58 +1,59 @@
-<div class="jumbotron fullheight">
-    <div class="container fullheight">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="pull-right">
-                    <button type="button" class="btn btn-primary" data-ng-click="newPlayer()">{{'new_player'| i18n}}
-                    </button>
-                </div>
-                <h2 class="text-muted" id="pageHeader">
-                    {{(title) ? title : "Players list"}}
-                </h2>
-                <small ng-hide="showSubTitle">
-                    {{'In this page you can customize the look and the functionality of your players'|i18n}}
-                </small>
-            </div>
-            <div class="col-md-4">
+<div id='list' class="fluid-container fullheight">
+    <div id="header">
+        <h2 id="pageHeader">
+            {{(title) ? title : "Players list"}}
+        </h2>
+        <small ng-hide="showSubTitle">
+            {{'In this page you can customize the look and the functionality of your players'|i18n}}
+        </small>
+        <div class=" padTop">
+            <div class="col-sm-10 col-xs-7">
                 <form class="form-inline" id="listsearch" role="search">
                     <input type="text" typeahead="player.name for player in data | filter:$viewValue | limitTo:8"
                            class="form-control" placeholder="{{'Search by name or tag'| i18n}}"
                            ng-model="search">
                 </form>
             </div>
-        </div>
-        <div id='playerList' class="row fullheight">
-            <div class="row">
-                <div class="col-md-3 col-sm-4 col-xs-4">{{'Preview'| i18n }}</div>
-                <div class="col-xs-3">{{ 'Name' | i18n }}</div>
-                <div class="col-xs-1">{{ 'ID' | i18n }}</div>
-                <div class="col-xs-1">{{ 'Save Date' | i18n }}</div>
-                <div class="col-md-1 visible-lg">{{ 'Creation Date' | i18n }}</div>
-                <div class="col-xs-3">{{ 'Actions' | i18n }}</div>
+            <div class="col-xs-2">
+                <button type="button" class="btn btn-primary" data-ng-click="newPlayer()"><i class="glyphicon glyphicon-plus">&nbsp;</i>{{'Add New player'| i18n}}
+                </button>
             </div>
-            <div class="row scrollerWrap maxViewPort">
-                <div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
-                    <div class="row" on-finish-render
-                         ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
-                        <div class="col-md-3 col-sm-4 col-xs-4"><img class="playerThumb"
-                                                                     ng-src="{{getThumbnail(item)}}"/></div>
-                        <div class="col-xs-3"><a data-ng-click="goToEditPage(item,$event)"
-                                                 ng-href="edit/{{item.id}}">{{item.name}}</a>
+        </div>
+    </div>
+    <div id='playerList'>
+        <div class="row" id="tableHead">
+            <div class="hidden-xs col-sm-3  col-lg-2">{{'Preview'| i18n }}</div>
+            <div class="col-xs-3">{{ 'Name' | i18n }}</div>
+            <div class="col-xs-2 col-md-1 ">{{ 'ID' | i18n }}</div>
+            <div class="col-xs-2 col-md-1 noPadding">{{ 'Save Date' | i18n }}</div>
+            <div class="col-md-1 visible-lg">{{ 'Creation Date' | i18n }}</div>
+            <div class="col-md-offset-1 pull-right col-sm-2  col-md-3  col-lg-3 col-xs-4">{{ 'Actions' | i18n }}</div>
+        </div>
+        <div class="scrollerWrap maxViewPort">
+            <div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
+                <div class="row" on-finish-render
+                     ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
+                    <div class="hidden-xs  col-lg-2  col-sm-3 col-xs-2"><img class="playerThumb"
+                                                                             ng-src="{{getThumbnail(item)}}"/></div>
+                    <div class="col-xs-3"><a data-ng-click="goToEditPage(item,$event)"
+                                             ng-href="edit/{{item.id}}">{{item.name}}</a>
 
-                            <div class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
-                                <small>{{' This player is out dated
-                                    - please update'| i18n}}
-                                </small>
-                            </div>
+                        <div class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item.version)">
+                            <small>{{' This player is out dated
+                                - please update'| i18n}}
+                            </small>
                         </div>
-                        <div class="col-xs-1">{{item.id}}</div>
-                        <div class="col-xs-1"><span class="timeago" timestamp="{{item.createdAt}}"></span></div>
-                        <div class="visible-lg col-md-1"><span class="timeago"
-                                                               timestamp="{{item.updatedAt}}"></span>
-                        </div>
-                        <div class="actionBtns col-xs-3">
+                    </div>
+                    <div class="col-xs-2  col-md-1 wrapText">{{item.id}}</div>
+                    <div class="col-xs-2 col-sm-2 col-md-1"><span class="timeago" timestamp="{{item.createdAt}}"></span>
+                    </div>
+                    <div class="visible-lg col-md-1"><span class="timeago"
+                                                           timestamp="{{item.updatedAt}}"></span>
+                    </div>
+                    <div class="actionBtns  col-lg-4 col-md-4  col-sm-2 col-xs-4">
+                        <div class="inner">
                             <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
-                                    class="glyphicon glyphicon-plus-sign"></span> {{'Duplicate'| i18n}}
+                                    class="icon-copy"></span> {{'Duplicate'| i18n}}
                             </button>
                             <button type="button" class="btn btn-link" ng-click="delete(item)"><span
                                     class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}
@@ -62,40 +63,40 @@
                             </button>
                             <button type="button" class="btn btn-link"
                                     ng-show="checkVersionNeedsUpgrade(item.version)"
-                                    ng-click="update(item)"><span class="glyphicon glyphicon-edit"></span>
+                                    ng-click="update(item)"><span class="glyphicon glyphicon-refresh"></span>
                                 {{'Update'|
                                 i18n}}
                             </button>
-                            <i class="glyphicon glyphicon-ok-circle"
+                            <i class="icon-checkmark-circle"
                                tooltip="{{'The player version is upto date'|i18n}}"
-                               ng-show="!checkVersionNeedsUpgrade(item.version)"></i>
+                               ng-show="!checkVersionNeedsUpgrade(item.version)">Updated</i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row  text-center">
-                <div class="col-sm-9">
+        </div>
+        <div class="row  text-center">
+            <div class="col-sm-9">
 
 
-                    <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
-                                page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
-                </div>
-                <div class="col-sm-3">
-                    <form class="form-inline" role="form">
-                        <div class="form-group">
-                            <label class="padTop" for="maxSizeSelect">
-                                <small> {{filtered.length}} Players in total, Show</small>
-                                <select class="form-control inline" id="maxSizeSelect" ng-model="maxSize">
-                                    <option value='5'>5</option>
-                                    <option value='10'>10</option>
-                                    <option value='15'>15</option>
-                                    <option value='20'>20</option>
-                                </select>
-                                <small> per page</small>
-                            </label>
-                        </div>
-                    </form>
-                </div>
+                <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
+                            page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
+            </div>
+            <div class="col-sm-3">
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <label class="padTop" for="maxSizeSelect">
+                            <small> {{filtered.length}} Players in total, Show</small>
+                            <select class="form-control inline" id="maxSizeSelect" ng-model="maxSize">
+                                <option value='5'>5</option>
+                                <option value='10'>10</option>
+                                <option value='15'>15</option>
+                                <option value='20'>20</option>
+                            </select>
+                            <small> per page</small>
+                        </label>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

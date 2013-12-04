@@ -162,6 +162,7 @@ body > section,
 #mp-menu #mp-base > ul > li > div.mp-level > a.mp-back {
   display: none;
 }
+#mp-menu ul.menuList > li hr,
 #mp-menu label hr,
 #mp-menu div.form-element hr {
   border-top: 1px solid #ccc;
@@ -170,12 +171,20 @@ body > section,
   margin-top: 16px;
   margin-bottom: 0px;
 }
+#mp-menu ul.menuList > li[type="text"] hr,
 #mp-menu label[type="text"] hr,
 #mp-menu div.form-element[type="text"] hr,
+#mp-menu ul.menuList > li[type="select2data"] hr,
 #mp-menu label[type="select2data"] hr,
 #mp-menu div.form-element[type="select2data"] hr {
   margin-top: 42px;
 }
+#mp-menu ul.menuList > li[type="menu"] hr,
+#mp-menu label[type="menu"] hr,
+#mp-menu div.form-element[type="menu"] hr {
+  width: 90%;
+}
+#mp-menu ul.menuList > li[type="dropdown"] hr,
 #mp-menu label[type="dropdown"] hr,
 #mp-menu div.form-element[type="dropdown"] hr {
   margin-top: 20px;
@@ -185,14 +194,14 @@ body > section,
   padding: 0.7em;
   padding-top: 24px;
   padding-bottom: 11px;
-  color: #000000;
+  color: #272727;
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
   font-weight: bold;
   font-family: arial, sans-serif;
   font-size: 18px;
 }
 #mp-menu .levelDesc {
-  margin: 0 20px;
+  margin: 0 13px;
   display: block;
   font-size: 13px;
   margin-bottom: 10px;
@@ -463,10 +472,10 @@ body > section,
   padding: 0.6em 1em;
   width: 100%;
   float: left;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   display: block;
-  color: #009dff;
+  color: #272727;
 }
 #mp-menu ul[ng-transclude] > li a.menu-level-trigger:hover {
   text-decoration: none;
@@ -482,7 +491,7 @@ body > section,
   line-height: 1;
   float: right;
   content: "\e080";
-  color: #009dff;
+  color: #272727;
 }
 #mp-menu ul.dropdown-menu {
   border-radius: 5px;
