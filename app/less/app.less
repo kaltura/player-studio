@@ -5,6 +5,9 @@ html, body, body > section, .scroller, .wrapper {
 body > section > * {
   padding-top: 26px;
 }
+.fluid-container {
+  padding:26px;
+}
 .alert {
   text-align: center;
   padding: 5px;
@@ -13,13 +16,20 @@ body > section > * {
 .padTop {
   padding-top: 15px;
 }
-
+.noPadding{
+  padding:0;
+}
+.wrapText{
+  white-space: pre-wrap;
+  word-break: break-all;
+}
 .scroller-inner > .container {
   margin: auto;
   max-width: 95%;
 }
 
 .playerThumb {
+  padding: 10px;
   width: 100%;
 }
 /* for bootstrap Angular UI*/
@@ -131,4 +141,8 @@ body > section > * {
 .btn-primary[disabled] .btn-primary.active {
   background-color: #26b2ec;
   border-color: #26b2ec;
+}
+
+h1,h2,h3 {
+  color:#272727;
 }
