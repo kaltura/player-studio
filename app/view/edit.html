@@ -1,52 +1,54 @@
-<!-- Push Wrapper -->
-<menu-head>
-    <li><a menupage='search' class='icon icon-TabSearch' tooltip-placement='right'
-           tooltip='Search for menu properties'></a>
-    </li>
-</menu-head>
-<div id="outerWrap">
-    <div id="mp-pusher" ng-controller="menuCntrl">
-        <!-- mp-menu -->
-        <navmenu data="data.settings">
-            <menu-level pagename='search' label='Menu Search' >
-                <li class="nohover ">
-                    <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
-                          ng-submit="searchMenuFn(value)" role="search">
-                        <div class="form-group ">
-                            <div class="input-group merged">
-                                <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
-                                <input typeahead-on-select="checkSearch()" ng-change="checkSearch()" type="text"
-                                       typeahead="item for item in menuData | filter:$viewValue "
-                                       data-typeaheadOnSelect="checkSearch()"
-                                       class="form-control forceRightRadius"
-                                       placeholder="{{'Search for menu property'| i18n}}"
-                                       ng-model='menuSearch'/>
-                            </div>
+<section id="edit">
+    <menu-head>
+        <li><a menupage='search' class='icon icon-TabSearch' tooltip-placement='right'
+               tooltip='Search for menu properties'></a>
+        </li>
+    </menu-head>
+    <div id="outerWrap">
+        <div id="mp-pusher" ng-controller="menuCntrl">
+            <!-- mp-menu -->
+            <navmenu data="data.settings">
+                <menu-level pagename='search' label='Menu Search'>
+                    <li class="nohover ">
+                        <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
+                              ng-submit="searchMenuFn(value)" role="search">
+                            <div class="form-group ">
+                                <div class="input-group merged">
+                                    <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
+                                    <input typeahead-on-select="checkSearch()" ng-change="checkSearch()" type="text"
+                                           typeahead="item for item in menuData | filter:$viewValue "
+                                           data-typeaheadOnSelect="checkSearch()"
+                                           class="form-control forceRightRadius"
+                                           placeholder="{{'Search for menu property'| i18n}}"
+                                           ng-model='menuSearch'/>
+                                </div>
                         <span class="help-block"
                               ng-show="notFound">{{ 'The property was not found '| i18n}}</span>
-                        </div>
-                    </form>
-                </li>
-            </menu-level>
-        </navmenu>
-        <!-- /mp-menu -->
-        <div class="wrapper">
-            <div class="jumbotron">
-                <a class="menu-trigger" data-ng-click="togglemenu()">
-                    <span class="sr-only">Toggle navigation</span>
-                </a>
+                            </div>
+                        </form>
+                    </li>
+                </menu-level>
+            </navmenu>
+            <!-- /mp-menu -->
+            <div class="wrapper">
+                <div class="container padTop">
+                    <a class="menu-trigger" data-ng-click="togglemenu($event)">
+                        <i class="icon-Close"></i>
+                        <span class="sr-only">Toggle navigation</span>
+                    </a>
 
-                <h2 class=" inline text-muted" id="pageHeader">
-                    {{title}}
-                </h2>
+                    <h2 class=" inline text-muted" id="pageHeader">
+                        {{title}}
+                    </h2>
 
-                <p>use the menu (3 bars icon) to navigate through editable properties.</p>
+                    <p>use the menu (3 bars icon) to navigate through editable properties.</p>
+                </div>
+                <div class="container" ng-controller="editPageDataCntrl">
+                    <div id="kplayer" style="width: 100%; min-height: 480px;" itemprop="video" itemscope
+                         itemtype="http://schema.org/VideoObject"></div>
+                </div>
+                <pre>{{data}}</pre>
             </div>
-            <div class="container" ng-controller="editPageDataCntrl">
-                <div id="kplayer" style="width: 100%; min-height: 480px;" itemprop="video" itemscope
-                     itemtype="http://schema.org/VideoObject"></div>
-            </div>
-            <pre>{{data}}</pre>
         </div>
     </div>
-</div>
+</section>

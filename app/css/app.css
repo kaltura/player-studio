@@ -1,9 +1,12 @@
 /* app stylesheet */
+html,
 body,
-.jumbotron {
-  font-size: 13px;
+body > section,
+.scroller,
+.wrapper {
+  height: 100%;
 }
-.jumbotron {
+body > section > * {
   padding-top: 26px;
 }
 .alert {
@@ -19,44 +22,6 @@ body,
 }
 .playerThumb {
   width: 100%;
-}
-.playerTemplate {
-  display: block;
-  border: 3px solid darkblue;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  text-align: center;
-}
-#listsearch ul.typeahead.dropdown-menu {
-  max-width: 360px;
-  overflow-x: scroll;
-  overflow-y: hidden;
-}
-#playerList {
-  margin-bottom: -150px;
-}
-#playerList div > div .alert {
-  padding: 0;
-  margin: 0;
-  display: block;
-  font-size: 75%;
-}
-#playerList div > div.actionBtns button {
-  width: 116px;
-  text-align: left;
-}
-#playerList div > div.actionBtns i {
-  display: inline-block;
-  width: 116px;
-  padding-left: 12px;
-  color: #12aa16;
-  clear: both;
-}
-#maxSizeSelect {
-  max-width: 40px;
-  padding: 0;
-  text-align: left;
 }
 /* for bootstrap Angular UI*/
 .nav,
@@ -101,39 +66,8 @@ body,
   left: 0;
   z-index: 999;
 }
-.maxViewPort {
-  height: 73%;
-  overflow: hidden;
-}
-@media (max-width: 767px) {
-  .maxViewPort {
-    height: 62%;
-  }
-}
-@media (max-width: 480px) {
-  .maxViewPort {
-    height: 50%;
-  }
-}
 .forceRightRadius {
   border-radius: 0px 4px 4px 0px !important;
-}
-#kplayer {
-  margin: auto;
-}
-.scrollable {
-  height: 100%;
-  width: auto;
-  overflow: hidden;
-  position: static;
-}
-.scrollable > div {
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-.scrollable > div > div {
-  height: 100%;
 }
 .merged .input-group-addon {
   border-right: 0px;

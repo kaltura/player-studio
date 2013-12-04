@@ -35,9 +35,11 @@
     <script type="text/javascript" src="http://kgit.html5video.org/tags/v2.0.0.rc7/mwEmbedLoader.php"></script>
     <link rel="stylesheet" href="bower_components/select2/select2.css">
     <link rel="stylesheet" href="lib/prettycheckable/dist/prettyCheckable.css">
-    <!--    app stylesheets-->
+    <!--    app stylesheets - should be loaded in the views...-->
     <link rel="stylesheet" href="css/app.css"/>
-    <link rel="stylesheet" href="css/menu.css"/>
+    <link rel="stylesheet" href="css/edit.css"/>
+    <link rel="stylesheet" href="css/new.css"/>
+    <link rel="stylesheet" href="css/list.css"/>
     <link rel="stylesheet" href="css/icons.css"/>
     <script type="text/javascript"
             src="lib/malihu_custon_scrollbar/jquery.mousewheel.min.js"></script>
@@ -68,7 +70,7 @@
     <script src="js/controllers/LoginCtrl.js"></script>
     <script src="js/controllers/playerCreateCtrl.js"></script>
 </head>
-<body class="scroller">
+<body>
 <loading-widget></loading-widget>
 <section class="relative" ng-view></section>
 </body>

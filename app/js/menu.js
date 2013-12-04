@@ -12,6 +12,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', '$window', function(menuSv
             {'left': '0'},
             { duration: 200, queue: true });
         $('#mp-menu').animate({'left': '-' + width});
+        $('#mp-pusher >.wrapper').animate({'width': '100%'});
     };
     var resetMenu = function() {
         var width = getWidth();
@@ -23,7 +24,8 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', '$window', function(menuSv
         $('#mp-pusher').animate(
             {'left': width},
             { duration: 200, queue: true });
-        $('#mp-menu').animate({'left': -width});
+        $('#mp-menu').animate({'left': -width}, { duration: 200, queue: false });
+        $('#mp-pusher >.wrapper').animate({'width': '70%'}, { duration: 200, queue: true });
     };
     $scope.menuShown = true; //initial value
     resetMenu();
@@ -46,8 +48,12 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', '$window', function(menuSv
             }
         }
     });
-    $scope.togglemenu = function() {
+    $scope.togglemenu = function(e) {
         $scope.menuShown = !$scope.menuShown;
+        if (!$scope.menuShown)
+            $(e.target).parent().css('transform', 'rotate(180deg)');//.delay(500).toggleClass('icon-open icon-Close');
+        else
+            $(e.target).parent().css('transform', '');//.delay(500).toggleClass('icon-open icon-Close');
     };
 
     $scope.$watch('menuShown', function(newVal, oldVal) {
