@@ -9,7 +9,7 @@
 	font-style: normal;
 }
 
-[class*="icon-"] {
+[class^="icon-"], [class*=" icon-"] {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -23,42 +23,45 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.icon-graduation:before {
-	content: "\e600";
-}
-.icon-book:before {
-	content: "\e601";
-}
-.icon-book2:before {
-	content: "\e602";
-}
-.icon-users:before {
-	content: "\e603";
-}
-.icon-share:before {
+.icon-open:before {
 	content: "\e604";
 }
-.icon-TabSearch:before {
+.icon-Close:before {
 	content: "\e605";
 }
-.icon-TabPlugins:before {
+.icon-TabSearch:before {
 	content: "\e606";
 }
-.icon-TabMonetization:before {
+.icon-TabPlugins:before {
 	content: "\e607";
 }
-.icon-TabLookandFeel:before {
+.icon-TabMonetization:before {
 	content: "\e608";
 }
-.icon-TabEngagement:before {
+.icon-TabLookandFeel:before {
 	content: "\e609";
 }
-.icon-TabBasicSettings:before {
+.icon-TabEngagement:before {
 	content: "\e60a";
 }
-.icon-TabAnalytics:before {
+.icon-TabBasicSettings:before {
 	content: "\e60b";
 }
-.icon-defult:before {
+.icon-TabAnalytics:before {
 	content: "\e60c";
+}
+.icon-defult:before {
+	content: "\e60d";
+}
+.icon-checkmark-circle:before {
+	content: "\e600";
+}
+.icon-copy:before {
+	content: "\e601";
+}
+.icon-eye:before {
+	content: "\e602";
+}
+.icon-close:before {
+	content: "\e603";
 }

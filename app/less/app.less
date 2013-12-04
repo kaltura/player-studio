@@ -59,15 +59,22 @@ body, .jumbotron {
         text-align: left;
       }
       i {
-        width: 126px;
+        display: inline-block;
+        width: 116px;
         padding-left: 12px;
-        color: green;
+        color: #12aa16;
+        clear: both;
       }
     }
   }
 }
 
-#maxSizeSelect{max-width: 40px;padding:0;text-align: left}
+#maxSizeSelect {
+  max-width: 40px;
+  padding: 0;
+  text-align: left
+}
+
 /* for bootstrap Angular UI*/
 .nav, .pagination, .carousel a {
   cursor: pointer;
@@ -122,8 +129,12 @@ body, .jumbotron {
 .maxViewPort {
   height: 73%;
   overflow: hidden;
-  @media (max-width: 767px) { height: 62%; }
-  @media (max-width: 480px) { height: 50%; }
+  @media (max-width: 767px) {
+    height: 62%;
+  }
+  @media (max-width: 480px) {
+    height: 50%;
+  }
 }
 
 .forceRightRadius {
@@ -157,4 +168,50 @@ body, .jumbotron {
 .merged input {
   border-left: 0px;
   background-color: #FFFFFF;
+}
+.btn-primary {
+  background-color: #26b2ec;
+  border-color: #26b2ec;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+  background-color: #1ea7e0;
+  background-image: -moz-linear-gradient(top,#26b2ec,#1296cd);
+  background-image: -webkit-gradient(linear,0 0,0 100%,from(#26b2ec),to(#1296cd));
+  background-image: -webkit-linear-gradient(top,#26b2ec,#1296cd);
+  background-image: -o-linear-gradient(top,#26b2ec,#1296cd);
+  background-image: linear-gradient(to bottom,#26b2ec,#1296cd);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff26b2ec', endColorstr='#ff1196cd', GradientType=0);
+  border-color: #1296cd #1296cd #0c6387;
+  border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  text-decoration: none;
+  background-position: 0 -15px;
+  -webkit-transition: background-position .1s linear;
+  -moz-transition: background-position .1s linear;
+  -o-transition: background-position .1s linear;
+  transition: background-position .1s linear;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #1296cd;
+}
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary.active:hover {
+  background-color: #14a7e4;
+  border-color: #1296cd;
+}
+.btn-primary.disabled:hover,
+.btn-primary.disabled:focus,
+.btn-primary.disabled:active,
+.btn-primary.disabled.active,
+.btn-primary[disabled] .btn-primary:hover,
+.btn-primary[disabled] .btn-primary:focus,
+.btn-primary[disabled] .btn-primary:active,
+.btn-primary[disabled] .btn-primary.active {
+  background-color: #26b2ec;
+  border-color: #26b2ec;
 }
