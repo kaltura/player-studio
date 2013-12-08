@@ -10,17 +10,32 @@ KMCServices.factory('playerCache', function ($cacheFactory) {
         capacity: 10
     });
 })
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', function ($http, $modal, $log) {
-    return {
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , function ($http, $modal, $log, $q, apiService) {
+    var playersCache = [];
+    var playersService = {
         'getPlayer': function (id) {
+            var deferred = $q.defer();
             // find player data by its ID
-
-            for ( var i=0; i<this.playersData.length; i++)
-                if (this.playersData[i].id == id){
-                    return {"data" : this.playersData[i]};
+            for (var i = 0; i < playersCache.length; i++)
+                if (playersCache[i].id == id) {
+                    deferred.resolve(playersCache[i])
                 }
+            var request = {
+                'service': 'uiConf',
+                'action': 'get',
+                id: id
 
-            //return $http.get('js/services/oneplayer.json'); //probably really using the id to get a specific player
+            }
+            apiService.doRequest(request).then(function (result) {
+                    return deferred.resolve(result);
+                }
+            );
+            return deferred.promise;
+        },
+        cachePlayers: function (playersList) {
+            if ($.isArray(playersList))
+                playersCache = playersCache.concat(playersList);
+            else playersCache.push(playersList)
         },
         'getRequiredVersion': function () {
             return 2;
@@ -52,7 +67,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', function ($http
                 $log.info('update modal dismissed at: ' + new Date());
             });
         }
-    };
+    }
+    return playersService;
 }])
 KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($rootScope) {
         // private notification messages

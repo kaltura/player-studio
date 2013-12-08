@@ -30,7 +30,7 @@ KMCModule.controller('PlayerListCtrl',
             apiService.doRequest(request).then(function (data) {
                 $scope.data = data.objects;
                 $scope.calculateTotalItems();
-                PlayerService.playersData = $scope.data;
+                PlayerService.cachePlayers(data.objects);
             });
             //mock data
 //            PlayerService.getPlayers().success(function (data) {
