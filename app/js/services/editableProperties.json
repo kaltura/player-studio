@@ -16,13 +16,13 @@
             {
                 "label": "Long Description",
                 "type": "modaledit",
-                "model": "description",
+                "model": "basicDisplay.description",
                 "placeholder":"Enter player description"
             },
             {
                 "label": "Player Tags",
                 "type": "tags",
-                "model": "tags",
+                "model": "basicDisplay.tags",
                 "source": "getTags"
             },
             {
@@ -32,7 +32,7 @@
                 "query": "queryEntries",
                 "endline": "true",
                 "width": "100%",
-                "model": "previewentry",
+                "model": "basicDisplay.previewentry",
                 "data-placeholder": "Pick a entry"
             },
             {
@@ -51,11 +51,11 @@
                 "type": "dropdown",
                 "label": "Aspect Ratio",
                 "endline": "true",
-                "model": "aspectRatio"
+                "model": "basicDisplay.aspectRatio"
             },
             {
                 "type": "featuremenu",
-                "model": "transport",
+                "model": "basicDisplay.transport",
                 "label": "Transport",
                 "children": [
                     {
@@ -72,7 +72,7 @@
                         "initvalue": 1,
                         "type": "dropdown",
                         "label": "Prefered Bitrate",
-                        "model": "preferedFlavorBR"
+                        "model": "basicDisplay.transport.preferedFlavorBR"
                     },
                     {
                         "options": [
@@ -84,31 +84,31 @@
                         "initvalue": "0.75",
                         "type": "dropdown",
                         "label": "Delivery type",
-                        "model": "deliveryType"
+                        "model": "basicDisplay.transport.deliveryType"
                     }
                 ]
             },
             {
                 "type": "featuremenu",
-                "model": "deviceSpecific",
+                "model": "basicDisplay.deviceSpecific",
                 "label": "Device Specific Flags",
                 "children": [
                     {
                         "type": "checkbox",
                         "label": "Html Controls on iPad",
-                        "model": "ipadHTMLcontrols"
+                        "model": "basicDisplay.deviceSpecific.ipadHTMLcontrols"
                     },
                     {
                         "type": "checkbox",
                         "label": "Native Controls Fullscreen",
-                        "model": "nativeFullscreenControls"
+                        "model": "basicDisplay.deviceSpecific.nativeFullscreenControls"
                     }
                 ]
             },
             {
                 "label": "Last Update",
                 "type": "readonly",
-                "model": "lastUpdated"
+                "model": "updatedAt"
             },
             {
                 "label": "Version:",
@@ -129,7 +129,7 @@
         "children": [
             {
                 "type": "menu",
-                "model": "title",
+                "model": "lookAndFeel.title",
                 "endline":"true",
                 "label": "Title Label",
                 "children": [
@@ -150,7 +150,7 @@
                         ],
                         "initvalue": "right",
                         "type": "radio",
-                        "model": "align"
+                        "model": "lookAndFeel.title.align"
                     },
                     {
                         "options": [
@@ -162,11 +162,11 @@
                         "initvalue": "0.75",
                         "type": "dropdown",
                         "label": "Delivery type",
-                        "model": "deliveryType"
+                        "model": "lookAndFeel.titledeliveryType"
                     },
                     {
                         "label": "Template",
-                        "model": "titleTemplate",
+                        "model": "lookAndFeel.title.titleTemplate",
                         "default": "<span data-bind=”{mediaProxy.entry.name}”></span>",
                         "type": "modaltextbox"
                     },
@@ -184,11 +184,11 @@
                         "initvalue": "videoHolder",
                         "type": "dropdown",
                         "label": "Display location",
-                        "model": "titleContainer"
+                        "model": "lookAndFeel.title.titleContainer"
                     },
                     {
                         "default": ".titleLabel",
-                        "model": "titleCSSclass",
+                        "model": "lookAndFeel.title.titleCSSclass",
                         "label": "CSS class",
                         "type": "readonly"
                     }
@@ -196,8 +196,8 @@
             },
             {
                 "type": "menu",
+                "model": "lookAndFeel.controlBar",
                 "endline":"true",
-                "model": "controlBar",
                 "label": "Control Bar",
                 "children": [
                     {
@@ -205,11 +205,11 @@
                         "showTextEntry": true,
                         "type": "slider",
                         "default": "100%,30px",
-                        "model": "controlBarSize"
+                        "model": "lookAndFeel.controlBar.controlBarSize"
                     },
                     {
                         "type": "featuremenu",
-                        "model": "controlBarVolume",
+                        "model": "lookAndFeel.controlBar.controlBarVolume",
                         "label": "Volume Control",
                         "children": [
                             {
@@ -225,13 +225,13 @@
                                 ],
                                 "type": "radio",
                                 "initvalue": "0",
-                                "model": "controlBarVolumeDirection"
+                                "model": "lookAndFeel.controlBar.controlBarVolume.controlBarVolumeDirection"
                             },
                             {
                                 "label": "Initial Volume",
                                 "type": "number",
                                 "default": 80,
-                                "model": "initialvolume",
+                                "model": "lookAndFeel.controlBar.controlBarVolume.initialvolume",
                                 "from": 0,
                                 "to": 100,
                                 "stepsize": 5
@@ -240,7 +240,7 @@
                     },
                     {
                         "type": "featuremenu",
-                        "model": "logo",
+                        "model": "lookAndFeel.controlBar.logo",
                         "label": "Logo",
                         "order": 0,
                         "children": [
@@ -261,10 +261,10 @@
                                 ],
                                 "initvalue": "right",
                                 "type": "radio",
-                                "model": "align"
+                                "model": "lookAndFeel.controlBar.logo.align"
                             },
                             {
-                                "model": "priority",
+                                "model": "lookAndFeel.controlBar.logo.priority",
                                 "label": "Display Priority",
                                 "options": [
                                     {
@@ -287,7 +287,7 @@
                     },
                     {
                         "type": "featuremenu",
-                        "model": "flavor",
+                        "model": "lookAndFeel.controlBar.flavor",
                         "label": "Flavor Selector",
                         "order": 0,
                         "children": [
@@ -308,10 +308,10 @@
                                 ],
                                 "initvalue": "right",
                                 "type": "radio",
-                                "model": "align"
+                                "model": "lookAndFeel.controlBar.flavor.align"
                             },
                             {
-                                "model": "priority",
+                                "model": "lookAndFeel.controlBar.flavor.priority",
                                 "label": "Display Priority",
                                 "options": [
                                     {
@@ -334,7 +334,7 @@
                     },
                     {
                         "type": "featuremenu",
-                        "model": "playbackRate",
+                        "model": "lookAndFeel.controlBar.playbackRate",
                         "label": "Playback Rate Selector",
                         "order": 0,
                         "children": [
@@ -355,10 +355,10 @@
                                 ],
                                 "initvalue": "right",
                                 "type": "radio",
-                                "model": "align"
+                                "model": "lookAndFeel.controlBar.playbackRate.align"
                             },
                             {
-                                "model": "priority",
+                                "model": "lookAndFeel.controlBar.playbackRate.priority",
                                 "label": "Display Priority",
                                 "options": [
                                     {
@@ -381,7 +381,7 @@
                     },
                     {
                         "type": "featuremenu",
-                        "model": "flagContent",
+                        "model": "lookAndFeel.controlBar.flagContent",
                         "label": "Flag Content",
                         "order": 0,
                         "children": [
@@ -402,10 +402,10 @@
                                 ],
                                 "initvalue": "right",
                                 "type": "radio",
-                                "model": "align"
+                                "model": "lookAndFeel.controlBar.flagContent.align"
                             },
                             {
-                                "model": "priority",
+                                "model": "lookAndFeel.controlBar.flagContent.priority",
                                 "label": "Display Priority",
                                 "options": [
                                     {
@@ -430,13 +430,13 @@
             },
             {
                 "type": "menu",
-                "model": "watermark",
-                "endline":"true",
+                "model": "lookAndFeel.watermark",
                 "label": "Watermark",
+                "endline":"true",
                 "children": [
                     {
                         "label": "Watermark Logo URL",
-                        "model": "watermarkURL",
+                        "model": "lookAndFeel.watermark.watermarkURL",
                         "validation": "url",
                         "type": "text"
                     },
@@ -454,42 +454,42 @@
                         "label": "Position",
                         "type": "dropdown",
                         "initvalue": "top,left",
-                        "model": "watermarkPosition"
+                        "model": "lookAndFeel.watermark.watermarkPosition"
                     }
                 ]
             },
             {
                 "type": "menu",
                 "endline":"true",
-                "model": "stylesAndColors",
+                "model": "lookAndFeel.stylesAndColors",
                 "label": "Styles & Colors",
                 "children": [
                     {
                         "label": "ControlBar Background",
-                        "model": "controlBarColor",
+                        "model": "lookAndFeel.stylesAndColors.controlBarColor",
                         "default": "#000",
                         "type": "color"
                     },
                     {
                         "label": "Playhead Scurbber",
-                        "model": "playheadColor",
+                        "model": "lookAndFeel.stylesAndColors.playheadColor",
                         "default": "#fff",
                         "type": "color"
                     },
                     {
                         "label": "Focus Color",
-                        "model": "focusColor",
+                        "model": "lookAndFeel.stylesAndColors.focusColor",
                         "default": "#fff",
                         "type": "color"
                     },
                     {
                         "type": "featuremenu",
-                        "model": "textOptions",
+                        "model": "lookAndFeel.stylesAndColors.textOptions",
                         "label": "Text Options",
                         "children": [
                             {
                                 "label": "Text Color",
-                                "model": "textColorValue",
+                                "model": "lookAndFeel.stylesAndColors.textOptions.textColorValue",
                                 "default": "#fff",
                                 "type": "color"
                             },
@@ -507,13 +507,13 @@
                                 "label": "Font name",
                                 "type": "dropdown",
                                 "initvalue": "ariel",
-                                "model": "fontName"
+                                "model": "lookAndFeel.stylesAndColors.textOptions.fontName"
                             },
                             {
                                 "label": "Base Font Size (ems)",
                                 "type": "number",
                                 "default": 1,
-                                "model": "fontSize",
+                                "model": "lookAndFeel.stylesAndColors.textOptions.fontSize",
                                 "from": 0.1,
                                 "to": 5,
                                 "stepsize": 0.1,
