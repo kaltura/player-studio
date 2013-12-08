@@ -145,7 +145,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 return menudata;
             },
             getData: function(model) {
-                var modelStr = model.split('.').pop();
+                var modelStr = model.substr(model.indexOf(".")+1);
                 return searchModelStr('', menudata, modelStr);
             },
             currentPage: 'basicSettings',
@@ -183,7 +183,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     default :
                         var directive = JSON2directiveDictionary(item.type);
                         if (directive)
-                            elm = writeFormElement(item, JSON2directiveDictionary(item.type), originAppendPos);
+                            elm = writeFormElement(item, directive, originAppendPos);
                         break;
 
                 }
@@ -223,13 +223,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             elm.attr(key, value);
                         }
                     });
-                    if (typeof parentModel != "undefined") {
-                        var subModelStr = parentModel + '.' + item.model;
-                        elm.attr('model', subModelStr);
-                    }
-                    else {
-                        elm.attr('model', BaseData + '.' + item.model);
-                    }
+//                  if (typeof parentModel != "undefined") {
+//                        var subModelStr = parentModel + '.' + item.model;
+//                        elm.attr('model', subModelStr);
+//                    }
+//                    else {
+//                        elm.attr('model', BaseData + '.' + item.model);
+                    //}
+                    elm.attr('model', 'data.' + item.model);
                     return elm;
                 }
             },

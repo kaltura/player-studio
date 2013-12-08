@@ -13,9 +13,14 @@ KMCServices.factory('playerCache', function ($cacheFactory) {
 KMCServices.factory('PlayerService', ['$http', '$modal', '$log', function ($http, $modal, $log) {
     return {
         'getPlayer': function (id) {
-            //actually does not use the id for now...
-            return $http.get('js/services/oneplayer.json'); //probably really using the id to get a specific player
+            // find player data by its ID
 
+            for ( var i=0; i<this.playersData.length; i++)
+                if (this.playersData[i].id == id){
+                    return {"data" : this.playersData[i]};
+                }
+
+            //return $http.get('js/services/oneplayer.json'); //probably really using the id to get a specific player
         },
         'getRequiredVersion': function () {
             return 2;
