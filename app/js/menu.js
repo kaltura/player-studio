@@ -150,6 +150,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             get: function () {
                 return menudata;
             },
+            getModalData: function (model) {
+                return Search4ControlModelData('', menuSvc.menuScope, model);
+            },
             getControlData: function (model) {
                 var modelStr = model.substr(model.indexOf(".") + 1);
                 return Search4ControlModelData('', menudata, modelStr);
@@ -207,7 +210,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                                 break;
                         }
                     }
-                    if (eachInLi == "fff") {
+                    if (eachInLi == true) { //problematic perhaps - creates another scope for some reason.
                         parent.children().each(function () {
                             if (!$(this).is('li'))
                                 $(this).wrap('<li>');
@@ -370,18 +373,15 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 "</nav>",
             replace: true,
             restrict: 'E',
-            priority: 1000,
-            scope: {data: '=', 'actions': '&'},
+            scope: {},
             transclude: true,
             compile: function (tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('ul[ng-transclude]:first');
                 var menuData = menuSvc.buildMenu('data');
                 return function ($scope, $element) {
-                    // menuElem.append(menuData.html());
-                    $compile(menuData.contents())($scope, function (clone) {
+                    $compile(menuData.contents())($scope.$parent, function (clone) {
                         menuElem.prepend(clone);
                     });
-                    // $element.find('#mp-base >ul > li:first > div.mp-level').addClass('mp-level-open');
                     $scope.$on('menuChange', function (e, page) {
                         $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
                         if (page != 'search')

@@ -94,7 +94,6 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 },
                 'editProperties': 'editableProperties',
                 'menuSvc': 'menuSvc',
-
                 'localize': 'localize',
                 'userEntries': function (apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
