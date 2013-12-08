@@ -1,9 +1,15 @@
 /* app stylesheet */
-html, body, body > section, .scroller, .wrapper {
+html, body, body > section, .wrapper,.scroller  {
   height: 100%;
 }
 body > section > * {
   padding-top: 26px;
+}
+body  a { //default links color
+  color:#009dff;
+  &:hover,&:focus,&:active{
+    color:#51c0ff;
+  }
 }
 .fluid-container {
   padding:26px;
@@ -28,10 +34,6 @@ body > section > * {
   max-width: 95%;
 }
 
-.playerThumb {
-  padding: 10px;
-  width: 100%;
-}
 /* for bootstrap Angular UI*/
 .nav, .pagination, .carousel a {
   cursor: pointer;

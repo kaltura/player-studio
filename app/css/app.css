@@ -2,12 +2,20 @@
 html,
 body,
 body > section,
-.scroller,
-.wrapper {
+.wrapper,
+.scroller {
   height: 100%;
 }
 body > section > * {
   padding-top: 26px;
+}
+body a {
+  color: #009dff;
+}
+body a:hover,
+body a:focus,
+body a:active {
+  color: #51c0ff;
 }
 .fluid-container {
   padding: 26px;
@@ -29,10 +37,6 @@ body > section > * {
 .scroller-inner > .container {
   margin: auto;
   max-width: 95%;
-}
-.playerThumb {
-  padding: 10px;
-  width: 100%;
 }
 /* for bootstrap Angular UI*/
 .nav,
