@@ -12,7 +12,7 @@ angular.module('KMC.controllers', [])
             {result: true, label: 'OK', cssClass: 'btn-primary'}
         ];
         $scope.close = function (result) {
-            $modalInstance.close($scope);
+            $modalInstance.close(result);
 
         };
         $scope.cancel = function () {

@@ -90,13 +90,14 @@ KMCModule.controller('PlayerListCtrl',
             $scope.oldVersionEditText = $filter('i18n')('Warning this player is out of date. \n' +
                 'Saving changes to this player upgrade, some features and \n' +
                 'design may be lost. (read more about upgrading players)');
-            $scope.goToEditPage = function (item,$event) {
+            $scope.goToEditPage = function (item, $event) {
                 $event.preventDefault();
                 //TODO filter according to what? we don't have "version" field
                 if (!$scope.checkVersionNeedsUpgrade(item.version)) {
                     $location.path('/edit/' + item.id);
                     return false;
                 } else {
+                    var msgText = $scope.oldVersionEditText;
                     var modal = $modal.open({
                         templateUrl: 'template/dialog/message.html',
                         controller: 'ModalInstanceCtrl',
@@ -104,7 +105,7 @@ KMCModule.controller('PlayerListCtrl',
                             settings: function () {
                                 return {
                                     'title': 'Edit confirmation',
-                                    'message': $scope.oldVersionEditText
+                                    'message': msgText
                                 };
                             }
                         }
@@ -118,6 +119,7 @@ KMCModule.controller('PlayerListCtrl',
                         return $log.info('edit when outdated modal dismissed at: ' + new Date());
                     });
                 }
+
             };
             $scope.newPlayer = function () {
                 $location.path('/new');

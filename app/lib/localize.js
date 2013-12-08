@@ -84,10 +84,10 @@ angular.module('localization', [])
                 },
 
                 // checks the dictionary for a localized resource string
-                getLocalizedString: function (value) {
+                getLocalizedString: function (value, SyncAction) {
                     //  Contextualize missing translation
                     var translated = '!' + value + '!';                        //  check to see if the resource file has been loaded
-                    if (!localize.resourceFileLoaded) {
+                    if (!localize.resourceFileLoaded && !SyncAction) {
                         //  call the init method
                         var promise = localize.initLocalizedResources();
                         //  set the flag to keep from looping in init
@@ -122,6 +122,7 @@ angular.module('localization', [])
                     }
                     //  add watcher on the item to get the new string
                     else {
+                        return value;
                     }                        //  return the value to the call
                     return translated;
                 }
@@ -140,7 +141,7 @@ angular.module('localization', [])
     .filter('i18n', ['localize',
         function (localize) {
             return function (input) {
-                return localize.getLocalizedString(input);
+                return localize.getLocalizedString(input, true);
             };
         }
     ])
