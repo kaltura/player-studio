@@ -111,7 +111,6 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
-                return function(scope, element, attr){debugger;}
             },
             // $parent.model is used because tooltip is creating an isolate scope.
             template: "<label >{{label}}:<i ng-if='icon' class='icon {{icon}}'></i>" +
