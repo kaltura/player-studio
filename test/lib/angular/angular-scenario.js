@@ -1952,7 +1952,7 @@ jQuery.fn.extend({
 		return jQuery.access( this, function( value ) {
 
 			if ( value === undefined ) {
-				data = this.triggerHandler( "getData" + part, [ parts[0] ] );
+				data = this.triggerHandler( "getControlData" + part, [ parts[0] ] );
 
 				// Try to fetch any internally stored data first
 				if ( data === undefined && elem ) {
@@ -3097,7 +3097,7 @@ jQuery.event = {
 	// Events that are safe to short-circuit if no handlers are attached.
 	// Native DOM events should not be added, they may have inline handlers.
 	customEvent: {
-		"getData": true,
+		"getControlData": true,
 		"setData": true,
 		"changeData": true
 	},

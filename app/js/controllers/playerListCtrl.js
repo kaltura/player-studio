@@ -27,15 +27,16 @@ KMCModule.controller('PlayerListCtrl',
                 'action': 'list'
             };
             //real data
-//            apiService.doRequest(request).then(function (data) {
+            apiService.doRequest(request).then(function (data) {
+                $scope.data = data.objects;
+                $scope.calculateTotalItems();
+                PlayerService.cachePlayers(data.objects);
+            });
+            //mock data
+//            PlayerService.getPlayers().success(function (data) {
 //                $scope.data = data.objects;
 //                $scope.calculateTotalItems();
 //            });
-            //mock data
-            PlayerService.getPlayers().success(function (data) {
-                $scope.data = data.objects;
-                $scope.calculateTotalItems();
-            });
             $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
 
 

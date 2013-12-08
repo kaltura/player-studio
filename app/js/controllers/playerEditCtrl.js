@@ -8,13 +8,15 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = $routeParams.id;
             $scope.title = $filter('i18n')('Edit player');
-            $scope.data = PlayerData.data;
+            $scope.data = PlayerData;
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
-            $scope.tags = [
-                {id: "testing", text: 'testing'},
-                {id: "1", text: 'one'} // needs to be a string!
-            ];
+            // set tags
+            $scope.tags = [];
+            var tags = $scope.data.tags.split(",");
+            for (var i = 0; i < tags.length; i++)
+                $scope.tags.push({id: tags[i], text: tags[i]});
+
             menuSvc.registerAction('getTags', function () {
                 return $scope.tags;
             });
@@ -46,8 +48,8 @@ KMCModule.controller('PlayerEditCtrl',
                     PlayerService.playerUpdate($scope.data)
                 });
             }
-            $scope.previewEntry = ($scope.data.settings.basicDisplay.previewentry) ? $scope.data.settings.basicDisplay.previewentry.id : '0_ji4qh61l';
-            $scope.$watch('data.settings.basicDisplay.previewentry', function (newVal, oldVal) {
+            $scope.previewEntry = ($scope.data.previewentry) ? $scope.data.previewentry.id : '0_ji4qh61l';
+            $scope.$watch('data.previewentry', function (newVal, oldVal) {
                 if (newVal != oldVal) {
                     $scope.previewEntry = newVal.id;
                     $scope.renderPlayer();

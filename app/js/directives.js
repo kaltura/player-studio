@@ -68,7 +68,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 'label': '@'
             },
             controller: function($scope, $element, $attrs) {
-                var menuData = menuSvc.getData($attrs.model);
+                var menuData = menuSvc.getControlData($attrs.model);
                 $scope.options = menuData.options;
             },
             link: function(scope, element, attributes) {
@@ -310,7 +310,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     tElement.append('<hr/>');
                 }
                 return function($scope, $element, $attrs) {
-                    var menuData = menuSvc.getData($attrs.model);
+                    var menuData = menuSvc.getControlData($attrs.model);
                     $scope.options = menuData.options;
                 }
             },

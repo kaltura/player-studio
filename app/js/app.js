@@ -88,7 +88,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         {templateUrl: 'view/edit.html',
             controller: 'PlayerEditCtrl',
             resolve: {
-                'PlayerData': function (PlayerService, $route) {
+                'PlayerData': function (PlayerService, $route, apiService, localStorageService, $location) {
+                    ksCheck(apiService, localStorageService, $location);
                     return  PlayerService.getPlayer($route.current.params.id);
                 },
                 'editProperties': 'editableProperties',
