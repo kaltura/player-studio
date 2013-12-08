@@ -1,0 +1,122 @@
+#list > #header {
+  position: absolute;
+  width: 96%;
+}
+@media (max-width: 767px) {
+  #list > #header {
+    width: 92%;
+  }
+}
+@media (max-width: 480px) {
+  #list > #header {
+    width: 90%;
+  }
+}
+#list .scrollable {
+  height: 100%;
+  width: auto;
+  overflow: hidden;
+  position: static;
+}
+#list .scrollable > div {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+#list .scrollable > div > div {
+  height: 100%;
+}
+#list #listsearch ul.typeahead.dropdown-menu {
+  max-width: 360px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+#list .maxViewPort {
+  height: 80%;
+  overflow: hidden;
+}
+@media (max-width: 767px) {
+  #list .maxViewPort {
+    height: 62%;
+  }
+}
+@media (max-width: 480px) {
+  #list .maxViewPort {
+    height: 50%;
+  }
+}
+#list #kplayer {
+  margin: auto;
+}
+#list #playerList {
+  height: 88%;
+  margin-top: 130px;
+}
+@media (max-width: 767px) {
+  #list #playerList {
+    height: 86%;
+    margin-top: 150px;
+  }
+}
+@media (max-width: 480px) {
+  #list #playerList {
+    margin-top: 160px;
+  }
+}
+#list #playerList > div.row:last-child {
+  margin: 0;
+  margin-top: 10px;
+  border-top: 3px solid #f1f1e9;
+}
+#list #playerList #tableHead {
+  border-bottom: 3px solid #f1f1e9;
+  margin: 0;
+  margin-bottom: 15px;
+}
+#list #playerList #tableHead div {
+  white-space: nowrap;
+  font-weight: bold;
+}
+#list #playerList div.row {
+  border-bottom: 2px solid #ebf1f4;
+}
+#list #playerList div.row:last-child {
+  border-bottom: none;
+}
+#list #playerList div.row .alert {
+  padding: 0;
+  margin: 0;
+  color: #272727;
+  background: #e3e09d;
+  display: block;
+  font-size: 13px;
+}
+#list #playerList div.row .actionBtns > .inner {
+  max-width: 300px;
+  margin: auto;
+}
+#list #playerList div.row .actionBtns button {
+  width: 116px;
+  text-align: left;
+}
+#list #playerList div.row .actionBtns i {
+  display: inline-block;
+  width: 116px;
+  padding-left: 12px;
+  color: #12aa16;
+  clear: both;
+}
+#list #playerList .mCustomScrollBox .mCSB_draggerRail {
+  background: #ffffff;
+}
+#list #playerList .mCustomScrollBox .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+  width: 11px;
+}
+#list #playerList .mCustomScrollBox:hover .mCSB_dragger {
+  background: #f1f1e9;
+}
+#list #playerList #maxSizeSelect {
+  max-width: 40px;
+  padding: 0;
+  text-align: left;
+}
