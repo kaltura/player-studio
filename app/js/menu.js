@@ -355,12 +355,16 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             link: function(scope, iElem, iAttr) {
                 scope.$on('highlight', function(e, data) {
                     if (iAttr.highlight == data) {
-                        var originalBorder = iElem.css('border') || 'none';
-                        var originalMargin = iElem.css('margin') || 'none';
-                        iElem.css({'borderStyle': 'solid', 'borderWidth': '2px', 'borderRadius': '10px', 'margin': '-4px 0'});
-                        iElem.animate({'borderColor': '#FD0210'}, 1000);
+                        var elm = iElem;
+                        if (iElem.parent().is('li'))
+                            elm = iElem.parent();
+                        var originalBG = elm.css('background') || 'transparent';
+                        elm.css({'backgroundColor': 'rgba(253,255,187,1)'});
                         $timeout(function() {
-                            iElem.css({'border': originalBorder, 'margin': originalMargin});
+                            elm.animate({'backgroundColor': 'rgba(253,255,187,0)'}, 1000, function() {
+                                elm.css({'backgroundColor': originalBG}, 1000);
+                            });
+
                         }, 4000);
                     }
                 })
@@ -378,7 +382,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 "</nav>",
             replace: true,
             restrict: 'E',
-            scope: {'data':'='},
+            scope: {'data': '='},
             transclude: true,
             compile: function(tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('ul[ng-transclude]:first');
