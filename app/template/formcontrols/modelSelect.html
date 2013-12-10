@@ -1,0 +1,8 @@
+<label>
+     <span class="tooltipWrap" data-tooltip="{{helpnote}}">
+        <span class="control-label">{{label}}</span>
+        <select ui-select2="{{uiselectOpts}}" ng-model="$parent.model">
+            <option ng-selected="checkSelection(item.value)" value={{item.value}}" ng-repeat="item in options">{{item.label}}</option>
+        </select>
+     </span>
+</label>

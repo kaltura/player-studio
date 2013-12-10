@@ -57,15 +57,11 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
         return {
             restrict: 'E',
             replace: true,
-            template: '<div class="form-element">' +
-                '<div class="radioLabel">{{ label }}</div>' +
-                '<div class="form-group">' +
-                '<label ng-repeat="option in options" >' +
-                '<input value="{{ option.value }}"  type="radio" pretty-radio ng-model="$parent.model"/><span class="optionLabel"> {{ option.label }}</span></label>' +
-                '</div></div>',
+            templateUrl: 'template/formcontrols/modelRadio.html',
             scope: {
                 'model': '=',
-                'label': '@'
+                'label': '@',
+                'helpnote': '@'
             },
             controller: function($scope, $element, $attrs) {
                 var menuData = menuSvc.getControlData($attrs.model);
@@ -91,12 +87,10 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             scope: {
                 'class': '@',
                 'label': '@',
+                'helpnote': '@',
                 'model': "="
             },
-            template: '<label>{{label}} \n\
-                                <input colorpicker class="colorinput {{class}} hidden" type="text" ng-model="model" />\n\
-                                <span class="colorExample" ng-style="{\'background-color\': model}"></span>\n\
-                            </label>'
+            templateUrl: 'template/formcontrols/modalColor.html'
         };
     }).directive('modelText',function() {
         return {
@@ -105,16 +99,17 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             scope: {
                 'label': "@",
                 'model': "=",
-                'icon': '@'
+                'icon': '@',
+                'helpnote': '@'
             },
             compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
             },
-            // $parent.model is used because tooltip is creating an isolate scope.
-            template: "<label >{{label}}:<i ng-if='icon' class='icon {{icon}}'></i>" +
-                "<span class='inputHolder'><input class='form-control' tooltip='{{label}}' type='text' ng-model='$parent.model'/></span></label>"        };
+            // $parent.model is used as model because tooltip is creating an isolate scope.
+            templateUrl: 'template/formcontrols/modalText.html'
+        };
     }).directive('select2Data', ['menuSvc', function(menuSvc) {
         return {
             replace: true,
@@ -123,6 +118,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 'label': "@",
                 'model': "=",
                 'icon': '@',
+                'helpnote': '@',
                 'initvalue': '@'
             },
             controller: function($scope, $element, $attrs) {
@@ -135,9 +131,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 }
                 $scope.selectOpts['width'] = $attrs.width;
             },
-            template: "<label>{{label}}<i ng-if='icon' class='icon {{icon}}'></i>" +
-                '<input type="hidden" ui-select2="selectOpts" ng-model="model"> ' +
-                '</label>',
+            templateUrl: 'template/formcontrols/select2Data.html',
             compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
@@ -165,13 +159,12 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             restrict: "E",
             scope: {
                 'label': "@",
+                'helpnote': "@",
                 'model': "=",
                 'icon': '@'
             },
             controller: modalEditCntrl,
-            template: "<label>{{label}} <div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>" +
-                "<input type='text' readonly='readonly' ng-model='model' ng-click='doModal()'/>" +
-                "</div></label>",
+            templateUrl: 'template/formcontrols/modelEdit.html',
             compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
@@ -209,6 +202,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             scope: {
                 'label': "@",
                 'model': "=",
+                'helpnote': '@',
                 'icon': '@'
             },
             controller: function($scope, $element, $attrs) {
@@ -216,9 +210,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 $scope.selectOpts['tags'] = menuSvc.doAction($attrs.source);
 
             },
-            template: "<label>{{label}}<div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>" +
-                '<input type="text" ui-select2="selectOpts" ng-model="model"/> </div>' +
-                '</label>',
+            templateUrl: 'template/formcontrols/modelTags.html',
             compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
@@ -268,12 +260,10 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 'btnLabel': '@',
                 'btnClass': '@',
                 'action': '@',
+                'helpnote': '@',
                 'label': '@'
             },
-            template: '<label><span class="control-label">{{ label }}</span><i ng-if="icon" class="icon {{icon}}"></i>' +
-                '<span class="button-wrapper"><button type="button" ng-if="check(action)" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}" >{{ btnLabel }}</button></span>' +
-                '<span class="infodata control-data">{{ model }}</span>' +
-                '</label>'
+            templateUrl: 'template/formcontrols/infoAction.html'
         }
     })
     .directive('modelSelect',function(menuSvc) {
@@ -284,6 +274,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 label: "@",
                 model: "=",
                 initvalue: '@',
+                helpnote: '@',
                 selectOpts: '@'
             },
             compile: function(tElement, tAttr) {
@@ -293,7 +284,6 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 return function($scope, $element, $attrs) {
                     var menuData = menuSvc.getControlData($attrs.model);
                     $scope.options = menuData.options;
-
                 }
             },
             controller: function($scope, $element, $attrs) {
@@ -305,20 +295,29 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 }
                 $scope.uiselectOpts = angular.toJson($scope.selectOpts);
                 $scope.options = [];
-                if ($scope.model == '' || typeof $scope.model == 'undefined') {
-                    $scope.model = $attrs.initvalue;
+                $scope.checkSelection = function(value) {
+                    if (value == $scope.model)
+                        return true
+                    else if (typeof  value == 'number' && parseFloat($scope.model) == value) {
+                        return true
+                    }
+                    return false;
+
+                }
+                $scope.initSelection = function() {
+                    if ($scope.model == '' || typeof $scope.model == 'undefined') {
+                        $scope.model = $attrs.initvalue;
+                    }
+                    return $scope.model;
                 }
 
+                $scope.initSelection();
                 this.setOptions = function(optsArr) {
                     $scope.options = optsArr;
-
                 }
             },
 
-            template: '<label><span class="control-label">{{label}}</span>' +
-                '<select ui-select2="{{uiselectOpts}}" ng-model="model"> ' +
-                '<option value={{item.value}}" ng-repeat="item in options">{{item.label}}</option>' +
-                '</select></label>'
+            templateUrl: 'template/formcontrols/modelSelect.html'
         }
     }
 ).
@@ -390,13 +389,12 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
     }).
     directive('modelCheckbox',function() {
         return  {
-            template: '<label>{{label}}' +
-                '<input type="checkbox" class="prettyCheckbox" ng-model="model">' +
-                '</label>',
+            templateUrl: 'template/formcontrols/modelCheckbox.html',
             replace: true,
             restrict: 'E',
             scope: {
                 label: '@',
+                helpnote: '@',
                 model: "="
             }
         };
@@ -406,9 +404,10 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             replace: 'true',
             scope: {
                 model: '=',
-                label: '@'
+                label: '@',
+                helpnote: '@'
             },
-            template: '<label><span class="control-label">{{ label }}</span><i ng-if="icon" class="icon {{icon}}"></i><span class="control-data infodata">{{ model }}</span> </label>'
+            templateUrl: 'template/formcontrols/readOnly.html'
         }
     }).directive('modelButton',function(menuSvc) {
         return {
@@ -426,13 +425,14 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             scope: {
                 'label': '@',
                 'action': '@',
-                "btnClass": '@'
+                "btnClass": '@',
+                helpnote: '@'
             },
-            template: '<label ng-if="check(action)"><i class="icon {{icon}}"></i><button type="button" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}" >{{ label }}</button></label>'
+            templateUrl: 'template/formcontrols/modelButton.html'
         }
     }).directive('modelNumber', function() {
         return{
-            templateUrl: 'template/spinedit/spinedit.html',
+            templateUrl: 'template/formcontrols/spinEdit.html',
             replace: true,
             restrict: 'EA',
             scope: {
