@@ -2,6 +2,7 @@
   min-height: 100%;
   height: 100%;
   /* Pad & margin   by footer height */
+
   margin: 0 auto -80px;
   padding: 0 0 80px;
 }
