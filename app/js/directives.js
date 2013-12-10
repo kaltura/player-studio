@@ -284,6 +284,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 return function($scope, $element, $attrs) {
                     var menuData = menuSvc.getControlData($attrs.model);
                     $scope.options = menuData.options;
+
                 }
             },
             controller: function($scope, $element, $attrs) {
@@ -293,7 +294,6 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 if (!$attrs.showSearch) {
                     $scope.selectOpts.minimumResultsForSearch = -1;
                 }
-                $scope.uiselectOpts = angular.toJson($scope.selectOpts);
                 $scope.options = [];
                 $scope.checkSelection = function(value) {
                     if (value == $scope.model)
@@ -311,7 +311,8 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     return $scope.model;
                 }
 
-                $scope.initSelection();
+                $scope.selectOpts.initSelection = $scope.initSelection();
+                $scope.uiselectOpts = angular.toJson($scope.selectOpts);
                 this.setOptions = function(optsArr) {
                     $scope.options = optsArr;
                 }

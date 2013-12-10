@@ -11,20 +11,20 @@
                 "type": "text",
                 "model": "name",
                 "default": "New Player",
-                "helpnote" :"Please enter your player's name blah blah blah",
+                "helpnote": "Please enter your player's name blah blah blah",
                 "endline": "true"
             },
             {
                 "label": "Long Description",
                 "type": "modaledit",
-                "helpnote":"this is the edit modal",
+                "helpnote": "this is the edit modal",
                 "model": "basicDisplay.description",
-                "placeholder":"Enter player description"
+                "placeholder": "Enter player description"
             },
             {
                 "label": "Player Tags",
                 "type": "tags",
-                "helpnote":"tags and bugs",
+                "helpnote": "tags and bugs",
                 "model": "basicDisplay.tags",
                 "source": "getTags"
             },
@@ -33,7 +33,7 @@
                 "type": "select2data",
                 "source": "listEntries",
                 "query": "queryEntries",
-                "helpnote":"testing112143",
+                "helpnote": "testing112143",
                 "endline": "true",
                 "width": "100%",
                 "model": "basicDisplay.previewentry",
@@ -43,16 +43,14 @@
                 "options": [
                     {
                         "label": "4/3",
-                        "value": "narrow"
-                    },
+                        "value":"narrow"},
                     {
                         "label": "16/9",
-                        "value": "wide"
-                    }
+                        "value":"wide"}
                 ],
                 "showSearch": false,
-                "initvalue": "wide",
-                "helpnote":"select whatever",
+                "initvalue":"wide",
+                "helpnote": "select whatever",
                 "type": "dropdown",
                 "label": "Aspect Ratio",
                 "endline": "true",
@@ -62,7 +60,7 @@
                 "type": "featuremenu",
                 "model": "basicDisplay.transport",
                 "label": "Transport",
-                "helpnote":"what do you want to do?",
+                "helpnote": "what do you want to do?",
                 "children": [
                     {
                         "options": [
@@ -101,7 +99,7 @@
                 "children": [
                     {
                         "type": "checkbox",
-                        "helpnote":"to check",
+                        "helpnote": "to check",
                         "label": "Html Controls on iPad",
                         "model": "basicDisplay.deviceSpecific.ipadHTMLcontrols"
                     },
@@ -115,14 +113,14 @@
             {
                 "label": "Last Update",
                 "type": "readonly",
-                "helpnote":"to read",
+                "helpnote": "to read",
                 "model": "updatedAt"
             },
             {
                 "label": "Version:",
                 "btn-label": "Update Player",
                 "type": "infoAction",
-                "helpnote":"this is the players version",
+                "helpnote": "this is the players version",
                 "btn-class": "btn-xs btn-primary",
                 "action": "update",
                 "model": "version"
@@ -139,7 +137,7 @@
             {
                 "type": "menu",
                 "model": "lookAndFeel.title",
-                "endline":"true",
+                "endline": "true",
                 "label": "Title Label",
                 "children": [
                     {
@@ -206,7 +204,7 @@
             {
                 "type": "menu",
                 "model": "lookAndFeel.controlBar",
-                "endline":"true",
+                "endline": "true",
                 "label": "Control Bar",
                 "children": [
                     {
@@ -234,7 +232,7 @@
                                 ],
                                 "type": "radio",
                                 "initvalue": "0",
-                                "helpnote" :"somthing of the sort",
+                                "helpnote": "somthing of the sort",
                                 "model": "lookAndFeel.controlBar.controlBarVolume.controlBarVolumeDirection"
                             },
                             {
@@ -442,7 +440,7 @@
                 "type": "menu",
                 "model": "lookAndFeel.watermark",
                 "label": "Watermark",
-                "endline":"true",
+                "endline": "true",
                 "children": [
                     {
                         "label": "Watermark Logo URL",
@@ -470,7 +468,7 @@
             },
             {
                 "type": "menu",
-                "endline":"true",
+                "endline": "true",
                 "model": "lookAndFeel.stylesAndColors",
                 "label": "Styles & Colors",
                 "children": [
@@ -479,7 +477,7 @@
                         "model": "lookAndFeel.stylesAndColors.controlBarColor",
                         "default": "#000",
                         "type": "color",
-                        "helpnote" :"something of the sort of that"
+                        "helpnote": "something of the sort of that"
                     },
                     {
                         "label": "Playhead Scurbber",
