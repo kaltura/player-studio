@@ -29,7 +29,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 for (var i = 0; i < playersCache.length; i++)
                     if (playersCache[i].id == id) {
                         deferred.resolve(playersCache[i])
-                        currentPlayer = result;
+                        currentPlayer = playersCache[i];
                         cache = true;
                     }
             }
