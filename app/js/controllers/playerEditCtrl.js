@@ -13,9 +13,11 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.userEntries = userEntries;
             // set tags
             $scope.tags = [];
-            var tags = $scope.data.tags.split(",");
-            for (var i = 0; i < tags.length; i++)
-                $scope.tags.push({id: tags[i], text: tags[i]});
+            if (typeof $scope.data.tags != "undefined"){
+                var tags = typeof $scope.data.tags == "string" ? $scope.data.tags.split(",") : $scope.data.tags;
+                for (var i = 0; i < tags.length; i++)
+                    $scope.tags.push({id: tags[i], text: tags[i]});
+            }
 
             menuSvc.registerAction('getTags', function () {
                 return $scope.tags;

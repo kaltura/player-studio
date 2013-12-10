@@ -14,22 +14,26 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
     var playersCache = [];
     var playersService = {
         'getPlayer': function (id) {
+            var cache = false;
             var deferred = $q.defer();
             // find player data by its ID
             for (var i = 0; i < playersCache.length; i++)
                 if (playersCache[i].id == id) {
                     deferred.resolve(playersCache[i])
+                    cache = true;
                 }
-            var request = {
-                'service': 'uiConf',
-                'action': 'get',
-                id: id
+            if (!cache) {
+                var request = {
+                    'service': 'uiConf',
+                    'action': 'get',
+                    'id': id
 
-            }
-            apiService.doRequest(request).then(function (result) {
-                    return deferred.resolve(result);
                 }
-            );
+                apiService.doRequest(request).then(function (result) {
+                        deferred.resolve(result);
+                    }
+                );
+            }
             return deferred.promise;
         },
         cachePlayers: function (playersList) {
