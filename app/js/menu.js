@@ -342,8 +342,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             $(this).find('.header:first i.glyphicon').toggleClass('rotate90');
                     });
                     scope.$on('openFeature', function(e, args) {
-                        if (args == (attributes['model'].split('.').pop())) {
-                            element.find('.header').trigger('click');
+                        if (args == attributes['highlight']) {
+                            element.find('#' + scope.id).collapse('show');
                         }
                     })
                 }
