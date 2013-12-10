@@ -373,13 +373,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 "</nav>",
             replace: true,
             restrict: 'E',
-            scope: {},
+            scope: {'data':'='},
             transclude: true,
             compile: function (tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('ul[ng-transclude]:first');
                 var menuData = menuSvc.buildMenu('data');
                 return function ($scope, $element) {
-                    $compile(menuData.contents())($scope.$parent, function (clone) {
+                    $compile(menuData.contents())($scope, function (clone) {
                         menuElem.prepend(clone);
                     });
                     $scope.$on('menuChange', function (e, page) {
