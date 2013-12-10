@@ -23,7 +23,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     theme: 'dark',
                     advanced: {
                         updateOnBrowserResize: true,
-                        updateOnContentResize:true,
+                        updateOnContentResize: true,
                     }
                 };
                 angular.extend(opts, options);
@@ -152,25 +152,6 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 }
 
             }
-        }
-    }]).directive('modelEdit2', ['$modal' , function($modal) {
-        var modalEditCntrl = function($scope, $element, $attrs) {
-            if (typeof  $scope.model == 'undefined')
-                $scope.model = '';
-            $scope.modelValue = $scope.model;
-        }
-        return {
-            replace: true,
-            restrict: "E",
-            require: 'ngModel',
-            scope: {
-                'label': "@",
-                'model': "=",
-                'icon': '@'
-            },
-            controller: modalEditCntrl,
-            template: ''
-
         }
     }])
     .directive('modelEdit', ['$modal' , function($modal) {
@@ -312,6 +293,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 return function($scope, $element, $attrs) {
                     var menuData = menuSvc.getControlData($attrs.model);
                     $scope.options = menuData.options;
+
                 }
             },
             controller: function($scope, $element, $attrs) {
@@ -335,7 +317,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
 
             template: '<label><span class="control-label">{{label}}</span>' +
                 '<select ui-select2="{{uiselectOpts}}" ng-model="model"> ' +
-                '<option value=item.value" ng-repeat="item in options">{{item.label}}</option>' +
+                '<option value={{item.value}}" ng-repeat="item in options">{{item.label}}</option>' +
                 '</select></label>'
         }
     }
