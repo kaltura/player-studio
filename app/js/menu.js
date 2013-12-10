@@ -307,10 +307,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
         return {
             restrict: 'E',
             replace: true,
-            templateUrl: 'template/formcontrols/featuremenu.html',
+            templateUrl: 'template/formcontrols/featureMenu.html',
             transclude: true,
             controller: function($scope, $element, $attrs) {
                 $scope.label = $attrs['label'];
+                $scope.helpnote = $attrs['helpnote'];
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                 if ($scope.featureCheckbox) {
                     $scope.modelPath = ($attrs['model'] + '._featureEnabled');

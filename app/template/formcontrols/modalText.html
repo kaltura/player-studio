@@ -1,0 +1,7 @@
+<label>
+    {{label}}:<i ng-if='icon' class='icon {{icon}}'></i>
+        <span class='inputHolder'>
+            <input class='form-control' tooltip='{{helpnote || label}}' type='text'
+                   ng-model='$parent.model'/>
+        </span>
+</label>

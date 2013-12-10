@@ -11,17 +11,20 @@
                 "type": "text",
                 "model": "name",
                 "default": "New Player",
+                "helpnote" :"Please enter your player's name blah blah blah",
                 "endline": "true"
             },
             {
                 "label": "Long Description",
                 "type": "modaledit",
+                "helpnote":"this is the edit modal",
                 "model": "basicDisplay.description",
                 "placeholder":"Enter player description"
             },
             {
                 "label": "Player Tags",
                 "type": "tags",
+                "helpnote":"tags and bugs",
                 "model": "basicDisplay.tags",
                 "source": "getTags"
             },
@@ -30,6 +33,7 @@
                 "type": "select2data",
                 "source": "listEntries",
                 "query": "queryEntries",
+                "helpnote":"testing112143",
                 "endline": "true",
                 "width": "100%",
                 "model": "basicDisplay.previewentry",
@@ -48,6 +52,7 @@
                 ],
                 "showSearch": false,
                 "initvalue": "wide",
+                "helpnote":"select whatever",
                 "type": "dropdown",
                 "label": "Aspect Ratio",
                 "endline": "true",
@@ -57,6 +62,7 @@
                 "type": "featuremenu",
                 "model": "basicDisplay.transport",
                 "label": "Transport",
+                "helpnote":"what do you want to do?",
                 "children": [
                     {
                         "options": [
@@ -95,6 +101,7 @@
                 "children": [
                     {
                         "type": "checkbox",
+                        "helpnote":"to check",
                         "label": "Html Controls on iPad",
                         "model": "basicDisplay.deviceSpecific.ipadHTMLcontrols"
                     },
@@ -108,12 +115,14 @@
             {
                 "label": "Last Update",
                 "type": "readonly",
+                "helpnote":"to read",
                 "model": "updatedAt"
             },
             {
                 "label": "Version:",
                 "btn-label": "Update Player",
                 "type": "infoAction",
+                "helpnote":"this is the players version",
                 "btn-class": "btn-xs btn-primary",
                 "action": "update",
                 "model": "version"
@@ -225,6 +234,7 @@
                                 ],
                                 "type": "radio",
                                 "initvalue": "0",
+                                "helpnote" :"somthing of the sort",
                                 "model": "lookAndFeel.controlBar.controlBarVolume.controlBarVolumeDirection"
                             },
                             {
@@ -468,7 +478,8 @@
                         "label": "ControlBar Background",
                         "model": "lookAndFeel.stylesAndColors.controlBarColor",
                         "default": "#000",
-                        "type": "color"
+                        "type": "color",
+                        "helpnote" :"something of the sort of that"
                     },
                     {
                         "label": "Playhead Scurbber",
