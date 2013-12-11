@@ -451,7 +451,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
 ).
     directive('menuLevel',function (menuSvc) {
         return  {
-            templateUrl: 'template/menu/menuLevel.html',
+            templateUrl: 'template/menu/menuPage.html',
             replace: true,
             transclude: 'true',
             restrict: 'E',
