@@ -407,7 +407,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     });
                     $timeout(function () {
                         menuSvc.setMenu('basicDisplay');
-                    }, 100);
+                    }, 500);
                 }
             },
             controller: function ($scope, $element, $attrs) {
