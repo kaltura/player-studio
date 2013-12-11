@@ -89,6 +89,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 case 'dropdown' :
                     return  '<model-select/>';
                     break;
+                case 'container' :
+                    return  '<model-select parent-container=""/>';
+                break;
                 case 'checkbox' :
                     return '<model-checkbox/>';
                     break;

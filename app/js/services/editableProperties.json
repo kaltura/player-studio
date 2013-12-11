@@ -161,7 +161,7 @@
                     },
                     {
                         "initvalue": "videoHolder",
-                        "type": "dropdown",
+                        "type": "container",
                         "label": "Control Bar Location",
                         "model": "lookAndFeel.components.controlBar.controlBarContainer",
                         "options": [
@@ -232,7 +232,7 @@
                             }
                         ],
                         "initvalue": "videoHolder",
-                        "type": "dropdown",
+                        "type": "container",
                         "label": "Display location",
                         "model": "lookAndFeel.title.titleContainer"
                     },
@@ -283,7 +283,7 @@
                             },
                             {
                                 "initvalue": "videoHolder",
-                                "type": "dropdown",
+                                "type": "container",
                                 "label": "Volume Bar Location",
                                 "model": "lookAndFeel.components.volume.volumeBarContainer",
                                 "options": [
@@ -350,7 +350,7 @@
                             },
                             {
                                 "initvalue": "videoHolder",
-                                "type": "dropdown",
+                                "type": "container",
                                 "label": "Logo Location",
                                 "model": "lookAndFeel.components.logoContainer",
                                 "options": [
@@ -417,7 +417,7 @@
                             },
                             {
                                 "initvalue": "videoHolder",
-                                "type": "dropdown",
+                                "type": "container",
                                 "label": "Flavor Selector Location",
                                 "model": "lookAndFeel.components.flavor.flavorContainer",
                                 "options": [
@@ -484,7 +484,7 @@
                             },
                             {
                                 "initvalue": "videoHolder",
-                                "type": "dropdown",
+                                "type": "container",
                                 "label": "Playback Rate Selector Location",
                                 "model": "lookAndFeel.components.playbackRate.playbackRateContainer",
                                 "options": [
@@ -551,7 +551,7 @@
                             },
                             {
                                 "initvalue": "videoHolder",
-                                "type": "dropdown",
+                                "type": "container",
                                 "label": "Flag Content Selector Location",
                                 "model": "lookAndFeel.components.flagContent.flagContentContainer",
                                 "options": [
@@ -603,7 +603,7 @@
                     },
                     {
                         "initvalue": "videoHolder",
-                        "type": "dropdown",
+                        "type": "container",
                         "label": "Watermark Location",
                         "model": "lookAndFeel.watermark.watermarkContainer",
                         "options": [

@@ -1,0 +1,10 @@
+<li>
+    <div class='menu-level-trigger'> <a data-ng-click='selfOpenLevel()'>{{label}}</a></div>
+    <div class='mp-level'>
+        <a class='mp-back' ng-click='goBack()' ng-show='parentPage'>Back to {{parentLabel}}</a>
+
+        <h2>{{label}}</h2>
+        <span class='levelDesc'>{{description}}</span>
+        <ul class='menuList' ng-transclude></ul>
+    </div>
+</li>
