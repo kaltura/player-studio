@@ -3,12 +3,20 @@
 ///* Filters */
 //
 angular.module('KMC.filters', ['ngSanitize' ])
-    .filter('HTMLunsafe', function ($sce) {
+    .filter('HTMLunsafe',function ($sce) {
         return function (val) {
             return $sce.trustAsHtml(val);
         };
+    }).filter('timeago', function () {
+        return function (input) {
+            if (typeof $.timeago == 'function') {
+                var date = input * 1000;
+                return $.timeago(date);
+            }
+        }
     })
-    .filter('range',function () {
+    .
+    filter('range',function () {
         return function (input) {
             var lowBound, highBound;
             switch (input.length) {
