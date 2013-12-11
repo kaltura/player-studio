@@ -421,6 +421,10 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                     if (typeof $filter($attrs['filter']) == "function")
                         $scope.model = $filter($attrs['filter'])($scope.model);
                 }
+                if ($attrs['initvalue']) {
+                    if (typeof $scope.model == "undefined" || scope.model == '')
+                        $scope.model = $attrs['initvalue'];
+                }
             },
             templateUrl: 'template/formcontrols/readOnly.html'
         }

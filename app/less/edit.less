@@ -1,4 +1,5 @@
 @import 'mixins.less';
+
 //layout
 body > section > section#edit {
   padding: 0;
@@ -18,8 +19,8 @@ body > section > section#edit {
     position: relative;
     overflow: hidden;
   }
-  .wrapper{
-    width:70%;
+  .wrapper {
+    width: 70%;
   }
 
   #mp-pusher {
@@ -157,11 +158,6 @@ body > section > section#edit {
       &[type="text"], &[type="select2data"] {
         hr {
           margin-top: 42px;
-        }
-      }
-      &[type="menu"] {
-        hr {
-          width: 90%;
         }
       }
       &[type="dropdown"] {
@@ -378,23 +374,25 @@ body > section > section#edit {
     ul[ng-transclude] > li {
       display: block;
       min-height: 40px;
-      a.menu-level-trigger {
+      div.menu-level-trigger {
         padding: 0.6em 1em;
         width: 100%;
-        float: left;
-        font-size: 14px;
-        font-weight: bold;
-        display: block;
-        color: #272727;
-
-        &:hover {
-          text-decoration: none;
-        }
-        &:after {
-          .booticon;
-          float: right;
-          content: "\e080";
+        a {
+          margin-bottom: 16px;
+          float: left;
+          font-size: 14px;
+          font-weight: bold;
+          display: block;
           color: #272727;
+          &:hover {
+            text-decoration: none;
+          }
+          &:after {
+            .booticon;
+            float: right;
+            content: "\e080";
+            color: #272727;
+          }
         }
       }
     }
