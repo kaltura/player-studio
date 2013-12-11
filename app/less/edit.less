@@ -368,6 +368,35 @@ body > section > section#edit {
           background-color: azure;
           outline: 3px double black;
         }
+        .sortContainer {
+          margin-bottom: 20px;
+          overflow: hidden;
+          h4 {
+            padding-left: 0;
+          }
+          border: 1px solid #272727;
+          li.sortObj {
+            &:active, &:hover, &:focus {
+              background: #666666;
+              color:white;
+            }
+            &.ui-sortable-helper{
+              border:1px solid darkred;
+            }
+            min-height: 28px;
+            border-bottom: 1px dashed #666;
+            &:last-child {
+              border-bottom: none;
+            }
+            &:first-child {
+              border-top: 1px dashed #666;
+            }
+            i {
+              padding-left: 10px;
+            }
+
+          }
+        }
       }
     }
 

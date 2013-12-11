@@ -1,0 +1,35 @@
+{
+  "name": "angular-ui-sortable",
+  "description": "This directive allows you to jQueryUI Sortable.",
+  "author": "https://github.com/angular-ui/ui-sortable/graphs/contributors",
+  "license": "MIT",
+  "homepage": "http://angular-ui.github.com",
+  "main": "./src/sortable.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test*",
+    "demo*",
+    "gruntFile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "angular": "~1.2.x",
+    "jquery-ui": ">= 1.9"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.x",
+    "jquery-simulate": "latest"
+  },
+  "_release": "e53fcdf178",
+  "_resolution": {
+    "type": "branch",
+    "branch": "angular1.2",
+    "commit": "e53fcdf1785c480b94f1f1cfbf8298af5f43daf7"
+  },
+  "_source": "git://github.com/angular-ui/ui-sortable.git",
+  "_target": "angular1.2",
+  "_originalSource": "angular-ui-sortable",
+  "_direct": true
+}

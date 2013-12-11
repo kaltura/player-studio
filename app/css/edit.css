@@ -445,6 +445,46 @@ body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-el
   background-color: azure;
   outline: 3px double black;
 }
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer {
+  margin-bottom: 20px;
+  overflow: hidden;
+  border: 1px solid #272727;
+}
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer h4,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer h4 {
+  padding-left: 0;
+}
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer li.sortObj,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer li.sortObj {
+  min-height: 28px;
+  border-bottom: 1px dashed #666;
+}
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer li.sortObj:active,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer li.sortObj:active,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer li.sortObj:hover,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer li.sortObj:hover,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer li.sortObj:focus,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer li.sortObj:focus {
+  background: #666666;
+  color: white;
+}
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer li.sortObj.ui-sortable-helper,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer li.sortObj.ui-sortable-helper {
+  border: 1px solid darkred;
+}
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer li.sortObj:last-child,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer li.sortObj:last-child {
+  border-bottom: none;
+}
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer li.sortObj:first-child,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer li.sortObj:first-child {
+  border-top: 1px dashed #666;
+}
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li label .sortContainer li.sortObj i,
+body > section > section#edit #mp-menu .mp-level ul[ng-transclude] > li .form-element .sortContainer li.sortObj i {
+  padding-left: 10px;
+}
 body > section > section#edit #mp-menu ul[ng-transclude] > li {
   display: block;
   min-height: 40px;

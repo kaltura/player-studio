@@ -91,7 +91,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     break;
                 case 'container' :
                     return  '<model-select parent-container=""/>';
-                break;
+                    break;
                 case 'checkbox' :
                     return '<model-checkbox/>';
                     break;
@@ -118,6 +118,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     break;
                 case 'infoAction':
                     return '<info-action/>';
+                    break;
+                case "sortOrder":
+                    return '<sort-order/>'
                     break;
             }
         };
@@ -404,7 +407,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     });
                     $timeout(function () {
                         menuSvc.setMenu('basicDisplay');
-                    },100);
+                    }, 100);
                 }
             },
             controller: function ($scope, $element, $attrs) {

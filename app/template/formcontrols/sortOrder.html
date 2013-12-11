@@ -1,0 +1,13 @@
+<div class="form-element">
+    <ul>
+        <li ng-repeat="container in containers">
+            <div class="sortContainer"><h4>{{container.name}}</h4>
+                <ul ui-sortable="sortableOptions" ng-model="container.elements">
+                    <li class="sortObj" ng-repeat="obj in container.elements"><i
+                            class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

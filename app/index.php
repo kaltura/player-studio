@@ -43,6 +43,10 @@
     <link rel="stylesheet" href="css/icons.css"/>
     <script type="text/javascript"
             src="lib/malihu_custon_scrollbar/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-ui/ui/jquery.ui.core.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-ui/ui/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-ui/ui/jquery.ui.mouse.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-ui/ui/jquery.ui.sortable.js"></script>
     <script type="text/javascript"
             src="lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.js"></script>
     <script type="text/javascript" src="bower_components/select2/select2.js"></script>
@@ -50,6 +54,7 @@
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-sortable/src/sortable.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
     <script src="lib/sprintf.js"></script>
     <script src="lib/localize.js"></script>

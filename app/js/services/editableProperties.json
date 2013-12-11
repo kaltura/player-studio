@@ -162,6 +162,7 @@
                     {
                         "initvalue": "videoHolder",
                         "type": "container",
+                        "sortVal": 0,
                         "label": "Control Bar Location",
                         "model": "lookAndFeel.components.controlBar.controlBarContainer",
                         "options": [
@@ -233,7 +234,8 @@
                         ],
                         "initvalue": "videoHolder",
                         "type": "container",
-                        "label": "Display location",
+                        "sortVal": 0,
+                        "label": "Display Location",
                         "model": "lookAndFeel.title.titleContainer"
                     },
                     {
@@ -275,15 +277,16 @@
                             {
                                 "label": "Initial Volume",
                                 "type": "number",
-                                "default": 80,
+                                "initvalue": "80",
                                 "model": "lookAndFeel.components.volume.initialvolume",
-                                "from": 0,
-                                "to": 100,
-                                "stepsize": 5
+                                "from": "0",
+                                "to": "100",
+                                "stepsize": "5"
                             },
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
+                                "sortVal": 0,
                                 "label": "Volume Bar Location",
                                 "model": "lookAndFeel.components.volume.volumeBarContainer",
                                 "options": [
@@ -351,6 +354,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
+                                "sortVal": 0,
                                 "label": "Logo Location",
                                 "model": "lookAndFeel.components.logoContainer",
                                 "options": [
@@ -418,6 +422,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
+                                "sortVal": 0,
                                 "label": "Flavor Selector Location",
                                 "model": "lookAndFeel.components.flavor.flavorContainer",
                                 "options": [
@@ -485,6 +490,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
+                                "sortVal": 0,
                                 "label": "Playback Rate Selector Location",
                                 "model": "lookAndFeel.components.playbackRate.playbackRateContainer",
                                 "options": [
@@ -552,6 +558,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
+                                "sortVal": 0,
                                 "label": "Flag Content Selector Location",
                                 "model": "lookAndFeel.components.flagContent.flagContentContainer",
                                 "options": [
@@ -604,6 +611,7 @@
                     {
                         "initvalue": "videoHolder",
                         "type": "container",
+                        "sortVal": 0,
                         "label": "Watermark Location",
                         "model": "lookAndFeel.watermark.watermarkContainer",
                         "options": [
@@ -686,6 +694,19 @@
                                 "numberOfDecimals": 1
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                "type": "menu",
+                "label": "Sort Order",
+                "model": "lookAndFeel.sortOrder",
+                "endline": "true",
+                "children": [
+                    {
+                        "type": "sortOrder",
+                        "label": "Sort Order",
+                        "model": "lookAndFeel.sortOrder.sortOrder"
                     }
                 ]
             }

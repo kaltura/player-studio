@@ -1,21 +1,71 @@
 'use strict';
 /* Services */
 var KMCServices = angular.module('KMC.services', []);
-KMCServices.config(['$httpProvider', function($httpProvider) {
+KMCServices.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
-KMCServices.factory('playerCache', function($cacheFactory) {
+KMCServices.factory('playerCache', function ($cacheFactory) {
     return $cacheFactory('playerCache', {
         capacity: 10
     });
-})
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , function($http, $modal, $log, $q, apiService) {
+});
+KMCServices.factory('sortSvc', [function () {
+    var containers = {};
+    var sorter = {}
+
+    var Container = function Container(name) {
+        this.name = name;
+        this.elements = [];
+        containers[name] = this;
+    }
+    Container.prototype.addElement = function (model) {
+        this.elements.push(model);
+    }
+    Container.prototype.callObjectsUpdate = function () {
+        angular.forEach(this.elements, function (model) {
+            cl(model.sortVal + ' ' + model.model);
+        })
+    }
+    Container.prototype.removeElement = function (model) {
+        var index = this.elements.indexOf(model);
+        if (index != -1)
+            this.elements.splice(index, 1);
+    }
+    sorter.sortScope = '';
+    sorter.register = function (containerName, model) {
+        var container = (typeof  containers[containerName] == 'undefined') ? new Container(containerName) : containers[containerName];
+        container.addElement(model);
+    }
+    sorter.update = function (newVal, oldVal, model) {
+        var oldContainer = containers[oldVal]
+        var newContainer = (!containers[newVal]) ? new Container(newVal) : containers[newVal];
+        if (oldContainer) {
+            oldContainer.removeElement(model);
+        }
+        newContainer.addElement(model)
+        if (typeof  sorter.sortScope == 'object') {
+            sorter.sortScope.$broadcast('sortContainersChanged');
+        }
+    }
+    sorter.getObjects = function () {
+        return containers;
+    }
+    sorter.saveOrder = function (containersObj) {
+        containers = containersObj;
+        angular.forEach(containers, function (container) {
+            container.callObjectsUpdate();
+        })
+    }
+    return sorter;
+}]
+);
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , function ($http, $modal, $log, $q, apiService) {
     var playersCache = [];
     var currentPlayer = {};
     var playersService = {
 
-        'getPlayer': function(id) {
+        'getPlayer': function (id) {
             var cache = false;
             var deferred = $q.defer();
             if (typeof currentPlayer.id != 'undefined') { // find if player obj is already loaded
@@ -40,7 +90,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'id': id
 
                 }
-                apiService.doRequest(request).then(function(result) {
+                apiService.doRequest(request).then(function (result) {
                         deferred.resolve(result);
                         currentPlayer = result;
                     }
@@ -48,25 +98,25 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             }
             return deferred.promise;
         },
-        cachePlayers: function(playersList) {
+        cachePlayers: function (playersList) {
             if ($.isArray(playersList))
                 playersCache = playersCache.concat(playersList);
             else playersCache.push(playersList)
         },
-        'getRequiredVersion': function() {
+        'getRequiredVersion': function () {
             return 2;
         },
-        'getPlayers': function() {
+        'getPlayers': function () {
             return $http.get('js/services/allplayers.json');
         },
-        'playerUpdate': function(playerObj) {
+        'playerUpdate': function (playerObj) {
             //TODO: api call for update
             var text = '<span>Updating the player -- TEXT MISSING -- current version </span>';
             var modal = $modal.open({
                 templateUrl: 'template/dialog/message.html',
                 controller: 'ModalInstanceCtrl',
                 resolve: {
-                    settings: function() {
+                    settings: function () {
                         return {
                             'title': 'Update confirmation',
                             'message': text + playerObj.version
@@ -74,32 +124,32 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     }
                 }
             });
-            modal.result.then(function(result) {
+            modal.result.then(function (result) {
                 if (result) {
                     $log.info('update modal confirmed for item version ' + playerObj.version + 'at: ' + new Date());
                 }
 
-            }, function() {
+            }, function () {
                 $log.info('update modal dismissed at: ' + new Date());
             });
         }
     }
     return playersService;
 }])
-KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootScope) {
+KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($rootScope) {
         // private notification messages
         var _START_REQUEST_ = '_START_REQUEST_';
         var _END_REQUEST_ = '_END_REQUEST_';
         var obj = {customStart: null};
         // publish start request notification
-        obj.requestStarted = function(customStart) {
+        obj.requestStarted = function (customStart) {
             $rootScope.$broadcast(_START_REQUEST_);
             if (customStart) {
                 obj.customStart = customStart;
             }
         };
         // publish end request notification
-        obj.requestEnded = function(customStart) {
+        obj.requestEnded = function (customStart) {
             if (obj.customStart) {
                 if (customStart == obj.customStart) {
                     $rootScope.$broadcast(_END_REQUEST_);
@@ -111,57 +161,57 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
                 $rootScope.$broadcast(_END_REQUEST_);
         };
         // subscribe to start request notification
-        obj.onRequestStarted = function($scope, handler) {
-            $scope.$on(_START_REQUEST_, function(event) {
+        obj.onRequestStarted = function ($scope, handler) {
+            $scope.$on(_START_REQUEST_, function (event) {
                 handler();
             });
         };
         // subscribe to end request notification
-        obj.onRequestEnded = function($scope, handler) {
-            $scope.$on(_END_REQUEST_, function(event) {
+        obj.onRequestEnded = function ($scope, handler) {
+            $scope.$on(_END_REQUEST_, function (event) {
                 handler();
             });
         };
 
         return obj;
     }])
-    .factory('editableProperties', ['$http', function($http) {
+    .factory('editableProperties', ['$http', function ($http) {
         return $http.get('js/services/editableProperties.json');
     }])
-    .factory('apiService', ['$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function($q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
+    .factory('apiService', ['$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function ($q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
         return{
             apiObj: null,
-            getClient: function() {
+            getClient: function () {
                 //first request - create new kwidget.api
                 if (!this.apiObj) {
                     this.apiObj = new kWidget.api();
                 }
                 return this.apiObj;
             },
-            unSetks: function() {
+            unSetks: function () {
                 delete this.apiObj;
             },
-            setKs: function(ks) {
+            setKs: function (ks) {
                 this.getClient().setKs(ks);
             },
-            setWid: function(wid) {
+            setWid: function (wid) {
                 this.getClient().wid = wid;
             },
-            getKey: function(params) {
+            getKey: function (params) {
                 var key = '';
                 for (var i in params) {
                     key += params[i] + '_';
                 }
                 return key;
             },
-            listMedia: function() {
+            listMedia: function () {
                 var request = {
                     'service': 'media',
                     'action': 'list'
                 };
                 return this.doRequest(request);
             },
-            doRequest: function(params) {
+            doRequest: function (params) {
                 //Creating a deferred object
                 var deferred = $q.defer();
                 requestNotificationChannel.requestStarted();
@@ -169,9 +219,9 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
                 if (playerCache.get(params_key)) {
                     deferred.resolve(playerCache.get(params_key));
                 } else {
-                    this.getClient().doRequest(params, function(data) {
+                    this.getClient().doRequest(params, function (data) {
                         //timeout will trigger another $digest cycle that will trigger the "then" function
-                        $timeout(function() {
+                        $timeout(function () {
                             if (data.code) {
                                 if (data.code == "INVALID_KS") {
                                     localStorageService.remove('ks');
@@ -192,12 +242,12 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
             }
         };
     }])
-    .factory('playerTemplates', ['$http', function($http) {
+    .factory('playerTemplates', ['$http', function ($http) {
         return {
-            'listSystem': function() {
+            'listSystem': function () {
                 return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
             },
-            'listUser': function() {
+            'listUser': function () {
                 return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
             }
         }
