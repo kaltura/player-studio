@@ -1,6 +1,6 @@
 <label>
         <span class="tooltipWrap" data-tooltip="{{helpnote}}">
             {{label}}
-            <input type="checkbox" class="prettyCheckbox" ng-model="model">
+            <input type="checkbox" ng-checked="$parent.model" class="prettyCheckbox" ng-model="$parent.model">
         </span>
 </label>

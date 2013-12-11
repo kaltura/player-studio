@@ -165,11 +165,6 @@ body > section > section#edit #mp-menu label[type="select2data"] hr,
 body > section > section#edit #mp-menu div.form-element[type="select2data"] hr {
   margin-top: 42px;
 }
-body > section > section#edit #mp-menu ul.menuList > li[type="menu"] hr,
-body > section > section#edit #mp-menu label[type="menu"] hr,
-body > section > section#edit #mp-menu div.form-element[type="menu"] hr {
-  width: 90%;
-}
 body > section > section#edit #mp-menu ul.menuList > li[type="dropdown"] hr,
 body > section > section#edit #mp-menu label[type="dropdown"] hr,
 body > section > section#edit #mp-menu div.form-element[type="dropdown"] hr {
@@ -454,19 +449,22 @@ body > section > section#edit #mp-menu ul[ng-transclude] > li {
   display: block;
   min-height: 40px;
 }
-body > section > section#edit #mp-menu ul[ng-transclude] > li a.menu-level-trigger {
+body > section > section#edit #mp-menu ul[ng-transclude] > li div.menu-level-trigger {
   padding: 0.6em 1em;
   width: 100%;
+}
+body > section > section#edit #mp-menu ul[ng-transclude] > li div.menu-level-trigger a {
+  margin-bottom: 16px;
   float: left;
   font-size: 14px;
   font-weight: bold;
   display: block;
   color: #272727;
 }
-body > section > section#edit #mp-menu ul[ng-transclude] > li a.menu-level-trigger:hover {
+body > section > section#edit #mp-menu ul[ng-transclude] > li div.menu-level-trigger a:hover {
   text-decoration: none;
 }
-body > section > section#edit #mp-menu ul[ng-transclude] > li a.menu-level-trigger:after {
+body > section > section#edit #mp-menu ul[ng-transclude] > li div.menu-level-trigger a:after {
   position: relative;
   top: 1px;
   display: inline-block;

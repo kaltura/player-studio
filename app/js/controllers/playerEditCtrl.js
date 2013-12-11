@@ -13,12 +13,14 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.userEntries = userEntries;
             // set tags
             $scope.tags = [];
+            // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
+            // the model tags of the player are actually set properly from the ng-model of the tags directive and are not needed here
             if (typeof $scope.data.tags != "undefined"){
                 var tags = typeof $scope.data.tags == "string" ? $scope.data.tags.split(",") : $scope.data.tags;
                 for (var i = 0; i < tags.length; i++)
                     $scope.tags.push({id: tags[i], text: tags[i]});
             }
-
+            //registers the tags to be available to the directive
             menuSvc.registerAction('getTags', function () {
                 return $scope.tags;
             });

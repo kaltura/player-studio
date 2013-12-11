@@ -35,7 +35,7 @@
             <div class="scroller row" mcustom-scrollbar="{autoHideScrollbar:false}">
                 <table>
                     <tbody>
-                    <tr class="row" on-finish-render
+                    <tr class="row repeat-animation" on-finish-render
                         ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
                         <td class=" playerThumbWrapper col-xs-2">
                             <img class="playerThumb" ng-src="{{getThumbnail(item)}}"/>
