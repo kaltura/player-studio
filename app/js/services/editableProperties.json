@@ -25,7 +25,7 @@
                 "label": "Player Tags",
                 "type": "tags",
                 "helpnote": "tags and bugs",
-                "model": "basicDisplay.tags",
+                "model": "tags",
                 "source": "getTags"
             },
             {

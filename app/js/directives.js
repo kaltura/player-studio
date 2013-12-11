@@ -207,7 +207,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             },
             controller: function($scope, $element, $attrs) {
                 $scope.selectOpts = {simple_tags: true, 'multiple': true, tokenSeparators: [",", " "]};
-                $scope.selectOpts['tags'] = menuSvc.doAction($attrs.source);
+                $scope.selectOpts['tags'] = menuSvc.doAction($attrs.source); // these tags will be available from the dropdown list/ autocomplete suggestions
 
             },
             templateUrl: 'template/formcontrols/modelTags.html',
