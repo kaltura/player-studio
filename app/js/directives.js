@@ -1,6 +1,6 @@
 'use strict';
 /* Directives */
-angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
+angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortable'])
     .directive('mcustomScrollbar', ['$timeout', function ($timeout) {
         return{
             priority: 0,
@@ -242,34 +242,11 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             }
         }
     })
-    .directive('infoAction', function (menuSvc) {
-        return {
-            restrict: 'E',
-            replace: 'true',
-            controller: function ($scope, $element, $attrs) {
-                $scope.check = function (action) {
-                    // for update button.. checks if needed
-                    return   menuSvc.checkAction(action);
-                }
-                $scope.btnAction = function (action) {
-                    menuSvc.doAction(action);
-                }
-            },
-            scope: {
-                'model': '=',
-                'btnLabel': '@',
-                'btnClass': '@',
-                'action': '@',
-                'helpnote': '@',
-                'label': '@'
-            },
-            templateUrl: 'template/formcontrols/infoAction.html'
-        }
-    })
     .directive('modelSelect',function (menuSvc) {
         return {
             replace: true,
             restrict: 'E',
+            require: '?parentContainer',
             scope: {
                 label: "@",
                 model: "=",
@@ -281,7 +258,19 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
-                return function ($scope, $element, $attrs) {
+                return function ($scope, $element, $attrs, controller) {
+                    if (controller) {
+                        var pubObj = {
+                            model: $attrs.model,
+                            label: $attrs.label.replace('Location',''),
+                            sortVal: menuSvc.getControlData($attrs.model).sortVal
+                        }
+                        controller.register($scope.model, pubObj); // container,model
+                        $scope.$watch('model', function (newVal, oldVal) {
+                            if (newVal != oldVal)
+                                controller.update(newVal, oldVal, pubObj);
+                        })
+                    }
                     var menuData = menuSvc.getControlData($attrs.model);
                     $scope.options = menuData.options;
 
@@ -321,7 +310,83 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2'])
             templateUrl: 'template/formcontrols/modelSelect.html'
         }
     }
-).
+).directive('parentContainer', function (sortSvc) {// another layer of possible manipulation, interface for the sortSvc
+        return {
+            restrict: 'A',
+            controller: function ($scope, $element, $attrs) {
+                var cntrl = {
+                    register: function (container, model) {
+                        sortSvc.register(container, model);
+                    },
+                    update: function (newVal, oldVal, model) {
+                        sortSvc.update(newVal, oldVal, model);
+                    }
+                }
+                return cntrl;
+            },
+            link: function (scope, element, attrs) {
+
+            }
+        }
+    })
+    .directive('sortOrder', ['sortSvc', function (sortSvc) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {},
+            templateUrl: 'template/formcontrols/sortOrder.html',
+            controller: function ($scope, $element, $attrs) {
+                $scope.getObjects = function () {
+                    $scope.containers = sortSvc.getObjects();
+                }
+                $scope.getObjects(); //init
+                sortSvc.sortScope = $scope;
+                $scope.$on('sortContainersChanged', function () {
+                    $scope.getObjects();
+                });
+                $scope.$watchCollection('containers', function (newVal, oldVal) {
+                    if (newVal != oldVal) {
+                        sortSvc.saveOrder($scope.containers);
+                    }
+                });
+                $scope.sortableOptions = {
+                    update: function (e, ui) {
+                        cl($scope.containers)
+                    },
+                    axis: 'y'
+                };
+            },
+            link: function (scope, element, attrs) {
+
+            }
+
+        }
+    }])
+
+    .directive('infoAction',function (menuSvc) {
+        return {
+            restrict: 'E',
+            replace: 'true',
+            controller: function ($scope, $element, $attrs) {
+                $scope.check = function (action) {
+                    // for update button.. checks if needed
+                    return   menuSvc.checkAction(action);
+                }
+                $scope.btnAction = function (action) {
+                    menuSvc.doAction(action);
+                }
+            },
+            scope: {
+                'model': '=',
+                'btnLabel': '@',
+                'btnClass': '@',
+                'action': '@',
+                'helpnote': '@',
+                'label': '@'
+            },
+            templateUrl: 'template/formcontrols/infoAction.html'
+        }
+    }).
     directive('prettyCheckbox',function () {
         return {
             restrict: 'AC',
