@@ -78,7 +78,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         // Check if we have ks in locaclstorage
         var ks = localStorageService.get('ks');
         if (!ks) { //navigate to login
-            return $location.path("/login");
+             $location.path("/login");
+            return false;
         } else {
             apiService.setKs(ks);
         }

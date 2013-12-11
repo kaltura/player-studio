@@ -128,7 +128,7 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
     .factory('editableProperties', ['$http', function($http) {
         return $http.get('js/services/editableProperties.json');
     }])
-    .factory('apiService', ['$q', '$timeout', '$location' , 'playerCache', 'requestNotificationChannel', function($q, $timeout, $location, playerCache, requestNotificationChannel) {
+    .factory('apiService', ['$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function($q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
         return{
             apiObj: null,
             getClient: function() {
@@ -174,6 +174,7 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
                         $timeout(function() {
                             if (data.code) {
                                 if (data.code == "INVALID_KS") {
+                                    localStorageService.remove('ks');
                                     $location.path("/login");
                                 }
                                 requestNotificationChannel.requestEnded();
