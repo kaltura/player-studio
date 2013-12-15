@@ -6,8 +6,7 @@ window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
     ['localization', 'ngRoute', 'KMC.controllers', 'KMC.filters',
-        'KMC.services', 'KMC.directives', 'ui.bootstrap','ngAnimate',
-        , 'LocalStorageModule', 'KMC.menu']);
+        'KMC.services', 'KMC.directives', 'ui.bootstrap','ngAnimate', 'LocalStorageModule', 'KMC.menu']);
 
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
     $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });

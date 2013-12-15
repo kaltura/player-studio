@@ -42,7 +42,7 @@
     </style>
     <![endif]-->
     <!-- TODO move to ini file -->
-    <script type="text/javascript" src="http://kgit.html5video.org/tags/v2.0.0.rc7/mwEmbedLoader.php"></script>
+    <script type="text/javascript" src="http://kgit.html5video.org/pulls/500/mwEmbedLoader.php?debug=true"></script>
     <link rel="stylesheet" href="bower_components/select2/select2.css">
     <link rel="stylesheet" href="lib/prettycheckable/dist/prettyCheckable.css">
     <!--    app stylesheets - should be loaded in the views...-->
@@ -91,7 +91,7 @@
 <section class="relative" ng-view></section>
 <!--[if lte IE 9]>
 <script>
-    window.myCustomTags = [ 'featureMenu', 'highlight', 'navmenu', 'menuSearchCtl', 'menuLevel', 'menuHead',
+    window.myCustomTags = [ 'featureMenu', 'highlight', 'navmenu', 'menuSearchCtl', 'menuLevel', 'menuHead','nav','section',
         'mcustomScrollbar', 'timeago', 'modelRadio', 'modelColor', 'modelText', 'select2Data', 'modelEdit', 'modelTags',
         'modelSelect', 'parentContainer', 'sortOrder', 'infoAction', 'modelCheckbox', 'readOnly', 'modelButton',
         'modelNumber', 'loadingWidget']; // any E type directive needs to be here for IE8 compatibility

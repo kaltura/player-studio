@@ -380,7 +380,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
     }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout' , function (menuSvc, $compile, $timeout) {
 
         return  {
-            template: "<nav  ng-form name='playerEdit' id='mp-menu'>" +
+            template: "<nav  ng-form='playerEdit' name='playerEdit' id='mp-menu'>" +
                 "<div id='mp-inner'>" +
                 "<div id='mp-base' class='mp-level'>" +
                 "<ul ng-transclude></ul>" +
