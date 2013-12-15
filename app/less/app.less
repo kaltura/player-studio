@@ -1,19 +1,24 @@
 /* app stylesheet */
-html, body, body > section, .wrapper,.scroller  {
+html, body, body > section, .wrapper, .scroller {
   height: 100%;
 }
+
 body > section > * {
   padding-top: 26px;
 }
-body  a { //default links color
-  color:#009dff;
-  &:hover,&:focus,&:active{
-    color:#51c0ff;
+
+body a {
+  //default links color
+  color: #009dff;
+  &:hover, &:focus, &:active {
+    color: #51c0ff;
   }
 }
+
 .fluid-container {
-  padding:26px;
+  padding: 26px;
 }
+
 .alert {
   text-align: center;
   padding: 5px;
@@ -22,13 +27,16 @@ body  a { //default links color
 .padTop {
   padding-top: 15px;
 }
-.noPadding{
-  padding:0;
+
+.noPadding {
+  padding: 0;
 }
-.wrapText{
+
+.wrapText {
   white-space: pre-wrap;
   word-break: break-all;
 }
+
 .scroller-inner > .container {
   margin: auto;
   max-width: 95%;
@@ -98,22 +106,24 @@ body  a { //default links color
   border-left: 0px;
   background-color: #FFFFFF;
 }
+
 .btn-primary {
   background-color: #26b2ec;
   border-color: #26b2ec;
   color: #fff;
-  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #1ea7e0;
-  background-image: -moz-linear-gradient(top,#26b2ec,#1296cd);
-  background-image: -webkit-gradient(linear,0 0,0 100%,from(#26b2ec),to(#1296cd));
-  background-image: -webkit-linear-gradient(top,#26b2ec,#1296cd);
-  background-image: -o-linear-gradient(top,#26b2ec,#1296cd);
-  background-image: linear-gradient(to bottom,#26b2ec,#1296cd);
+  background-image: -moz-linear-gradient(top, #26b2ec, #1296cd);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#26b2ec), to(#1296cd));
+  background-image: -webkit-linear-gradient(top, #26b2ec, #1296cd);
+  background-image: -o-linear-gradient(top, #26b2ec, #1296cd);
+  background-image: linear-gradient(to bottom, #26b2ec, #1296cd);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff26b2ec', endColorstr='#ff1196cd', GradientType=0);
   border-color: #1296cd #1296cd #0c6387;
-  border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
+
 .btn-primary:hover,
 .btn-primary:focus {
   text-decoration: none;
@@ -123,16 +133,19 @@ body  a { //default links color
   -o-transition: background-position .1s linear;
   transition: background-position .1s linear;
 }
+
 .btn-primary:hover,
 .btn-primary:focus {
   background-color: #1296cd;
 }
+
 .btn-primary:active,
 .btn-primary.active,
 .btn-primary.active:hover {
   background-color: #14a7e4;
   border-color: #1296cd;
 }
+
 .btn-primary.disabled:hover,
 .btn-primary.disabled:focus,
 .btn-primary.disabled:active,
@@ -145,36 +158,53 @@ body  a { //default links color
   border-color: #26b2ec;
 }
 
-h1,h2,h3 {
-  color:#272727;
+h1, h2, h3 {
+  color: #272727;
 }
+
 .tooltipWrap {
   display: block;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 }
+
 /*
  * ngRepeat triggers three animation events: enter, leave and move.
  */
 .repeat-animation.ng-enter,
 .repeat-animation.ng-leave,
 .repeat-animation.ng-move {
-  -webkit-transition:0.5s linear all;
-  transition:0.5s linear all;
+  -webkit-transition: 0.5s linear all;
+  transition: 0.5s linear all;
 }
 
 /* ending enter and move styling
    (this is what the element will animate from */
 .repeat-animation.ng-enter,
-.repeat-animation.ng-move { opacity:0; }
+.repeat-animation.ng-move {
+  opacity: 0;
+}
 
 /* ending enter and move styling
    (this is what the element will animate towards */
 .repeat-animation.ng-enter.ng-enter-active,
-.repeat-animation.ng-move.ng-move-active { opacity:1; }
+.repeat-animation.ng-move.ng-move-active {
+  opacity: 1;
+}
 
 /* starting leave animation */
-.repeat-animation.ng-leave { opacity:1; }
+.repeat-animation.ng-leave {
+  opacity: 1;
+}
 
 /* ending leave animation */
-.repeat-animation.ng-leave.ng-leave-active { opacity:0; }
+.repeat-animation.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+#loginBox {
+  max-width: 400px;
+  text-align: center;
+  margin: auto;
+
+}
