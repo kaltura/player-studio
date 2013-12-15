@@ -2,6 +2,7 @@
 <html id="ng-app" lang="en" ng-app="KMCModule">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <base href="<?php
     $dir = $_SERVER['REQUEST_URI'];
     $dir = str_replace('\\', '/', $dir);
@@ -23,7 +24,6 @@
     <script type="text/javascript" src="lib/html5shiv.js"></script>
     <script type="text/javascript" src="lib/respond.min.js"></script>
     <![endif]-->
-    <!--change this base tag to the root of your app URL-->
     <title>Player Studio - JS Version</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">

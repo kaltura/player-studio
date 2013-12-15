@@ -129,7 +129,7 @@ KMCModule.controller('PlayerListCtrl',
 //                TODO:will need to get the current ID and move it to the edit page with duplicate flag (save as new)
                 $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
             };
-            //TODO: preview action...
+            // TODO: preview action...
             $scope.delete = function (item) {
                 //TODO: api call for delete
                 var modal = $modal.open({

@@ -23,7 +23,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
                     theme: 'dark',
                     advanced: {
                         updateOnBrowserResize: true,
-                        updateOnContentResize: true,
+                        updateOnContentResize: true\
                     }
                 };
                 angular.extend(opts, options);
