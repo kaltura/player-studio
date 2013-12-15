@@ -84,7 +84,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             apiService.setKs(ks);
         }
         return apiService;
-    }
+    };
+
     $routeProvider.when('/edit/:id',
         {templateUrl: 'view/edit.html',
             controller: 'PlayerEditCtrl',

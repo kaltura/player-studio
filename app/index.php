@@ -91,7 +91,7 @@
 <section class="relative" ng-view></section>
 <!--[if lte IE 9]>
 <script>
-    window.myCustomTags = [ 'featureMenu', 'highlight', 'navmenu', 'menuSearchCtl', 'menuLevel', 'menuHead'
+    window.myCustomTags = [ 'featureMenu', 'highlight', 'navmenu', 'menuSearchCtl', 'menuLevel', 'menuHead',
         'mcustomScrollbar', 'timeago', 'modelRadio', 'modelColor', 'modelText', 'select2Data', 'modelEdit', 'modelTags',
         'modelSelect', 'parentContainer', 'sortOrder', 'infoAction', 'modelCheckbox', 'readOnly', 'modelButton',
         'modelNumber', 'loadingWidget']; // any E type directive needs to be here for IE8 compatibility
