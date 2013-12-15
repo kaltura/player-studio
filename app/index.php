@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="KMCModule">
+<html id="ng-app" lang="en" ng-app="KMCModule">
 <head>
     <meta charset="utf-8">
     <base href="<?php
@@ -79,5 +79,15 @@
 <body>
 <loading-widget></loading-widget>
 <section class="relative" ng-view></section>
+<!--[if lte IE 9]>
+<script src="/lib/html5shiv.js"></script>
+<script>
+    window.myCustomTags = [ 'featureMenu', 'highlight', 'navmenu', 'menuSearchCtl', 'menuLevel', 'menuHead'
+        'mcustomScrollbar', 'timeago', 'modelRadio', 'modelColor', 'modelText', 'select2Data', 'modelEdit', 'modelTags',
+        'modelSelect', 'parentContainer', 'sortOrder', 'infoAction', 'modelCheckbox', 'readOnly', 'modelButton',
+        'modelNumber', 'loadingWidget']; // any E type directive needs to be here for IE8 compatibility
+</script>
+<script src="bower_components/angular-ui-utils/modules/ie-shiv/ie-shiv.js"></script>
+<![endif]-->
 </body>
 </html>
