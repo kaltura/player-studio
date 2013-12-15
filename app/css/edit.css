@@ -30,6 +30,32 @@ body > section > section#edit .wrapper {
 body > section > section#edit .wrapper {
   width: 70%;
 }
+body > section > section#edit .wrapper .container {
+  display: block;
+  position: relative;
+  width: 90%;
+  margin: auto;
+}
+body > section > section#edit .wrapper .container #spacer {
+  padding-top: 25px;
+  margin-top: 56.25%;
+  height: 0;
+}
+body > section > section#edit .wrapper .container #spacer .narrow {
+  margin-top: 75%;
+}
+body > section > section#edit .wrapper .container #kVideoContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+body > section > section#edit .wrapper .container #kVideoContainer #kVideoTarget {
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+}
 body > section > section#edit #mp-pusher {
   left: 30%;
   height: 100%;

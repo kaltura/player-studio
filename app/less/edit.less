@@ -21,6 +21,34 @@ body > section > section#edit {
   }
   .wrapper {
     width: 70%;
+    .container {
+      display: block;
+      position: relative;
+      width: 90%;
+      margin: auto;
+      #spacer {
+        padding-top: 25px; // for ie8 to show the control bar (height is a guess here)
+        margin-top: 56.25%; //16-9
+        height: 0;
+        .narrow {
+          margin-top: 75%; //4-3
+        }
+      }
+
+      #kVideoContainer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        #kVideoTarget {
+          width: 100%;
+          overflow: hidden;
+          height: 100%;
+        }
+
+      }
+    }
   }
 
   #mp-pusher {
@@ -378,10 +406,10 @@ body > section > section#edit {
           li.sortObj {
             &:active, &:hover, &:focus {
               background: #666666;
-              color:white;
+              color: white;
             }
-            &.ui-sortable-helper{
-              border:1px solid darkred;
+            &.ui-sortable-helper {
+              border: 1px solid darkred;
             }
             min-height: 28px;
             border-bottom: 1px dashed #666;
