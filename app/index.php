@@ -18,6 +18,11 @@
     <!--[if gte IE 9]><!-->
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
     <!--<![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
     <!--change this base tag to the root of your app URL-->
     <title>Player Studio - JS Version</title>
     <!-- Latest compiled and minified CSS -->
@@ -61,31 +66,30 @@
     <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-sortable/src/sortable.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-select2/src/select2.js"></script>
-    <script src="lib/sprintf.js"></script>
-    <script src="lib/localize.js"></script>
-    <script src="lib/spin.min.js"></script>
-    <script src="lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.7.0.js"></script>
-    <script src="lib/spinedit/js/bootstrap-spinedit.js"></script>
-    <script src="lib/colorpicker/js/bootstrap-colorpicker-module.js"></script>
-    <script src="lib/localStorage/angular-local-storage.js"></script>
-    <script src="lib/jquery.timeago.js"></script>
-    <script src="lib/jquery.animate-colors-min.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/menu.js"></script>
-    <script src="js/filters.js"></script>
-    <script src="js/controllers/controllers.js"></script>
-    <script src="js/directives.js"></script>
-    <script src="js/services/services.js"></script>
-    <script src="js/controllers/playerListCtrl.js"></script>
-    <script src="js/controllers/playerEditCtrl.js"></script>
-    <script src="js/controllers/LoginCtrl.js"></script>
-    <script src="js/controllers/playerCreateCtrl.js"></script>
+    <script type="text/javascript" src="lib/sprintf.js"></script>
+    <script type="text/javascript" src="lib/localize.js"></script>
+    <script type="text/javascript" src="lib/spin.min.js"></script>
+    <script type="text/javascript" src="lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.7.0.js"></script>
+    <script type="text/javascript" src="lib/spinedit/js/bootstrap-spinedit.js"></script>
+    <script type="text/javascript" src="lib/colorpicker/js/bootstrap-colorpicker-module.js"></script>
+    <script type="text/javascript" src="lib/localStorage/angular-local-storage.js"></script>
+    <script type="text/javascript" src="lib/jquery.timeago.js"></script>
+    <script type="text/javascript" src="lib/jquery.animate-colors-min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/menu.js"></script>
+    <script type="text/javascript" src="js/filters.js"></script>
+    <script type="text/javascript" src="js/controllers/controllers.js"></script>
+    <script type="text/javascript" src="js/directives.js"></script>
+    <script type="text/javascript" src="js/services/services.js"></script>
+    <script type="text/javascript" src="js/controllers/playerListCtrl.js"></script>
+    <script type="text/javascript" src="js/controllers/playerEditCtrl.js"></script>
+    <script type="text/javascript" src="js/controllers/LoginCtrl.js"></script>
+    <script type="text/javascript" src="js/controllers/playerCreateCtrl.js"></script>
 </head>
 <body>
 <loading-widget></loading-widget>
 <section class="relative" ng-view></section>
 <!--[if lte IE 9]>
-<script src="lib/html5shiv.js"></script>
 <script>
     window.myCustomTags = [ 'featureMenu', 'highlight', 'navmenu', 'menuSearchCtl', 'menuLevel', 'menuHead'
         'mcustomScrollbar', 'timeago', 'modelRadio', 'modelColor', 'modelText', 'select2Data', 'modelEdit', 'modelTags',
