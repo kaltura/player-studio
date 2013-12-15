@@ -130,7 +130,7 @@ KMCModule.controller('PlayerListCtrl',
                 $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
             };
             // TODO: preview action...
-            $scope.delete = function (item) {
+            $scope.deletePlayer = function (item) {
                 //TODO: api call for delete
                 var modal = $modal.open({
                     templateUrl: 'template/dialog/message.html',
