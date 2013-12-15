@@ -1,5 +1,3 @@
-'use strict';
-
 /* Controllers */
 
 KMCModule.controller('LoginCtrl',
