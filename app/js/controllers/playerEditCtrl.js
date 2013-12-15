@@ -1,3 +1,5 @@
+'use strict';
+
 /* Controllers */
 
 KMCModule.controller('PlayerEditCtrl',
@@ -59,7 +61,7 @@ KMCModule.controller('PlayerEditCtrl',
             })
             $scope.renderPlayer = function () {
                 kWidget.embed({
-                    "targetId": "kplayer",
+                    "targetId": "kVideoTarget",
                     "wid": "_" + $scope.data.partnerId,
                     "uiconf_id": $scope.data.id,
                     "flashvars": {},

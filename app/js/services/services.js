@@ -1,3 +1,4 @@
+'use strict';
 /* Services */
 var KMCServices = angular.module('KMC.services', []);
 KMCServices.config(['$httpProvider', function ($httpProvider) {

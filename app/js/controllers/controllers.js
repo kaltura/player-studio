@@ -1,3 +1,5 @@
+'use strict';
+
 /* Controllers */
 //
 angular.module('KMC.controllers', [])
