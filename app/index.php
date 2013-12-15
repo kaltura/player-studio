@@ -80,7 +80,7 @@
 <loading-widget></loading-widget>
 <section class="relative" ng-view></section>
 <!--[if lte IE 9]>
-<script src="/lib/html5shiv.js"></script>
+<script src="lib/html5shiv.js"></script>
 <script>
     window.myCustomTags = [ 'featureMenu', 'highlight', 'navmenu', 'menuSearchCtl', 'menuLevel', 'menuHead'
         'mcustomScrollbar', 'timeago', 'modelRadio', 'modelColor', 'modelText', 'select2Data', 'modelEdit', 'modelTags',
