@@ -12,7 +12,12 @@
         echo $dirParts[0] . '/app/';
     } else echo "/";
     ?>"/>
+    <!--[if lte IE 9]>
+    <script type="text/javascript" src="bower_components/jquery/jquery-1.10.2.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
+    <!--<![endif]-->
     <!--change this base tag to the root of your app URL-->
     <title>Player Studio - JS Version</title>
     <!-- Latest compiled and minified CSS -->
