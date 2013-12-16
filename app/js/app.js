@@ -128,6 +128,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     });
     $routeProvider.otherwise({
         resolve: {'res': function (localStorageService, $location) {
+            if (parent.kmc && parent.kmc.vars){
+                // got ks from KMC - save to local storage
+                if (parent.kmc.vars.ks)
+                    localStorageService.add('ks', parent.kmc.vars.ks);
+            }
             var ks = localStorageService.get('ks');
             if (!ks) { //navigate to login
                 return $location.path("/login");
