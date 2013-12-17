@@ -262,7 +262,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
                     if (controller) {
                         var pubObj = {
                             model: $attrs.model,
-                            label: $attrs.label.replace('Location',''),
+                            label: $attrs.label.replace('Location', ''),
                             sortVal: menuSvc.getControlData($attrs.model).sortVal
                         }
                         controller.register($scope.model, pubObj); // container,model
@@ -362,7 +362,20 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
 
         }
     }])
+    .directive('playerRefresh', function (PlayerService, menuSvc) {
+        return {
+            restrict: "A",
+            link: function ($scope, $element, $attrs) {
+                if ($attrs['playerRefresh'] != 'false') {
+                    var model = $attrs['model'];
+                    menuSvc.menuScope.$watch(model, function () {
+                        PlayerService.playerRefresh($attrs['playerRefresh']);
+                    })
+                }
+            }
+        }
 
+    })
     .directive('infoAction',function (menuSvc) {
         return {
             restrict: 'E',

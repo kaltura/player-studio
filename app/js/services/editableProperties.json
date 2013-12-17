@@ -9,6 +9,8 @@
             {
                 "label": "Player's Name",
                 "type": "text",
+                "player-refresh": "// if you will want to auto add this to all properties than false will make an exception..",
+                "player-refresh": false,
                 "model": "name",
                 "default": "New Player",
                 "helpnote": "Please enter your player's name blah blah blah",
@@ -34,12 +36,14 @@
                 "source": "listEntries",
                 "query": "queryEntries",
                 "helpnote": "testing112143",
+                "player-refresh": true,
                 "endline": "true",
                 "width": "100%",
-                "model": "basicDisplay.previewentry",
+                "model": "previewentry",
                 "data-placeholder": "Pick a entry"
             },
             {
+                "player-refresh": "aspectToggle",
                 "options": [
                     {
                         "label": "4/3",
