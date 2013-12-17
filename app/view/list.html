@@ -1,4 +1,4 @@
-<div id='list' class="fluid-container fullheight" >
+<div id='list' class="fluid-container fullheight">
     <div id="wrapper">
         <div id="header">
             <h2 id="pageHeader">
@@ -13,11 +13,18 @@
                             class="glyphicon glyphicon-plus">&nbsp;</i>{{'Add New player'| i18n}}
                     </button>
                 </div>
-                <div class=" noPadding col-md-10 col-sm-9 col-xs-7">
+                <div class="noPadding col-md-10 col-sm-9 col-xs-7">
                     <form class="form-inline" id="listsearch" role="search">
-                        <input type="text" typeahead="player.name for player in data | filter:$viewValue | limitTo:8"
-                               class="form-control" placeholder="{{'Search by name or tag'| i18n}}"
-                               ng-model="search">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                 <i class="icon-TabSearch"></i>
+                            </span>
+                            <input type="text"
+                                   typeahead="player.name for player in data | filter:$viewValue | limitTo:8"
+                                   class="form-control" placeholder="{{'Search by name or tag'| i18n}}"
+                                   ng-model="search">
+                        </div>
+
                     </form>
                 </div>
             </div>
@@ -53,10 +60,10 @@
                         </td>
                         <td class="col-xs-2   text-center ">{{item.id}}</td>
                         <td class="col-xs-2 text-center  col-lg-1"><span class="timeago"
-                                                    timestamp="{{item.createdAt}}"></span>
+                                                                         timestamp="{{item.createdAt}}"></span>
                         </td>
                         <td class="visible-lg text-center col-lg-1"><span class="timeago"
-                                                              timestamp="{{item.updatedAt}}"></span>
+                                                                          timestamp="{{item.updatedAt}}"></span>
                         </td>
                         <td class="actionBtns  col-xs-3  ">
                             <div class="inner">
