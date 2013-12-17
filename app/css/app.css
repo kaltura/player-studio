@@ -1,12 +1,12 @@
 /* app stylesheet */
 html,
 body,
-body > section,
+body > .section,
 .wrapper,
 .scroller {
   height: 100%;
 }
-body > section > * {
+body > .section > * {
   padding-top: 26px;
 }
 body a {

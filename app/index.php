@@ -1,5 +1,5 @@
-<!doctype html>
-<html id="ng-app" lang="en" ng-app="KMCModule">
+<!DOCTYPE html>
+<html id="ng-app" lang="en" ng-app="KMCModule" xmlns:ng="http://angularjs.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,17 +13,20 @@
         echo $dirParts[0] . '/app/';
     } else echo "/";
     ?>"/>
-    <!--[if lte IE 9]>
+    <script type="text/javascript" src="lib/modernizer.min.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script>
+        document.documentElement.className += " IE8";
+    </script>
     <script type="text/javascript" src="bower_components/jquery/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <script type="text/javascript" src="lib/es5-shim.min.js"></script>
     <![endif]-->
     <!--[if gte IE 9]><!-->
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
     <!--<![endif]-->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script type="text/javascript" src="lib/html5shiv.js"></script>
-    <script type="text/javascript" src="lib/respond.min.js"></script>
-    <![endif]-->
     <title>Player Studio - JS Version</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
@@ -86,17 +89,7 @@
     <script type="text/javascript" src="js/controllers/LoginCtrl.js"></script>
     <script type="text/javascript" src="js/controllers/playerCreateCtrl.js"></script>
 </head>
-<body>
 <loading-widget></loading-widget>
-<section class="relative" ng-view></section>
-<!--[if lte IE 9]>
-<script>
-    window.myCustomTags = [ 'featureMenu', 'highlight', 'navmenu', 'menuSearchCtl', 'menuLevel', 'menuHead','nav','section',
-        'mcustomScrollbar', 'timeago', 'modelRadio', 'modelColor', 'modelText', 'select2Data', 'modelEdit', 'modelTags',
-        'modelSelect', 'parentContainer', 'sortOrder', 'infoAction', 'modelCheckbox', 'readOnly', 'modelButton',
-        'modelNumber', 'loadingWidget']; // any E type directive needs to be here for IE8 compatibility
-</script>
-<script src="bower_components/angular-ui-utils/modules/ie-shiv/ie-shiv.js"></script>
-<![endif]-->
+<div class="section relative" ng-view></div>
 </body>
 </html>

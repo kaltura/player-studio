@@ -55,7 +55,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
         }
     }]).directive('modelRadio', function (menuSvc) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             replace: true,
             templateUrl: 'template/formcontrols/modelRadio.html',
             scope: {
@@ -74,7 +74,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
     })
     .directive('modelColor',function () {
         return  {
-            restrict: 'E',
+            restrict: 'EA',
             replace: true,
             controller: function ($scope, $element, $attrs) {
                 if (typeof  $scope.model == 'undefined') {
@@ -95,7 +95,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
     }).directive('modelText',function () {
         return {
             replace: true,
-            restrict: 'E',
+            restrict: 'EA',
             scope: {
                 'label': "@",
                 'model': "=",
@@ -113,7 +113,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
     }).directive('select2Data', ['menuSvc', function (menuSvc) {
         return {
             replace: true,
-            restrict: "E",
+            restrict: "EA",
             scope: {
                 'label': "@",
                 'model': "=",
@@ -156,7 +156,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
         }
         return {
             replace: true,
-            restrict: "E",
+            restrict: "EA",
             scope: {
                 'label': "@",
                 'helpnote': "@",
@@ -198,7 +198,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
     directive('modelTags', ['menuSvc', function (menuSvc) {
         return {
             replace: true,
-            restrict: "E",
+            restrict: "EA",
             scope: {
                 'label': "@",
                 'model': "=",
@@ -245,7 +245,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
     .directive('modelSelect',function (menuSvc) {
         return {
             replace: true,
-            restrict: 'E',
+            restrict: 'EA',
             require: '?parentContainer',
             scope: {
                 label: "@",
@@ -331,7 +331,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
     })
     .directive('sortOrder', ['sortSvc', function (sortSvc) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             replace: true,
             scope: {},
             templateUrl: 'template/formcontrols/sortOrder.html',
@@ -378,7 +378,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
     })
     .directive('infoAction',function (menuSvc) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             replace: 'true',
             controller: function ($scope, $element, $attrs) {
                 $scope.check = function (action) {
@@ -478,7 +478,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
                         $scope.model = true
                 }
             },
-            restrict: 'E',
+            restrict: 'EA',
             scope: {
                 label: '@',
                 helpnote: '@',
@@ -487,7 +487,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
         };
     }).directive('readOnly',function () {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             replace: 'true',
             scope: {
                 model: '=',
@@ -508,7 +508,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
         }
     }).directive('modelButton',function (menuSvc) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             replace: 'true',
             controller: function ($scope) {
                 $scope.check = function (action) {
@@ -579,7 +579,7 @@ angular.module('KMC.directives', ['colorpicker.module', 'ui.select2', 'ui.sortab
     })
     .directive('loadingWidget', ['requestNotificationChannel', function (requestNotificationChannel) {
         return {
-            restrict: "E",
+            restrict: "EA",
             scope: {},
             replace: true,
             template: "<div class='loadingOverlay'><a><div id='spinWrapper'></div></a></div>",

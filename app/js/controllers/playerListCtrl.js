@@ -40,8 +40,6 @@ KMCModule.controller('PlayerListCtrl',
 //                $scope.calculateTotalItems();
 //            });
             $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
-
-
             $scope.playerVersions = [
                 {"label": "1.0", "url": "", "value": "1.0"},
                 {"label": "2.0", "url": "", "value": "2.0"},
