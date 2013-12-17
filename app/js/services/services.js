@@ -80,12 +80,28 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             }
         },
         playerRefresh: function (option) {
-            if (option == 'aspectToggle')
-            {
+            if (option == 'aspectToggle') {
                 $('#spacer').toggleClass('narrow');
             }
             playersService.renderPlayer(); // for now does nothing different than render,
             // but could be used to trigger view changes via notify events rather than complete refresh
+        },
+        newPlayer: function () {
+            var deferred = $q.defer();
+            var request = {
+                'service': 'uiConf',
+                'action': 'add',
+                'uiConf:objectType': 'KalturaUiConf',
+                'uiConf:objType': 1,
+                'uiConf:creationMode': 2
+            }
+            apiService.doRequest(request).then(function (data) {
+                deferred.resolve(data);
+            }, function (reason) {
+                deferred.reject(reason); //TODO: how to display the error...
+            });
+            return deferred.promise;
+
         },
         'getPlayer': function (id) {
             var cache = false;
@@ -256,6 +272,7 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($root
                 var request = {
                     'service': 'media',
                     'action': 'list'
+
                 };
                 return this.doRequest(request);
             },
