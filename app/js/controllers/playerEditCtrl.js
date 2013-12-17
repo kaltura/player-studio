@@ -6,8 +6,8 @@ KMCModule.controller('PlayerEditCtrl',
     ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries',
         function ($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries) {
             $scope.ks = localStorageService.get('ks');
-            $scope.playerId = $routeParams.id;
-            $scope.title = $filter('i18n')('Edit player');
+            $scope.playerId = PlayerData.id;
+            $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player')
             $scope.data = PlayerData;
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
@@ -15,7 +15,7 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.tags = [];
             // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
             // the model tags of the player are actually set properly from the ng-model of the tags directive and are not needed here
-            if (typeof $scope.data.tags != "undefined") {
+            if (typeof $scope.data.tags != "undefined" && $scope.data.tags) { //can also be null
                 var tags = typeof $scope.data.tags == "string" ? $scope.data.tags.split(",") : $scope.data.tags;
                 for (var i = 0; i < tags.length; i++)
                     $scope.tags.push({id: tags[i], text: tags[i]});

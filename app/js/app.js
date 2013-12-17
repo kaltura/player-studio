@@ -6,7 +6,7 @@ window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
     ['localization', 'ngRoute', 'KMC.controllers', 'KMC.filters',
-        'KMC.services', 'KMC.directives', 'ui.bootstrap','ngAnimate', 'LocalStorageModule', 'KMC.menu']);
+        'KMC.services', 'KMC.directives', 'ui.bootstrap', 'ngAnimate', 'LocalStorageModule', 'KMC.menu']);
 
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
     $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
@@ -77,7 +77,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         // Check if we have ks in locaclstorage
         var ks = localStorageService.get('ks');
         if (!ks) { //navigate to login
-             $location.path("/login");
+            $location.path("/login");
             return false;
         } else {
             apiService.setKs(ks);
@@ -102,7 +102,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }
         }
     );
-    $routeProvider.when('/new',
+    $routeProvider.when('/newByTemplate',
         {templateUrl: 'view/new-template.html',
             controller: 'PlayerCreateCtrl',
             resolve: {
@@ -113,6 +113,24 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     return '1' //  KMC would need to give us the userID ?
                 }
 
+            }
+        }
+    );
+    $routeProvider.when('/new',
+        {templateUrl: 'view/edit.html',
+            controller: 'PlayerEditCtrl',
+            resolve: {
+                'PlayerData': function (PlayerService, apiService, localStorageService, $location) {
+                    ksCheck(apiService, localStorageService, $location);
+                    return  PlayerService.newPlayer();
+                },
+                'editProperties': 'editableProperties',
+                'menuSvc': 'menuSvc',
+                'localize': 'localize',
+                'userEntries': function (apiService, localStorageService, $location) {
+                    ksCheck(apiService, localStorageService, $location);
+                    return apiService.listMedia(); // should only load the first 20...
+                }
             }
         }
     );
@@ -128,7 +146,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     });
     $routeProvider.otherwise({
         resolve: {'res': function (localStorageService, $location) {
-            if (parent.kmc && parent.kmc.vars){
+            if (parent.kmc && parent.kmc.vars) {
                 // got ks from KMC - save to local storage
                 if (parent.kmc.vars.ks)
                     localStorageService.add('ks', parent.kmc.vars.ks);
