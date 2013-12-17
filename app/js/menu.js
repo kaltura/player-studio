@@ -232,13 +232,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
 
                 function writeFormElement(item, directive) {
                     var elm = angular.element(directive);
-                    elm.attr('highlight', item.model);
+                    elm.attr('model', 'data.' + item.model);
                     angular.forEach(item, function (value, key) {
-                        if (key != 'model' && (typeof value == 'string' || typeof value == 'number')) {
+                        if (key != 'model' && (typeof value == 'string' || typeof value == 'number' || typeof value == 'boolean')) {
                             elm.attr(key, value);
                         }
                     });
-                    elm.attr('model', 'data.' + item.model);
+
                     return elm;
                 }
             },
@@ -356,12 +356,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 }
             }
         }
-    }).directive('highlight', ['$timeout', function ($timeout) {
+    }).directive('model', ['$timeout', function ($timeout) {
         return {
             restrict: 'A',
             link: function (scope, iElem, iAttr) {
                 scope.$on('highlight', function (e, data) {
-                    if (iAttr.highlight == data) {
+                    if (iAttr.model.replace('data.', '') == data) {
                         var elm = iElem;
                         if (iElem.parent().is('li'))
                             elm = iElem.parent();

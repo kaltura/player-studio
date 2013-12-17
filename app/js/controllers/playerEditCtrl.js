@@ -15,7 +15,7 @@ KMCModule.controller('PlayerEditCtrl',
             $scope.tags = [];
             // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
             // the model tags of the player are actually set properly from the ng-model of the tags directive and are not needed here
-            if (typeof $scope.data.tags != "undefined"){
+            if (typeof $scope.data.tags != "undefined") {
                 var tags = typeof $scope.data.tags == "string" ? $scope.data.tags.split(",") : $scope.data.tags;
                 for (var i = 0; i < tags.length; i++)
                     $scope.tags.push({id: tags[i], text: tags[i]});
@@ -52,25 +52,17 @@ KMCModule.controller('PlayerEditCtrl',
                     PlayerService.playerUpdate($scope.data)
                 });
             }
-            $scope.previewEntry = ($scope.data.previewentry) ? $scope.data.previewentry.id : '0_ji4qh61l';
+            $scope.previewEntry = ($scope.data.previewentry) ? $scope.data.previewentry.id : '0_ji4qh61l'; //default entry
             $scope.$watch('data.previewentry', function (newVal, oldVal) {
                 if (newVal != oldVal) {
                     $scope.previewEntry = newVal.id;
-                    $scope.renderPlayer();
+                    PlayerService.setPreviewEntry($scope.previewEntry);
+                    PlayerService.renderPlayer();
                 }
             })
-            $scope.renderPlayer = function () {
-                kWidget.embed({
-                    "targetId": "kVideoTarget",
-                    "wid": "_" + $scope.data.partnerId,
-                    "uiconf_id": $scope.data.id,
-                    "flashvars": {},
-                    "cache_st": 1385293901,
-                    "entry_id": $scope.previewEntry
-                });
-            }
             $(document).ready(function () {
-                $scope.renderPlayer();
+                PlayerService.setPreviewEntry($scope.previewEntry);
+                PlayerService.renderPlayer();
             });
 
         }
