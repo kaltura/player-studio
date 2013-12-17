@@ -70,11 +70,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         },
         'renderPlayer': function () {
             if (currentPlayer && typeof kWidget != "undefined") {
+                var flashvars = ($('html').hasClass('IE8')) ? {'wmode': 'transparent'} : {};
                 kWidget.embed({
                     "targetId": "kVideoTarget", // hard coded for now?
                     "wid": "_" + currentPlayer.partnerId, //$scope.data.partnerId,
                     "uiconf_id": currentPlayer.id,// $scope.data.id,
-                    "flashvars": {},
+                    "flashvars": flashvars,
                     "entry_id": previewEntry //$scope.previewEntry
                 });
             }

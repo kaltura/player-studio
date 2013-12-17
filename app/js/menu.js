@@ -78,49 +78,49 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             //this is now the single place one need to edit in order to add a directive to the menu generator
             switch (jsonName) {
                 case 'modaledit' :
-                    return '<model-edit/>';
+                    return '<div model-edit/>';
                     break;
                 case 'tags' :
-                    return '<model-tags/>';
+                    return '<div model-tags/>';
                     break;
                 case 'select2data' :
-                    return '<select2-data/>';
+                    return '<div select2-data/>';
                     break;
                 case 'dropdown' :
-                    return  '<model-select/>';
+                    return  '<div model-select/>';
                     break;
                 case 'container' :
-                    return  '<model-select parent-container=""/>';
+                    return  '<div model-select parent-container=""/>';
                     break;
                 case 'checkbox' :
-                    return '<model-checkbox/>';
+                    return '<div model-checkbox/>';
                     break;
                 case 'color' :
-                    return  '<model-color/>';
+                    return  '<div model-color/>';
                     break;
                 case 'text' :
-                    return  '<model-text/>';
+                    return '<div model-text/>';
                     break;
                 case 'number':
-                    return  '<model-number/>';
+                    return  '<div model-number/>';
                     break;
                 case 'readonly':
-                    return '<read-only/>';
+                    return '<div read-only/>';
                     break;
                 case 'featuremenu':
-                    return '<feature-menu/>';
+                    return '<div feature-menu/>';
                     break;
                 case 'radio':
-                    return '<model-radio/>';
+                    return'<div model-radio/>';
                     break;
                 case 'button':
-                    return '<model-button/>';
+                    return '<div model-button/>';
                     break;
                 case 'infoAction':
-                    return '<info-action/>';
+                    return '<div info-action/>';
                     break;
                 case "sortOrder":
-                    return '<sort-order/>'
+                    return '<div sort-order/>'
                     break;
             }
         };
@@ -185,7 +185,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 var elm = '';
                 switch (item.type) {
                     case  'menu':
-                        var menuLevelObj = angular.element('<menu-level pagename="' + item.model + '" />');
+                        var menuLevelObj = angular.element('<div menu-level pagename="' + item.model + '" />');
                         if (typeof parentModel != 'undefined') {
                             menuLevelObj.attr('parent-label', parentModel.label);
                             menuLevelObj.attr('parent-page', parentModel.model);
@@ -194,7 +194,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         elm = writeChildren(item, parentMenu, true);
                         break;
                     case 'featuremenu':
-                        elm = writeChildren(item, writeFormElement(item, '<feature-menu/>'));
+                        elm = writeChildren(item, writeFormElement(item, '<div feature-menu/>'));
                         break;
                     default :
                         var directive = JSON2directiveDictionary(item.type);
@@ -212,7 +212,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                                 parent.append(menuSvc.buildMenuItem(subitem, parent, item.model, item));
                                 break;
                             case 'featuremenu':
-                                parent.append(writeChildren(subitem, writeFormElement(subitem, '<feature-menu/>')));
+                                parent.append(writeChildren(subitem, writeFormElement(subitem, '<div feature-menu/>')));
                                 break;
                             default :
                                 var directive = JSON2directiveDictionary(subitem.type);
@@ -311,7 +311,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
     }]).
     directive('featureMenu',function ($parse) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             replace: true,
             templateUrl: 'template/menu/featureMenu.html',
             transclude: true,
@@ -380,15 +380,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
     }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout' , function (menuSvc, $compile, $timeout) {
 
         return  {
-            template: "<nav  ng-form='playerEdit' name='playerEdit' id='mp-menu'>" +
-                "<div id='mp-inner'>" +
-                "<div id='mp-base' class='mp-level'>" +
-                "<ul ng-transclude></ul>" +
-                "</div>" +
-                "</div>" +
-                "</nav>",
+            templateUrl:'template/menu/navmenu.html',
             replace: true,
-            restrict: 'E',
+            restrict: 'EA',
             scope: {'data': '='},
             transclude: true,
             compile: function (tElement, tAttrs, transclude) {
@@ -454,7 +448,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             templateUrl: 'template/menu/menuPage.html',
             replace: true,
             transclude: 'true',
-            restrict: 'E',
+            restrict: 'EA',
             controller: function ($scope, $element, $attrs) {
                 $scope.selfOpenLevel = function () {
                     menuSvc.setMenu($attrs.pagename);
@@ -504,7 +498,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
     }).
     directive('menuHead', ['menuSvc', function (menuSvc) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             template: "<div id='mp-mainlevel'><ul>" +
                 "</ul></div>",
             replace: true,
