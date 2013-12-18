@@ -469,19 +469,16 @@ DirectivesModule.directive('prettyCheckbox', function () {
     restrict: 'AC',
     require: 'ngModel',
     transclude: 'element',
-    priority: -100,
     compile: function (tElement, tAttrs, transclude) {
-      var wrapper = angular.element('<div class="prettycheckbox"><a href="#" class=""></a></div>');
-      var clickHandler = wrapper.find('a');
-      return function (scope, iElement, iAttr, ngController) {
+      return function (scope, $element, iAttr, ngController) {
+        var wrapper = angular.element('<div class="prettycheckbox"></div>');
+        var clickHandler = wrapper.append('<a href="#" class=""></a>');
         transclude(scope, function (clone) {
-          return wrapper.append(clone);
+          return $element.replaceWith(wrapper).append(clone);
         });
-        wrapper.wrap(iElement);
-        iElement.replaceWith(wrapper);
         var input = wrapper.find('input').hide();
         var watchProp = iAttr['model'] || 'model';
-        clickHandler.on('click', 'a', function (e) {
+        wrapper.on('click', 'a', function (e) {
           e.preventDefault();
           ngController.$setViewValue(!ngController.$viewValue);
           return false;
