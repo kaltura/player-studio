@@ -22,7 +22,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'app/js',
                     src: ['**/*.js'],
-                    dest: '_dist/app/'
+                    dest: 'app/_dist/app/'
                 }]
             }
         },
@@ -32,20 +32,21 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
-                    '_dist/app/*.js',
-                    '_dist/app/controllers/*.js',
-                    '_dist/app/services/*.js'
+                    'app/_dist/app/*.js',
+                    'app/_dist/app/controllers/*.js',
+                    'app/_dist/app/services/*.js'
                 ],
-                dest: '_dist/main.js'
+                dest: 'app/_dist/main.js'
             }
         },
         uglify: {
             options: {
-                banner: '<%= meta.banner %>'
+                banner: '<%= meta.banner %>',
+                mangle: false
             },
             dist: {
                 files: {
-                    '_dist/main.min.js': ['<%= concat.dist.dest %>']
+                    'app/_dist/main.min.js': ['<%= concat.dist.dest %>']
                 }
             }
         },

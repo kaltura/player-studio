@@ -309,13 +309,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
         };
         return menuSvc;
     }]).
-    directive('featureMenu',['$parse',function ($parse) {
+    directive('featureMenu', ['$parse', function ($parse) {
         return {
             restrict: 'EA',
             replace: true,
             templateUrl: 'template/menu/featureMenu.html',
             transclude: true,
-            controller: function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
                 $scope.label = $attrs['label'];
                 $scope.helpnote = $attrs['helpnote'];
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
@@ -325,7 +325,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     $scope.featureModel = $scope.featureModelCon($scope);
                 }
                 $scope.id = $attrs['model'].replace(/\./g, '_');
-            },
+            }],
             scope: true,
             compile: function (tElement, tAttr, transclude) {
                 if (tAttr['endline'] != 'false') {
@@ -380,7 +380,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
     }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout' , function (menuSvc, $compile, $timeout) {
 
         return  {
-            templateUrl:'template/menu/navmenu.html',
+            templateUrl: 'template/menu/navmenu.html',
             replace: true,
             restrict: 'EA',
             scope: {'data': '='},
@@ -404,15 +404,15 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     }, 500);
                 }
             },
-            controller: function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', function ($scope, $element) {
                 $element.on('shown.bs.collapse hidden.bs.collapse', function (e) {
                     $('.mCustomScrollbar').mCustomScrollbar('update');
                 });
                 menuSvc.menuScope = $scope;
-            }
+            }]
 
         }
-    }]).controller('menuSearchCtl',['$scope', 'menuSvc',function ($scope, menuSvc) {
+    }]).controller('menuSearchCtl', ['$scope', 'menuSvc', function ($scope, menuSvc) {
         var menuObj = menuSvc.get();
         $scope.menuData = [];
         $scope.checkSearch = function (val) {
@@ -442,14 +442,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
         };
         getLabels(menuObj);
     }]
-).
-    directive('menuLevel',['menuSvc',function (menuSvc) {
+    ).
+    directive('menuLevel', ['menuSvc', function (menuSvc) {
         return  {
             templateUrl: 'template/menu/menuPage.html',
             replace: true,
             transclude: 'true',
             restrict: 'EA',
-            controller: function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
                 $scope.selfOpenLevel = function () {
                     menuSvc.setMenu($attrs.pagename);
                 };
@@ -466,7 +466,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     return $scope.isOnTop = false;
                 };
                 $scope.isOnTop = false;
-            },
+            }],
             compile: function (tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.find('div.menu-level-trigger').append('<hr/>');
@@ -504,7 +504,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             replace: true,
             transclude: true,
             scope: {},
-            controller: function ($scope, $element) {
+            controller: ['$scope', '$element', function ($scope, $element) {
                 $scope.changeActiveItem = function (element) {
                     var menuitem = $(element);
                     if (menuitem.length && menuitem.is('a') && menuitem.parent('li')) {
@@ -512,7 +512,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         $(menuitem).parent('li').siblings('li').find('a').removeClass('active');
                     }
                 };
-            },
+            }],
             compile: function (tElement, attr, transclude) {
                 var ul = tElement.find('ul');
                 var elements = menuSvc.get();

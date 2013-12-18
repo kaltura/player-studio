@@ -324,17 +324,22 @@ KMCMenu.factory('menuSvc', [
       replace: true,
       templateUrl: 'template/menu/featureMenu.html',
       transclude: true,
-      controller: function ($scope, $element, $attrs) {
-        $scope.label = $attrs['label'];
-        $scope.helpnote = $attrs['helpnote'];
-        $scope.featureCheckbox = $attrs.featureCheckbox == 'false' ? false : true;
-        if ($scope.featureCheckbox) {
-          $scope.modelPath = $attrs['model'] + '._featureEnabled';
-          $scope.featureModelCon = $parse($scope.modelPath);
-          $scope.featureModel = $scope.featureModelCon($scope);
+      controller: [
+        '$scope',
+        '$element',
+        '$attrs',
+        function ($scope, $element, $attrs) {
+          $scope.label = $attrs['label'];
+          $scope.helpnote = $attrs['helpnote'];
+          $scope.featureCheckbox = $attrs.featureCheckbox == 'false' ? false : true;
+          if ($scope.featureCheckbox) {
+            $scope.modelPath = $attrs['model'] + '._featureEnabled';
+            $scope.featureModelCon = $parse($scope.modelPath);
+            $scope.featureModel = $scope.featureModelCon($scope);
+          }
+          $scope.id = $attrs['model'].replace(/\./g, '_');
         }
-        $scope.id = $attrs['model'].replace(/\./g, '_');
-      },
+      ],
       scope: true,
       compile: function (tElement, tAttr, transclude) {
         if (tAttr['endline'] != 'false') {
@@ -419,12 +424,16 @@ KMCMenu.factory('menuSvc', [
           }, 500);
         };
       },
-      controller: function ($scope, $element, $attrs) {
-        $element.on('shown.bs.collapse hidden.bs.collapse', function (e) {
-          $('.mCustomScrollbar').mCustomScrollbar('update');
-        });
-        menuSvc.menuScope = $scope;
-      }
+      controller: [
+        '$scope',
+        '$element',
+        function ($scope, $element) {
+          $element.on('shown.bs.collapse hidden.bs.collapse', function (e) {
+            $('.mCustomScrollbar').mCustomScrollbar('update');
+          });
+          menuSvc.menuScope = $scope;
+        }
+      ]
     };
   }
 ]).controller('menuSearchCtl', [
@@ -468,23 +477,28 @@ KMCMenu.factory('menuSvc', [
       replace: true,
       transclude: 'true',
       restrict: 'EA',
-      controller: function ($scope, $element, $attrs) {
-        $scope.selfOpenLevel = function () {
-          menuSvc.setMenu($attrs.pagename);
-        };
-        $scope.goBack = function () {
-          menuSvc.setMenu($attrs.parentPage);
-        };
-        $scope.openLevel = function (arg) {
-          if (typeof arg == 'undefined')
-            return $scope.isOnTop = true;
-          else if (arg == $scope.pagename) {
-            return $scope.isOnTop = true;
-          }
-          return $scope.isOnTop = false;
-        };
-        $scope.isOnTop = false;
-      },
+      controller: [
+        '$scope',
+        '$element',
+        '$attrs',
+        function ($scope, $element, $attrs) {
+          $scope.selfOpenLevel = function () {
+            menuSvc.setMenu($attrs.pagename);
+          };
+          $scope.goBack = function () {
+            menuSvc.setMenu($attrs.parentPage);
+          };
+          $scope.openLevel = function (arg) {
+            if (typeof arg == 'undefined')
+              return $scope.isOnTop = true;
+            else if (arg == $scope.pagename) {
+              return $scope.isOnTop = true;
+            }
+            return $scope.isOnTop = false;
+          };
+          $scope.isOnTop = false;
+        }
+      ],
       compile: function (tElement, tAttr) {
         if (tAttr['endline'] == 'true') {
           tElement.find('div.menu-level-trigger').append('<hr/>');
@@ -522,15 +536,19 @@ KMCMenu.factory('menuSvc', [
       replace: true,
       transclude: true,
       scope: {},
-      controller: function ($scope, $element) {
-        $scope.changeActiveItem = function (element) {
-          var menuitem = $(element);
-          if (menuitem.length && menuitem.is('a') && menuitem.parent('li')) {
-            $(menuitem).addClass('active');
-            $(menuitem).parent('li').siblings('li').find('a').removeClass('active');
-          }
-        };
-      },
+      controller: [
+        '$scope',
+        '$element',
+        function ($scope, $element) {
+          $scope.changeActiveItem = function (element) {
+            var menuitem = $(element);
+            if (menuitem.length && menuitem.is('a') && menuitem.parent('li')) {
+              $(menuitem).addClass('active');
+              $(menuitem).parent('li').siblings('li').find('a').removeClass('active');
+            }
+          };
+        }
+      ],
       compile: function (tElement, attr, transclude) {
         var ul = tElement.find('ul');
         var elements = menuSvc.get();

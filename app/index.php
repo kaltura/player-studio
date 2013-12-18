@@ -79,7 +79,7 @@
     <script type="text/javascript" src="lib/jquery.timeago.js"></script>
     <script type="text/javascript" src="lib/jquery.animate-colors-min.js"></script>
 
-    <script type="text/javascript" src="../_dist/main.min.js"></script>
+    <script type="text/javascript" src="_dist/main.min.js"></script>
     <!--script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/filters.js"></script>

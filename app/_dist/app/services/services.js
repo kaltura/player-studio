@@ -204,7 +204,7 @@ KMCServices.factory('requestNotificationChannel', [
   function ($rootScope) {
     var _START_REQUEST_ = '_START_REQUEST_';
     var _END_REQUEST_ = '_END_REQUEST_';
-    var obj = { customStart: null };
+    var obj = { 'customStart': null };
     obj.requestStarted = function (customStart) {
       $rootScope.$broadcast(_START_REQUEST_);
       if (customStart) {
@@ -233,12 +233,82 @@ KMCServices.factory('requestNotificationChannel', [
     };
     return obj;
   }
-]).factory('editableProperties', [
+]);
+KMCServices.directive('loadingWidget', [
+  'requestNotificationChannel',
+  function (requestNotificationChannel) {
+    return {
+      restrict: 'EA',
+      scope: {},
+      replace: true,
+      template: '<div class=\'loadingOverlay\'><a><div id=\'spinWrapper\'></div></a></div>',
+      controller: [
+        '$scope',
+        '$element',
+        function ($scope, $element) {
+          $scope.spinner = null;
+          $scope.spinRunning = false;
+          $scope.opts = {
+            lines: 15,
+            length: 27,
+            width: 8,
+            radius: 60,
+            corners: 1,
+            rotate: 0,
+            direction: 1,
+            color: '#000',
+            speed: 0.6,
+            trail: 24,
+            shadow: true,
+            hwaccel: true,
+            className: 'spinner',
+            zIndex: 2000000000,
+            top: 'auto',
+            left: 'auto'
+          };
+          var initSpin = function () {
+            $scope.spinner = new Spinner($scope.opts).spin();
+          };
+          $scope.endSpin = function () {
+            if ($scope.spinner)
+              $scope.spinner.stop();
+            $scope.spinRunning = false;
+          };
+          $scope.spin = function () {
+            if ($scope.spinRunning)
+              return;
+            var target = $element.find('#spinWrapper');
+            if ($scope.spinner == null)
+              initSpin();
+            $scope.spinner.spin(target[0]);
+            $scope.spinRunning = true;
+          };
+        }
+      ],
+      link: function (scope, element) {
+        element.hide();
+        var startRequestHandler = function () {
+          element.show();
+          scope.spin();
+        };
+        var endRequestHandler = function () {
+          element.hide();
+          scope.endSpin();
+        };
+        requestNotificationChannel.onRequestStarted(scope, startRequestHandler);
+        requestNotificationChannel.onRequestEnded(scope, endRequestHandler);
+      }
+    };
+  }
+]);
+;
+KMCServices.factory('editableProperties', [
   '$http',
   function ($http) {
     return $http.get('js/services/editableProperties.json');
   }
-]).factory('apiService', [
+]);
+KMCServices.factory('apiService', [
   '$q',
   '$timeout',
   '$location',
@@ -306,7 +376,8 @@ KMCServices.factory('requestNotificationChannel', [
       }
     };
   }
-]).factory('playerTemplates', [
+]);
+KMCServices.factory('playerTemplates', [
   '$http',
   function ($http) {
     return {

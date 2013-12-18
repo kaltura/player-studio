@@ -1,9 +1,10 @@
 'use strict';
-angular.module('KMC.directives', [
-  'colorpicker.module',
-  'ui.select2',
-  'ui.sortable'
-]).directive('mcustomScrollbar', [
+var DirectivesModule = angular.module('KMC.directives', [
+    'colorpicker.module',
+    'ui.select2',
+    'ui.sortable'
+  ]);
+DirectivesModule.directive('mcustomScrollbar', [
   '$timeout',
   function ($timeout) {
     return {
@@ -44,7 +45,8 @@ angular.module('KMC.directives', [
       }
     };
   }
-]).directive('timeago', [function () {
+]);
+DirectivesModule.directive('timeago', [function () {
     return {
       scope: { timestamp: '@' },
       restrict: 'CA',
@@ -58,7 +60,8 @@ angular.module('KMC.directives', [
           });
       }
     };
-  }]).directive('modelRadio', [
+  }]);
+DirectivesModule.directive('modelRadio', [
   'menuSvc',
   function (menuSvc) {
     return {
@@ -70,27 +73,38 @@ angular.module('KMC.directives', [
         'label': '@',
         'helpnote': '@'
       },
-      controller: function ($scope, $element, $attrs) {
-        var menuData = menuSvc.getControlData($attrs.model);
-        $scope.options = menuData.options;
-      },
+      controller: [
+        '$scope',
+        '$element',
+        '$attrs',
+        function ($scope, $element, $attrs) {
+          var menuData = menuSvc.getControlData($attrs.model);
+          $scope.options = menuData.options;
+        }
+      ],
       link: function (scope, element, attributes) {
         element.find('input').attr('name', scope.model);
       }
     };
   }
-]).directive('modelColor', function () {
+]);
+DirectivesModule.directive('modelColor', function () {
   return {
     restrict: 'EA',
     replace: true,
-    controller: function ($scope, $element, $attrs) {
-      if (typeof $scope.model == 'undefined') {
-        if ($attrs.initvalue)
-          $scope.model = $attrs.initvalue;
-        else
-          $scope.model = '#fff';
+    controller: [
+      '$scope',
+      '$element',
+      '$attrs',
+      function ($scope, $element, $attrs) {
+        if (typeof $scope.model == 'undefined') {
+          if ($attrs.initvalue)
+            $scope.model = $attrs.initvalue;
+          else
+            $scope.model = '#fff';
+        }
       }
-    },
+    ],
     scope: {
       'class': '@',
       'label': '@',
@@ -99,7 +113,8 @@ angular.module('KMC.directives', [
     },
     templateUrl: 'template/formcontrols/modalColor.html'
   };
-}).directive('modelText', function () {
+});
+DirectivesModule.directive('modelText', function () {
   return {
     replace: true,
     restrict: 'EA',
@@ -116,7 +131,8 @@ angular.module('KMC.directives', [
     },
     templateUrl: 'template/formcontrols/modalText.html'
   };
-}).directive('select2Data', [
+});
+DirectivesModule.directive('select2Data', [
   'menuSvc',
   function (menuSvc) {
     return {
@@ -129,15 +145,20 @@ angular.module('KMC.directives', [
         'helpnote': '@',
         'initvalue': '@'
       },
-      controller: function ($scope, $element, $attrs) {
-        $scope.selectOpts = {};
-        $scope.selectOpts['data'] = menuSvc.doAction($attrs.source);
-        if ($attrs.query) {
-          $scope.selectOpts['data'].results = [];
-          $scope.selectOpts['query'] = menuSvc.getAction($attrs.query);
+      controller: [
+        '$scope',
+        '$element',
+        '$attrs',
+        function ($scope, $element, $attrs) {
+          $scope.selectOpts = {};
+          $scope.selectOpts['data'] = menuSvc.doAction($attrs.source);
+          if ($attrs.query) {
+            $scope.selectOpts['data'].results = [];
+            $scope.selectOpts['query'] = menuSvc.getAction($attrs.query);
+          }
+          $scope.selectOpts['width'] = $attrs.width;
         }
-        $scope.selectOpts['width'] = $attrs.width;
-      },
+      ],
       templateUrl: 'template/formcontrols/select2Data.html',
       compile: function (tElement, tAttr) {
         if (tAttr['endline'] == 'true') {
@@ -153,14 +174,18 @@ angular.module('KMC.directives', [
       }
     };
   }
-]).directive('modelEdit', [
+]);
+DirectivesModule.directive('modelEdit', [
   '$modal',
   function ($modal) {
-    var modalEditCntrl = function ($scope, $element, $attrs) {
-      if (typeof $scope.model == 'undefined')
-        $scope.model = '';
-      $scope.modelValue = $scope.model;
-    };
+    var modalEditCntrl = [
+        '$scope',
+        function ($scope) {
+          if (typeof $scope.model == 'undefined')
+            $scope.model = '';
+          $scope.modelValue = $scope.model;
+        }
+      ];
     return {
       replace: true,
       restrict: 'EA',
@@ -199,7 +224,8 @@ angular.module('KMC.directives', [
       }
     };
   }
-]).directive('modelTags', [
+]);
+DirectivesModule.directive('modelTags', [
   'menuSvc',
   function (menuSvc) {
     return {
@@ -211,17 +237,22 @@ angular.module('KMC.directives', [
         'helpnote': '@',
         'icon': '@'
       },
-      controller: function ($scope, $element, $attrs) {
-        $scope.selectOpts = {
-          simple_tags: true,
-          'multiple': true,
-          tokenSeparators: [
-            ',',
-            ' '
-          ]
-        };
-        $scope.selectOpts['tags'] = menuSvc.doAction($attrs.source);
-      },
+      controller: [
+        '$scope',
+        '$element',
+        '$attrs',
+        function ($scope, $element, $attrs) {
+          $scope.selectOpts = {
+            simple_tags: true,
+            'multiple': true,
+            tokenSeparators: [
+              ',',
+              ' '
+            ]
+          };
+          $scope.selectOpts['tags'] = menuSvc.doAction($attrs.source);
+        }
+      ],
       templateUrl: 'template/formcontrols/modelTags.html',
       compile: function (tElement, tAttr) {
         if (tAttr['endline'] == 'true') {
@@ -232,27 +263,34 @@ angular.module('KMC.directives', [
       }
     };
   }
-]).directive('listEntriesThumbs', function () {
+]);
+DirectivesModule.directive('listEntriesThumbs', function () {
   return {
     restrict: 'A',
-    controller: function ($scope, $element, $attrs) {
-      if ($attrs.listEntriesThumbs == 'true') {
-        var format = function (player) {
-          if (!player.thumbnailUrl)
-            return player.name;
-          return '<img class=\'thumb\' src=\'' + player.thumbnailUrl + '\'/>' + player.name;
-        };
-        $scope.addOption({
-          formatResult: format,
-          formatSelection: format,
-          escapeMarkup: function (m) {
-            return m;
-          }
-        });
+    controller: [
+      '$scope',
+      '$element',
+      '$attrs',
+      function ($scope, $element, $attrs) {
+        if ($attrs.listEntriesThumbs == 'true') {
+          var format = function (player) {
+            if (!player.thumbnailUrl)
+              return player.name;
+            return '<img class=\'thumb\' src=\'' + player.thumbnailUrl + '\'/>' + player.name;
+          };
+          $scope.addOption({
+            formatResult: format,
+            formatSelection: format,
+            escapeMarkup: function (m) {
+              return m;
+            }
+          });
+        }
       }
-    }
+    ]
   };
-}).directive('modelSelect', [
+});
+DirectivesModule.directive('modelSelect', [
   'menuSvc',
   function (menuSvc) {
     return {
@@ -287,43 +325,49 @@ angular.module('KMC.directives', [
           $scope.options = menuData.options;
         };
       },
-      controller: function ($scope, $element, $attrs) {
-        if (!$scope.selectOpts) {
-          $scope.selectOpts = {};
-        }
-        if (!$attrs.showSearch) {
-          $scope.selectOpts.minimumResultsForSearch = -1;
-        }
-        $scope.options = [];
-        $scope.checkSelection = function (value) {
-          if (value == $scope.model)
-            return true;
-          else if (typeof value == 'number' && parseFloat($scope.model) == value) {
-            return true;
+      controller: [
+        '$scope',
+        '$element',
+        '$attrs',
+        function ($scope, $element, $attrs) {
+          if (!$scope.selectOpts) {
+            $scope.selectOpts = {};
           }
-          return false;
-        };
-        $scope.initSelection = function () {
-          if ($scope.model == '' || typeof $scope.model == 'undefined') {
-            $scope.model = $attrs.initvalue;
+          if (!$attrs.showSearch) {
+            $scope.selectOpts.minimumResultsForSearch = -1;
           }
-          return $scope.model;
-        };
-        $scope.selectOpts.initSelection = $scope.initSelection();
-        $scope.uiselectOpts = angular.toJson($scope.selectOpts);
-        this.setOptions = function (optsArr) {
-          $scope.options = optsArr;
-        };
-      },
+          $scope.options = [];
+          $scope.checkSelection = function (value) {
+            if (value == $scope.model)
+              return true;
+            else if (typeof value == 'number' && parseFloat($scope.model) == value) {
+              return true;
+            }
+            return false;
+          };
+          $scope.initSelection = function () {
+            if ($scope.model == '' || typeof $scope.model == 'undefined') {
+              $scope.model = $attrs.initvalue;
+            }
+            return $scope.model;
+          };
+          $scope.selectOpts.initSelection = $scope.initSelection();
+          $scope.uiselectOpts = angular.toJson($scope.selectOpts);
+          this.setOptions = function (optsArr) {
+            $scope.options = optsArr;
+          };
+        }
+      ],
       templateUrl: 'template/formcontrols/modelSelect.html'
     };
   }
-]).directive('parentContainer', [
+]);
+DirectivesModule.directive('parentContainer', [
   'sortSvc',
   function (sortSvc) {
     return {
       restrict: 'A',
-      controller: function ($scope, $element, $attrs) {
+      controller: function () {
         var cntrl = {
             register: function (container, model) {
               sortSvc.register(container, model);
@@ -333,12 +377,11 @@ angular.module('KMC.directives', [
             }
           };
         return cntrl;
-      },
-      link: function (scope, element, attrs) {
       }
     };
   }
-]).directive('sortOrder', [
+]);
+DirectivesModule.directive('sortOrder', [
   'sortSvc',
   function (sortSvc) {
     return {
@@ -346,32 +389,36 @@ angular.module('KMC.directives', [
       replace: true,
       scope: {},
       templateUrl: 'template/formcontrols/sortOrder.html',
-      controller: function ($scope, $element, $attrs) {
-        $scope.getObjects = function () {
-          $scope.containers = sortSvc.getObjects();
-        };
-        $scope.getObjects();
-        sortSvc.sortScope = $scope;
-        $scope.$on('sortContainersChanged', function () {
+      controller: [
+        '$scope',
+        function ($scope) {
+          $scope.getObjects = function () {
+            $scope.containers = sortSvc.getObjects();
+          };
           $scope.getObjects();
-        });
-        $scope.$watchCollection('containers', function (newVal, oldVal) {
-          if (newVal != oldVal) {
-            sortSvc.saveOrder($scope.containers);
-          }
-        });
-        $scope.sortableOptions = {
-          update: function (e, ui) {
-            cl($scope.containers);
-          },
-          axis: 'y'
-        };
-      },
+          sortSvc.sortScope = $scope;
+          $scope.$on('sortContainersChanged', function () {
+            $scope.getObjects();
+          });
+          $scope.$watchCollection('containers', function (newVal, oldVal) {
+            if (newVal != oldVal) {
+              sortSvc.saveOrder($scope.containers);
+            }
+          });
+          $scope.sortableOptions = {
+            update: function (e, ui) {
+              cl($scope.containers);
+            },
+            axis: 'y'
+          };
+        }
+      ],
       link: function (scope, element, attrs) {
       }
     };
   }
-]).directive('playerRefresh', [
+]);
+DirectivesModule.directive('playerRefresh', [
   'PlayerService',
   'menuSvc',
   function (PlayerService, menuSvc) {
@@ -387,20 +434,24 @@ angular.module('KMC.directives', [
       }
     };
   }
-]).directive('infoAction', [
+]);
+DirectivesModule.directive('infoAction', [
   'menuSvc',
   function (menuSvc) {
     return {
       restrict: 'EA',
       replace: 'true',
-      controller: function ($scope, $element, $attrs) {
-        $scope.check = function (action) {
-          return menuSvc.checkAction(action);
-        };
-        $scope.btnAction = function (action) {
-          menuSvc.doAction(action);
-        };
-      },
+      controller: [
+        '$scope',
+        function ($scope) {
+          $scope.check = function (action) {
+            return menuSvc.checkAction(action);
+          };
+          $scope.btnAction = function (action) {
+            menuSvc.doAction(action);
+          };
+        }
+      ],
       scope: {
         'model': '=',
         'btnLabel': '@',
@@ -412,18 +463,21 @@ angular.module('KMC.directives', [
       templateUrl: 'template/formcontrols/infoAction.html'
     };
   }
-]).directive('prettyCheckbox', function () {
+]);
+DirectivesModule.directive('prettyCheckbox', function () {
   return {
     restrict: 'AC',
     require: 'ngModel',
     transclude: 'element',
+    priority: -100,
     compile: function (tElement, tAttrs, transclude) {
-      var wrapper = angular.element('<div class="prettycheckbox"></div>');
-      var clickHandler = wrapper.append('<a href="#" class=""></a>');
+      var wrapper = angular.element('<div class="prettycheckbox"><a href="#" class=""></a></div>');
+      var clickHandler = wrapper.find('a');
       return function (scope, iElement, iAttr, ngController) {
         transclude(scope, function (clone) {
           return wrapper.append(clone);
         });
+        wrapper.wrap(iElement);
         iElement.replaceWith(wrapper);
         var input = wrapper.find('input').hide();
         var watchProp = iAttr['model'] || 'model';
@@ -445,7 +499,8 @@ angular.module('KMC.directives', [
       };
     }
   };
-}).directive('prettyRadio', function () {
+});
+DirectivesModule.directive('prettyRadio', function () {
   return {
     restrict: 'AC',
     priority: 1000,
@@ -478,24 +533,31 @@ angular.module('KMC.directives', [
       };
     }
   };
-}).directive('modelCheckbox', function () {
+});
+DirectivesModule.directive('modelCheckbox', function () {
   return {
+    restrict: 'EA',
     templateUrl: 'template/formcontrols/modelCheckbox.html',
     replace: true,
-    controller: function ($scope, $element, $attrs) {
-      if ($scope.model == '' || typeof $scope.model == 'undefined') {
-        if ($attrs.initvalue === 'true')
-          $scope.model = true;
+    controller: [
+      '$scope',
+      '$element',
+      '$attrs',
+      function ($scope, $element, $attrs) {
+        if ($scope.model == '' || typeof $scope.model == 'undefined') {
+          if ($attrs.initvalue === 'true')
+            $scope.model = true;
+        }
       }
-    },
-    restrict: 'EA',
+    ],
     scope: {
       label: '@',
       helpnote: '@',
       model: '='
     }
   };
-}).directive('readOnly', [
+});
+DirectivesModule.directive('readOnly', [
   '$filter',
   function ($filter) {
     return {
@@ -506,33 +568,42 @@ angular.module('KMC.directives', [
         label: '@',
         helpnote: '@'
       },
-      controller: function ($scope, $element, $attrs) {
-        if ($attrs['filter']) {
-          if (typeof $filter($attrs['filter']) == 'function')
-            $scope.model = $filter($attrs['filter'])($scope.model);
+      controller: [
+        '$scope',
+        '$element',
+        '$attrs',
+        function ($scope, $element, $attrs) {
+          if ($attrs['filter']) {
+            if (typeof $filter($attrs['filter']) == 'function')
+              $scope.model = $filter($attrs['filter'])($scope.model);
+          }
+          if ($attrs['initvalue']) {
+            if (typeof $scope.model == 'undefined' || scope.model == '')
+              $scope.model = $attrs['initvalue'];
+          }
         }
-        if ($attrs['initvalue']) {
-          if (typeof $scope.model == 'undefined' || scope.model == '')
-            $scope.model = $attrs['initvalue'];
-        }
-      },
+      ],
       templateUrl: 'template/formcontrols/readOnly.html'
     };
   }
-]).directive('modelButton', [
+]);
+DirectivesModule.directive('modelButton', [
   'menuSvc',
   function (menuSvc) {
     return {
       restrict: 'EA',
       replace: 'true',
-      controller: function ($scope) {
-        $scope.check = function (action) {
-          return menuSvc.checkAction(action);
-        };
-        $scope.btnAction = function (action) {
-          menuSvc.doAction(action);
-        };
-      },
+      controller: [
+        '$scope',
+        function ($scope) {
+          $scope.check = function (action) {
+            return menuSvc.checkAction(action);
+          };
+          $scope.btnAction = function (action) {
+            menuSvc.doAction(action);
+          };
+        }
+      ],
       scope: {
         'label': '@',
         'action': '@',
@@ -542,7 +613,8 @@ angular.module('KMC.directives', [
       templateUrl: 'template/formcontrols/modelButton.html'
     };
   }
-]).directive('modelNumber', function () {
+]);
+DirectivesModule.directive('modelNumber', function () {
   return {
     templateUrl: 'template/formcontrols/spinEdit.html',
     replace: true,
@@ -568,98 +640,42 @@ angular.module('KMC.directives', [
         }
       });
     },
-    controller: function ($scope, $element, $attrs) {
-      var def = {
-          from: 5,
-          to: 10,
-          stepsize: 1,
-          numberOfDecimals: 0
-        };
-      var keys = [
-          'from',
-          'to',
-          'stepsize',
-          'numberofdecimals'
-        ];
-      angular.forEach(keys, function (keyName) {
-        if (!$attrs[keyName])
-          $scope[keyName] = def[keyName];
-        else
-          $scope[keyName] = $attrs[keyName];
-      });
-      if (typeof $scope.model != 'undefined') {
-        $scope.initvalue = $scope.model;
-      } else {
-        if (!$attrs['default'])
-          $scope.initvalue = 1;
-        else
-          $scope.initvalue = $attrs['default'];
+    controller: [
+      '$scope',
+      '$element',
+      '$attrs',
+      function ($scope, $element, $attrs) {
+        var def = {
+            from: 5,
+            to: 10,
+            stepsize: 1,
+            numberOfDecimals: 0
+          };
+        var keys = [
+            'from',
+            'to',
+            'stepsize',
+            'numberofdecimals'
+          ];
+        angular.forEach(keys, function (keyName) {
+          if (!$attrs[keyName])
+            $scope[keyName] = def[keyName];
+          else
+            $scope[keyName] = $attrs[keyName];
+        });
+        if (typeof $scope.model != 'undefined') {
+          $scope.initvalue = $scope.model;
+        } else {
+          if (!$attrs['default'])
+            $scope.initvalue = 1;
+          else
+            $scope.initvalue = $attrs['default'];
+        }
       }
-    }
+    ]
   };
-}).directive('loadingWidget', [
-  'requestNotificationChannel',
-  function (requestNotificationChannel) {
-    return {
-      restrict: 'EA',
-      scope: {},
-      replace: true,
-      template: '<div class=\'loadingOverlay\'><a><div id=\'spinWrapper\'></div></a></div>',
-      controller: function ($scope, $element) {
-        $scope.spinner = null;
-        $scope.spinRunning = false;
-        $scope.opts = {
-          lines: 15,
-          length: 27,
-          width: 8,
-          radius: 60,
-          corners: 1,
-          rotate: 0,
-          direction: 1,
-          color: '#000',
-          speed: 0.6,
-          trail: 24,
-          shadow: true,
-          hwaccel: true,
-          className: 'spinner',
-          zIndex: 2000000000,
-          top: 'auto',
-          left: 'auto'
-        };
-        var initSpin = function () {
-          $scope.spinner = new Spinner($scope.opts).spin();
-        };
-        $scope.endSpin = function () {
-          if ($scope.spinner)
-            $scope.spinner.stop();
-          $scope.spinRunning = false;
-        };
-        $scope.spin = function () {
-          if ($scope.spinRunning)
-            return;
-          var target = $element.find('#spinWrapper');
-          if ($scope.spinner == null)
-            initSpin();
-          $scope.spinner.spin(target[0]);
-          $scope.spinRunning = true;
-        };
-      },
-      link: function (scope, element) {
-        element.hide();
-        var startRequestHandler = function () {
-          element.show();
-          scope.spin();
-        };
-        var endRequestHandler = function () {
-          element.hide();
-          scope.endSpin();
-        };
-        requestNotificationChannel.onRequestStarted(scope, startRequestHandler);
-        requestNotificationChannel.onRequestEnded(scope, endRequestHandler);
-      }
-    };
-  }
-]).directive('onFinishRender', [
+});
+DirectivesModule.directive('onFinishRender', [
   '$timeout',
   'requestNotificationChannel',
   function ($timeout, requestNotificationChannel) {
