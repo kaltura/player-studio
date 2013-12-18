@@ -1,5 +1,5 @@
 /*global module:false*/
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     var shellOpts = {
         stdout: true,
@@ -18,12 +18,14 @@ module.exports = function(grunt) {
         },
         ngmin: {
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: 'app/js',
-                    src: ['**/*.js'],
-                    dest: 'app/_dist/app/'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'app/js',
+                        src: ['**/*.js'],
+                        dest: 'app/_dist/app/'
+                    }
+                ]
             }
         },
         concat: {
@@ -41,7 +43,7 @@ module.exports = function(grunt) {
         },
         uglify: {
             options: {
-                banner: '<%= meta.banner %>',
+                banner: '<%= meta.banner %>'
             },
             dist: {
                 files: {
@@ -69,7 +71,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     // Default task.
-    grunt.registerTask('default', ['ngmin:dist','concat:dist', 'uglify:dist']);
+    grunt.registerTask('default', ['ngmin:dist', 'concat:dist', 'uglify:dist']);
     //grunt.registerTask('default', ['concat:dist']);
     grunt.registerTask('deploy', ['default', 'shell:copyLatest']);
 
