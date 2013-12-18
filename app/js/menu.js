@@ -2,7 +2,7 @@
 /* Menu */
 
 var KMCMenu = angular.module('KMC.menu', []);
-KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', '$window', function (menuSvc, $scope, $window) {
+KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope) {
     var getWidth = function () {
         return $('#mp-menu').width();
     };
@@ -309,7 +309,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
         };
         return menuSvc;
     }]).
-    directive('featureMenu',function ($parse) {
+    directive('featureMenu',['$parse',function ($parse) {
         return {
             restrict: 'EA',
             replace: true,
@@ -356,7 +356,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 }
             }
         }
-    }).directive('model', ['$timeout', function ($timeout) {
+    }]).directive('model', ['$timeout', function ($timeout) {
         return {
             restrict: 'A',
             link: function (scope, iElem, iAttr) {
@@ -412,7 +412,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             }
 
         }
-    }]).controller('menuSearchCtl',function ($scope, menuSvc) {
+    }]).controller('menuSearchCtl',['$scope', 'menuSvc',function ($scope, menuSvc) {
         var menuObj = menuSvc.get();
         $scope.menuData = [];
         $scope.checkSearch = function (val) {
@@ -441,9 +441,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             });
         };
         getLabels(menuObj);
-    }
+    }]
 ).
-    directive('menuLevel',function (menuSvc) {
+    directive('menuLevel',['menuSvc',function (menuSvc) {
         return  {
             templateUrl: 'template/menu/menuPage.html',
             replace: true,
@@ -495,7 +495,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 'description': '@'
             }
         };
-    }).
+    }]).
     directive('menuHead', ['menuSvc', function (menuSvc) {
         return {
             restrict: 'EA',

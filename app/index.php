@@ -78,7 +78,9 @@
     <script type="text/javascript" src="lib/localStorage/angular-local-storage.js"></script>
     <script type="text/javascript" src="lib/jquery.timeago.js"></script>
     <script type="text/javascript" src="lib/jquery.animate-colors-min.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+
+    <script type="text/javascript" src="../_dist/main.min.js"></script>
+    <!--script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/filters.js"></script>
     <script type="text/javascript" src="js/controllers/controllers.js"></script>
@@ -87,7 +89,7 @@
     <script type="text/javascript" src="js/controllers/playerListCtrl.js"></script>
     <script type="text/javascript" src="js/controllers/playerEditCtrl.js"></script>
     <script type="text/javascript" src="js/controllers/LoginCtrl.js"></script>
-    <script type="text/javascript" src="js/controllers/playerCreateCtrl.js"></script>
+    <script type="text/javascript" src="js/controllers/playerCreateCtrl.js"></script-->
 </head>
 <loading-widget></loading-widget>
 <div class="section relative" ng-view></div>
