@@ -1,15 +1,18 @@
 'use strict';
 /* Services */
 var KMCServices = angular.module('KMC.services', []);
+
 KMCServices.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
+
 KMCServices.factory('playerCache', function ($cacheFactory) {
     return $cacheFactory('playerCache', {
         capacity: 10
     });
 });
+
 KMCServices.factory('sortSvc', [function () {
     var containers = {};
     var sorter = {}
@@ -60,6 +63,7 @@ KMCServices.factory('sortSvc', [function () {
     return sorter;
 }]
 );
+
 KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', function ($http, $modal, $log, $q, apiService, $filter) {
     var playersCache = [];
     var currentPlayer = {};
@@ -198,124 +202,193 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         }
     }
     return playersService;
-}])
+}]);
+
 KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($rootScope) {
-        // private notification messages
-        var _START_REQUEST_ = '_START_REQUEST_';
-        var _END_REQUEST_ = '_END_REQUEST_';
-        var obj = {customStart: null};
-        // publish start request notification
-        obj.requestStarted = function (customStart) {
-            $rootScope.$broadcast(_START_REQUEST_);
-            if (customStart) {
-                obj.customStart = customStart;
-            }
-        };
-        // publish end request notification
-        obj.requestEnded = function (customStart) {
-            if (obj.customStart) {
-                if (customStart == obj.customStart) {
-                    $rootScope.$broadcast(_END_REQUEST_);
-                    obj.customStart = null;
-                }
-                else return;
-            }
-            else
-                $rootScope.$broadcast(_END_REQUEST_);
-        };
-        // subscribe to start request notification
-        obj.onRequestStarted = function ($scope, handler) {
-            $scope.$on(_START_REQUEST_, function (event) {
-                handler();
-            });
-        };
-        // subscribe to end request notification
-        obj.onRequestEnded = function ($scope, handler) {
-            $scope.$on(_END_REQUEST_, function (event) {
-                handler();
-            });
-        };
-
-        return obj;
-    }])
-    .factory('editableProperties', ['$http', function ($http) {
-        return $http.get('js/services/editableProperties.json');
-    }])
-    .factory('apiService', ['$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function ($q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
-        return{
-            apiObj: null,
-            getClient: function () {
-                //first request - create new kwidget.api
-                if (!this.apiObj) {
-                    kWidget.api.prototype.type = 'POST';
-                    this.apiObj = new kWidget.api();
-                }
-
-                return this.apiObj;
-            },
-            unSetks: function () {
-                delete this.apiObj;
-            },
-            setKs: function (ks) {
-                this.getClient().setKs(ks);
-            },
-            setWid: function (wid) {
-                this.getClient().wid = wid;
-            },
-            getKey: function (params) {
-                var key = '';
-                for (var i in params) {
-                    key += params[i] + '_';
-                }
-                return key;
-            },
-            listMedia: function () {
-                var request = {
-                    'service': 'media',
-                    'action': 'list'
-
-                };
-                return this.doRequest(request);
-            },
-            doRequest: function (params) {
-                //Creating a deferred object
-                var deferred = $q.defer();
-                requestNotificationChannel.requestStarted();
-                var params_key = this.getKey(params);
-                if (playerCache.get(params_key)) {
-                    deferred.resolve(playerCache.get(params_key));
-                } else {
-                    this.getClient().doRequest(params, function (data) {
-                        //timeout will trigger another $digest cycle that will trigger the "then" function
-                        $timeout(function () {
-                            if (data.code) {
-                                if (data.code == "INVALID_KS") {
-                                    localStorageService.remove('ks');
-                                    $location.path("/login");
-                                }
-                                requestNotificationChannel.requestEnded();
-                                deferred.reject(data.code);
-                            } else {
-                                playerCache.put(params_key, data);
-                                requestNotificationChannel.requestEnded();
-                                deferred.resolve(data);
-                            }
-                        }, 0);
-                    });
-                }
-                //Returning the promise object
-                return deferred.promise;
-            }
-        };
-    }])
-    .factory('playerTemplates', ['$http', function ($http) {
-        return {
-            'listSystem': function () {
-                return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
-            },
-            'listUser': function () {
-                return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
-            }
+    // private notification messages
+    var _START_REQUEST_ = '_START_REQUEST_';
+    var _END_REQUEST_ = '_END_REQUEST_';
+    var obj = {'customStart': null};
+    // publish start request notification
+    obj.requestStarted = function (customStart) {
+        $rootScope.$broadcast(_START_REQUEST_);
+        if (customStart) {
+            obj.customStart = customStart;
         }
+    };
+    // publish end request notification
+    obj.requestEnded = function (customStart) {
+        if (obj.customStart) {
+            if (customStart == obj.customStart) {
+                $rootScope.$broadcast(_END_REQUEST_);
+                obj.customStart = null;
+            }
+            else return;
+        }
+        else
+            $rootScope.$broadcast(_END_REQUEST_);
+    };
+    // subscribe to start request notification
+    obj.onRequestStarted = function ($scope, handler) {
+        $scope.$on(_START_REQUEST_, function (event) {
+            handler();
+        });
+    };
+    // subscribe to end request notification
+    obj.onRequestEnded = function ($scope, handler) {
+        $scope.$on(_END_REQUEST_, function (event) {
+            handler();
+        });
+    };
 
-    }]);
+    return obj;
+
+
+}]);
+
+KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (requestNotificationChannel) {
+    return {
+        restrict: 'EA',
+        scope: {},
+        replace: true,
+        template: '<div class=\'loadingOverlay\'><a><div id=\'spinWrapper\'></div></a></div>',
+        controller: ['$scope', '$element', function ($scope, $element) {
+            $scope.spinner = null;
+            $scope.spinRunning = false;
+            $scope.opts = {
+                lines: 15,
+                length: 27,
+                width: 8,
+                radius: 60,
+                corners: 1,
+                rotate: 0,
+                direction: 1,
+                color: '#000',
+                speed: 0.6,
+                trail: 24,
+                shadow: true,
+                hwaccel: true,
+                className: 'spinner',
+                zIndex: 2000000000,
+                top: 'auto',
+                left: 'auto'
+            };
+            var initSpin = function () {
+                $scope.spinner = new Spinner($scope.opts).spin();
+            };
+            $scope.endSpin = function () {
+                if ($scope.spinner)
+                    $scope.spinner.stop();
+                $scope.spinRunning = false;
+            };
+            $scope.spin = function () {
+                if ($scope.spinRunning)
+                    return;
+                var target = $element.find('#spinWrapper');
+                if ($scope.spinner == null)
+                    initSpin();
+                $scope.spinner.spin(target[0]);
+                $scope.spinRunning = true;
+            };
+        }],
+        link: function (scope, element) {
+            element.hide();
+            var startRequestHandler = function () {
+                element.show();
+                scope.spin();
+            };
+            var endRequestHandler = function () {
+                element.hide();
+                scope.endSpin();
+            };
+            requestNotificationChannel.onRequestStarted(scope, startRequestHandler);
+            requestNotificationChannel.onRequestEnded(scope, endRequestHandler);
+        }
+    };
+}
+])
+;
+
+KMCServices.factory('editableProperties', ['$http', function ($http) {
+    return $http.get('js/services/editableProperties.json');
+}]);
+
+KMCServices.factory('apiService', ['$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function ($q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
+    return{
+        apiObj: null,
+        getClient: function () {
+            //first request - create new kwidget.api
+            if (!this.apiObj) {
+                kWidget.api.prototype.type = 'POST';
+                this.apiObj = new kWidget.api();
+            }
+
+            return this.apiObj;
+        },
+        unSetks: function () {
+            delete this.apiObj;
+        },
+        setKs: function (ks) {
+            this.getClient().setKs(ks);
+        },
+        setWid: function (wid) {
+            this.getClient().wid = wid;
+        },
+        getKey: function (params) {
+            var key = '';
+            for (var i in params) {
+                key += params[i] + '_';
+            }
+            return key;
+        },
+        listMedia: function () {
+            var request = {
+                'service': 'media',
+                'action': 'list'
+
+            };
+            return this.doRequest(request);
+        },
+        doRequest: function (params) {
+            //Creating a deferred object
+            var deferred = $q.defer();
+            requestNotificationChannel.requestStarted();
+            var params_key = this.getKey(params);
+            if (playerCache.get(params_key)) {
+                deferred.resolve(playerCache.get(params_key));
+            } else {
+                this.getClient().doRequest(params, function (data) {
+                    //timeout will trigger another $digest cycle that will trigger the "then" function
+                    $timeout(function () {
+                        if (data.code) {
+                            if (data.code == "INVALID_KS") {
+                                localStorageService.remove('ks');
+                                $location.path("/login");
+                            }
+                            requestNotificationChannel.requestEnded();
+                            deferred.reject(data.code);
+                        } else {
+                            playerCache.put(params_key, data);
+                            requestNotificationChannel.requestEnded();
+                            deferred.resolve(data);
+                        }
+                    }, 0);
+                });
+            }
+            //Returning the promise object
+            return deferred.promise;
+        }
+    };
+}]);
+
+KMCServices.factory('playerTemplates', ['$http', function ($http) {
+    return {
+        'listSystem': function () {
+            return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
+        },
+        'listUser': function () {
+            return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
+        }
+    }
+
+}]);

@@ -57,18 +57,18 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     $routeProvider.when('/login', {
             templateUrl: 'view/login.html',
             controller: 'LoginCtrl',
-            resolve: {'apiService': function (apiService) {
+            resolve: {'apiService': ['apiService',function (apiService) {
                 return apiService;
-            }, 'localize': 'localize'
+            }], 'localize': 'localize'
             }
         }
     );
     $routeProvider.when('/list', {
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
-            resolve: {'apiService': function (apiService, localStorageService, $location) {
+            resolve: {'apiService': ['apiService', 'localStorageService', '$location',function (apiService, localStorageService, $location) {
                 return ksCheck(apiService, localStorageService, $location);
-            }
+            }]
 
             }
         }
@@ -88,17 +88,17 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         {templateUrl: 'view/edit.html',
             controller: 'PlayerEditCtrl',
             resolve: {
-                'PlayerData': function (PlayerService, $route, apiService, localStorageService, $location) {
+                'PlayerData': ['PlayerService', '$route', 'apiService', 'localStorageService', '$location',function (PlayerService, $route, apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
                     return  PlayerService.getPlayer($route.current.params.id);
-                },
+                }],
                 'editProperties': 'editableProperties',
                 'menuSvc': 'menuSvc',
                 'localize': 'localize',
-                'userEntries': function (apiService, localStorageService, $location) {
+                'userEntries': ['apiService', 'localStorageService', '$location',function (apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
                     return apiService.listMedia(); // should only load the first 20...
-                }
+                }]
             }
         }
     );
@@ -106,9 +106,9 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         {templateUrl: 'view/new-template.html',
             controller: 'PlayerCreateCtrl',
             resolve: {
-                'templates': function (playerTemplates) {
+                'templates': ['playerTemplates',function (playerTemplates) {
                     return  playerTemplates.listSystem();
-                },
+                }],
                 'userId': function () {
                     return '1' //  KMC would need to give us the userID ?
                 }
@@ -120,32 +120,32 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         {templateUrl: 'view/edit.html',
             controller: 'PlayerEditCtrl',
             resolve: {
-                'PlayerData': function (PlayerService, apiService, localStorageService, $location) {
+                'PlayerData': ['PlayerService', 'apiService', 'localStorageService', '$location',function (PlayerService, apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
                     return  PlayerService.newPlayer();
-                },
+                }],
                 'editProperties': 'editableProperties',
                 'menuSvc': 'menuSvc',
                 'localize': 'localize',
-                'userEntries': function (apiService, localStorageService, $location) {
+                'userEntries': ['apiService', 'localStorageService', '$location',function (apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
                     return apiService.listMedia(); // should only load the first 20...
-                }
+                }]
             }
         }
     );
     $routeProvider.when('/logout', {
-        resolve: {'logout': function (localStorageService, apiService, $location) {
+        resolve: {'logout': ['localStorageService', 'apiService', '$location',function (localStorageService, apiService, $location) {
             if (localStorageService.isSupported()) {
                 localStorageService.clearAll();
             }
             apiService.unSetks();
             $location.path('/login');
-        }}
+        }]}
 
     });
     $routeProvider.otherwise({
-        resolve: {'res': function (localStorageService, $location) {
+        resolve: {'res': ['localStorageService', '$location',function (localStorageService, $location) {
             if (parent.kmc && parent.kmc.vars) {
                 // got ks from KMC - save to local storage
                 if (parent.kmc.vars.ks)
@@ -157,7 +157,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }
             else
                 return $location.path('/list');
-        }}
+        }]}
     });
 }])
 ;

@@ -1,11 +1,28 @@
 {
-  "name": "angualrjs-seed",
-  "description": "A starter project for angular js",
+  "name": "Studio-v2",
+  "description": "KMC Video Studio V2",
+  "version": "2.0.0",
+  "main": "Gruntfile.js",
   "devDependencies": {
-        "phantomjs" : "*",
-        "karma" : "*",
-        "karma-junit-reporter" : "*",    
-        "karma-jasmine" : "*",
-        "karma-ng-scenario" : "*"
-    }
+    "grunt": "~0.4.2",
+    "grunt-ngmin": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-shell": "~0.2.2",
+    "phantomjs": "*",
+    "karma": "*",
+    "karma-junit-reporter": "*",
+    "karma-jasmine": "*",
+    "karma-ng-scenario": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaltura/player-studio.git"
+  },
+  "author": "Amir Chervinsky",
+  "license": "GNU",
+  "readmeFilename": "README.md"
 }
