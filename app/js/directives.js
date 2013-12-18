@@ -101,7 +101,7 @@ DirectivesModule.directive('modelColor', function () {
         templateUrl: 'template/formcontrols/modalColor.html'
     };
 });
-DirectivesModule.directive('modelText', function () {
+DirectivesModule.directive('µ', function () {
     return {
         replace: true,
         restrict: 'EA',
