@@ -39,6 +39,16 @@ module.exports = function (grunt) {
                     'app/_dist/app/services/*.js'
                 ],
                 dest: 'app/_dist/main.js'
+            },
+            libs: {
+                src: [
+                    'app/lib/sprintf.js',
+                    'app/lib/localize.js',
+                    'app/lib/spin.min.js',
+                    'app/lib/lib/jquery.timeago.js.js',
+                    'app/ib/jquery.animate-colors-min.js'
+                ],
+                dest: 'app/lib/libs.js'
             }
         },
         uglify: {
@@ -47,7 +57,15 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    'app/_dist/main.min.js': ['<%= concat.dist.dest %>']
+                    'app/_dist/main.min.js': ['<%= concat.dist.dest %>'],
+                    'app/lib/libs.min.js': 'app/lib/libs.js'
+                }
+            }
+        },
+        cssmin: {
+            combine: {
+                files: {
+                    'app/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css']
                 }
             }
         },
@@ -65,14 +83,15 @@ module.exports = function (grunt) {
     });
 
     // Add grunt plugins
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-ngmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-shell');
 
     // Default task.
-    grunt.registerTask('default', ['ngmin:dist', 'concat:dist', 'uglify:dist']);
-    //grunt.registerTask('default', ['concat:dist']);
+    grunt.registerTask('default', ['cssmin', 'ngmin:dist', 'concat', 'uglify:dist']);
+    //grunt.registerTask('default', ['cssmin']);
     grunt.registerTask('deploy', ['default', 'shell:copyLatest']);
 
 };

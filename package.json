@@ -8,6 +8,7 @@
     "grunt-ngmin": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-uglify": "*",
+    "grunt-contrib-cssmin": "~0.7.0",
     "grunt-shell": "~0.2.2",
     "phantomjs": "*",
     "karma": "*",
