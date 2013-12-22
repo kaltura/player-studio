@@ -4,10 +4,10 @@
 
 describe('SortService', function () {
     var sortSvc;
-    beforeEach(module('KMC.services'));
+    beforeEach(module('KMC.services'), module("templates"));
     beforeEach(inject(function ($injector) {
         sortSvc = $injector.get('sortSvc');
-    }));
+    }), module("templates"));
 
     it('should exist and return an object ', function () {
         expect(typeof sortSvc).toBe('object');

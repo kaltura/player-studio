@@ -1,6 +1,7 @@
 'use strict';
 var DirectivesModule = angular.module('KMC.directives', [
     'colorpicker.module',
+    'ui.bootstrap',
     'ui.select2',
     'ui.sortable'
 ]);
@@ -101,7 +102,7 @@ DirectivesModule.directive('modelColor', function () {
         templateUrl: 'template/formcontrols/modalColor.html'
     };
 });
-DirectivesModule.directive('µ', function () {
+DirectivesModule.directive('modelText', function () {
     return {
         replace: true,
         restrict: 'EA',
@@ -116,7 +117,7 @@ DirectivesModule.directive('µ', function () {
                 tElement.append('<hr/>');
             }
         },
-        templateUrl: 'template/formcontrols/modalText.html'
+        templateUrl: 'template/formcontrols/modelText.html'
     };
 });
 DirectivesModule.directive('select2Data', [

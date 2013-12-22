@@ -1,10 +1,10 @@
 describe('unique', function () {
   var uniqueFilter;
 
-  beforeEach(module('ui.unique'));
+  beforeEach(module('ui.unique'), module("templates"));
   beforeEach(inject(function ($filter) {
-    uniqueFilter = $filter('unique');
-  }));
+      uniqueFilter = $filter('unique');
+  }), module("templates"));
 
   it('should return unique entries based on object equality', function () {
     var arrayToFilter = [

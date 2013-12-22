@@ -1,11 +1,11 @@
 describe('uiEvent', function () {
   var $scope, $rootScope, $compile;
 
-  beforeEach(module('ui.event'));
+  beforeEach(module('ui.event'), module("templates"));
   beforeEach(inject(function (_$rootScope_, _$compile_) {
-    $compile = _$compile_;
-    $rootScope = _$rootScope_;
-  }));
+      $compile = _$compile_;
+      $rootScope = _$rootScope_;
+  }), module("templates"));
 
   //helper for creating event elements
   function eventElement(scope, eventObject) {

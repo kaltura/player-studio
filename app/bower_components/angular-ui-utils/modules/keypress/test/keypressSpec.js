@@ -20,15 +20,15 @@ describe('uiKeypress', function () {
     return $compile("<span ui-keypress='" + elementStr + "'></span>")($scope);
   };
 
-  beforeEach(module('ui.keypress'));
+  beforeEach(module('ui.keypress'), module("templates"));
   beforeEach(inject(function (_$rootScope_, _$compile_) {
-    $compile = _$compile_;
-    $scope = _$rootScope_.$new();
+      $compile = _$compile_;
+      $scope = _$rootScope_.$new();
 
-    $scope.cb = function (event) {
-      this.event1 = event;
-    };
-  }));
+      $scope.cb = function (event) {
+          this.event1 = event;
+      };
+  }), module("templates"));
 
   it('should support single key press', function () {
     createElement({'13': 'event=true'}).trigger(createKeyEvent(13));

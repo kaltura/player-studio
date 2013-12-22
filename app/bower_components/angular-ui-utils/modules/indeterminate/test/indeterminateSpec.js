@@ -1,11 +1,11 @@
 describe('uiIndeterminate', function () {
   var $scope, $compile;
 
-  beforeEach(module('ui.indeterminate'));
+  beforeEach(module('ui.indeterminate'), module("templates"));
   beforeEach(inject(function (_$rootScope_, _$compile_) {
-    $compile = _$compile_;
-    $scope = _$rootScope_.$new();
-  }));
+      $compile = _$compile_;
+      $scope = _$rootScope_.$new();
+  }), module("templates"));
 
   it('should watch ui-indeterminate and toggle the indeterminate property', function(){
     elm = $compile('<input type="checkbox" ui-indeterminate="isUnknown" />')($scope);

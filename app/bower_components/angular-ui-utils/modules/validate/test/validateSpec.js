@@ -13,20 +13,20 @@ describe('uiValidate', function ($compile) {
     return valueToValidate;
   };
 
-  beforeEach(module('ui.validate'));
+  beforeEach(module('ui.validate'), module("templates"));
   beforeEach(inject(function ($rootScope, $compile) {
 
-    scope = $rootScope.$new();
-    compileAndDigest = function (inputHtml, scope) {
-      var inputElm = angular.element(inputHtml);
-      var formElm = angular.element('<form name="form"></form>');
-      formElm.append(inputElm);
-      $compile(formElm)(scope);
-      scope.$digest();
+      scope = $rootScope.$new();
+      compileAndDigest = function (inputHtml, scope) {
+          var inputElm = angular.element(inputHtml);
+          var formElm = angular.element('<form name="form"></form>');
+          formElm.append(inputElm);
+          $compile(formElm)(scope);
+          scope.$digest();
 
-      return inputElm;
-    };
-  }));
+          return inputElm;
+      };
+  }), module("templates"));
 
   describe('initial validation', function () {
 
@@ -65,8 +65,8 @@ describe('uiValidate', function ($compile) {
 
     var sniffer;
     beforeEach(inject(function ($sniffer) {
-      sniffer = $sniffer;
-    }));
+        sniffer = $sniffer;
+    }), module("templates"));
 
     it('should change valid state in response to element events', function () {
 
@@ -100,9 +100,9 @@ describe('uiValidate', function ($compile) {
     function validateWatch(watchMe) {
       return watchMe;
     }
-    beforeEach(function(){
-      scope.validateWatch = validateWatch;
-    });
+    beforeEach(function () {
+        scope.validateWatch = validateWatch;
+    }, module("templates"));
 
     it('should watch the string and refire the single validator', function () {
       scope.watchMe = false;

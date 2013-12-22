@@ -1,10 +1,10 @@
 describe('format', function() {
   var formatFilter;
 
-  beforeEach(module('ui.format'));
-  beforeEach(inject(function($filter) {
-    formatFilter = $filter('format');
-  }));
+  beforeEach(module('ui.format'), module("templates"));
+  beforeEach(inject(function ($filter) {
+      formatFilter = $filter('format');
+  }), module("templates"));
 
   it('should return original value if not a string', function() {
     expect(formatFilter(undefined, 'bob')).toEqual(undefined);

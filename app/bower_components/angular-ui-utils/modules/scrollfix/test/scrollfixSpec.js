@@ -3,12 +3,12 @@ describe('uiScrollfix', function () {
   'use strict';
 
   var scope, $compile, $window;
-  beforeEach(module('ui.scrollfix'));
+  beforeEach(module('ui.scrollfix'), module("templates"));
   beforeEach(inject(function (_$rootScope_, _$compile_, _$window_) {
-    scope = _$rootScope_.$new();
-    $compile = _$compile_;
-    $window = _$window_;
-  }));
+      scope = _$rootScope_.$new();
+      $compile = _$compile_;
+      $window = _$window_;
+  }), module("templates"));
 
   describe('compiling this directive', function () {
     it('should bind to window "scroll" event', function () {

@@ -1,10 +1,10 @@
 describe('inflector', function () {
   var inflectorFilter, testPhrase = 'here isMy_phone_number';
 
-  beforeEach(module('ui.inflector'));
+  beforeEach(module('ui.inflector'), module("templates"));
   beforeEach(inject(function ($filter) {
-    inflectorFilter = $filter('inflector');
-  }));
+      inflectorFilter = $filter('inflector');
+  }), module("templates"));
 
   describe('default', function () {
     it('should default to humanize', function () {

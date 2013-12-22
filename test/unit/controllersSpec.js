@@ -4,7 +4,7 @@
 
 describe('ModalInstanceCtrl', function () {
     var $scope, settings, $modalInstance, mi,testVal;
-    beforeEach(module('KMC.controllers'));
+    beforeEach(module('KMC.controllers'), module("templates"));
     beforeEach(inject(function (_$rootScope_, $controller) {
         $scope = _$rootScope_;
         settings = {};
@@ -12,7 +12,7 @@ describe('ModalInstanceCtrl', function () {
             testVal = value;
         }};
         mi = $controller('ModalInstanceCtrl', { $scope: $scope, $modalInstance: $modalInstance, settings: settings});
-    }));
+    }), module("templates"));
     it('should have a ModalInstanceCtrl controller', function () {
         expect('ModalInstanceCtrl').toBeDefined();
     });

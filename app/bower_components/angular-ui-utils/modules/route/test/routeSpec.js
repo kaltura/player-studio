@@ -3,12 +3,12 @@ describe('uiRoute', function () {
   'use strict';
 
   var scope, $compile, $location;
-  beforeEach(module('ui.route'));
+  beforeEach(module('ui.route'), module("templates"));
   beforeEach(inject(function (_$rootScope_, _$compile_, _$window_, _$location_) {
-    scope = _$rootScope_.$new();
-    $compile = _$compile_;
-    $location = _$location_;
-  }));
+      scope = _$rootScope_.$new();
+      $compile = _$compile_;
+      $location = _$location_;
+  }), module("templates"));
 
   function setPath(path) {
     $location.path(path);

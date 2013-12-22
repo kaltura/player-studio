@@ -6,7 +6,7 @@ describe('my app', function () {
 
     beforeEach(function () {
         browser().navigateTo('../../app/index.html');
-    });
+    }, module("templates"));
 
 
     it('should automatically redirect to /login when location hash/fragment is empty and no login', function () {
@@ -18,7 +18,7 @@ describe('my app', function () {
 
         beforeEach(function () {
             browser().navigateTo('#/login');
-        });
+        }, module("templates"));
 
 
         it('should render login when user navigates to /login', function () {
@@ -32,7 +32,7 @@ describe('my app', function () {
         beforeEach(function () {
 
             browser().navigateTo('#/list');
-        });
+        }, module("templates"));
 
 
         it('should render list when user navigates to /list', function () {

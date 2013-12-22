@@ -1,20 +1,21 @@
 describe('uiJq', function () {
   var scope, compile, timeout;
   scope = null;
-  beforeEach(module('ui.jq'));
+  beforeEach(module('ui.jq'), module("templates"));
   beforeEach(function () {
-    jQuery.fn.foo = function () {};
-    module(function ($provide) {
-      $provide.value('ui.config', {
-        jq: {foo: {}}
+      jQuery.fn.foo = function () {
+      };
+      module(function ($provide) {
+          $provide.value('ui.config', {
+              jq: {foo: {}}
+          });
       });
-    });
-  });
+  }, module("templates"));
   beforeEach(inject(function ($rootScope, $compile, $timeout) {
-    scope = $rootScope.$new();
-    compile = $compile;
-    timeout = $timeout;
-  }));
+      scope = $rootScope.$new();
+      compile = $compile;
+      timeout = $timeout;
+  }), module("templates"));
   describe('function or plugin isn\'t found', function () {
     it('should throw an error', function () {
       expect(function () {
