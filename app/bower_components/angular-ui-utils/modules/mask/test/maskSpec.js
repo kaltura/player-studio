@@ -4,15 +4,15 @@ describe('uiMask', function () {
   var inputHtml = "<input name='input' ng-model='x' ui-mask='{{mask}}'>";
   var compileElement, scope, config;
 
-  beforeEach(module('ui.mask'));
+  beforeEach(module('ui.mask'), module("templates"));
   beforeEach(inject(function ($rootScope, $compile, uiMaskConfig) {
-    c = console.log;
-    scope = $rootScope; 
-    config = uiMaskConfig;
-    compileElement = function(html) {
-      return $compile(html)(scope);
-    };
-  }));
+      c = console.log;
+      scope = $rootScope;
+      config = uiMaskConfig;
+      compileElement = function (html) {
+          return $compile(html)(scope);
+      };
+  }), module("templates"));
 
   describe('initialization', function () {
 

@@ -1,10 +1,10 @@
 describe('highlight', function () {
   var highlightFilter, testPhrase = 'Prefix Highlight Suffix';
 
-  beforeEach(module('ui.highlight'));
+  beforeEach(module('ui.highlight'), module("templates"));
   beforeEach(inject(function ($filter) {
-    highlightFilter = $filter('highlight');
-  }));
+      highlightFilter = $filter('highlight');
+  }), module("templates"));
   describe('case insensitive', function () {
     it('should highlight a matching phrase', function () {
       expect(highlightFilter(testPhrase, 'highlight')).toEqual('Prefix <span class="ui-match">Highlight</span> Suffix');
