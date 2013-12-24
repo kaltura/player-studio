@@ -29,7 +29,8 @@ module.exports = function (config) {
             'app/bower_components/angular-ui-select2/src/select2.js',
             'test/unit/**/*.js',
             'app/lib/jquery.timeago.js',
-            'app/template/**/*.html'
+            'app/template/**/*.html',
+            'app/view/**/*.html'
         ],
 
         autoWatch: true,
