@@ -3,11 +3,11 @@ describe('uiReset', function () {
   'use strict';
 
   var scope, $compile;
-  beforeEach(module('ui.reset'));
+  beforeEach(module('ui.reset'), module("templates"));
   beforeEach(inject(function (_$rootScope_, _$compile_, _$window_) {
-    scope = _$rootScope_.$new();
-    $compile = _$compile_;
-  }));
+      scope = _$rootScope_.$new();
+      $compile = _$compile_;
+  }), module("templates"));
 
   describe('compiling this directive', function () {
     it('should throw an error if we have no model defined', function () {

@@ -6,11 +6,11 @@
     describe('uiShow', function () {
 
         var scope, $compile;
-        beforeEach(module('ui.showhide'));
+        beforeEach(module('ui.showhide'), module("templates"));
         beforeEach(inject(function (_$rootScope_, _$compile_) {
             scope = _$rootScope_.$new();
             $compile = _$compile_;
-        }));
+        }), module("templates"));
 
         describe('linking the directive', function () {
             it('should call scope.$watch', function () {
@@ -39,11 +39,11 @@
     describe('uiHide', function () {
 
         var scope, $compile;
-        beforeEach(module('ui.showhide'));
+        beforeEach(module('ui.showhide'), module("templates"));
         beforeEach(inject(function (_$rootScope_, _$compile_) {
             scope = _$rootScope_.$new();
             $compile = _$compile_;
-        }));
+        }), module("templates"));
 
         describe('when the directive is linked', function () {
             it('should call scope.$watch', function () {
@@ -72,11 +72,11 @@
     describe('uiToggle', function () {
 
         var scope, $compile;
-        beforeEach(module('ui.showhide'));
+        beforeEach(module('ui.showhide'), module("templates"));
         beforeEach(inject(function (_$rootScope_, _$compile_) {
             scope = _$rootScope_.$new();
             $compile = _$compile_;
-        }));
+        }), module("templates"));
 
         describe('when the directive is linked', function () {
             it('should call scope.$watch', function () {

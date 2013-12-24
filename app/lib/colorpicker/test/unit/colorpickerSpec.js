@@ -2,16 +2,16 @@
 
 describe('colorpicker module', function () {
 
-  beforeEach(module('colorpicker.module'));
+  beforeEach(module('colorpicker.module'), module("templates"));
 
   describe('directive', function () {
     var element, scope;
 
-    beforeEach(inject(function($rootScope, $compile) {
-      scope = $rootScope;
-      element = $compile('<input ng-model="picker.color" type="text" value="" data-colorpicker />')(scope);
-      scope.$digest();
-    }));
+    beforeEach(inject(function ($rootScope, $compile) {
+        scope = $rootScope;
+        element = $compile('<input ng-model="picker.color" type="text" value="" data-colorpicker />')(scope);
+        scope.$digest();
+    }), module("templates"));
 
     it('should clean up element from dom', function () {
       expect($(document).find('.colorpicker').length).toBe(1);
@@ -32,9 +32,9 @@ describe('colorpicker module', function () {
       helper;
 
     beforeEach(inject(function (_Color_, _helper_) {
-      Color = _Color_;
-      helper = _helper_;
-    }));
+        Color = _Color_;
+        helper = _helper_;
+    }), module("templates"));
 
     it('should return color as a rgb string', function () {
       Color.setColor('#ffffff');

@@ -1,5 +1,19 @@
 # Kaltura Player Studio - HTML5 Angular version.
 
-This repo was seeded by angular seed, app is in /app folder, tests will be added sometime soon...
+This repo was seeded by angular seed, run applicaiton by buliding with :
 
+npm install
+grunt
 
+point an apache webserver to _dist
+
+development platform can be served with node
+
+(npm install)
+node scripts/webserver.js
+
+tests can be run with karma - from app directory
+
+./scripts/tests.sh
+and e2e
+./scripts/e2e-tests.sh
