@@ -4,3 +4,4 @@ logs/*
 .idea/watcherTasks.xml
 node_modules/*
 npm-debug.log
+_dist/*
