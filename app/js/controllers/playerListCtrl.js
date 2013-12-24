@@ -11,6 +11,28 @@ KMCModule.controller('PlayerListCtrl',
             $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
             $scope.maxSize = 5;
+            // get studio UICONF to setup studio configuration
+            var request = {
+                'filter:tagsMultiLikeOr': 'studio_v2',
+                'filter:orderBy': '-updatedAt',
+                'filter:objTypeEqual': '16',
+                'filter:objectType': 'KalturaUiConfFilter',
+                'filter:creationModeEqual':'3',
+                'ignoreNull':'1',
+                'page:objectType': 'KalturaFilterPager',
+                'pager:pageIndex': '1',
+                'pager:pageSize': '25',
+                'service': 'uiConf',
+                'action': 'list'
+            };
+            apiService.doRequest(request).then(function(data) {
+                if (data.objects && data.objects.length == 1){
+                    $scope.UIConf = angular.fromJson(data.objects[0].config);
+                }else{
+                    $log.error('Error retrieving studio UICONF');
+                }
+            });
+            // get players list from KMC
             var request = {
                 'filter:tagsMultiLikeOr': 'kdp3',
                 'filter:orderBy': '-updatedAt',
