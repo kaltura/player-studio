@@ -2,4 +2,4 @@ logs/*
 !.gitkeep
 .idea/*
 .idea/watcherTasks.xml
-./node_modules/*
+node_modules/*
