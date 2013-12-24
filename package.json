@@ -23,7 +23,10 @@
     "requirejs": "~2.1.9",
     "karma-requirejs": "~0.2.0",
     "karma-phantomjs-launcher": "~0.1.1",
-    "karma-ng-html2js-preprocessor": "~0.1.0"
+    "karma-ng-html2js-preprocessor": "~0.1.0",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-angular-templates": "~0.5.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

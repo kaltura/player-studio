@@ -1,11 +1,5 @@
 /*global module:false*/
-module.exports = function (grunt) {
-
-    var shellOpts = {
-        stdout: true,
-        failOnError: true
-    };
-
+module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -23,7 +17,7 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'app/js',
                         src: ['**/*.js'],
-                        dest: 'app/_dist/app/'
+                        dest: '_dist/app/'
                     }
                 ]
             }
@@ -34,11 +28,11 @@ module.exports = function (grunt) {
             },
             dist: {
                 src: [
-                    'app/_dist/app/*.js',
-                    'app/_dist/app/controllers/*.js',
-                    'app/_dist/app/services/*.js'
+                    '_dist/app/*.js',
+                    '_dist/app/controllers/*.js',
+                    '_dist/app/services/*.js'
                 ],
-                dest: 'app/_dist/main.js'
+                dest: '_dist/main.js'
             },
             libs: {
                 src: [
@@ -57,7 +51,7 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    'app/_dist/main.min.js': ['<%= concat.dist.dest %>'],
+                    '_dist/main.min.js': ['<%= concat.dist.dest %>'],
                     'app/lib/libs.min.js': 'app/lib/libs.js'
                 }
             }
@@ -65,33 +59,94 @@ module.exports = function (grunt) {
         cssmin: {
             combine: {
                 files: {
-                    'app/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css']
+                    '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
+                    '_dist/css/vendor.css': ['app/bower_components/select2/select2.css', 'app/lib/prettycheckable/dist/prettyCheckable.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/spinedit/css/bootstrap-spinedit.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
                 }
+
             }
         },
-        shell: {
-            copyLatest: {
-                command: [
-                    'mkdir -p ~/Sites/kaltura/app/alpha/web/lib/js/kmc/<%= pkg.version %>',
-                    'cp lib/js/kmc.js ~/Sites/kaltura/app/alpha/web/lib/js/kmc/<%= pkg.version %>/kmc.js',
-                    'cp lib/js/kmc.min.js ~/Sites/kaltura/app/alpha/web/lib/js/kmc/<%= pkg.version %>/kmc.min.js',
-                    'cp lib/css/kmc5.css ~/Sites/kaltura/app/alpha/web/lib/css/kmc5.css'
-                ].join(' && '),
-                options: shellOpts
+        copy: {
+            main: {
+                files: [
+                    // includes files within path
+                    {
+                        dot: true,
+                        expand: true,
+                        cwd: 'app/dist_src',
+                        src: '**',
+                        dest: '_dist/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'app/',
+                        src: 'lib/**/*.js',
+                        dest: '_dist/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'app/',
+                        src: 'bower_components/**/*.min.js',
+                        dest: '_dist/'
+                    },
+                    {
+                        src: 'app/bower_components/select2/select2.png',
+                        dest: '_dist/css/select2.png'
+                    },
+                    {
+                        src: 'app/lib/prettycheckable/img/prettyCheckable.png',
+                        dest: '_dist/img/prettyCheckable.png'
+                    },
+                    {
+                        src: 'app/js/services/editableProperties.json',
+                        dest: '_dist/js/services/editableProperties.json'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'app/img',
+                        src: '**/*',
+                        dest: '_dist/img'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'app/i18n',
+                        src: '**/*.json',
+                        dest: '_dist/i18n'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'app/css/fonts',
+                        src: '*',
+                        dest: '_dist/css/fonts'
+                    }
+                ]
+            }
+        },
+        clean: {
+            build: ["_dist"],
+            release: ["_dist/app"]
+        },
+        ngtemplates: {
+            KMCModule: {
+                cwd: 'app',
+                src: ['template/**/*.html', 'view/**/*.html'],
+                dest: '_dist/templates.js',
+                options: {
+                    htmlmin: { collapseWhitespace: true, collapseBooleanAttributes: true }
+                }
             }
         }
     });
 
     // Add grunt plugins
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-ngmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-angular-templates');
 
     // Default task.
-    grunt.registerTask('default', ['cssmin', 'ngmin:dist', 'concat', 'uglify:dist']);
-    //grunt.registerTask('default', ['cssmin']);
-    grunt.registerTask('deploy', ['default', 'shell:copyLatest']);
+    grunt.registerTask('default', ['clean:build', 'copy', 'cssmin', 'ngmin:dist', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
 
 };

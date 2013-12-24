@@ -3,3 +3,4 @@ logs/*
 .idea/*
 .idea/watcherTasks.xml
 node_modules/*
+npm-debug.log

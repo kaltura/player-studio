@@ -8,7 +8,8 @@ describe('ModalInstanceCtrl', function () {
     beforeEach(inject(function (_$rootScope_, $controller) {
         $scope = _$rootScope_;
         settings = {};
-        $modalInstance = {close: function (value) {
+        $modalInstance = {
+            close: function (value) {
             testVal = value;
         }};
         mi = $controller('ModalInstanceCtrl', { $scope: $scope, $modalInstance: $modalInstance, settings: settings});
