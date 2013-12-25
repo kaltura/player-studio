@@ -28,6 +28,7 @@ KMCModule.controller('PlayerListCtrl',
             apiService.doRequest(request).then(function(data) {
                 if (data.objects && data.objects.length == 1){
                     $scope.UIConf = angular.fromJson(data.objects[0].config);
+                    console.log("got version "+$scope.UIConf.version)
                 }else{
                     $log.error('Error retrieving studio UICONF');
                 }

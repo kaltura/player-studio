@@ -75,6 +75,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     );
     var ksCheck = function (apiService, localStorageService, $location) {
         // Check if we have ks in locaclstorage
+        if (window.parent.kmc && window.parent.kmc.vars) {
+            // got ks from KMC - save to local storage
+            if (window.parent.kmc.vars.ks)
+                localStorageService.add('ks', window.parent.kmc.vars.ks);
+        }
         var ks = localStorageService.get('ks');
         if (!ks) { //navigate to login
             $location.path("/login");
@@ -145,18 +150,10 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
     });
     $routeProvider.otherwise({
-        resolve: {'res': ['localStorageService', '$location',function (localStorageService, $location) {
-            if (parent.kmc && parent.kmc.vars) {
-                // got ks from KMC - save to local storage
-                if (parent.kmc.vars.ks)
-                    localStorageService.add('ks', parent.kmc.vars.ks);
-            }
-            var ks = localStorageService.get('ks');
-            if (!ks) { //navigate to login
-                return $location.path("/login");
-            }
-            else
+        resolve: {'res': ['apiService', 'localStorageService', '$location',function (apiService, localStorageService, $location) {
+            if (ksCheck(apiService, localStorageService, $location)){
                 return $location.path('/list');
+            }
         }]}
     });
 }])
