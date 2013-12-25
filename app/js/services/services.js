@@ -111,13 +111,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         clonePlayer: function (srcUi) {
             var deferred = $q.defer();
             var request = {
-                'service': 'uiConf',
-                'action': 'clone',
-                'uiConf:objectType': 'KalturaUiConf',
-                'uiConf:objType': 1,
-                'id': srcUi.id,
-                'name': 'Copy Of ' + srcUi.name,
-                'uiConf:creationMode': 2
+                service: 'multirequest',
+                'action': null,
+                '1:service': 'uiconf',
+                '1:action': 'clone',
+                '1:id': srcUi.id,
+                '2:service': 'uiconf',
+                '2:action': 'update',
+                '2:id': '{1:result:id}',
+                '2:uiConf:name': 'Copy of ' + srcUi.name,
+                '2:uiConf:objectType': 'KalturaUiConf'
+                //'2:uiConf:objType': 1,
+               // 'uiConf:creationMode': 2
             }
             apiService.doRequest(request).then(function (data) {
                 deferred.resolve(data);
@@ -221,7 +226,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         }
     }
     return playersService;
-}]);
+}])
+;
 
 KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($rootScope) {
     // private notification messages
