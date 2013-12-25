@@ -2,40 +2,40 @@
 
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
 
-describe('my app', function () {
+describe('my app', function() {
 
-    beforeEach(function () {
+    beforeEach(function() {
         browser().navigateTo('../../app/index.html');
-    }, module("templates"));
+    });
 
 
-    it('should automatically redirect to /login when location hash/fragment is empty and no login', function () {
+    it('should automatically redirect to /login when location hash/fragment is empty and no login', function() {
         expect(browser().location().url()).toBe("/login");
     });
 
 
-    describe('login', function () {
+    describe('login', function() {
 
-        beforeEach(function () {
+        beforeEach(function() {
             browser().navigateTo('#/login');
-        }, module("templates"));
+        });
 
 
-        it('should render login when user navigates to /login', function () {
+        it('should render login when user navigates to /login', function() {
             expect(element('div[ng-view]').text()).
                 toBeDefined('view/login.html');
         });
 
     });
-    describe('list', function () {
+    describe('list', function() {
 
-        beforeEach(function () {
+        beforeEach(function() {
 
             browser().navigateTo('#/list');
-        }, module("templates"));
+        });
 
 
-        it('should render list when user navigates to /list', function () {
+        it('should render list when user navigates to /list', function() {
             expect(element('div[ng-view]').text()).
                 toBeDefined('view/list.html');
         });

@@ -3,7 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <base href="/"/>
+    <base href="<?php
+    $dir = $_SERVER['REQUEST_URI'];
+    $dir = str_replace('\\', '/', $dir);
+    if ($dir != '/') $dir .= '/';
+    echo $dir;
+    ?>"/>
     <script type="text/javascript" src="lib/modernizer.min.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -19,12 +24,6 @@
     <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
     <!--<![endif]-->
     <title>Player Studio - JS Version</title>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <!--    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">-->
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <!--[if gte IE 9]>
     <style type="text/css">
         .gradient {

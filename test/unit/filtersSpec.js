@@ -3,7 +3,7 @@
 /* jasmine specs for filters go here */
 //
 describe('filter', function () {
-    beforeEach(module('KMC.filters'), module("templates"));
+    beforeEach(module('KMC.filters'));
     describe('startFrom', function () {
         it('should cut the beginging of a string by a set number of characters ', inject(function ($filter) {
             var startFrom = $filter('startFrom');

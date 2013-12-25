@@ -36,6 +36,7 @@ module.exports = function(grunt) {
             },
             libs: {
                 src: [
+                    'app/bower_components/bootstrap/dist/js/bootstrap.min.js',
                     'app/lib/sprintf.js',
                     'app/lib/localize.js',
                     'app/lib/spin.min.js',
@@ -60,7 +61,7 @@ module.exports = function(grunt) {
             combine: {
                 files: {
                     '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
-                    '_dist/css/vendor.css': ['app/bower_components/select2/select2.css', 'app/lib/prettycheckable/dist/prettyCheckable.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/spinedit/css/bootstrap-spinedit.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
+                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css','app/bower_components/select2/select2.css', 'app/lib/prettycheckable/dist/prettyCheckable.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/spinedit/css/bootstrap-spinedit.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
                 }
 
             }
