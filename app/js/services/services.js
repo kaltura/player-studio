@@ -108,6 +108,25 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             return deferred.promise;
 
         },
+        clonePlayer: function (srcUi) {
+            var deferred = $q.defer();
+            var request = {
+                'service': 'uiConf',
+                'action': 'clone',
+                'uiConf:objectType': 'KalturaUiConf',
+                'uiConf:objType': 1,
+                'id': srcUi.id,
+                'name': 'Copy Of ' + srcUi.name,
+                'uiConf:creationMode': 2
+            }
+            apiService.doRequest(request).then(function (data) {
+                deferred.resolve(data);
+            }, function (reason) {
+                deferred.reject(reason); //TODO: how to display the error...
+            });
+            return deferred.promise;
+
+        },
         'getPlayer': function (id) {
             var cache = false;
             var deferred = $q.defer();

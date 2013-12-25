@@ -40,36 +40,20 @@ KMCModule.controller('PlayerListCtrl',
                 'filter:objTypeEqual': '1',
                 'filter:objectType': 'KalturaUiConfFilter',
                 'filter:creationModeEqual':'2',
-                //this was removed to allow client side paging,
-                // else we need another request to know the totalSize
-                // so we can make a pager that does requests per page
-                //
                 'ignoreNull':'1',
 				'page:objectType': 'KalturaFilterPager',
 				'pager:pageIndex': '1',
-				'pager:pageSize': '25',
+				'pager:pageSize': '999',
                 'service': 'uiConf',
                 'action': 'list'
             };
-            //real data
             apiService.doRequest(request).then(function(data) {
                 $scope.data = data.objects;
                 $scope.calculateTotalItems();
                 PlayerService.cachePlayers(data.objects);
             });
-            //mock data
-//            PlayerService.getPlayers().success(function (data) {
-//                $scope.data = data.objects;
-//                $scope.calculateTotalItems();
-//            });
             $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
-            $scope.playerVersions = [
-                {"label": "1.0", "url": "", "value": "1.0"},
-                {"label": "2.0", "url": "", "value": "2.0"},
-                {"label": "2.0.1rc2", "url": '', "value": "2.0.1"}
-            ]
-            $scope.requiredVersion = '201';
-
+            $scope.requiredVersion = PlayerService.getRequiredVersion();
             $scope.calculateTotalItems = function() {
                 if ($scope.filtered)
                     $scope.totalItems = $scope.filtered.length;
@@ -88,8 +72,6 @@ KMCModule.controller('PlayerListCtrl',
                 else
                     return true
             }
-
-            // $scope.title = $filter('i18n')('Players list');
             $scope.showSubTitle = true;
             $scope.getThumbnail = function(item) {
                 if (typeof item.thumbnailUrl != 'undefined')
@@ -149,8 +131,12 @@ KMCModule.controller('PlayerListCtrl',
                 $location.path('/new');
             };
             $scope.duplicate = function(item) {
-//                TODO:will need to get the current ID and move it to the edit page with duplicate flag (save as new)
-                $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
+                var newclone = PlayerService.clonePlayer(item);
+                newclone.then(function(newplayerObj){
+                    $location.url('edit/' + newplayerObj.id);
+                });
+//
+               // $scope.data.splice($scope.data.indexOf(item) + 1, 0, item);
             };
             // TODO: preview action...
             $scope.deletePlayer = function(item) {
