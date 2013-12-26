@@ -170,7 +170,6 @@ angular.module('localization', [])
                             // insert the text into the element
                             elm.text(tag);
                         }
-                        ;
                     }
                 },
 

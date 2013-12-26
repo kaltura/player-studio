@@ -95,7 +95,8 @@ StaticServlet.prototype.handleRequest = function(req, res) {
     return self.sendForbidden_(req, res, path);
   fs.stat(path, function(err, stat) {
     if (err)
-      return self.sendMissing_(req, res, path);
+        return self.sendFile_(req, res, 'app/index.html');
+      //return self.sendMissing_(req, res, path);
     if (stat.isDirectory())
       return self.sendDirectory_(req, res, path);
     return self.sendFile_(req, res, path);
