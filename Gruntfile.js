@@ -67,7 +67,7 @@ module.exports = function(grunt) {
                     'app/bower_components/angular-ui-sortable/src/sortable.min.js',
                     'app/bower_components/angular-ui-select2/src/select2.min.js'
                 ],
-                dest: 'app/bower_components/vendor.min.js'
+                dest: '_dist/vendor/vendor.min.js'
             }
         },
         uglify: {
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
             dist: {
                 files: {
                     '_dist/main.min.js': 'app/main.js',
-                    'app/lib/libs.min.js': 'app/lib/libs.js'
+                    '_dist/lib/libs.min.js': 'app/lib/libs.js'
                 }
             }
         },
@@ -104,15 +104,8 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'app/lib/',
-                        src: ['libs.min.js','html5shiv.js','respond.min.js','es5-shim.min.js'],
+                        src: ['html5shiv.js','respond.min.js','es5-shim.min.js'],
                         dest: '_dist/lib/'
-                    },
-
-                    {
-                        expand: true,
-                        cwd: 'app/bower_components/',
-                        src: 'vendor.min.js',
-                        dest: '_dist/vendor/'
                     },
                     {
                         expand: true,
