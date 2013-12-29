@@ -21,13 +21,11 @@
     <script>
         document.documentElement.className += " IE8";
     </script>
-    <script type="text/javascript" src="vendor/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="lib/html5shiv.js"></script>
-    <script type="text/javascript" src="lib/respond.min.js"></script>
-    <script type="text/javascript" src="lib/es5-shim.min.js"></script>
+    <script type="text/javascript" src="vendor/vendorOld.min.js"></script>
     <![endif]-->
     <!--[if gte IE 9]><!-->
-
+    <!-- min vendor lib -->
+    <script type="text/javascript" src="vendor/vendor.min.js"></script>
     <!--<![endif]-->
     <title>Player Studio</title>
     <!--[if gte IE 9]>
@@ -39,14 +37,11 @@
     <![endif]-->
     
     <!-- HTML5 library -->
-    <script type="text/javascript" src="../../../../html5/html5lib/v2.1/mwEmbedLoader.php"></script>
+    <script type="text/javascript" src="http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true"></script>
     
     <!--  app stylesheet-->
     <link rel="stylesheet" href="css/studio.css"/>
     <link rel="stylesheet" href="css/vendor.css"/>
-    
-    <!-- min vendor lib -->
-    <script type="text/javascript" src="vendor/vendor.min.js"></script>
 
     <!-- min extrnal lib -->
     <script type="text/javascript" src="lib/libs.min.js"></script>
