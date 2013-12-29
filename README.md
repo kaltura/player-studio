@@ -12,6 +12,8 @@ development platform can be served with node
 (npm install)
 node scripts/webserver.js
 
+
+to compile less use grunt less
 tests can be run with karma - from app directory
 
 ./scripts/tests.sh
