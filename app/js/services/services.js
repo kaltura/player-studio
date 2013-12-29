@@ -64,7 +64,8 @@ KMCServices.factory('sortSvc', [function () {
 }]
 );
 
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', function ($http, $modal, $log, $q, apiService, $filter) {
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', 'localStorageService',
+    function ($http, $modal, $log, $q, apiService, $filter, localStorageService) {
     var playersCache = [];
     var currentPlayer = {};
     var previewEntry = '0_ji4qh61l';
@@ -200,9 +201,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         'getPlayers': function () {
             return $http.get('js/services/allplayers.json');
         },
-        'playerUpdate': function (playerObj) {
-            //TODO: api call for update
-            var text = '<span>Updating the player -- TEXT MISSING -- current version </span>';
+        'playerUpdate': function (playerObj, html5LibVersion) {
+            var currentVersion = playerObj.html5Url.split("/v")[1].split("/")[0];
+            var text = '<span><b>' + $filter("i18n")("upgradeMsg") + '</b><br></br>'+$filter("i18n")("upgradeFromVersion") + currentVersion + '<br> ' + $filter("i18n")("upgradeToVersion")+ html5LibVersion.substr(1) + '</span>';
             var modal = $modal.open({
                 templateUrl: 'template/dialog/message.html',
                 controller: 'ModalInstanceCtrl',
@@ -210,14 +211,48 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     settings: function () {
                         return {
                             'title': 'Update confirmation',
-                            'message': text + playerObj.version
+                            'message': text
                         };
                     }
                 }
             });
             modal.result.then(function (result) {
                 if (result) {
-                    $log.info('update modal confirmed for item version ' + playerObj.version + 'at: ' + new Date());
+                    // use the upgradePlayer service to convert the old XML config to the new json config object
+                    $http({
+                        url: window.kWidget.getPath() + 'services.php',
+                        method: "GET",
+                        params: {service: 'upgradePlayer', uiconf_id:playerObj.id, ks: localStorageService.get("ks")}
+                    }).success(function(data, status, headers, config) {
+                            // clean some redundant data from received object
+                            delete data['uiConfId'];
+                            delete data['widgetId'];
+                            delete data.vars['ks'];
+                            var html5lib = playerObj.html5Url.substr(0,playerObj.html5Url.indexOf('/v')+2)+window.MWEMBED_VERSION+"/mwEmbedLoader.php";
+                            // set an api request to update the uiconf
+                            var deferred = $q.defer();
+                            var request = {
+                                'service': 'uiConf',
+                                'action': 'update',
+                                'id': playerObj.id,                   // the id of the player to update
+                                'uiConf:tags': 'html5studio,player',  // update tags to prevent breaking the old studio which looks for the tag kdp3
+                                'uiConf:html5Url':html5lib,           // update the html5 lib to the new version
+                                'uiConf:config':angular.toJson(data)  // update the config object
+                            }
+                            apiService.doRequest(request).then(function (result) {
+                                    deferred.resolve(result);
+                                    // update local data (we will not retrieve from the server again)
+                                    playerObj.config = angular.toJson(data);
+                                    playerObj.html5Url = html5lib;
+                                    playerObj.tags = 'html5studio,player';
+                                }, function () {
+                                    deferred.reject(rejectText);
+                                    $log.error('Error updating uiconf: ' + rejectText);
+                                }
+                            );
+                    }).error(function(data, status, headers, config) {
+                        $log.error('Error getting UICong config: ' + data);
+                    });
                 }
 
             }, function () {

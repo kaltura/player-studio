@@ -28,14 +28,13 @@ KMCModule.controller('PlayerListCtrl',
             apiService.doRequest(request).then(function (data) {
                 if (data.objects && data.objects.length == 1) {
                     $scope.UIConf = angular.fromJson(data.objects[0].config);
-                    console.log("got version " + $scope.UIConf.version)
                 } else {
                     $log.error('Error retrieving studio UICONF');
                 }
             });
             // get players list from KMC
             var request = {
-                'filter:tagsMultiLikeOr': 'kdp3',
+                'filter:tagsMultiLikeOr': 'kdp3,html5studio',
                 'filter:orderBy': '-updatedAt',
                 'filter:objTypeEqual': '1',
                 'filter:objectType': 'KalturaUiConfFilter',
@@ -62,15 +61,9 @@ KMCModule.controller('PlayerListCtrl',
                     return $scope.totalItems;
                 }
             };
-            $scope.checkVersionNeedsUpgrade = function (itemVersion) {
-                if (!itemVersion) {
-                    return false;
-                }
-                itemVersion = itemVersion.replace(/\./g, '');
-                if (itemVersion >= $scope.requiredVersion)
-                    return false
-                else
-                    return true
+            $scope.checkVersionNeedsUpgrade = function (item) {
+                var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v')+2, 1); // get html5 lib version number from its URL
+                return (html5libVersion == "1" || item.config == null); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
             }
             $scope.showSubTitle = true;
             $scope.getThumbnail = function (item) {
@@ -99,7 +92,7 @@ KMCModule.controller('PlayerListCtrl',
             $scope.goToEditPage = function (item, $event) {
                 $event.preventDefault();
                 //TODO filter according to what? we don't have "version" field
-                if (!$scope.checkVersionNeedsUpgrade(item.version)) {
+                if (!$scope.checkVersionNeedsUpgrade(item)) {
                     $location.path('/edit/' + item.id);
                     return false;
                 } else {
@@ -174,7 +167,7 @@ KMCModule.controller('PlayerListCtrl',
                 });
             };
             $scope.update = function (player) {
-                PlayerService.playerUpdate(player);
+                PlayerService.playerUpdate(player, $scope.UIConf.html5_version);
             }
         }
     ])

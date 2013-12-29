@@ -1,4 +1,4 @@
-/*! Studio-v2 - v2.0.0 - 2013-12-25
+/*! Studio-v2 - v2.0.0 - 2013-12-26
 * https://github.com/kaltura/player-studio
 * Copyright (c) 2013 Kaltura */
 /*!
