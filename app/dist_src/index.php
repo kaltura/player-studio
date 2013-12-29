@@ -6,10 +6,16 @@
     <base href="<?php
     $dir = $_SERVER['REQUEST_URI'];
     $dir = str_replace('\\', '/', $dir);
+    $dirArr = explode('/', $dir);
+    if (count($dirArr) > 1) {
+        while (!file_exists($dir . 'index.php')) {
+            array_pop($dirArr);
+            $dir = implode('/', $dirArr);
+        }
+    }
     if ($dir != '/') $dir .= '/';
     echo $dir;
     ?>"/>
-
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script>
