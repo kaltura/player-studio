@@ -41,10 +41,10 @@
     <link rel="stylesheet" href="css/vendor.css"/>
 
     <!-- min extrnal lib -->
-    <script type="text/javascript" src="lib/libs.min.js"></script>
+    <script type="text/javascript" src="lib/libs.js"></script>
 
     <!-- min internal scripts -->
-    <script type="text/javascript" src="main.min.js"></script>
+    <script type="text/javascript" src="main.js"></script>
 
     <!--  Angular templates -->
     <script type="text/javascript" src="templates.js"></script>

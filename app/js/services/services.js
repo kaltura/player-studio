@@ -15,51 +15,51 @@ KMCServices.factory('playerCache', function ($cacheFactory) {
 
 KMCServices.factory('sortSvc', [function () {
     var containers = {};
-    var sorter = {}
+    var sorter = {};
 
     var Container = function Container(name) {
         this.name = name;
         this.elements = [];
         containers[name] = this;
-    }
+    };
     Container.prototype.addElement = function (model) {
         this.elements.push(model);
-    }
+    };
     Container.prototype.callObjectsUpdate = function () {
         angular.forEach(this.elements, function (model) {
             cl(model.sortVal + ' ' + model.model);
-        })
-    }
+        });
+    };
     Container.prototype.removeElement = function (model) {
         var index = this.elements.indexOf(model);
         if (index != -1)
             this.elements.splice(index, 1);
-    }
+    };
     sorter.sortScope = '';
     sorter.register = function (containerName, model) {
         var container = (typeof  containers[containerName] == 'undefined') ? new Container(containerName) : containers[containerName];
         container.addElement(model);
-    }
+    };
     sorter.update = function (newVal, oldVal, model) {
-        var oldContainer = containers[oldVal]
+        var oldContainer = containers[oldVal];
         var newContainer = (!containers[newVal]) ? new Container(newVal) : containers[newVal];
         if (oldContainer) {
             oldContainer.removeElement(model);
         }
-        newContainer.addElement(model)
+        newContainer.addElement(model);
         if (typeof  sorter.sortScope == 'object') {
             sorter.sortScope.$broadcast('sortContainersChanged');
         }
-    }
+    };
     sorter.getObjects = function () {
         return containers;
-    }
+    };
     sorter.saveOrder = function (containersObj) {
         containers = containersObj;
         angular.forEach(containers, function (container) {
             container.callObjectsUpdate();
-        })
-    }
+        });
+    };
     return sorter;
 }]
 );
@@ -99,7 +99,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 'uiConf:objectType': 'KalturaUiConf',
                 'uiConf:objType': 1,
                 'uiConf:creationMode': 2
-            }
+            };
             apiService.doRequest(request).then(function (data) {
                 deferred.resolve(data);
             }, function (reason) {
@@ -123,7 +123,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 '2:uiConf:objectType': 'KalturaUiConf'
                 //'2:uiConf:objType': 1,
                // 'uiConf:creationMode': 2
-            }
+            };
             apiService.doRequest(request).then(function (data) {
                 deferred.resolve(data);
             }, function (reason) {
@@ -145,7 +145,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 // find player data by its ID in the list cache
                 for (var i = 0; i < playersCache.length; i++)
                     if (playersCache[i].id == id) {
-                        deferred.resolve(playersCache[i])
+                        deferred.resolve(playersCache[i]);
                         currentPlayer = playersCache[i];
                         cache = true;
                     }
@@ -156,7 +156,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'action': 'get',
                     'id': id
 
-                }
+                };
                 apiService.doRequest(request).then(function (result) {
                         deferred.resolve(result);
                         currentPlayer = result;
@@ -168,7 +168,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         cachePlayers: function (playersList) {
             if ($.isArray(playersList))
                 playersCache = playersCache.concat(playersList);
-            else playersCache.push(playersList)
+            else playersCache.push(playersList);
         },
         'deletePlayer': function (id) {
             var deferred = $q.defer();
@@ -181,7 +181,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'action': 'delete',
                     'id': id
 
-                }
+                };
                 apiService.doRequest(request).then(function (result) {
                         deferred.resolve(result);
                     }, function () {
@@ -224,7 +224,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 $log.info('update modal dismissed at: ' + new Date());
             });
         }
-    }
+    };
     return playersService;
 }])
 ;
@@ -310,7 +310,7 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
                 if ($scope.spinRunning)
                     return;
                 var target = $element.find('#spinWrapper');
-                if ($scope.spinner == null)
+                if ($scope.spinner === null)
                     initSpin();
                 $scope.spinner.spin(target[0]);
                 $scope.spinRunning = true;
@@ -414,6 +414,6 @@ KMCServices.factory('playerTemplates', ['$http', function ($http) {
         'listUser': function () {
             return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
         }
-    }
+    };
 
 }]);

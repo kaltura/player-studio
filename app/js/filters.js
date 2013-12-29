@@ -13,7 +13,7 @@ angular.module('KMC.filters', ['ngSanitize' ])
                 var date = input * 1000;
                 return $.timeago(date);
             }
-        }
+        };
     })
     .
     filter('range',function () {

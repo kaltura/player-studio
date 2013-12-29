@@ -1,7 +1,7 @@
 'use strict';
 var cl = function (val) {
     return console.log(val);
-}
+};
 window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
@@ -49,7 +49,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 // send a notification requests are complete
                 notificationChannel.requestStarted();
                 return promise.then(success, error);
-            }
+            };
         }];
 
     $httpProvider.responseInterceptors.push(interceptor);
@@ -115,7 +115,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     return  playerTemplates.listSystem();
                 }],
                 'userId': function () {
-                    return '1' //  KMC would need to give us the userID ?
+                    return '1'; //  KMC would need to give us the userID ?
                 }
 
             }

@@ -10,6 +10,31 @@ module.exports = function(grunt) {
                 '* Copyright (c) <%= grunt.template.today("yyyy") %> ' +
                 'Kaltura */\n'
         },
+        jshint: {
+            options: {
+                "curly": false,
+                "eqnull": false,
+                "eqeqeq": false,
+                "undef": false,
+                '-W069': true,
+                '-W061': true,
+                '-W097': true,
+                '-W093': true,
+                '-W064': true,
+                "globals": {
+                    "jQuery": true,
+                    "cl": true,
+                    "angular":true,
+                    "$":true,
+                    "kWidget":true,
+                    "window":true,
+                    "console":true,
+                    "document":true,
+                    "Spinner":true
+                }
+            },
+            dev: ['app/js/**/*.js']
+        },
         ngmin: {
             dist: {
                 files: [
@@ -24,7 +49,8 @@ module.exports = function(grunt) {
         },
         concat: {
             options: {
-                banner: '<%= meta.banner %>'
+                banner: '<%= meta.banner %>',
+                stripBanners: true
             },
             dist: {
                 src: [
@@ -71,10 +97,10 @@ module.exports = function(grunt) {
             },
             vendorOld: {
                 src: [
-                    'app/bower_components/jquery/jquery-1.10.2.min.js',
                     'app/lib/html5shiv.js',
                     'app/lib/respond.min.js',
                     'app/lib/es5-shim.min.js',
+                    'app/bower_components/jquery/jquery-1.10.2.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.mouse.min.js',
@@ -104,7 +130,7 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                  //  '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
+                    //  '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
                     '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css', 'app/bower_components/select2/select2.css', 'app/lib/prettycheckable/dist/prettyCheckable.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/spinedit/css/bootstrap-spinedit.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
                 }
 
@@ -123,6 +149,12 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
+                        cwd: 'app/',
+                        src: 'lib/**/*.js',
+                        dest: '_dist/'
+                    },
+                    {
+                        expand: true,
                         cwd: 'app/bower_components/angular/',
                         src: 'angular.min.js.map',
                         dest: '_dist/vendor/'
@@ -135,7 +167,7 @@ module.exports = function(grunt) {
                         src: 'app/lib/prettycheckable/img/prettyCheckable.png',
                         dest: '_dist/img/prettyCheckable.png'
                     },
-                    {
+                    { // dev only
                         src: 'app/js/services/editableProperties.json',
                         dest: '_dist/js/services/editableProperties.json'
                     },
@@ -154,6 +186,14 @@ module.exports = function(grunt) {
                     {
                         src: 'app/css/studio.css',
                         dest: '_dist/css/studio.css'
+                    },
+                    { // dev only
+                        src: 'app/lib/libs.js',
+                        dest: '_dist/lib/libs.js'
+                    },
+                    { // dev only
+                        src: 'app/main.js',
+                        dest: '_dist/main.js'
                     },
                     {
                         expand: true,
@@ -206,8 +246,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-angular-templates');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     // Default task.
-    grunt.registerTask('default', ['clean:build', 'less','copy', 'cssmin', 'ngmin:dist', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
+    grunt.registerTask('default', ['jshint:dev', 'clean:build', 'less', 'copy', 'cssmin', 'ngmin:dist', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
 
 };

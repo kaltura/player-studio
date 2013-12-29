@@ -555,7 +555,7 @@ DirectivesModule.directive('modelSelect', [
             return false;
           };
           $scope.initSelection = function () {
-            if ($scope.model == '' || typeof $scope.model == 'undefined') {
+            if ($scope.model === '' || typeof $scope.model == 'undefined') {
               $scope.model = $attrs.initvalue;
             }
             return $scope.model;
@@ -750,7 +750,7 @@ DirectivesModule.directive('modelCheckbox', function () {
       '$element',
       '$attrs',
       function ($scope, $element, $attrs) {
-        if ($scope.model == '' || typeof $scope.model == 'undefined') {
+        if ($scope.model === '' || typeof $scope.model == 'undefined') {
           if ($attrs.initvalue === 'true')
             $scope.model = true;
         }
@@ -784,7 +784,7 @@ DirectivesModule.directive('readOnly', [
               $scope.model = $filter($attrs['filter'])($scope.model);
           }
           if ($attrs['initvalue']) {
-            if (typeof $scope.model == 'undefined' || scope.model == '')
+            if (typeof $scope.model == 'undefined' || $scope.model === '')
               $scope.model = $attrs['initvalue'];
           }
         }
@@ -982,7 +982,7 @@ KMCMenu.controller('menuCntrl', [
     $scope.menuShown = true;
     resetMenu();
     $(window).resize(function () {
-      if ($scope.menuShown == true)
+      if ($scope.menuShown === true)
         resetMenu();
       else {
         closeMenu();
@@ -1029,49 +1029,34 @@ KMCMenu.factory('menuSvc', [
       switch (jsonName) {
       case 'modaledit':
         return '<div model-edit/>';
-        break;
       case 'tags':
         return '<div model-tags/>';
-        break;
       case 'select2data':
         return '<div select2-data/>';
-        break;
       case 'dropdown':
         return '<div model-select/>';
-        break;
       case 'container':
         return '<div model-select parent-container=""/>';
-        break;
       case 'checkbox':
         return '<div model-checkbox/>';
-        break;
       case 'color':
         return '<div model-color/>';
-        break;
       case 'text':
         return '<div model-text/>';
-        break;
       case 'number':
         return '<div model-number/>';
-        break;
       case 'readonly':
         return '<div read-only/>';
-        break;
       case 'featuremenu':
         return '<div feature-menu/>';
-        break;
       case 'radio':
         return '<div model-radio/>';
-        break;
       case 'button':
         return '<div model-button/>';
-        break;
       case 'infoAction':
         return '<div info-action/>';
-        break;
       case 'sortOrder':
         return '<div sort-order/>';
-        break;
       }
     };
     var searchGet = function (obj, target) {
@@ -1084,7 +1069,7 @@ KMCMenu.factory('menuSvc', [
         if (obj.hasOwnProperty(k) && (k == 'label' || k == 'children' || typeof obj[k] == 'object'))
           if (obj[k] == target)
             return path + '[\'' + k + '\']';
-          else if (typeof obj[k] == 'object' || typeof obj[k] == 'Array') {
+          else if (typeof obj[k] == 'object') {
             var result = search(path + '[\'' + k + '\']', obj[k], target);
             if (result)
               return result;
@@ -1170,7 +1155,7 @@ KMCMenu.factory('menuSvc', [
                 break;
               }
             }
-            if (eachInLi == true) {
+            if (eachInLi === true) {
               parent.children().each(function () {
                 if (!$(this).is('menu-level'))
                   $(this).wrap('<li>');
@@ -1498,7 +1483,7 @@ KMCMenu.factory('menuSvc', [
         angular.forEach(elements, function (value, key) {
           var elm = angular.element('<li></li>');
           elm.html('<a menupage="' + value.model + '" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
-          if (key == 0)
+          if (key === 0)
             elm.find('a').addClass('active');
           elm.appendTo(ul);
         });
@@ -1519,7 +1504,7 @@ KMCMenu.factory('menuSvc', [
   }
 ]);
 'use strict';
-KMCModule.controller('LoginCtrl', [
+angular.module('KMCModule').controller('LoginCtrl', [
   '$scope',
   'apiService',
   '$location',
@@ -1581,7 +1566,7 @@ angular.module('KMC.controllers', []).controller('ModalInstanceCtrl', [
 ]);
 ;
 'use strict';
-KMCModule.controller('PlayerCreateCtrl', [
+angular.module('KMCModule').controller('PlayerCreateCtrl', [
   '$scope',
   '$filter',
   'templates',
@@ -1604,7 +1589,6 @@ KMCModule.controller('PlayerCreateCtrl', [
         } else {
           $scope.loading = true;
           $scope.templates = templates.data;
-          ;
           $scope.loading = false;
         }
       }
@@ -1618,7 +1602,7 @@ KMCModule.controller('PlayerCreateCtrl', [
 ]);
 ;
 'use strict';
-KMCModule.controller('PlayerEditCtrl', [
+angular.module('KMCModule').controller('PlayerEditCtrl', [
   '$scope',
   'PlayerData',
   '$routeParams',
@@ -1689,13 +1673,13 @@ KMCModule.controller('PlayerEditCtrl', [
   }
 ]);
 ;
-KMCModule.controller('editPageDataCntrl', [
+angular.module('KMCModule').controller('editPageDataCntrl', [
   '$scope',
   function ($scope) {
   }
 ]);
 'use strict';
-KMCModule.controller('PlayerListCtrl', [
+angular.module('KMCModule').controller('PlayerListCtrl', [
   'apiService',
   '$location',
   '$rootScope',
@@ -1737,19 +1721,19 @@ KMCModule.controller('PlayerListCtrl', [
         $log.error('Error retrieving studio UICONF');
       }
     });
-    var request = {
-        'filter:tagsMultiLikeOr': 'kdp3',
-        'filter:orderBy': '-updatedAt',
-        'filter:objTypeEqual': '1',
-        'filter:objectType': 'KalturaUiConfFilter',
-        'filter:creationModeEqual': '2',
-        'ignoreNull': '1',
-        'page:objectType': 'KalturaFilterPager',
-        'pager:pageIndex': '1',
-        'pager:pageSize': '999',
-        'service': 'uiConf',
-        'action': 'list'
-      };
+    request = {
+      'filter:tagsMultiLikeOr': 'kdp3',
+      'filter:orderBy': '-updatedAt',
+      'filter:objTypeEqual': '1',
+      'filter:objectType': 'KalturaUiConfFilter',
+      'filter:creationModeEqual': '2',
+      'ignoreNull': '1',
+      'page:objectType': 'KalturaFilterPager',
+      'pager:pageIndex': '1',
+      'pager:pageSize': '999',
+      'service': 'uiConf',
+      'action': 'list'
+    };
     apiService.doRequest(request).then(function (data) {
       $scope.data = data.objects;
       $scope.calculateTotalItems();
@@ -2176,7 +2160,7 @@ KMCServices.directive('loadingWidget', [
             if ($scope.spinRunning)
               return;
             var target = $element.find('#spinWrapper');
-            if ($scope.spinner == null)
+            if ($scope.spinner === null)
               initSpin();
             $scope.spinner.spin(target[0]);
             $scope.spinRunning = true;

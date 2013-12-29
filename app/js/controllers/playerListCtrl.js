@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-KMCModule.controller('PlayerListCtrl',
+angular.module('KMCModule').controller('PlayerListCtrl',
     ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService',
         function (apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService) {
             requestNotificationChannel.requestStarted('list');
@@ -28,13 +28,13 @@ KMCModule.controller('PlayerListCtrl',
             apiService.doRequest(request).then(function (data) {
                 if (data.objects && data.objects.length == 1) {
                     $scope.UIConf = angular.fromJson(data.objects[0].config);
-                    console.log("got version " + $scope.UIConf.version)
+                    console.log("got version " + $scope.UIConf.version);
                 } else {
                     $log.error('Error retrieving studio UICONF');
                 }
             });
             // get players list from KMC
-            var request = {
+            request = {
                 'filter:tagsMultiLikeOr': 'kdp3',
                 'filter:orderBy': '-updatedAt',
                 'filter:objTypeEqual': '1',
@@ -68,10 +68,10 @@ KMCModule.controller('PlayerListCtrl',
                 }
                 itemVersion = itemVersion.replace(/\./g, '');
                 if (itemVersion >= $scope.requiredVersion)
-                    return false
+                    return false;
                 else
-                    return true
-            }
+                    return true;
+            };
             $scope.showSubTitle = true;
             $scope.getThumbnail = function (item) {
                 if (typeof item.thumbnailUrl != 'undefined')
@@ -115,7 +115,7 @@ KMCModule.controller('PlayerListCtrl',
                                 };
                             }
                         }
-                    })
+                    });
                     modal.result.then(function (result) {
                         if (result) { // here we should move though an upgrade process before reaching the edit.
                             return  $location.url('edit/' + item.id);
@@ -168,14 +168,14 @@ KMCModule.controller('PlayerListCtrl',
                                     }
                                 }
                             });
-                        })
+                        });
                 }, function () {
                     $log.info('Delete modal dismissed at: ' + new Date());
                 });
             };
             $scope.update = function (player) {
                 PlayerService.playerUpdate(player);
-            }
+            };
         }
     ])
 ;

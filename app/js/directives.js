@@ -309,7 +309,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
                 return false;
             };
             $scope.initSelection = function () {
-                if ($scope.model == '' || typeof $scope.model == 'undefined') {
+                if ($scope.model === '' || typeof $scope.model == 'undefined') {
                     $scope.model = $attrs.initvalue;
                 }
                 return $scope.model;
@@ -482,7 +482,7 @@ DirectivesModule.directive('modelCheckbox', function () {
         templateUrl: 'template/formcontrols/modelCheckbox.html',
         replace: true,
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
-            if ($scope.model == '' || typeof $scope.model == 'undefined') {
+            if ($scope.model === '' || typeof $scope.model == 'undefined') {
                 if ($attrs.initvalue === 'true')
                     $scope.model = true;
             }
@@ -509,7 +509,7 @@ DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
                     $scope.model = $filter($attrs['filter'])($scope.model);
             }
             if ($attrs['initvalue']) {
-                if (typeof $scope.model == 'undefined' || scope.model == '')
+                if (typeof $scope.model == 'undefined' || $scope.model === '')
                     $scope.model = $attrs['initvalue'];
             }
         }],

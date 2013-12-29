@@ -2,12 +2,12 @@
 
 /* Controllers */
 
-KMCModule.controller('PlayerEditCtrl',
+angular.module('KMCModule').controller('PlayerEditCtrl',
     ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries',
         function ($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
-            $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player')
+            $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
@@ -49,7 +49,7 @@ KMCModule.controller('PlayerEditCtrl',
 
             if (parseFloat($scope.data.version) < PlayerService.getRequiredVersion()) {
                 menuSvc.registerAction('update', function () {
-                    PlayerService.playerUpdate($scope.data)
+                    PlayerService.playerUpdate($scope.data);
                 });
             }
             $scope.previewEntry = ($scope.data.previewentry) ? $scope.data.previewentry.id : '0_ji4qh61l'; //default entry
@@ -59,7 +59,7 @@ KMCModule.controller('PlayerEditCtrl',
                     PlayerService.setPreviewEntry($scope.previewEntry);
                     PlayerService.renderPlayer();
                 }
-            })
+            });
             $(document).ready(function () {
                 PlayerService.setPreviewEntry($scope.previewEntry);
                 PlayerService.renderPlayer();
@@ -68,7 +68,7 @@ KMCModule.controller('PlayerEditCtrl',
         }
     ])
 ;
-KMCModule.controller('editPageDataCntrl', ['$scope', function ($scope) {
+angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', function ($scope) {
 
 
 }]);
