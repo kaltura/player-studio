@@ -36,7 +36,7 @@ module.exports = function(grunt) {
             },
             libs: {
                 src: [
-                    'app/bower_components/bootstrap/dist/js/bootstrap.min.js',
+                    'app/bower_components/bootstrap/dist/js/bootstrap.min.js', // soon to be removed!
                     'app/lib/modernizer.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mousewheel.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.min.js',
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
                 ],
                 dest: 'app/lib/libs.js'
             },
-            vendor: {
+            vendorModern: {
                 src: [
                     'app/bower_components/jquery/jquery.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
@@ -68,6 +68,26 @@ module.exports = function(grunt) {
                     'app/bower_components/angular-ui-select2/src/select2.min.js'
                 ],
                 dest: '_dist/vendor/vendor.min.js'
+            },
+            vendorOld: {
+                src: [
+                    'app/bower_components/jquery/jquery-1.10.2.min.js',
+                    'app/lib/html5shiv.js',
+                    'app/lib/respond.min.js',
+                    'app/lib/es5-shim.min.js',
+                    'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
+                    'app/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js',
+                    'app/bower_components/jquery-ui/ui/minified/jquery.ui.mouse.min.js',
+                    'app/bower_components/jquery-ui/ui/minified/jquery.ui.sortable.min.js',
+                    'app/bower_components/select2/select2.min.js',
+                    'app/bower_components/angular/angular.min.js',
+                    'app/bower_components/angular-route/angular-route.min.js',
+                    'app/bower_components/angular-sanitize/angular-sanitize.min.js',
+                    'app/bower_components/angular-animate/angular-animate.min.js',
+                    'app/bower_components/angular-ui-sortable/src/sortable.min.js',
+                    'app/bower_components/angular-ui-select2/src/select2.min.js'
+                ],
+                dest: '_dist/vendor/vendorOld.min.js'
             }
         },
         uglify: {
@@ -103,20 +123,8 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
-                        cwd: 'app/lib/',
-                        src: ['html5shiv.js', 'respond.min.js', 'es5-shim.min.js'],
-                        dest: '_dist/lib/'
-                    },
-                    {
-                        expand: true,
                         cwd: 'app/bower_components/angular/',
                         src: 'angular.min.js.map',
-                        dest: '_dist/vendor/'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'app/bower_components/jquery/',
-                        src: 'jquery-1.10.2.min.js',
                         dest: '_dist/vendor/'
                     },
                     {
