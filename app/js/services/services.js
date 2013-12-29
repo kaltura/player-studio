@@ -225,9 +225,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         params: {service: 'upgradePlayer', uiconf_id:playerObj.id, ks: localStorageService.get("ks")}
                     }).success(function(data, status, headers, config) {
                             // clean some redundant data from received object
-                            delete data['uiConfId'];
-                            delete data['widgetId'];
-                            delete data.vars['ks'];
+                            if (data['uiConfId']){
+                                delete data['uiConfId'];
+                                delete data['widgetId'];
+                                delete data.vars['ks'];
+                            }
+                            debugger;
                             var html5lib = playerObj.html5Url.substr(0,playerObj.html5Url.indexOf('/v')+2)+window.MWEMBED_VERSION+"/mwEmbedLoader.php";
                             // set an api request to update the uiconf
                             var deferred = $q.defer();

@@ -9,5 +9,8 @@
     "search": "Search",
     "Players list": "Players list",
     "duplicate": "Duplicate",
-    "search for": "Search for"
+    "search for": "Search for",
+    "upgradeMsg": "Do you want to update this player?",
+    "upgradeFromVersion": "Current version: ",
+    "upgradeToVersion": "Update to version: "
 }
