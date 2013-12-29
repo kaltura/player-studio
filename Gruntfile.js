@@ -84,8 +84,8 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                    '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
-                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css','app/bower_components/select2/select2.css', 'app/lib/prettycheckable/dist/prettyCheckable.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/spinedit/css/bootstrap-spinedit.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
+                  //  '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
+                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css', 'app/bower_components/select2/select2.css', 'app/lib/prettycheckable/dist/prettyCheckable.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/spinedit/css/bootstrap-spinedit.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
                 }
 
             }
@@ -104,7 +104,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'app/lib/',
-                        src: ['html5shiv.js','respond.min.js','es5-shim.min.js'],
+                        src: ['html5shiv.js', 'respond.min.js', 'es5-shim.min.js'],
                         dest: '_dist/lib/'
                     },
                     {
@@ -144,6 +144,10 @@ module.exports = function(grunt) {
                         dest: '_dist/i18n'
                     },
                     {
+                        src: 'app/css/studio.css',
+                        dest: '_dist/css/studio.css'
+                    },
+                    {
                         expand: true,
                         cwd: 'app/css/fonts',
                         src: '*',
@@ -156,6 +160,17 @@ module.exports = function(grunt) {
                         dest: '_dist/fonts'
                     }
                 ]
+            }
+        },
+        less: {
+            development: {
+                files: {'app/css/studio.css': 'app/less/*.less'},
+                options: {
+                    compress: true,
+                    cleancss: true,
+                    ieCompat: true,
+                    sourceMap: true
+                }
             }
         },
         clean: {
@@ -181,9 +196,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-angular-templates');
 
     // Default task.
-    grunt.registerTask('default', ['clean:build', 'copy', 'cssmin', 'ngmin:dist', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
+    grunt.registerTask('default', ['clean:build', 'less','copy', 'cssmin', 'ngmin:dist', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
 
 };

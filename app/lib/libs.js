@@ -1,4 +1,4 @@
-/*! Studio-v2 - v2.0.0 - 2013-12-26
+/*! Studio-v2 - v2.0.0 - 2013-12-29
 * https://github.com/kaltura/player-studio
 * Copyright (c) 2013 Kaltura */
 /*!
@@ -386,7 +386,6 @@ angular.module('localization', [])
                             // insert the text into the element
                             elm.text(tag);
                         }
-                        ;
                     }
                 },
 
