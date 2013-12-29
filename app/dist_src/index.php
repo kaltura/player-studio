@@ -6,14 +6,11 @@
     <base href="<?php
     $dir = $_SERVER['REQUEST_URI'];
     $dir = str_replace('\\', '/', $dir);
-    $dirArr = explode('/', $dir);
-    if (count($dirArr) > 1) {
-        while (!file_exists($dir . 'index.php')) {
-            array_pop($dirArr);
-            $dir = implode('/', $dirArr);
-        }
+    if (strpos($dir,'/_dist') != -1) { // we are in a sub path
+        $dirArr =  explode('/_dist', $dir);
+        $dir = $dirArr[0].'/_dist';
     }
-    if ($dir != '/') $dir .= '/';
+    if (substr($dir, -1, 1) != '/') $dir .= '/';
     echo $dir;
     ?>"/>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
