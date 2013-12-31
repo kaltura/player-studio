@@ -14,7 +14,7 @@
     echo $dir;
     ?>"/>
     <!--[if lt IE 9]>
-    <script>
+    <script type="text/javascript">
         document.documentElement.className += " IE8";
     </script>
     <script type="text/javascript" src="vendor/vendorOld.min.js"></script>
