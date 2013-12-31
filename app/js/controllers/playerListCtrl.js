@@ -167,8 +167,45 @@ KMCModule.controller('PlayerListCtrl',
                 });
             };
             $scope.update = function (player) {
-                PlayerService.playerUpdate(player, $scope.UIConf.html5_version);
-            }
+	            var currentVersion = player.html5Url.split("/v")[1].split("/")[0];
+	            var text = '<span><b>' + $filter("i18n")("upgradeMsg") + '</b><br></br>'+$filter("i18n")("upgradeFromVersion") + currentVersion + '<br> ' + $filter("i18n")("upgradeToVersion")+ $scope.UIConf.html5_version.substr(1) + '</span>';
+	            var html5lib = player.html5Url.substr(0,player.html5Url.indexOf('/v')+2)+window.MWEMBED_VERSION+"/mwEmbedLoader.php";
+	            var modal = $modal.open({
+		            templateUrl: 'template/dialog/message.html',
+		            controller: 'ModalInstanceCtrl',
+		            resolve: {
+			            settings: function () {
+				            return {
+					            'title': 'Update confirmation',
+					            'message': text
+				            };
+			            }
+		            }
+	            });
+	            modal.result.then(function (result) {
+		            if (result)
+			            PlayerService.playerUpdate(player, html5lib).then(function (data) {
+				            // update local data (we will not retrieve from the server again)
+				            player.config = angular.toJson(data);
+				            player.html5Url = html5lib;
+				            player.tags = 'html5studio,player';
+			            }, function (reason) {
+				            $modal.open({ templateUrl: 'template/dialog/message.html',
+					            controller: 'ModalInstanceCtrl',
+					            resolve: {
+						            settings: function () {
+							            return {
+								            'title': 'Update player failure',
+								            'message': reason
+							            };
+						            }
+					            }
+				            });
+			            })
+	            }, function () {
+		            $log.info('Update player dismissed at: ' + new Date());
+	            });
+            };
         }
     ])
 ;
