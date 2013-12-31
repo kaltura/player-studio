@@ -64,7 +64,8 @@ KMCServices.factory('sortSvc', [function () {
 }]
 );
 
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', function ($http, $modal, $log, $q, apiService, $filter) {
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', 'localStorageService',
+    function ($http, $modal, $log, $q, apiService, $filter, localStorageService) {
     var playersCache = [];
     var currentPlayer = {};
     var previewEntry = '0_ji4qh61l';
@@ -172,7 +173,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         },
         'deletePlayer': function (id) {
             var deferred = $q.defer();
-            var rejectText = $filter('i18n')('Delete action was rejected at API level, perhaps a permission problem?');
+            var rejectText = $filter('i18n')('Delete action was rejected: ');
             if (typeof id == 'undefined' && currentPlayer)
                 id = currentPlayer.id;
             if (id) {
@@ -184,8 +185,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 };
                 apiService.doRequest(request).then(function (result) {
                         deferred.resolve(result);
-                    }, function () {
-                        deferred.reject(rejectText);
+                    }, function (msg) {
+                        deferred.reject(rejectText + msg);
                     }
                 );
             }
@@ -200,29 +201,41 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         'getPlayers': function () {
             return $http.get('js/services/allplayers.json');
         },
-        'playerUpdate': function (playerObj) {
-            //TODO: api call for update
-            var text = '<span>Updating the player -- TEXT MISSING -- current version </span>';
-            var modal = $modal.open({
-                templateUrl: 'template/dialog/message.html',
-                controller: 'ModalInstanceCtrl',
-                resolve: {
-                    settings: function () {
-                        return {
-                            'title': 'Update confirmation',
-                            'message': text + playerObj.version
-                        };
+        'playerUpdate': function (playerObj, html5lib) {
+            // use the upgradePlayer service to convert the old XML config to the new json config object
+	        var deferred = $q.defer();
+	        var rejectText = $filter('i18n')('Update player action was rejected: ');
+	        $http({
+                url: window.kWidget.getPath() + 'services.php',
+                method: "GET",
+                params: {service: 'upgradePlayer', uiconf_id:playerObj.id, ks: localStorageService.get("ks")}
+            }).success(function(data, status, headers, config) {
+                    // clean some redundant data from received object
+                    if (data['uiConfId']){
+                        delete data['uiConfId'];
+                        delete data['widgetId'];
+                        delete data.vars['ks'];
                     }
-                }
+                    // set an api request to update the uiconf
+                    var request = {
+                        'service': 'uiConf',
+                        'action': 'update',
+                        'id': playerObj.id,                   // the id of the player to update
+                        'uiConf:tags': 'html5studio,player',  // update tags to prevent breaking the old studio which looks for the tag kdp3
+                        'uiConf:html5Url':html5lib,           // update the html5 lib to the new version
+                        'uiConf:config':angular.toJson(data)  // update the config object
+                    }
+                    apiService.doRequest(request).then(function (result) {
+                            deferred.resolve(result);
+                        }, function (msg) {
+                            deferred.reject(rejectText + msg);
+                        }
+                    );
+            }).error(function(data, status, headers, config) {
+			    deferred.reject("Error getting UIConf config: " + data);
+                $log.error('Error getting UIConf config: ' + data);
             });
-            modal.result.then(function (result) {
-                if (result) {
-                    $log.info('update modal confirmed for item version ' + playerObj.version + 'at: ' + new Date());
-                }
-
-            }, function () {
-                $log.info('update modal dismissed at: ' + new Date());
-            });
+	        return deferred.promise;
         }
     };
     return playersService;

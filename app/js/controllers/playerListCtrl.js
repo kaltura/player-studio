@@ -28,14 +28,13 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             apiService.doRequest(request).then(function (data) {
                 if (data.objects && data.objects.length == 1) {
                     $scope.UIConf = angular.fromJson(data.objects[0].config);
-                    console.log("got version " + $scope.UIConf.version);
                 } else {
                     $log.error('Error retrieving studio UICONF');
                 }
             });
             // get players list from KMC
-            request = {
-                'filter:tagsMultiLikeOr': 'kdp3',
+            var request = {
+                'filter:tagsMultiLikeOr': 'kdp3,html5studio',
                 'filter:orderBy': '-updatedAt',
                 'filter:objTypeEqual': '1',
                 'filter:objectType': 'KalturaUiConfFilter',
@@ -62,16 +61,12 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     return $scope.totalItems;
                 }
             };
-            $scope.checkVersionNeedsUpgrade = function (itemVersion) {
-                if (!itemVersion) {
-                    return false;
-                }
-                itemVersion = itemVersion.replace(/\./g, '');
-                if (itemVersion >= $scope.requiredVersion)
-                    return false;
-                else
-                    return true;
-            };
+
+            $scope.checkVersionNeedsUpgrade = function (item) {
+                var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v')+2, 1); // get html5 lib version number from its URL
+                return (html5libVersion == "1" || item.config == null); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
+            }
+
             $scope.showSubTitle = true;
             $scope.getThumbnail = function (item) {
                 if (typeof item.thumbnailUrl != 'undefined')
@@ -99,7 +94,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.goToEditPage = function (item, $event) {
                 $event.preventDefault();
                 //TODO filter according to what? we don't have "version" field
-                if (!$scope.checkVersionNeedsUpgrade(item.version)) {
+                if (!$scope.checkVersionNeedsUpgrade(item)) {
                     $location.path('/edit/' + item.id);
                     return false;
                 } else {
@@ -174,7 +169,44 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 });
             };
             $scope.update = function (player) {
-                PlayerService.playerUpdate(player);
+	            var currentVersion = player.html5Url.split("/v")[1].split("/")[0];
+	            var text = '<span><b>' + $filter("i18n")("upgradeMsg") + '</b><br></br>'+$filter("i18n")("upgradeFromVersion") + currentVersion + '<br> ' + $filter("i18n")("upgradeToVersion")+ $scope.UIConf.html5_version.substr(1) + '</span>';
+	            var html5lib = player.html5Url.substr(0,player.html5Url.indexOf('/v')+2)+window.MWEMBED_VERSION+"/mwEmbedLoader.php";
+	            var modal = $modal.open({
+		            templateUrl: 'template/dialog/message.html',
+		            controller: 'ModalInstanceCtrl',
+		            resolve: {
+			            settings: function () {
+				            return {
+					            'title': 'Update confirmation',
+					            'message': text
+				            };
+			            }
+		            }
+	            });
+	            modal.result.then(function (result) {
+		            if (result)
+			            PlayerService.playerUpdate(player).then(function (data) {
+				            // update local data (we will not retrieve from the server again)
+				            player.config = angular.toJson(data);
+				            player.html5Url = html5lib;
+				            player.tags = 'html5studio,player';
+			            }, function (reason) {
+				            $modal.open({ templateUrl: 'template/dialog/message.html',
+					            controller: 'ModalInstanceCtrl',
+					            resolve: {
+						            settings: function () {
+							            return {
+								            'title': 'Update player failure',
+								            'message': reason
+							            };
+						            }
+					            }
+				            });
+			            })
+	            }, function () {
+		            $log.info('Update player dismissed at: ' + new Date());
+	            });
             };
         }
     ])
