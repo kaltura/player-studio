@@ -6,14 +6,13 @@
     <base href="<?php
     $dir = $_SERVER['REQUEST_URI'];
     $dir = str_replace('\\', '/', $dir);
-    if (strpos($dir,'/_dist') != -1) { // we are in a sub path
+    if (strpos($dir,'/_dist') !== false) { // we are in a sub path
         $dirArr =  explode('/_dist', $dir);
         $dir = $dirArr[0].'/_dist';
     }
     if (substr($dir, -1, 1) != '/') $dir .= '/';
     echo $dir;
     ?>"/>
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script>
         document.documentElement.className += " IE8";

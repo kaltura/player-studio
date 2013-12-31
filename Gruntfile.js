@@ -58,7 +58,7 @@ module.exports = function(grunt) {
                     '_dist/app/controllers/*.js',
                     '_dist/app/services/*.js'
                 ],
-                dest: 'app/main.js'
+                dest: '_dist/main.js'
             },
             libs: {
                 src: [
@@ -76,7 +76,7 @@ module.exports = function(grunt) {
                     'app/ib/jquery.animate-colors-min.js',
                     'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js'
                 ],
-                dest: 'app/lib/libs.js'
+                dest: '_dist/lib/libs.js'
             },
             vendorModern: {
                 src: [
@@ -122,8 +122,8 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    '_dist/main.min.js': 'app/main.js',
-                    '_dist/lib/libs.min.js': 'app/lib/libs.js'
+                    '_dist/main.min.js': '_dist/main.js',
+                    '_dist/lib/libs.min.js': '_dist/lib/libs.js'
                 }
             }
         },
@@ -145,12 +145,6 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'app/dist_src',
                         src: '**',
-                        dest: '_dist/'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'app/',
-                        src: 'lib/**/*.js',
                         dest: '_dist/'
                     },
                     {
@@ -186,14 +180,6 @@ module.exports = function(grunt) {
                     {
                         src: 'app/css/studio.css',
                         dest: '_dist/css/studio.css'
-                    },
-                    { // dev only
-                        src: 'app/lib/libs.js',
-                        dest: '_dist/lib/libs.js'
-                    },
-                    { // dev only
-                        src: 'app/main.js',
-                        dest: '_dist/main.js'
                     },
                     {
                         expand: true,
