@@ -226,13 +226,14 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         'uiConf:config':angular.toJson(data)  // update the config object
                     }
                     apiService.doRequest(request).then(function (result) {
-                            deferred.resolve(result, html5lib);
+                            deferred.resolve(result);
                         }, function (msg) {
                             deferred.reject(rejectText + msg);
                         }
                     );
             }).error(function(data, status, headers, config) {
-                $log.error('Error getting UICong config: ' + data);
+			    deferred.reject("Error getting UIConf config: " + data);
+                $log.error('Error getting UIConf config: ' + data);
             });
 	        return deferred.promise;
         }
