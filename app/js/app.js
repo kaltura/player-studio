@@ -8,7 +8,7 @@ var KMCModule = angular.module('KMCModule',
     ['localization', 'ngRoute', 'KMC.controllers', 'KMC.filters',
         'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu']);
 
-KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
+KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider',function($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
     $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -73,11 +73,15 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         }
     );
     var ksCheck = function(apiService, localStorageService, $location) {
-        // Check if we have ks in locaclstorage
-        if (window.parent.kmc && window.parent.kmc.vars) {
-            // got ks from KMC - save to local storage
-            if (window.parent.kmc.vars.ks)
-                localStorageService.add('ks', window.parent.kmc.vars.ks);
+    // Check if we have ks in locaclstorage
+        try{
+            if (window.parent.kmc && window.parent.kmc.vars) {
+                // got ks from KMC - save to local storage
+                if (window.parent.kmc.vars.ks)
+                    localStorageService.add('ks', window.parent.kmc.vars.ks);
+            }
+        }catch (e){
+            cl('Could not located parent.kmc: ' + e);
         }
         var ks = localStorageService.get('ks');
         if (!ks) { //navigate to login
