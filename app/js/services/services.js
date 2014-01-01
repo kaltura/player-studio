@@ -378,10 +378,12 @@ KMCServices.provider('api', function() {
                     kWidget.api.prototype.type = 'POST';
                     apiObj = new kWidget.api();
                     deferred.resolve(apiObj);
-                }
+                };
                 require(url, function() {
                     if (typeof kWidget == 'undefined') {
-                        setTimeout(initKw, 100);
+                        setTimeout(function(){
+                            initKw();
+                        }, 100);
                     }
                     else {
                         initKw();
@@ -393,7 +395,7 @@ KMCServices.provider('api', function() {
                 deferred.resolve(apiObj);
             return deferred.promise;
         }
-    }
+    };
 });
 
 KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function(api, $q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
