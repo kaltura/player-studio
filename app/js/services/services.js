@@ -350,7 +350,23 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 KMCServices.factory('editableProperties', ['$http', function($http) {
     return $http.get('js/services/editableProperties.json');
 }]);
-KMCServices.service('api', ['$q', function($q) {
+
+KMCServices.factory('loadINI', ['$http', function($http) {
+    var iniConfig = null;
+    return {
+        'getINIConfig': function() {
+            if (!iniConfig){
+                iniConfig =  $http.get('studio.ini', {transformResponse:function (data, headers) {
+                    data = {};
+                    data.html5lib = 'http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true';
+                    return data;
+                }});
+            }
+            return iniConfig;
+        }
+    };
+}]);
+KMCServices.service('api', ['$q', 'loadINI', function($q, loadINI) {
     var apiObj = null;
     var deferred = $q.defer();
     //first request - create new kwidget.api
@@ -369,12 +385,15 @@ KMCServices.service('api', ['$q', function($q) {
             }
             head.appendChild(script);
         };
-        var url = 'http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true';
-        require(url, function() {
-            kWidget.api.prototype.type = 'POST';
-            apiObj = new kWidget.api();
-            deferred.resolve(apiObj);
+        loadINI.getINIConfig().success(function(data){
+            var url = data.html5lib;
+            require(url, function() {
+                kWidget.api.prototype.type = 'POST';
+                apiObj = new kWidget.api();
+                deferred.resolve(apiObj);
+            });
         });
+
     }
     else
         deferred.resolve(apiObj);
@@ -459,3 +478,4 @@ KMCServices.factory('playerTemplates', ['$http', function($http) {
     };
 
 }]);
+
