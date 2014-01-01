@@ -30,6 +30,7 @@ module.exports = function(grunt) {
                     "window":true,
                     "console":true,
                     "document":true,
+                    "setTimeout": true,
                     "Spinner":true
                 }
             },
