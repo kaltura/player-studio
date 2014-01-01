@@ -75,11 +75,15 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     );
     var ksCheck = function (apiService, localStorageService, $location) {
         // Check if we have ks in locaclstorage
-        if (window.parent.kmc && window.parent.kmc.vars) {
-            // got ks from KMC - save to local storage
-            if (window.parent.kmc.vars.ks)
-                localStorageService.add('ks', window.parent.kmc.vars.ks);
-        }
+	    try{
+	        if (window.parent.kmc && window.parent.kmc.vars) {
+	            // got ks from KMC - save to local storage
+	            if (window.parent.kmc.vars.ks)
+	                localStorageService.add('ks', window.parent.kmc.vars.ks);
+	        }
+	    }catch (e){
+		    $log.error('Could not located parent.kmc: ' + e);
+	    }
         var ks = localStorageService.get('ks');
         if (!ks) { //navigate to login
             $location.path("/login");
