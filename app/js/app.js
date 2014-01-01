@@ -1,5 +1,5 @@
 'use strict';
-var cl = function (val) {
+var cl = function(val) {
     return console.log(val);
 };
 window.lang = 'en-US';
@@ -8,13 +8,13 @@ var KMCModule = angular.module('KMCModule',
     ['localization', 'ngRoute', 'KMC.controllers', 'KMC.filters',
         'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu']);
 
-KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
+KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
     $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     //request loading indication//
     var $http,
-        interceptor = ['$q', '$injector', function ($q, $injector) {
+        interceptor = ['$q', '$injector', function($q, $injector) {
             var notificationChannel;
 
             function success(response) {
@@ -43,7 +43,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 return $q.reject(response);
             }
 
-            return function (promise) {
+            return function(promise) {
                 // get requestNotificationChannel via $injector because of circular dependency problem
                 notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
                 // send a notification requests are complete
@@ -57,7 +57,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     $routeProvider.when('/login', {
             templateUrl: 'view/login.html',
             controller: 'LoginCtrl',
-            resolve: {'apiService': ['apiService', function (apiService) {
+            resolve: {'apiService': ['apiService', function(apiService) {
                 return apiService;
             }], 'localize': 'localize'
             }
@@ -66,14 +66,14 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     $routeProvider.when('/list', {
             templateUrl: 'view/list.html',
             controller: 'PlayerListCtrl',
-            resolve: {'apiService': ['apiService', 'localStorageService', '$location', function (apiService, localStorageService, $location) {
-                return ksCheck(apiService, localStorageService, $location);
-            }]
-
+            resolve: {
+                'apiService': ['apiService', 'localStorageService', '$location', function(apiService, localStorageService, $location) {
+                    return ksCheck(apiService, localStorageService, $location);
+                }]
             }
         }
     );
-    var ksCheck = function (apiService, localStorageService, $location) {
+    var ksCheck = function(apiService, localStorageService, $location) {
         // Check if we have ks in locaclstorage
         if (window.parent.kmc && window.parent.kmc.vars) {
             // got ks from KMC - save to local storage
@@ -93,14 +93,14 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         {templateUrl: 'view/edit.html',
             controller: 'PlayerEditCtrl',
             resolve: {
-                'PlayerData': ['PlayerService', '$route', 'apiService', 'localStorageService', '$location', function (PlayerService, $route, apiService, localStorageService, $location) {
+                'PlayerData': ['PlayerService', '$route', 'apiService', 'localStorageService', '$location', function(PlayerService, $route, apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
                     return  PlayerService.getPlayer($route.current.params.id);
                 }],
                 'editProperties': 'editableProperties',
                 'menuSvc': 'menuSvc',
                 'localize': 'localize',
-                'userEntries': ['apiService', 'localStorageService', '$location', function (apiService, localStorageService, $location) {
+                'userEntries': ['apiService', 'localStorageService', '$location', function(apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
                     return apiService.listMedia(); // should only load the first 20...
                 }]
@@ -111,10 +111,10 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         {templateUrl: 'view/new-template.html',
             controller: 'PlayerCreateCtrl',
             resolve: {
-                'templates': ['playerTemplates', function (playerTemplates) {
+                'templates': ['playerTemplates', function(playerTemplates) {
                     return  playerTemplates.listSystem();
                 }],
-                'userId': function () {
+                'userId': function() {
                     return '1'; //  KMC would need to give us the userID ?
                 }
 
@@ -125,14 +125,14 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         {templateUrl: 'view/edit.html',
             controller: 'PlayerEditCtrl',
             resolve: {
-                'PlayerData': ['PlayerService', 'apiService', 'localStorageService', '$location', function (PlayerService, apiService, localStorageService, $location) {
+                'PlayerData': ['PlayerService', 'apiService', 'localStorageService', '$location', function(PlayerService, apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
                     return  PlayerService.newPlayer();
                 }],
                 'editProperties': 'editableProperties',
                 'menuSvc': 'menuSvc',
                 'localize': 'localize',
-                'userEntries': ['apiService', 'localStorageService', '$location', function (apiService, localStorageService, $location) {
+                'userEntries': ['apiService', 'localStorageService', '$location', function(apiService, localStorageService, $location) {
                     ksCheck(apiService, localStorageService, $location);
                     return apiService.listMedia(); // should only load the first 20...
                 }]
@@ -140,7 +140,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         }
     );
     $routeProvider.when('/logout', {
-        resolve: {'logout': ['localStorageService', 'apiService', '$location', function (localStorageService, apiService, $location) {
+        resolve: {'logout': ['localStorageService', 'apiService', '$location', function(localStorageService, apiService, $location) {
             if (localStorageService.isSupported()) {
                 localStorageService.clearAll();
             }
@@ -150,7 +150,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
     });
     $routeProvider.otherwise({
-        resolve: {'res': ['apiService', 'localStorageService', '$location', function (apiService, localStorageService, $location) {
+        resolve: {'res': ['apiService', 'localStorageService', '$location', function(apiService, localStorageService, $location) {
             if (ksCheck(apiService, localStorageService, $location)) {
                 return $location.path('/list');
             }
