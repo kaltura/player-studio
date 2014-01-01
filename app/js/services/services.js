@@ -350,45 +350,45 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 KMCServices.factory('editableProperties', ['$http', function($http) {
     return $http.get('js/services/editableProperties.json');
 }]);
-
-KMCServices.factory('apiService', ['$http', '$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function($http, $q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
-    var apiService = {
-        apiObj: null,
-        getClient: function() {
-            var deferred = $q.defer();
-            //first request - create new kwidget.api
-            if (!apiService.apiObj) {
-                var require = function(file, callback) {
-                    var head = document.getElementsByTagName("head")[0];
-                    var script = document.createElement('script');
-                    script.src = file;
-                    script.type = 'text/javascript';
-                    //real browsers
-                    script.onload = callback;
-                    //Internet explorer
-                    script.onreadystatechange = function() {
-                        if (this.readyState == 'complete') {
-                            callback();
-                        }
-                    };
-                    head.appendChild(script);
-                };
-                var url = 'http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true';
-                require(url, function() {
-                    kWidget.api.prototype.type = 'POST';
-                    apiService.apiObj = new kWidget.api();
-                    deferred.resolve(apiService.apiObj);
-                });
+KMCServices.service('api', ['$q', function($q) {
+    var apiObj = null;
+    var deferred = $q.defer();
+    //first request - create new kwidget.api
+    if (!apiObj) {
+        var require = function(file, callback) {
+            var head = document.getElementsByTagName("head")[0];
+            var script = document.createElement('script');
+            script.src = file;
+            script.type = 'text/javascript';
+            // bind the event to the callback function
+            if (script.addEventListener) {
+                script.addEventListener("load", callback, false); // IE9+, Chrome, Firefox
             }
-            else
-                deferred.resolve(apiService.apiObj);
-            return deferred.promise;
-        },
+            else if (script.readyState) {
+                script.onreadystatechange = callback; // IE8
+            }
+            head.appendChild(script);
+        };
+        var url = 'http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true';
+        require(url, function() {
+            kWidget.api.prototype.type = 'POST';
+            apiObj = new kWidget.api();
+            deferred.resolve(apiObj);
+        });
+    }
+    else
+        deferred.resolve(apiObj);
+    return deferred.promise;
+}]);
+
+KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function(api, $q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
+    var apiService = {
+        apiObj: api,
         unSetks: function() {
             delete this.apiObj;
         },
         setKs: function(ks) {
-            this.getClient().then(function(api) {
+            this.apiObj.then(function(api) {
                 api.setKs(ks);
             });
         },
@@ -420,7 +420,7 @@ KMCServices.factory('apiService', ['$http', '$q', '$timeout', '$location' , 'loc
             if (playerCache.get(params_key)) {
                 deferred.resolve(playerCache.get(params_key));
             } else {
-                this.getClient().then(function(api) {
+                this.apiObj.then(function(api) {
                     api.doRequest(params, function(data) {
 //timeout will trigger another $digest cycle that will trigger the "then" function
                         $timeout(function() {
