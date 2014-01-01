@@ -348,12 +348,14 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
 ;
 
 KMCServices.factory('editableProperties', ['$http', function ($http) {
-    return  $http.get('http://mwembed.dev/studio/playerFeatures.php'); //$http.get('http://kgit.html5video.org/pulls/515/studio/playerFeatures.php');
+    return  $http.get('http://kgit.html5video.org/pulls/515/studio/playerFeatures.php'); //$http.get('http://mwembed.dev/studio/playerFeatures.php'); //
     //
 }]);
 
 KMCServices.factory('loadINI', ['$http', function ($http) {
     var iniConfig = null;
+    //http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true
+    //http://kgit.html5video.org/pulls/500/mwEmbedLoader.php?debug=true
     return {
         'getINIConfig': function () {
             if (!iniConfig) {
