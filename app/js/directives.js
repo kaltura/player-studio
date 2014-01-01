@@ -547,21 +547,26 @@ DirectivesModule.directive('modelNumber', function () {
             helpnote: '@',
             label: '@'
         },
-        link: function ($scope, $element, $attrs) {
-            var $spinner = $element.find('input').spinedit({
-                minimum: parseFloat($attrs.from),
-                maximum: parseFloat($attrs.to),
-                step: parseFloat($attrs.stepsize),
-                value: parseFloat($attrs.initvalue),
-                numberOfDecimals: parseFloat($attrs.numberofdecimals)
-            });
-            $spinner.on('valueChanged', function (e) {
-                if (typeof e.value == 'number') {
-                    $scope.$apply(function () {
-                        $scope.model = e.value;
-                    });
-                }
-            });
+        compile: function (tElement, tAttr) {
+            if (tAttr['endline'] == 'true') {
+                tElement.append('<hr/>');
+            }
+            return function ($scope, $element, $attrs) {
+                var $spinner = $element.find('input').spinedit({
+                    minimum: parseFloat($attrs.from),
+                    maximum: parseFloat($attrs.to),
+                    step: parseFloat($attrs.stepsize),
+                    value: parseFloat($attrs.initvalue),
+                    numberOfDecimals: parseFloat($attrs.numberofdecimals)
+                });
+                $spinner.on('valueChanged', function (e) {
+                    if (typeof e.value == 'number') {
+                        $scope.$apply(function () {
+                            $scope.model = e.value;
+                        });
+                    }
+                });
+            }
         },
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
             var def = {
@@ -582,13 +587,13 @@ DirectivesModule.directive('modelNumber', function () {
                 else
                     $scope[keyName] = $attrs[keyName];
             });
-            if (typeof $scope.model != 'undefined') {
+            if (typeof $scope.model != 'number') {
                 $scope.initvalue = $scope.model;
             } else {
-                if (!$attrs['default'])
+                if (!$attrs['initvalue'])
                     $scope.initvalue = 1;
                 else
-                    $scope.initvalue = $attrs['default'];
+                    $scope.initvalue = $attrs['initvalue'];
             }
         }]
     };

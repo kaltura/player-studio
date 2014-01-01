@@ -93,6 +93,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     return  '<div model-color/>';
                 case 'text' :
                     return '<div model-text/>';
+                case 'url' :
+                    return '<div model-text validate="url"/>';
                 case 'number':
                     return  '<div model-number/>';
                 case 'readonly':
