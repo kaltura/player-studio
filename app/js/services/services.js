@@ -350,42 +350,57 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 KMCServices.factory('editableProperties', ['$http', function($http) {
     return $http.get('js/services/editableProperties.json');
 }]);
-KMCServices.service('api', ['$q', function($q) {
+KMCServices.provider('api', function() {
+    var injector = angular.injector(['ng']);
+    var $q = injector.get('$q');
     var apiObj = null;
-    var deferred = $q.defer();
-    //first request - create new kwidget.api
-    if (!apiObj) {
-        var require = function(file, callback) {
-            var head = document.getElementsByTagName("head")[0];
-            var script = document.createElement('script');
-            script.src = file;
-            script.type = 'text/javascript';
-            // bind the event to the callback function
-            if (script.addEventListener) {
-                script.addEventListener("load", callback, false); // IE9+, Chrome, Firefox
+    return {
+        $get: function() {
+            var deferred = $q.defer();
+            //first request - create new kwidget.api
+            if (!apiObj) {
+                var require = function(file, callback) {
+                    var head = document.getElementsByTagName("head")[0];
+                    var script = document.createElement('script');
+                    script.src = file;
+                    script.type = 'text/javascript';
+                    // bind the event to the callback function
+                    if (script.addEventListener) {
+                        script.addEventListener("load", callback, false); // IE9+, Chrome, Firefox
+                    }
+                    else if (script.readyState) {
+                        script.onreadystatechange = callback; // IE8
+                    }
+                    head.appendChild(script);
+                };
+                var url = 'http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true';
+                var initKw = function() {
+                    kWidget.api.prototype.type = 'POST';
+                    apiObj = new kWidget.api();
+                    deferred.resolve(apiObj);
+                }
+                require(url, function() {
+                    if (typeof kWidget == 'undefined') {
+                        setTimeout(initKw, 100);
+                    }
+                    else {
+                        initKw();
+                    }
+
+                });
             }
-            else if (script.readyState) {
-                script.onreadystatechange = callback; // IE8
-            }
-            head.appendChild(script);
-        };
-        var url = 'http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true';
-        require(url, function() {
-            kWidget.api.prototype.type = 'POST';
-            apiObj = new kWidget.api();
-            deferred.resolve(apiObj);
-        });
+            else
+                deferred.resolve(apiObj);
+            return deferred.promise;
+        }
     }
-    else
-        deferred.resolve(apiObj);
-    return deferred.promise;
-}]);
+});
 
 KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function(api, $q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
     var apiService = {
         apiObj: api,
         unSetks: function() {
-            delete this.apiObj;
+            this.apiObj =  api;
         },
         setKs: function(ks) {
             this.apiObj.then(function(api) {

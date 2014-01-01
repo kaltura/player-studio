@@ -16,7 +16,6 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     var $http,
         interceptor = ['$q', '$injector', function($q, $injector) {
             var notificationChannel;
-
             function success(response) {
                 // get $http via $injector because of circular dependency problem
                 $http = $http || $injector.get('$http');
