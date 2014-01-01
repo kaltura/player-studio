@@ -90,7 +90,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     $('#spacer').toggleClass('narrow');
                 }
                 playersService.renderPlayer(); // for now does nothing different than render,
-                // but could be used to trigger view changes via notify events rather than complete refresh
+// but could be used to trigger view changes via notify events rather than complete refresh
             },
             newPlayer: function () {
                 var deferred = $q.defer();
@@ -122,8 +122,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     '2:id': '{1:result:id}',
                     '2:uiConf:name': 'Copy of ' + srcUi.name,
                     '2:uiConf:objectType': 'KalturaUiConf'
-                    //'2:uiConf:objType': 1,
-                    // 'uiConf:creationMode': 2
+//'2:uiConf:objType': 1,
+// 'uiConf:creationMode': 2
                 };
                 apiService.doRequest(request).then(function (data) {
                     deferred.resolve(data);
@@ -143,7 +143,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     }
                 }
                 if (!cache) {
-                    // find player data by its ID in the list cache
+// find player data by its ID in the list cache
                     for (var i = 0; i < playersCache.length; i++)
                         if (playersCache[i].id == id) {
                             deferred.resolve(playersCache[i]);
@@ -202,7 +202,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 return $http.get('js/services/allplayers.json');
             },
             'playerUpdate': function (playerObj, html5lib) {
-                // use the upgradePlayer service to convert the old XML config to the new json config object
+// use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
                 var rejectText = $filter('i18n')('Update player action was rejected: ');
                 $http({
@@ -210,13 +210,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     method: "GET",
                     params: {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")}
                 }).success(function (data, status, headers, config) {
-                        // clean some redundant data from received object
+// clean some redundant data from received object
                         if (data['uiConfId']) {
                             delete data['uiConfId'];
                             delete data['widgetId'];
                             delete data.vars['ks'];
                         }
-                        // set an api request to update the uiconf
+// set an api request to update the uiconf
                         var request = {
                             'service': 'uiConf',
                             'action': 'update',
@@ -224,7 +224,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                             'uiConf:tags': 'html5studio,player',  // update tags to prevent breaking the old studio which looks for the tag kdp3
                             'uiConf:html5Url': html5lib,           // update the html5 lib to the new version
                             'uiConf:config': angular.toJson(data)  // update the config object
-                        }
+                        };
                         apiService.doRequest(request).then(function (result) {
                                 deferred.resolve(result);
                             }, function (msg) {
@@ -352,26 +352,89 @@ KMCServices.factory('editableProperties', ['$http', function ($http) {
     // $http.get('http://mwembed.dev/studio/playerFeatures.php');
 }]);
 
-KMCServices.factory('apiService', ['$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function ($q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
-    return{
-        apiObj: null,
-        getClient: function () {
-            //first request - create new kwidget.api
-            if (!this.apiObj) {
-                kWidget.api.prototype.type = 'POST';
-                this.apiObj = new kWidget.api();
+KMCServices.factory('loadINI', ['$http', function ($http) {
+    var iniConfig = null;
+    return {
+        'getINIConfig': function () {
+            if (!iniConfig) {
+                iniConfig = $http.get('studio.ini', {transformResponse: function (data, headers) {
+                    var config = data.substr(data.indexOf('widgets.studio.config = {')+24);
+                    data = angular.fromJson(config);
+                    return data;
+                }});
             }
+            return iniConfig;
+        }
+    };
+}]);
 
-            return this.apiObj;
-        },
+KMCServices.provider('api', function () {
+    var injector = angular.injector(['ng']);
+    var $q = injector.get('$q');
+
+    var apiObj = null;
+    return {
+        $get: function (loadINI) {
+            var deferred = $q.defer();
+            //first request - create new kwidget.api
+            if (!apiObj) {
+                var require = function (file, callback) {
+                    var head = document.getElementsByTagName("head")[0];
+                    var script = document.createElement('script');
+                    script.src = file;
+                    script.type = 'text/javascript';
+                    // bind the event to the callback function
+                    if (script.addEventListener) {
+                        script.addEventListener("load", callback, false); // IE9+, Chrome, Firefox
+                    }
+                    else if (script.readyState) {
+                        script.onreadystatechange = callback; // IE8
+                    }
+                    head.appendChild(script);
+                };
+                loadINI.getINIConfig().success(function (data) {
+                    var url = data.html5lib;
+                    var initKw = function () {
+                        kWidget.api.prototype.type = 'POST';
+                        apiObj = new kWidget.api();
+                        deferred.resolve(apiObj);
+                    };
+                    require(url, function () {
+                        if (typeof kWidget == 'undefined') {
+                            setTimeout(function () {
+                                initKw();
+                            }, 100);
+                        }
+                        else {
+                            initKw();
+                        }
+
+                    });
+
+                });
+            }
+            else
+                deferred.resolve(apiObj);
+            return deferred.promise;
+        }
+    };
+});
+
+KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function (api, $q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
+    var apiService = {
+        apiObj: api,
         unSetks: function () {
             delete this.apiObj;
         },
         setKs: function (ks) {
-            this.getClient().setKs(ks);
+            this.apiObj.then(function (api) {
+                api.setKs(ks);
+            });
         },
         setWid: function (wid) {
-            this.getClient().wid = wid;
+            this.getClient().then(function (api) {
+                api.wid = wid;
+            });
         },
         getKey: function (params) {
             var key = '';
@@ -396,29 +459,33 @@ KMCServices.factory('apiService', ['$q', '$timeout', '$location' , 'localStorage
             if (playerCache.get(params_key)) {
                 deferred.resolve(playerCache.get(params_key));
             } else {
-                this.getClient().doRequest(params, function (data) {
-                    //timeout will trigger another $digest cycle that will trigger the "then" function
-                    $timeout(function () {
-                        if (data.code) {
-                            if (data.code == "INVALID_KS") {
-                                localStorageService.remove('ks');
-                                $location.path("/login");
+                this.apiObj.then(function (api) {
+                    api.doRequest(params, function (data) {
+//timeout will trigger another $digest cycle that will trigger the "then" function
+                        $timeout(function () {
+                            if (data.code) {
+                                if (data.code == "INVALID_KS") {
+                                    localStorageService.remove('ks');
+                                    $location.path("/login");
+                                }
+                                requestNotificationChannel.requestEnded();
+                                deferred.reject(data.code);
+                            } else {
+                                playerCache.put(params_key, data);
+                                requestNotificationChannel.requestEnded();
+                                deferred.resolve(data);
                             }
-                            requestNotificationChannel.requestEnded();
-                            deferred.reject(data.code);
-                        } else {
-                            playerCache.put(params_key, data);
-                            requestNotificationChannel.requestEnded();
-                            deferred.resolve(data);
-                        }
-                    }, 0);
+                        }, 0);
+                    });
                 });
             }
             //Returning the promise object
             return deferred.promise;
         }
     };
-}]);
+    return apiService;
+}])
+;
 
 KMCServices.factory('playerTemplates', ['$http', function ($http) {
     return {
