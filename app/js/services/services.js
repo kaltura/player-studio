@@ -357,7 +357,7 @@ KMCServices.factory('loadINI', ['$http', function ($http) {
         'getINIConfig': function () {
             if (!iniConfig) {
                 iniConfig = $http.get('studio.ini', {transformResponse: function (data, headers) {
-                    var config = data.substr(data.indexOf('widgets.studio.config = {')+24);
+                    var config = data.match(/widgets\.studio\.config \= \'(.*)\'/)[1];
                     data = angular.fromJson(config);
                     return data;
                 }});
@@ -391,8 +391,7 @@ KMCServices.provider('api', function () {
                     }
                     head.appendChild(script);
                 };
-                loadINI.getINIConfig().success(function (data) {
-                    var url = data.html5lib;
+                var loadHTML5Lib = function(url){
                     var initKw = function () {
                         kWidget.api.prototype.type = 'POST';
                         apiObj = new kWidget.api();
@@ -409,8 +408,20 @@ KMCServices.provider('api', function () {
                         }
 
                     });
-
-                });
+                };
+                var html5lib = null;
+                try{
+                    if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.api_url) {
+                        html5lib = window.parent.kmc.vars.api_url+"/html5/html5lib/v2.1/mwEmbedLoader.php";
+                        loadHTML5Lib(html5lib);
+                    }
+                }catch(e){}
+                if (!html5lib){
+                    loadINI.getINIConfig().success(function (data) {
+                        var url = data.html5lib;
+                        loadHTML5Lib(url);
+                    });
+                }
             }
             else
                 deferred.resolve(apiObj);

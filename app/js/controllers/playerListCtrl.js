@@ -3,37 +3,42 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerListCtrl',
-    ['apiService', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService',
-        function(apiService, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService) {
+    ['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService',
+        function(apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService) {
             requestNotificationChannel.requestStarted('list');
             $rootScope.lang = 'en-US';
             $scope.search = '';
             $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
             $scope.maxSize = 5;
-// get studio UICONF to setup studio configuration
-            var request = {
-                'filter:tagsMultiLikeOr': 'studio_v2',
-                'filter:orderBy': '-updatedAt',
-                'filter:objTypeEqual': '16',
-                'filter:objectType': 'KalturaUiConfFilter',
-                'filter:creationModeEqual': '3',
-                'ignoreNull': '1',
-                'page:objectType': 'KalturaFilterPager',
-                'pager:pageIndex': '1',
-                'pager:pageSize': '25',
-                'service': 'uiConf',
-                'action': 'list'
-            };
-            apiService.doRequest(request).then(function(data) {
-                if (data.objects && data.objects.length == 1) {
-                    $scope.UIConf = angular.fromJson(data.objects[0].config);
-                } else {
-                    $log.error('Error retrieving studio UICONF');
+            // get studio UICONF to setup studio configuration
+            var uiConfID = null;
+
+            try{
+                if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.studio.uiConfID) {
+                    uiConfID = window.parent.kmc.vars.studio.uiConfID;
+                    var request = {
+                        'service': 'uiConf',
+                        'action': 'get',
+                        'id': uiConfID
+                    };
+                    apiService.doRequest(request).then(function(data) {
+                        $scope.UIConf = angular.fromJson(data.config);
+                    }, function (reason) {
+                        $log.error('Error retrieving studio UICONF: '+reason);
+                    });
                 }
-            });
-// get players list from KMC
-             request = {
+            }catch(e){}
+
+            // if we didin't get the uiconfID from kmc.vars - load the configuration from base.ini
+            if (!uiConfID){
+                loadINI.getINIConfig().success(function (data) {
+                    $scope.UIConf = data;
+                });
+            }
+
+            // get players list from KMC
+            var playersRequest = {
                 'filter:tagsMultiLikeOr': 'kdp3,html5studio',
                 'filter:orderBy': '-updatedAt',
                 'filter:objTypeEqual': '1',
@@ -46,7 +51,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 'service': 'uiConf',
                 'action': 'list'
             };
-            apiService.doRequest(request).then(function(data) {
+            apiService.doRequest(playersRequest).then(function(data) {
                 $scope.data = data.objects;
                 $scope.calculateTotalItems();
                 PlayerService.cachePlayers(data.objects);
