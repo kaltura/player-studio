@@ -24,14 +24,14 @@ module.exports = function(grunt) {
                 "globals": {
                     "jQuery": true,
                     "cl": true,
-                    "angular":true,
-                    "$":true,
-                    "kWidget":true,
-                    "window":true,
-                    "console":true,
-                    "document":true,
+                    "angular": true,
+                    "$": true,
+                    "kWidget": true,
+                    "window": true,
+                    "console": true,
+                    "document": true,
                     "setTimeout": true,
-                    "Spinner":true
+                    "Spinner": true
                 }
             },
             dev: ['app/js/**/*.js']
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
                     'app/lib/sprintf.js',
                     'app/lib/localize.js',
                     'app/lib/spin.min.js',
-                    'app/lib/lib/jquery.timeago.js',
+                    'app/lib/jquery.timeago.js',
                     'app/ib/jquery.animate-colors-min.js',
                     'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js'
                 ],
