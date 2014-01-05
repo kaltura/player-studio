@@ -39,8 +39,8 @@
                 <div class="pull-right text-center col-xs-3  ">{{ 'Actions' | i18n }}
                 </div>
             </div>
-            <div class="scroller " mcustom-scrollbar="{autoHideScrollbar:false}">
-                <table>
+            <div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
+                <table id="listTable">
                     <tbody>
                     <tr class="row repeat-animation" on-finish-render
                         ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
