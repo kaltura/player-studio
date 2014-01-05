@@ -33,6 +33,7 @@ DirectivesModule.directive('mcustomScrollbar', [
                     contentTouchScroll: true,
                     theme: 'dark',
                     advanced: {
+                        autoScrollOnFocus: false,
                         updateOnBrowserResize: true,
                         updateOnContentResize: true
                     }
