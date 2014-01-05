@@ -68,7 +68,7 @@ module.exports = function(grunt) {
                     'app/lib/malihu_custon_scrollbar/jquery.mousewheel.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.min.js',
                     'app/lib/spinedit/js/bootstrap-spinedit.min.js',
-                    'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.7.0.min.js',
+                    'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.9.0.min.js',
                     'app/lib/localStorage/angular-local-storage.min.js',
                     'app/lib/sprintf.js',
                     'app/lib/localize.js',
