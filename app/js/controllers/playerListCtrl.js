@@ -191,7 +191,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 });
                 modal.result.then(function(result) {
                     if (result)
-                        PlayerService.playerUpdate(player).then(function(data) {
+                        PlayerService.playerUpdate(player, html5lib).then(function(data) {
 // update local data (we will not retrieve from the server again)
                             player.config = angular.toJson(data);
                             player.html5Url = html5lib;
