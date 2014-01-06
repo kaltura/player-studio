@@ -232,8 +232,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                             }
                         );
                     }).error(function (data, status, headers, config) {
-                        deferred.reject("Error getting UIConf config: " + data);
-                        $log.error('Error getting UIConf config: ' + data);
+                        deferred.reject("Error updating UIConf: " + data);
+                        $log.error('Error updating UIConf: ' + data);
                     });
                 return deferred.promise;
             }
