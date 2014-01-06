@@ -409,13 +409,19 @@ KMCServices.provider('api', function () {
 
                     });
                 };
+
                 var html5lib = null;
                 try{
-                    if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.api_url) {
-                        html5lib = window.parent.kmc.vars.api_url+"/html5/html5lib/v2.1/mwEmbedLoader.php";
+                    var kmc = window.parent.kmc;
+                    if (kmc && kmc.vars && kmc.vars.studio.config) {
+                        var config = angular.fromJson(kmc.vars.studio.config);
+                        html5lib = kmc.vars.api_url+"/html5/html5lib/" + config.html5_version + "/mwEmbedLoader.php";
                         loadHTML5Lib(html5lib);
                     }
-                }catch(e){}
+                }catch(e){
+                    cl('Could not located parent.kmc: ' + e);
+                }
+
                 if (!html5lib){
                     loadINI.getINIConfig().success(function (data) {
                         var url = data.html5lib;

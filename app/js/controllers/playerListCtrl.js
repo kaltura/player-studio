@@ -12,26 +12,20 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.currentPage = 1;
             $scope.maxSize = 5;
             // get studio UICONF to setup studio configuration
-            var uiConfID = null;
+            var config = null;
 
             try{
-                if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.studio.uiConfID) {
-                    uiConfID = window.parent.kmc.vars.studio.uiConfID;
-                    var request = {
-                        'service': 'uiConf',
-                        'action': 'get',
-                        'id': uiConfID
-                    };
-                    apiService.doRequest(request).then(function(data) {
-                        $scope.UIConf = angular.fromJson(data.config);
-                    }, function (reason) {
-                        $log.error('Error retrieving studio UICONF: '+reason);
-                    });
+                var kmc = window.parent.kmc;
+                if (kmc && kmc.vars && kmc.vars.studio.config) {
+                    config = kmc.vars.studio.config;
+                    $scope.UIConf = angular.fromJson(config);
                 }
-            }catch(e){}
+            }catch(e){
+                $log.error('Could not located parent.kmc: ' + e);
+            }
 
-            // if we didin't get the uiconfID from kmc.vars - load the configuration from base.ini
-            if (!uiConfID){
+            // if we didin't get the uiconf from kmc.vars - load the configuration from base.ini
+            if (!config){
                 loadINI.getINIConfig().success(function (data) {
                     $scope.UIConf = data;
                 });

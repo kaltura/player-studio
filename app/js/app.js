@@ -75,10 +75,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     var ksCheck = function(apiService, localStorageService, $location) {
     // Check if we have ks in locaclstorage
         try{
-            if (window.parent.kmc && window.parent.kmc.vars) {
+            var kmc = window.parent.kmc;
+            if (kmc && kmc.vars) {
                 // got ks from KMC - save to local storage
-                if (window.parent.kmc.vars.ks)
-                    localStorageService.add('ks', window.parent.kmc.vars.ks);
+                if (kmc.vars.ks)
+                    localStorageService.add('ks', kmc.vars.ks);
             }
         }catch (e){
             cl('Could not located parent.kmc: ' + e);
