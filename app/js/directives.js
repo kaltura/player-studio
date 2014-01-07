@@ -118,39 +118,47 @@ DirectivesModule.directive('dname', function (menuSvc) { // made to help with va
         }
     };
 });
-DirectivesModule.directive('ngPlaceholder', function () {
+DirectivesModule.directive('ngPlaceholder', function ($timeout) {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function (scope, element, attr, ctrl) {
-            var value;
-            var placehold = function () {
-                element.val(attr['ngPlaceholder']);
-                element.addClass('placeholder');
-            };
-            var unplacehold = function () {
-                element.val('');
-                element.removeClass('placeholder');
-            };
-            scope.$watch(function () {
-                return element.val();
-            }, function (val) {
-                value = val || '';
-            });
-            element.bind('focus', function () {
-                if (value === '' || value == attr['ngPlaceholder']) unplacehold();
-            });
-            element.bind('blur', function () {
-                if (element.val() === '') placehold();
-            });
-            ctrl.$formatters.unshift(function (val) {
-                if (!val) {
-                    placehold();
-                    value = '';
-                    return attr['ngPlaceholder'];
-                }
-                return val;
-            });
+            if (attr['ngPlaceholder']) {
+                var value;
+                var req;
+                var placehold = function () {
+                    if (ctrl.$error.required) req = true;
+                    element.val(attr['ngPlaceholder']);
+                    if (req)
+                        $timeout(function () {
+                            ctrl.$setValidity('required', false);
+                        });
+                    element.addClass('placeholder');
+                };
+                var unplacehold = function () {
+                    element.val('');
+                    element.removeClass('placeholder');
+                };
+                scope.$watch(function () {
+                    return element.val();
+                }, function (val) {
+                    value = val || '';
+                });
+                element.bind('focus', function () {
+                    if (value === '' || value == attr['ngPlaceholder']) unplacehold();
+                });
+                element.bind('blur', function () {
+                    if (element.val() === '') placehold();
+                });
+                ctrl.$formatters.unshift(function (val) {
+                    if (!val) {
+                        placehold();
+                        value = '';
+                        return attr['ngPlaceholder'];
+                    }
+                    return val;
+                });
+            }
         }
     };
 });
