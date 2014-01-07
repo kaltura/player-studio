@@ -68,14 +68,17 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
     function ($http, $modal, $log, $q, apiService, $filter, localStorageService) {
         var playersCache = [];
         var currentPlayer = {};
-        var previewEntry = '0_ji4qh61l';
+        var previewEntry = '0_updxo21w';
         var playersService = {
             'setPreviewEntry': function (id) {
                 previewEntry = id;
             },
             'renderPlayer': function () {
                 if (currentPlayer && typeof kWidget != "undefined") {
-                    var flashvars = ($('html').hasClass('IE8')) ? {'wmode': 'transparent'} : {};
+                    var flashvars = {'jsonConfig': currentPlayer.config}; // update the player with the new configuration
+                    if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
+                        angular.extend(flashvars, {'wmode': 'transparent'});
+                    }
                     kWidget.embed({
                         "targetId": "kVideoTarget", // hard coded for now?
                         "wid": "_" + currentPlayer.partnerId, //$scope.data.partnerId,
@@ -223,7 +226,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                             'id': playerObj.id,                   // the id of the player to update
                             'uiConf:tags': 'html5studio,player',  // update tags to prevent breaking the old studio which looks for the tag kdp3
                             'uiConf:html5Url': html5lib,           // update the html5 lib to the new version
-                            'uiConf:config': angular.toJson(data)  // update the config object
+                            'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
                         };
                         apiService.doRequest(request).then(function (result) {
                                 deferred.resolve(result);
