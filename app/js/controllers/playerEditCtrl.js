@@ -3,12 +3,13 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries',
-        function ($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries', '$timeout',
+        function ($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
+            $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
             // set tags
@@ -61,10 +62,20 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 }
             });
             $(document).ready(function () {
+                $scope.masterData = angular.copy($scope.data);
                 PlayerService.setPreviewEntry($scope.previewEntry);
                 PlayerService.renderPlayer();
             });
-
+            $scope.save = function () {
+                menuSvc.menuScope.playerEdit.$dirty = false;
+                $scope.masterData = angular.copy($scope.data);
+                //we should render from $scope.data but save $scope.masterData this way we can also offer a revert edit button
+                //cl(menuSvc.menuScope.playerEdit);
+            };
+            $scope.saveEnabled = function () {
+                //instead of using the form dirty state we compare to the master copy.
+                return !angular.equals($scope.data, $scope.masterData);
+            };
         }
     ])
 ;

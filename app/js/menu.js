@@ -386,6 +386,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     });
                     $timeout(function() {
                         menuSvc.setMenu('basicDisplay');
+                        $scope.playerEdit.$dirty = false
+                        $scope.playerEdit.$setPristine();
                     }, 500);
                 };
             },

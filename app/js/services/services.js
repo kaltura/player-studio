@@ -348,7 +348,7 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
 ;
 
 KMCServices.factory('editableProperties', ['$http', function ($http) {
-    return $http.get('js/services/editableProperties.json');
+    return $http.get('js/services/basicProperties.json');
 }]);
 
 KMCServices.factory('loadINI', ['$http', function ($http) {

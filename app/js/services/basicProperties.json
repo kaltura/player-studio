@@ -1,0 +1,21 @@
+[
+    {
+        "label": "Basic Display",
+        "type": "menu",
+        "description": "basic settings let you set bla bla bla\n lorem ipsum test goes here",
+        "model": "basicDisplay",
+        "icon": "TabBasicSettings",
+        "children": [
+            {
+                "label": "Player's Name",
+                "type": "text",
+                "player-refresh": "// if you will want to auto add this to all properties than false will make an exception..",
+                "player-refresh": false,
+                "model": "name",
+                "default": "New Player",
+                "helpnote": "Please enter your player's name blah blah blah",
+                "endline": "true"
+            }
+        ]
+    }
+]
