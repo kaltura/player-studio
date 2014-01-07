@@ -193,7 +193,6 @@ DirectivesModule.directive('modelText', function (menuSvc) {
                 $scope.type = $attrs['validation'];
                 if ($attrs['validation'] == 'url') {
                     $scope.placehold = 'http://';
-                    cl('here');
                 }
             }
             else if ($attrs['validation']) {
