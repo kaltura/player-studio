@@ -98,17 +98,15 @@
         </div>
         <div class="col-xs-4 col-sm-3">
             <form class="form-inline" role="form">
-                <div class="form-group">
-                    <label class="padTop" for="maxSizeSelect">
-                        <small> {{filtered.length}} Players in total, Show</small>
-                        <select class="form-control inline" id="maxSizeSelect" ng-model="maxSize">
-                            <option value='5'>5</option>
-                            <option value='10'>10</option>
-                            <option value='15'>15</option>
-                            <option value='20'>20</option>
-                        </select>
-                        <small> per page</small>
-                    </label>
+                <div class="padTop">
+                    <small> {{filtered.length}} Players in total, Show</small>
+                    <select class="form-control inline" id="maxSizeSelect" ng-model="maxSize">
+                        <option value='5'>5</option>
+                        <option value='10'>10</option>
+                        <option value='15'>15</option>
+                        <option value='20'>20</option>
+                    </select>
+                    <small> per page</small>
                 </div>
             </form>
         </div>
