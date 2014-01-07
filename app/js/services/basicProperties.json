@@ -15,7 +15,26 @@
                 "player-refresh": false,
                 "model": "name",
                 "default": "New Player",
-                "helpnote": "Please enter your player's name blah blah blah",
+                "helpnote": "This can't be numbers",
+                "endline": "true"
+            },
+            {
+                "label": "Some Custom URL",
+                "type": "text",
+                "required": true,
+                "validation": "url",
+                "model": "url",
+                "default": "New Player",
+                "helpnote": "Please enter a URL",
+                "endline": "true"
+            },
+            {
+                "label": "email",
+                "type": "text",
+                "validation": "email",
+                "model": "email",
+                "default": "New Player",
+                "helpnote": "Please enter email (not required)",
                 "endline": "true"
             }
         ]

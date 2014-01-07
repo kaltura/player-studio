@@ -114,9 +114,45 @@ DirectivesModule.directive('dname', function (menuSvc) { // made to help with va
                     $ngModelCntrl.$name = dname;
                     menuSvc.menuScope.playerEdit.$addControl($ngModelCntrl);
                 }
-            }
+            };
         }
-    }
+    };
+});
+DirectivesModule.directive('ngPlaceholder', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, element, attr, ctrl) {
+            var value;
+            var placehold = function () {
+                element.val(attr['ngPlaceholder']);
+                element.addClass('placeholder');
+            };
+            var unplacehold = function () {
+                element.val('');
+                element.removeClass('placeholder');
+            };
+            scope.$watch(function () {
+                return element.val();
+            }, function (val) {
+                value = val || '';
+            });
+            element.bind('focus', function () {
+                if (value === '' || value == attr['ngPlaceholder']) unplacehold();
+            });
+            element.bind('blur', function () {
+                if (element.val() === '') placehold();
+            });
+            ctrl.$formatters.unshift(function (val) {
+                if (!val) {
+                    placehold();
+                    value = '';
+                    return attr['ngPlaceholder'];
+                }
+                return val;
+            });
+        }
+    };
 });
 DirectivesModule.directive('modelText', function (menuSvc) {
     return {
@@ -131,46 +167,55 @@ DirectivesModule.directive('modelText', function (menuSvc) {
                         if ($scope.form[$scope['strModel']]) {
                             var inputCntrl = $scope.form[$scope['strModel']];
                             if (typeof inputCntrl.$error[value] != 'undefined');
-                            return inputCntrl.$error[value]
+                            return inputCntrl.$error[value];
                         }
                         return false;
                     },
-                    function (newVal, oldVal) {
-                        if (newVal != oldVal) {
-                            $scope[retProp] = newVal;
-                        }
+                    function (newVal) {
+                        $scope[retProp] = newVal;
                     }
-                )
+                );
             };
             if ($scope.required) {
                 makeWatch('required', 'reqState');
+                $attrs.label = '* ' + $attrs.label;
             }
-
-            if ($attrs['validation']) {
+            if ($attrs['validation'] == 'url' || $attrs['validation'] == 'email') {
+                makeWatch($attrs['validation'], 'valState');
+                $scope.type = $attrs['validation'];
                 if ($attrs['validation'] == 'url') {
-                    $scope.type = 'url';
+                    $scope.placehold = 'http://';
+                    cl('here');
                 }
-                if ($attrs['validation'] == 'email') {
-                    $scope.type = 'email';
+            }
+            else if ($attrs['validation']) {
+                var pattern = $attrs['validation'];
+                var isValid, regex;
+                try {
+                    regex = new RegExp(pattern, 'i');
+                    isValid = true;
+
                 }
-                else {
-                    var pattern = $attrs['validation'];
-                    var regex = new RegExp(pattern, 'i');
+                catch (e) {
+                    isValid = false;
+                }
+                if (isValid) {
                     $scope.validation = regex;
                     makeWatch('pattern', 'valState');
                 }
-
-            } else {
-                $scope.validation = {test: function () { // mock the RegExp object
-                    return true;
-                } }
             }
+            $scope.validation = {
+                test: function () { // mock the RegExp object
+                    return true;
+                }
+            };
         },
         scope: {
             'label': '@',
             'strModel': '@model',
             'model': '=',
             'icon': '@',
+            'placeholder': '@',
             'helpnote': '@'
         },
         compile: function (tElement, tAttr) {

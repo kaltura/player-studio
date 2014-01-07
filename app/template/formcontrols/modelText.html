@@ -1,7 +1,7 @@
 <label>
     {{label}}:<i ng-if='icon' class='icon {{icon}}'></i>
         <span class='inputHolder'>
-            <input dname='strModel' ng-pattern='validation' ng-required="required" class='form-control'
+            <input dname='strModel' ng-placeholder="{{$parent.placehold}}" ng-pattern='validation' ng-required="required" class='form-control'
                    tooltip='{{helpnote || label}}' type='{{type}}'
                    ng-model='$parent.model'/>
             <span class="help-inline alert-danger" ng-show="required && reqState">{{"This field is required." | i18n }}</span>
