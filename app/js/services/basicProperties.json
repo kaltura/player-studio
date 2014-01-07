@@ -9,6 +9,8 @@
             {
                 "label": "Player's Name",
                 "type": "text",
+                "required": true,
+                "validation": "^[a-z _-]*$",
                 "player-refresh": "// if you will want to auto add this to all properties than false will make an exception..",
                 "player-refresh": false,
                 "model": "name",

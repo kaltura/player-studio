@@ -1,7 +1,7 @@
 @import 'mixins.less';
 
 //layout
-body  div.section#edit {
+body div.section#edit {
   padding: 0;
   height: 100%;
   #pageHeader {
@@ -222,6 +222,9 @@ body  div.section#edit {
     .mp-level ul[ng-transclude] > li {
       clear: both;
       label, .form-element {
+        .ng-invalid {
+          outline: 1px solid red;
+        }
         padding: 0.6em 1em;
         display: block;
         text-align: left;

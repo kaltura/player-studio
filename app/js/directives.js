@@ -103,12 +103,72 @@ DirectivesModule.directive('modelColor', function () {
         templateUrl: 'template/formcontrols/modalColor.html'
     };
 });
-DirectivesModule.directive('modelText', function () {
+DirectivesModule.directive('dname', function (menuSvc) { // made to help with validation registers dynamic directives with form controller
+    return {
+        require: '?ngModel',
+        compile: function (tElement, tAttrs) {
+            return function ($scope, $element, $attrs, $ngModelCntrl) {
+                if ($ngModelCntrl) {
+                    var dname = $scope.$eval($attrs['dname']);
+                    $element.attr('name', dname);
+                    $ngModelCntrl.$name = dname;
+                    menuSvc.menuScope.playerEdit.$addControl($ngModelCntrl);
+                }
+            }
+        }
+    }
+});
+DirectivesModule.directive('modelText', function (menuSvc) {
     return {
         replace: true,
         restrict: 'EA',
+        controller: function ($scope, $element, $attrs) {
+            $scope.type = 'text';
+            $scope.form = menuSvc.menuScope.playerEdit;
+            $scope.required = ($attrs.required) ? $attrs.required : false;
+            var makeWatch = function (value, retProp) {
+                $scope.$watch(function () {
+                        if ($scope.form[$scope['strModel']]) {
+                            var inputCntrl = $scope.form[$scope['strModel']];
+                            if (typeof inputCntrl.$error[value] != 'undefined');
+                            return inputCntrl.$error[value]
+                        }
+                        return false;
+                    },
+                    function (newVal, oldVal) {
+                        if (newVal != oldVal) {
+                            $scope[retProp] = newVal;
+                        }
+                    }
+                )
+            };
+            if ($scope.required) {
+                makeWatch('required', 'reqState');
+            }
+
+            if ($attrs['validation']) {
+                if ($attrs['validation'] == 'url') {
+                    $scope.type = 'url';
+                }
+                if ($attrs['validation'] == 'email') {
+                    $scope.type = 'email';
+                }
+                else {
+                    var pattern = $attrs['validation'];
+                    var regex = new RegExp(pattern, 'i');
+                    $scope.validation = regex;
+                    makeWatch('pattern', 'valState');
+                }
+
+            } else {
+                $scope.validation = {test: function () { // mock the RegExp object
+                    return true;
+                } }
+            }
+        },
         scope: {
             'label': '@',
+            'strModel': '@model',
             'model': '=',
             'icon': '@',
             'helpnote': '@'
@@ -119,8 +179,10 @@ DirectivesModule.directive('modelText', function () {
             }
         },
         templateUrl: 'template/formcontrols/modelText.html'
-    };
-});
+    }
+        ;
+})
+;
 DirectivesModule.directive('select2Data', [
     'menuSvc',
     function (menuSvc) {

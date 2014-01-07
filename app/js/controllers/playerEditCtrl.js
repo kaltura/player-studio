@@ -74,7 +74,12 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             };
             $scope.saveEnabled = function () {
                 //instead of using the form dirty state we compare to the master copy.
-                return !angular.equals($scope.data, $scope.masterData);
+                if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
+                    if (menuSvc.menuScope.playerEdit.$valid)
+                        return !angular.equals($scope.data, $scope.masterData);
+                    else
+                        return false;
+                }
             };
         }
     ])
