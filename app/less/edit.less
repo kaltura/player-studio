@@ -1,7 +1,7 @@
 @import 'mixins.less';
 
 //layout
-body  div.section#edit {
+body div.section#edit {
   padding: 0;
   height: 100%;
   #pageHeader {
@@ -26,6 +26,8 @@ body  div.section#edit {
       display: block;
       position: relative;
       width: 90%;
+      padding-right: 0;
+      padding-left: 0;
       margin: auto;
       #spacer {
         padding-top: 25px; // for ie8 to show the control bar (height is a guess here)
@@ -220,6 +222,12 @@ body  div.section#edit {
     .mp-level ul[ng-transclude] > li {
       clear: both;
       label, .form-element {
+        .ng-invalid {
+          outline: 1px solid red;
+        }
+        .placeholder {
+          color:#999999;
+        }
         padding: 0.6em 1em;
         display: block;
         text-align: left;
