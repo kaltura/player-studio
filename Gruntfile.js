@@ -101,6 +101,7 @@ module.exports = function(grunt) {
                     'app/lib/html5shiv.js',
                     'app/lib/respond.min.js',
                     'app/lib/es5-shim.min.js',
+                    'bower_components/selectivizr/selectivizr.js',
                     'app/bower_components/jquery/jquery-1.10.2.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js',
