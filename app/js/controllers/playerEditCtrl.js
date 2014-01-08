@@ -81,7 +81,6 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 }
             }, function (obj, oldVal) {
                 if (obj != oldVal) {
-                    cl(obj);
                     $scope.validationObject = obj;
                 }
 
