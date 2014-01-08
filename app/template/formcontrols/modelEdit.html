@@ -1,5 +1,5 @@
 <label>{{label}}
     <div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>
-        <input type='text' data-tooltip="{{helpnote}}" readonly='readonly' ng-model='model' ng-click='doModal()'/>
+        <input  ng-required="{{require}}" dname='strModel' type='text' data-tooltip="{{helpnote}}" readonly='readonly' ng-model='model' ng-click='doModal()'/>
     </div>
 </label>

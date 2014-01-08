@@ -9,7 +9,7 @@
             {
                 "label": "Player's Name",
                 "type": "text",
-                "required": true,
+                "require": true,
                 "validation": "^[a-z _-]*$",
                 "player-refresh": "// if you will want to auto add this to all properties than false will make an exception..",
                 "player-refresh": false,
@@ -21,7 +21,7 @@
             {
                 "label": "Some Custom URL",
                 "type": "text",
-                "required": true,
+                "require": true,
                 "validation": "url",
                 "model": "url",
                 "default": "New Player",

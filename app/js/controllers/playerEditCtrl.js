@@ -72,6 +72,20 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 //we should render from $scope.data but save $scope.masterData this way we can also offer a revert edit button
                 //cl(menuSvc.menuScope.playerEdit);
             };
+            $scope.$watch(function () {
+                if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
+                    if (menuSvc.menuScope.playerEdit.$error) {
+                        return menuSvc.menuScope.playerEdit.$error;
+
+                    }
+                }
+            }, function (obj, oldVal) {
+                if (obj != oldVal) {
+                    cl(obj);
+                    $scope.validationObject = obj;
+                }
+
+            })
             $scope.saveEnabled = function () {
                 //instead of using the form dirty state we compare to the master copy.
                 if (typeof menuSvc.menuScope.playerEdit != 'undefined') {

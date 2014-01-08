@@ -2,7 +2,7 @@
     <span data-tooltip="{{helpnote}}" class="tooltipWrap">
          {{label}}
     <div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>
-        <input type="text" ui-select2="selectOpts" ng-model="model"/>
+        <input dname="strModel" type="text" ng-required="$parent.require" ui-select2="selectOpts" ng-model="model"/>
     </div>
     </span>
 </label>

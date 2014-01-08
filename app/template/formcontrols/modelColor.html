@@ -1,6 +1,7 @@
 <label>
     <span class="tooltipWrap" data-tooltip="{{helpnote}}">{{label}}
-            <input colorpicker class="colorinput {{class}} hidden" type="text" ng-model="model"/>
+            <input dname="strModel" ng-required="require" colorpicker class="colorinput {{class}} hidden" type="text"
+                   ng-model="$parent.model"/>
             <span class="colorExample" ng-style="{'background-color': model}"></span>
     </span>
 </label>

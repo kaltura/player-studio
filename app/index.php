@@ -3,7 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <base href="/app/index.html"/>
+    <base href="<?php
+    $dir = $_SERVER['REQUEST_URI'];
+    $dir = str_replace('\\', '/', $dir);
+    if (strpos($dir,'/_dist') !== false) { // we are in a sub path
+        $dirArr =  explode('/_dist', $dir);
+        $dir = $dirArr[0].'/_dist';
+    }
+    if (substr($dir, -1, 1) != '/') $dir .= '/';
+    echo $dir;
+    ?>"/>
     <script type="text/javascript" src="lib/modernizer.min.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

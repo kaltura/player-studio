@@ -35,7 +35,9 @@
             <!-- /mp-menu -->
             <div class="wrapper" ng-controller="editPageDataCntrl">
                 <div class="container padTop">
-                    <span class=" padTop pull-right"><button ng-disabled="!saveEnabled()" ng-click="save()" class="btn btn-primary">Save Player Settings</button> </span>
+                    <span class=" padTop pull-right"><button ng-disabled="!saveEnabled()" ng-click="save()"
+                                                             class="btn btn-primary">Save Player Settings
+                    </button> </span>
                     <a class="menu-trigger" data-ng-click="togglemenu($event)">
                         <i class="icon-Close"></i>
                         <span class="sr-only">Toggle navigation</span>
@@ -44,6 +46,7 @@
                     <h2 class=" inline text-muted" id="pageHeader">
                         {{title}}
                     </h2>
+
                     <p>use the menu (3 bars icon) to navigate through editable properties.</p>
 
                 </div>
@@ -53,7 +56,13 @@
                         <div id="kVideoTarget" itemprop="video" itemscope
                              itemtype="http://schema.org/VideoObject"></div>
                     </div>
+                </div>
+                <div ng-if="validationObject" class="container"><p>these property values are not valid:</p>
 
+                    <div ng-repeat="obj in validationObject">
+                        <p ng-repeat="objSub in obj">
+                            {{objSub.$name}}:{{objSub.$error | json}}</p>
+                    </div>
                 </div>
             </div>
         </div>
