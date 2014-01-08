@@ -98,7 +98,7 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
                     ngModelCntrl = cntrl;
                 },
                 isRequired: $attrs.require
-            }
+            };
         }
         ],
         link: function (scope, element, attributes) {
@@ -110,7 +110,7 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
                         $(element).find('.form-group').removeClass('ng-invalid');
                     }
 
-                })
+                });
             }
         }
     };
@@ -593,13 +593,13 @@ DirectivesModule.directive('prettyCheckbox', function () {
                     if (ngController.$viewValue) {
                         clickHandler.addClass('checked');
                         if (scope['require']) {
-                            clickHandler.removeClass('ng-invalid')
+                            clickHandler.removeClass('ng-invalid');
                         }
                     }
                     else {
                         clickHandler.removeClass('checked');
                         if (scope['require']) {
-                            clickHandler.addClass('ng-invalid')
+                            clickHandler.addClass('ng-invalid');
                         }
                     }
                 };
@@ -608,7 +608,7 @@ DirectivesModule.directive('prettyCheckbox', function () {
                     clickHandler.find('a').addClass('checked');
                 }
                 if (scope['require'] && !ngController.$viewValue) {
-                    clickHandler.addClass('ng-invalid')
+                    clickHandler.addClass('ng-invalid');
                 }
             };
         }
@@ -626,7 +626,7 @@ DirectivesModule.directive('prettyRadio', function () {
                     $scope.checked = true;
                 } else
                     $scope.checked = false;
-            }
+            };
             if ($scope.$eval($attrs['model']) == $attrs.value) {
                 $scope.checked = true;
             }
