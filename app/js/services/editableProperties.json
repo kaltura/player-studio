@@ -9,6 +9,8 @@
             {
                 "label": "Player's Name",
                 "type": "text",
+                "require": true,
+                "validation": "^[a-z _-]*$",
                 "player-refresh": "// if you will want to auto add this to all properties than false will make an exception..",
                 "player-refresh": false,
                 "model": "name",
@@ -19,6 +21,7 @@
             {
                 "label": "Long Description",
                 "type": "modaledit",
+                "require": true,
                 "helpnote": "this is the edit modal",
                 "model": "basicDisplay.description",
                 "placeholder": "Enter player description"
@@ -45,6 +48,7 @@
             {
                 "player-refresh": "aspectToggle",
                 "options": [
+                    {},
                     {
                         "label": "4/3",
                         "value": "narrow"
@@ -55,9 +59,10 @@
                     }
                 ],
                 "showSearch": false,
-                "initvalue": "wide",
                 "helpnote": "select whatever",
                 "type": "dropdown",
+                "require": true,
+                "placehold": "Choose...",
                 "label": "Aspect Ratio",
                 "endline": "true",
                 "model": "basicDisplay.aspectRatio"
@@ -117,6 +122,13 @@
                 ]
             },
             {
+                "type": "checkbox",
+                "helpnote": "check validation",
+                "label": "Agree to terms",
+                "model": "terms",
+                "require": true
+            },
+            {
                 "label": "Last Update",
                 "type": "readonly",
                 "filter": "timeago",
@@ -153,8 +165,8 @@
                         "from": "0",
                         "to": "100",
                         "stepsize": "5",
+                        "require": true,
                         "helpnote": "the number is percentage from the player size",
-                        "initvalue": "100",
                         "model": "lookAndFeel.components.controlBar.controlBarSize"
                     },
                     {
@@ -204,6 +216,7 @@
                             }
                         ],
                         "initvalue": "right",
+                        "require": true,
                         "type": "radio",
                         "model": "lookAndFeel.title.align"
                     },
@@ -223,7 +236,7 @@
                         "label": "Template",
                         "model": "lookAndFeel.title.titleTemplate",
                         "default": "<span data-bind=”{mediaProxy.entry.name}”></span>",
-                        "type": "modaltextbox"
+                        "type": "modaledit"
                     },
                     {
                         "options": [
@@ -593,7 +606,7 @@
                     {
                         "label": "Watermark Logo URL",
                         "model": "lookAndFeel.watermark.watermarkURL",
-                        "validation": "url",
+                        "placehold": "http://",
                         "type": "text"
                     },
                     {
@@ -646,6 +659,7 @@
                         "model": "lookAndFeel.stylesAndColors.controlBarColor",
                         "default": "#000",
                         "type": "color",
+                        "require": true,
                         "helpnote": "something of the sort of that"
                     },
                     {

@@ -2,7 +2,9 @@
     <div class="radioLabel">{{ label }}</div>
     <div class="form-group" data-tooltip="{{helpnote}}">
         <label ng-repeat="option in options">
-            <input value="{{ option.value }}" type="radio" pretty-radio ng-model="$parent.model"/><span
+            <input dname='$parent.$parent.strModel' value="{{ option.value }}" type="radio"
+                   ng-required="!$parent.$parent.model && require" ng-model="$parent.$parent.model"
+                   pretty-radio/><span
                 class="optionLabel"> {{ option.label }}</span></label>
     </div>
 </div>

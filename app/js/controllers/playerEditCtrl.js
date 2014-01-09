@@ -3,12 +3,13 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries',
-        function ($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries', '$timeout',
+        function ($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
+            $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
             // set tags
@@ -52,7 +53,9 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     PlayerService.playerUpdate($scope.data);
                 });
             }
-            $scope.previewEntry = ($scope.data.previewentry) ? $scope.data.previewentry.id : '0_ji4qh61l'; //default entry
+            $scope.previewEntry = ($scope.data.previewentry) ? 
+                    $scope.data.previewentry.id : 
+                    ( $scope.userEntriesList.length > 0 ) ? $scope.userEntriesList[0].id : '0_ji4qh61l'; //default entry
             $scope.$watch('data.previewentry', function (newVal, oldVal) {
                 if (newVal != oldVal) {
                     $scope.previewEntry = newVal.id;
@@ -61,10 +64,40 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 }
             });
             $(document).ready(function () {
+                $scope.masterData = angular.copy($scope.data);
+                // get the preview entry
+                
                 PlayerService.setPreviewEntry($scope.previewEntry);
                 PlayerService.renderPlayer();
             });
+            $scope.save = function () {
+                menuSvc.menuScope.playerEdit.$dirty = false;
+                $scope.masterData = angular.copy($scope.data);
+                //we should render from $scope.data but save $scope.masterData this way we can also offer a revert edit button
+                //cl(menuSvc.menuScope.playerEdit);
+            };
+            $scope.$watch(function () {
+                if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
+                    if (menuSvc.menuScope.playerEdit.$error) {
+                        return menuSvc.menuScope.playerEdit.$error;
 
+                    }
+                }
+            }, function (obj, oldVal) {
+                if (obj != oldVal) {
+                    $scope.validationObject = obj;
+                }
+
+            });
+            $scope.saveEnabled = function () {
+                //instead of using the form dirty state we compare to the master copy.
+                if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
+                    if (menuSvc.menuScope.playerEdit.$valid)
+                        return !angular.equals($scope.data, $scope.masterData);
+                    else
+                        return false;
+                }
+            };
         }
     ])
 ;

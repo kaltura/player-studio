@@ -225,7 +225,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                             elm.attr(key, value);
                         }
                     });
-
+                    if (item.require) {
+                        item.label = '* ' + item.label;
+                    }
                     return elm;
                 }
             },
@@ -388,6 +390,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     });
                     $timeout(function () {
                         menuSvc.setMenu('basicDisplay');
+                        $scope.playerEdit.$dirty = false;
+                        $scope.playerEdit.$setPristine();
                     }, 500);
                 };
             },

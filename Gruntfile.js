@@ -24,14 +24,14 @@ module.exports = function(grunt) {
                 "globals": {
                     "jQuery": true,
                     "cl": true,
-                    "angular":true,
-                    "$":true,
-                    "kWidget":true,
-                    "window":true,
-                    "console":true,
-                    "document":true,
+                    "angular": true,
+                    "$": true,
+                    "kWidget": true,
+                    "window": true,
+                    "console": true,
+                    "document": true,
                     "setTimeout": true,
-                    "Spinner":true
+                    "Spinner": true
                 }
             },
             dev: ['app/js/**/*.js']
@@ -68,12 +68,12 @@ module.exports = function(grunt) {
                     'app/lib/malihu_custon_scrollbar/jquery.mousewheel.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.min.js',
                     'app/lib/spinedit/js/bootstrap-spinedit.min.js',
-                    'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.7.0.min.js',
+                    'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.9.0.min.js',
                     'app/lib/localStorage/angular-local-storage.min.js',
                     'app/lib/sprintf.js',
                     'app/lib/localize.js',
                     'app/lib/spin.min.js',
-                    'app/lib/lib/jquery.timeago.js.js',
+                    'app/lib/jquery.timeago.js',
                     'app/ib/jquery.animate-colors-min.js',
                     'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js'
                 ],
@@ -101,6 +101,7 @@ module.exports = function(grunt) {
                     'app/lib/html5shiv.js',
                     'app/lib/respond.min.js',
                     'app/lib/es5-shim.min.js',
+                    'bower_components/selectivizr/selectivizr.js',
                     'app/bower_components/jquery/jquery-1.10.2.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js',

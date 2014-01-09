@@ -32,9 +32,6 @@
     </style>
     <![endif]-->
     
-    <!-- HTML5 library -->
-    <script type="text/javascript" src="http://dev-hudson3.kaltura.dev/html5/html5lib/v2.1/mwEmbedLoader.php?debug=true"></script>
-    
     <!--  app stylesheet-->
     <link rel="stylesheet" href="css/studio.css"/>
     <link rel="stylesheet" href="css/vendor.css"/>
