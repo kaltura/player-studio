@@ -10,6 +10,10 @@
         $dirArr =  explode('/_dist', $dir);
         $dir = $dirArr[0].'/_dist';
     }
+    if (strpos($dir,'/app') !== false) { // we are in dev sub path
+    	$dirArr =  explode('/app', $dir);
+    	$dir = $dirArr[0].'/app';
+    }
     if (substr($dir, -1, 1) != '/') $dir .= '/';
     echo $dir;
     ?>"/>
