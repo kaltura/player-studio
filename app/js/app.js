@@ -52,7 +52,6 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         }];
 
     $httpProvider.responseInterceptors.push(interceptor);
-    $locationProvider.html5Mode(true);
     $routeProvider.when('/login', {
             templateUrl: 'view/login.html',
             controller: 'LoginCtrl',

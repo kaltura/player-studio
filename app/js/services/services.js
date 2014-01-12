@@ -85,9 +85,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     var currentDate = new Date();
                     window.jsCallbackReady = function(playerId) {
                         document.getElementById(playerId).kBind("layoutBuildDone", function() {
-                            renderedInstance = null
+                            renderedInstance = null;
                         });
-                    }
+                    };
                     //currentDate.setMinutes(currentDate.getMinutes() - 1);
                     if (renderedInstance && renderedInstance.getTime() < currentDate.getTime()) {
                         //debugger;
