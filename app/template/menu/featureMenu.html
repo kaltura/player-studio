@@ -1,8 +1,8 @@
-<div class="form-element" data-tooltip="{{helpnote}}">
+<div class="form-element">
      <span class="pull-right" ng-if="featureCheckbox">
             <input class="prettyCheckbox" model="$parent.featureModel" ng-model="$parent.featureModel" type="checkbox"/>
      </span>
-    <div class="header" data-toggle="collapse" data-target="#{{id}}">
+    <div class="header"  data-tooltip="{{helpnote}}" data-toggle="collapse" data-target="#{{id}}">
         <span class="featureLabel">{{ label }}</span>
         <i class="glyphicon glyphicon-play"></i>
     </div>
