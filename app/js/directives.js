@@ -752,6 +752,28 @@ DirectivesModule.directive('modelNumber', function ($timeout) {
             'strModel': '@model',
             'require': '@'
         },
+        compile: function (tElement, tAttr) {
+            if (tAttr['endline'] == 'true') {
+                tElement.append('<hr/>');
+            }
+            return function ($scope, $element, $attrs) {
+                var $spinner = $element.find('input').spinedit({
+                    minimum: parseFloat($attrs.from),
+                    maximum: parseFloat($attrs.to),
+                    step: parseFloat($attrs.stepsize),
+                    value: parseFloat($attrs.initvalue),
+                    numberOfDecimals: parseFloat($attrs.numberofdecimals)
+                });
+                $spinner.on('valueChanged', function (e) {
+                    if (typeof e.value == 'number') {
+                        $scope.$apply(function () {
+                            $scope.model = e.value;
+                        });
+                    }
+                });
+            }
+        },
+        // TODO -mdale merge I don't know if link is still needed ?
         link: function ($scope, $element, $attrs) {
             var $spinner = $element.find('input');
             $timeout(function () {
@@ -789,7 +811,7 @@ DirectivesModule.directive('modelNumber', function ($timeout) {
                 else
                     $scope[keyName] = $attrs[keyName];
             });
-            if (typeof $scope.model != 'undefined') {
+            if (typeof $scope.model != 'number') {
                 $scope.initvalue = $scope.model;
             } else {
                 if (!$attrs['initvalue'])

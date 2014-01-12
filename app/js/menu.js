@@ -93,6 +93,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     return  '<div model-color/>';
                 case 'text' :
                     return '<div model-text/>';
+                case 'url' :
+                    return '<div model-text validate="url"/>';
                 case 'number':
                     return  '<div model-number/>';
                 case 'readonly':
@@ -190,8 +192,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 return elm;
 
                 function writeChildren(item, parent, eachInLi) {
-                    for (var j = 0; j < item.children.length; j++) {
-                        var subitem = item.children[j];
+                    angular.forEach(item.children, function (subitem) {
+                        cl(subitem);
                         switch (subitem.type) {
                             case 'menu':
                                 parent.append(menuSvc.buildMenuItem(subitem, parent, item.model, item));
@@ -205,7 +207,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                                     parent.append(writeFormElement(subitem, directive));
                                 break;
                         }
-                    }
+                    });
                     if (eachInLi === true) { //problematic perhaps - creates another scope for some reason.
                         parent.children().each(function () {
                             if (!$(this).is('menu-level'))
