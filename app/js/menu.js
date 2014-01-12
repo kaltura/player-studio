@@ -305,7 +305,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
         };
         return menuSvc;
     }]).
-    directive('featureMenu', ['$parse', function($parse) {
+    directive('featureMenu', ['$parse', function() {
         return {
             restrict: 'EA',
             replace: true,
@@ -316,9 +316,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 $scope.helpnote = $attrs['helpnote'];
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                 if ($scope.featureCheckbox) {
-                    $scope.modelPath = ($attrs['model'] + '._featureEnabled');
-                    $scope.featureModelCon = $parse($scope.modelPath);
-                    $scope.featureModel = $scope.featureModelCon($scope);
+                    $scope.featureModelCon = $scope.$eval($attrs['model']);
+                    if ($scope.featureModelCon) {
+                        if (typeof $scope.featureModelCon._featureEnabled == 'undefined'  || $scope.featureModelCon._featureEnabled != false)
+                            $scope.featureModelCon._featureEnabled = true;
+                    }
+                    else {
+                        $scope.featureModelCon = {};
+                    }
                 }
                 $scope.id = $attrs['model'].replace(/\./g, '_');
             }],
@@ -379,7 +384,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
             restrict: 'EA',
-            scope: {'data': '=','settings':'='},
+            scope: {'data': '=', 'settings': '='},
             transclude: true,
             compile: function(tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('ul[ng-transclude]:first');

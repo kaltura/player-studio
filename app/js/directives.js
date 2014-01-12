@@ -542,7 +542,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', functio
             if ($attrs['playerRefresh'] != 'false') {
                 var model = $attrs['model'];
                 menuSvc.menuScope.$watch(model, function(newVal, oldVal) {
-                    if (newVal != oldVal){
+                    if (newVal != oldVal) {
                         PlayerService.playerRefresh($attrs['playerRefresh']);
                     }
 
@@ -586,7 +586,7 @@ DirectivesModule.directive('prettyCheckbox', function() {
                 transclude(scope, function(clone) {
                     return $element.replaceWith(wrapper).append(clone);
                 });
-                var watchProp = iAttr['model'] || 'model';
+                var watchProp = iAttr['model'] || iAttr['ngModel'];
                 clickHandler.on('click', function(e) {
                     e.preventDefault();
                     ngController.$setViewValue(!ngController.$viewValue);
@@ -608,7 +608,7 @@ DirectivesModule.directive('prettyCheckbox', function() {
                 };
                 ngController.$viewChangeListeners.push(formatter);
                 if (scope.$eval(watchProp)) {
-                    clickHandler.find('a').addClass('checked');
+                    clickHandler.addClass('checked');
                 }
                 if (scope['require'] && !ngController.$viewValue) {
                     clickHandler.addClass('ng-invalid');
