@@ -25,6 +25,6 @@ All code in this project is released under the [AGPLv3 license](http://www.gnu.o
 
 Copyright © Kaltura Inc. All rights reserved.
 
-Authors [@nadavsinai](https://github.com/nadavsinai), [@itaykinnrot](https://github.com/itaykinnrot), [@AmirChervinsky](https://github.com/@amirch1), [@MichalRadwantzor](https://github.com/MichalRadwantzor) and many others.
+Authors [@nadavsinai](https://github.com/nadavsinai), [@itaykinnrot](https://github.com/itaykinnrot), [@AmirChervinsky](https://github.com/amirch1), [@MichalRadwantzor](https://github.com/MichalRadwantzor) and many others.
 
 
