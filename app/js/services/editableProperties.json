@@ -43,7 +43,8 @@
                 "endline": "true",
                 "width": "100%",
                 "model": "previewentry",
-                "data-placeholder": "Pick a entry"
+                "initvalue": "2",
+                "data-placeholder": "Pick a entry1"
             },
             {
                 "player-refresh": "aspectToggle",
@@ -605,7 +606,7 @@
                 "children": [
                     {
                         "label": "Watermark Logo URL",
-                        "model": "lookAndFeel.watermark.watermarkURL",
+                        "model": "config.plugins.watermark.img",
                         "placehold": "http://",
                         "type": "text"
                     },
@@ -613,17 +614,26 @@
                         "options": [
                             {
                                 "label": "Top Left",
-                                "value": "top,left"
+                                "value": "topLeft"
                             },
                             {
                                 "label": "Top Right",
-                                "value": "top,right"
+                                "value": "topRight"
+                            },
+                            {
+                                "label": "Bottom Left",
+                                "value": "bottomLeft"
+                            },
+                            {
+                                "label": "Bottom Right",
+                                "value": "bottomRight"
                             }
                         ],
                         "label": "Position",
                         "type": "dropdown",
-                        "initvalue": "top,left",
-                        "model": "lookAndFeel.watermark.watermarkPosition"
+                        "player-refresh": true,
+                        "initvalue": "topLeft",
+                        "model": "config.plugins.watermark.cssClass"
                     },
                     {
                         "initvalue": "videoHolder",
