@@ -69,11 +69,19 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var playersCache = [];
         var currentPlayer = {};
         var renderedInstance = null;
-        var previewEntry = '0_updxo21w';
+        var previewEntry;
         var playerId = 'kVideoTarget';
         var playersService = {
-            'setPreviewEntry': function(id) {
-                previewEntry = id;
+            'setPreviewEntry': function(previewObj) {
+                localStorageService.set('previewEntry', previewObj);
+                previewEntry = previewObj.id;
+            },
+            'getPreviewEntry': function() {
+                if (!previewEntry) {
+                    return localStorageService.get('previewEntry');
+                }
+                else
+                    return previewEntry
             },
             'renderPlayer': function() {
                 if (currentPlayer && typeof kWidget != "undefined") {
@@ -88,13 +96,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                             renderedInstance = null;
                         });
                     };
-                    //currentDate.setMinutes(currentDate.getMinutes() - 1);
                     if (renderedInstance && renderedInstance.getTime() < currentDate.getTime()) {
-                        //debugger;
                         return;
                     }
                     else {
-                        cl('here');
                         renderedInstance = new Date();
                         kWidget.embed({
                             "targetId": playerId, // hard coded for now?
@@ -370,7 +375,7 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 ;
 
 KMCServices.factory('editableProperties', ['$http', function($http) {
-    return  $http.get('http://kgit.html5video.org/pulls/521/studio/playerFeatures.php');
+    return  $http.get('http://kgit.html5video.org/pulls/513/studio/playerFeatures.php');
     //return  $http.get('http://localhost/html5.kaltura/mwEmbed/studio/playerFeatures.php');
 }]);
 

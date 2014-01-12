@@ -218,7 +218,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
 
                 function writeFormElement(item, directive) {
                     var elm = angular.element(directive);
-                    elm.attr('model', 'data.' + item.model);
+                    if (typeof item.model != 'undefined' && item.model[0] == '~') {
+                        elm.attr('model', item.model.substr(1));
+                    }
+                    else {
+                        elm.attr('model', 'data.' + item.model);
+                    }
                     if (typeof item['player-refresh'] == 'undefined' || item['player-refresh'] == 'true') {
                         elm.attr('player-refresh', 'true');
                     }
@@ -374,7 +379,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
             restrict: 'EA',
-            scope: {'data': '='},
+            scope: {'data': '=','settings':'='},
             transclude: true,
             compile: function(tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('ul[ng-transclude]:first');
@@ -512,7 +517,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 angular.forEach(elements, function(value, key) {
                     var elm = angular.element('<li></li>');
                     elm.html('<a menupage="' + value.model + '" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
-                    if (key === 0) elm.find('a').addClass('active');// set first icon active
                     elm.appendTo(ul);
                 });
                 return  function($scope, $element) {
@@ -526,6 +530,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             $scope.changeActiveItem(this);
                         });
                     });
+                    $element.find('li:eq(1) a').addClass('active');// set first icon active
                 };
             }
         };

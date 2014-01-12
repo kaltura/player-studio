@@ -102,25 +102,25 @@ body div.section#edit {
       padding: 0;
       li {
         margin-bottom: 10px;
-      }
-    }
-
-    a.icon {
-      color: #fff;
-      display: block;
-      padding: 8px;
-      width: 100%;
-      text-align: center;
-      height: 50px;
-      font-size: 180%;
-      //    border-bottom: 2px solid #eee;
-      opacity: 0.18;
-      &:hover {
-        opacity: 0.5;
-        text-decoration: none;
-      }
-      &.active {
-        opacity: 1;
+        a.icon {
+          cursor: pointer;
+          color: #fff;
+          display: block;
+          padding: 8px;
+          width: 100%;
+          text-align: center;
+          height: 50px;
+          font-size: 180%;
+          //    border-bottom: 2px solid #eee;
+          opacity: 0.18;
+          &:hover {
+            opacity: 0.5;
+            text-decoration: none;
+          }
+          &.active {
+            opacity: 1;
+          }
+        }
       }
     }
   }
@@ -226,7 +226,7 @@ body div.section#edit {
           outline: 1px solid red;
         }
         .placeholder {
-          color:#999999;
+          color: #999999;
         }
         padding: 0.6em 1em;
         display: block;
@@ -254,6 +254,7 @@ body div.section#edit {
         }
         &[type="featuremenu"] {
           div.header {
+            cursor: pointer;
             .featureLabel {
               color: #009dff;
             }

@@ -4,7 +4,7 @@
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
     ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries', '$timeout',
-        function ($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout) {
+        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
@@ -13,7 +13,8 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
-            cl($scope.data.config);
+            $scope.settings = {};
+            window.scope = $scope;
             // set tags
             $scope.tags = [];
             // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
@@ -24,21 +25,21 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     $scope.tags.push({id: tags[i], text: tags[i]});
             }
             //registers the tags to be available to the directive
-            menuSvc.registerAction('getTags', function () {
+            menuSvc.registerAction('getTags', function() {
                 return $scope.tags;
             });
-            angular.forEach($scope.userEntries.objects, function (value) {
+            angular.forEach($scope.userEntries.objects, function(value) {
                 $scope.userEntriesList.push({'id': value.id, 'text': value.name});
             });
-            menuSvc.registerAction('listEntries', function () { // those should be the first 20...
+            menuSvc.registerAction('listEntries', function() { // those should be the first 20...
                 return $scope.userEntriesList;
             });
-            menuSvc.registerAction('queryEntries', function (query) {
+            menuSvc.registerAction('queryEntries', function(query) {
                 var data = {results: []};
                 console.log(query.term);
                 if (query.term) {
                     // here you should do some AJAX API call with the query term and then()...
-                    angular.forEach($scope.userEntriesList, function (item, key) {
+                    angular.forEach($scope.userEntriesList, function(item, key) {
                         if (query.term.toUpperCase() === item.text.substring(0, query.term.length).toUpperCase()) {
                             data.results.push(item);
                         }
@@ -51,47 +52,43 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             });
 
             if (parseFloat($scope.data.version) < PlayerService.getRequiredVersion()) {
-                menuSvc.registerAction('update', function () {
+                menuSvc.registerAction('update', function() {
                     PlayerService.playerUpdate($scope.data);
                 });
             }
-            $scope.previewEntry = ($scope.data.previewentry) ? 
-                    $scope.data.previewentry.id : 
-                    ( $scope.userEntriesList.length > 0 ) ? $scope.userEntriesList[0].id : '0_ji4qh61l'; //default entry
-            $scope.$watch('data.previewentry', function (newVal, oldVal) {
+            $scope.settings.previewEntry = ( PlayerService.getPreviewEntry()) ? PlayerService.getPreviewEntry() : $scope.userEntriesList[0]; //default entry
+            $scope.$watch('settings.previewEntry', function(newVal, oldVal) {
                 if (newVal != oldVal) {
-                    $scope.previewEntry = newVal.id;
-                    PlayerService.setPreviewEntry($scope.previewEntry);
+                    PlayerService.setPreviewEntry($scope.settings.previewEntry);
                     PlayerService.renderPlayer();
                 }
             });
-            $(document).ready(function () {
+            $(document).ready(function() {
                 $scope.masterData = angular.copy($scope.data);
                 // get the preview entry
-                
-                PlayerService.setPreviewEntry($scope.previewEntry);
+                PlayerService.setPreviewEntry($scope.settings.previewEntry);
                 PlayerService.renderPlayer();
             });
-            $scope.save = function () {
+            $scope.save = function() {
                 menuSvc.menuScope.playerEdit.$dirty = false;
                 $scope.masterData = angular.copy($scope.data);
                 //we should render from $scope.data but save $scope.masterData this way we can also offer a revert edit button
                 //cl(menuSvc.menuScope.playerEdit);
             };
-            $scope.$watch(function () {
+            $scope.$watch(function() {
                 if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
                     if (menuSvc.menuScope.playerEdit.$error) {
                         return menuSvc.menuScope.playerEdit.$error;
 
                     }
                 }
-            }, function (obj, oldVal) {
+            }, function(obj, oldVal) {
                 if (obj != oldVal) {
                     $scope.validationObject = obj;
                 }
 
             });
-            $scope.saveEnabled = function () {
+            $scope.saveEnabled = function() {
                 //instead of using the form dirty state we compare to the master copy.
                 if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
                     if (menuSvc.menuScope.playerEdit.$valid)
@@ -101,9 +98,9 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 }
             };
         }
-    ])
-;
-angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', function ($scope) {
+    ]);
+
+angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', function($scope) {
 
 
 }]);
