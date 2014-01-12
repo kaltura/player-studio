@@ -54,7 +54,9 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     PlayerService.playerUpdate($scope.data);
                 });
             }
-            $scope.previewEntry = ($scope.data.previewentry) ? $scope.data.previewentry.id : '0_ji4qh61l'; //default entry
+            $scope.previewEntry = ($scope.data.previewentry) ? 
+                    $scope.data.previewentry.id : 
+                    ( $scope.userEntriesList.length > 0 ) ? $scope.userEntriesList[0].id : '0_ji4qh61l'; //default entry
             $scope.$watch('data.previewentry', function (newVal, oldVal) {
                 if (newVal != oldVal) {
                     $scope.previewEntry = newVal.id;
@@ -64,6 +66,8 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             });
             $(document).ready(function () {
                 $scope.masterData = angular.copy($scope.data);
+                // get the preview entry
+                
                 PlayerService.setPreviewEntry($scope.previewEntry);
                 PlayerService.renderPlayer();
             });
