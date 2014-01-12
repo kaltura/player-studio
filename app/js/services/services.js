@@ -75,7 +75,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             },
             'renderPlayer': function () {
                 if (currentPlayer && typeof kWidget != "undefined") {
-                    var flashvars = {'jsonConfig': currentPlayer.config}; // update the player with the new configuration
+                    var flashvars = {'jsonConfig': angular.toJson(currentPlayer.config)}; // update the player with the new configuration
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
                         angular.extend(flashvars, {'wmode': 'transparent'});
                     }
