@@ -13,6 +13,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
+            cl($scope.data.config);
             // set tags
             $scope.tags = [];
             // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
