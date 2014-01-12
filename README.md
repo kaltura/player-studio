@@ -20,7 +20,8 @@ tests can be run with karma - from app directory
 and e2e
 ./scripts/e2e-tests.sh
 
-#All code in this project is released under the AGPLv3 license unless a different license for a particular library is specified in the applicable library path.
+# License and Copyright Information
+All code in this project is released under the AGPLv3 license unless a different license for a particular library is specified in the applicable library path.
 
 Copyright © Kaltura Inc. All rights reserved.
 
