@@ -375,8 +375,8 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 ;
 
 KMCServices.factory('editableProperties', ['$http', function($http) {
-    //return  $http.get('http://kgit.html5video.org/pulls/513/studio/playerFeatures.php');
-    return  $http.get('http://localhost/html5.kaltura/mwEmbed/studio/playerFeatures.php');
+    return  $http.get('http://kgit.html5video.org/pulls/513/studio/playerFeatures.php');
+    //return  $http.get('http://localhost/html5.kaltura/mwEmbed/studio/playerFeatures.php');
 }]);
 
 KMCServices.factory('loadINI', ['$http', function($http) {
