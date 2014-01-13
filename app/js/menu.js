@@ -318,7 +318,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 if ($scope.featureCheckbox) {
                     $scope.featureModelCon = $scope.$eval($attrs['model']);
                     if ($scope.featureModelCon) {
-                        if (typeof $scope.featureModelCon._featureEnabled == 'undefined'  || $scope.featureModelCon._featureEnabled != false)
+                        if (typeof $scope.featureModelCon._featureEnabled == 'undefined'  || $scope.featureModelCon._featureEnabled.toString() != 'false')
                             $scope.featureModelCon._featureEnabled = true;
                     }
                     else {
