@@ -81,7 +81,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     return localStorageService.get('previewEntry');
                 }
                 else
-                    return previewEntry
+                    return previewEntry;
             },
             'renderPlayer': function() {
                 if (currentPlayer && typeof kWidget != "undefined") {
