@@ -1,5 +1,5 @@
 <label>
-        <span  data-tooltip="{{helpnote}}"  class="control-label">{{ label }}</span><i ng-if="icon" class="icon {{icon}}"></i>
+        <span  data-tooltip="{{helpnote}}"  class="control-label"><span ng-bind-html="label"></span></span><i ng-if="icon" class="icon {{icon}}"></i>
         <span class="button-wrapper">
             <button   data-tooltip="{{helpnote}}" type="button" ng-if="check(action)" ng-click="btnAction(action)"
                     class="btn btn-default {{btnClass}}">{{ btnLabel }}

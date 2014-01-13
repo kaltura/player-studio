@@ -1,5 +1,5 @@
 <div class="spinEdit clearfix">
-    <label data-tooltip="{{helpnote}}">{{label}}
+    <label data-tooltip="{{helpnote}}"><span ng-bind-html="label"></span>
         <div class="col-xs-4 pull-right">
             <div class="input-group">
                 <input type="text" ng-model="$parent.model" dname='strModel' ng-required="require" readonly="readonly" class="small pull-left"

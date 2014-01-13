@@ -1,5 +1,5 @@
 <div class="form-element">
-    <div class="radioLabel">{{ label }}</div>
+    <div class="radioLabel"><span ng-bind-html="label"></span></div>
     <div class="form-group" data-tooltip="{{helpnote}}">
         <label ng-repeat="option in options">
             <input dname='$parent.$parent.strModel' value="{{ option.value }}" type="radio"

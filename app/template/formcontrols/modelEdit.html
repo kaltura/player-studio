@@ -1,4 +1,4 @@
-<label>{{label}}
+<label><span ng-bind-html="label"></span>
     <div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>
         <input  ng-required="{{require}}" dname='strModel' type='text' data-tooltip="{{helpnote}}" readonly='readonly' ng-model='model' ng-click='doModal()'/>
     </div>
