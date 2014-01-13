@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries', '$timeout',
-        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries', '$timeout','$modal',
+        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout, $modal) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
@@ -70,10 +70,46 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 PlayerService.renderPlayer();
             });
             $scope.save = function() {
-                menuSvc.menuScope.playerEdit.$dirty = false;
-                $scope.masterData = angular.copy($scope.data);
-                //we should render from $scope.data but save $scope.masterData this way we can also offer a revert edit button
-                //cl(menuSvc.menuScope.playerEdit);
+                var request = {
+                    'service': 'uiConf',
+                    'action': 'update',
+                    'id': $scope.playerId,
+                    'uiConf:name': $scope.data.name,
+                    'uiConf:tags': $scope.data.tags,
+                    'uiConf:description': $scope.data.description ? $scope.data.description : '',
+                    'uiConf:config': angular.toJson($scope.data.config)
+                };
+                apiService.doRequest(request).then(function(result) {
+                        // cleanup
+                        menuSvc.menuScope.playerEdit.$dirty = false;
+                        $scope.masterData = angular.copy($scope.data);
+                        // user message TODO: replace with floating success message that will disappear after few seconds
+                        $modal.open({ templateUrl: 'template/dialog/message.html',
+                            controller: 'ModalInstanceCtrl',
+                            resolve: {
+                                settings: function() {
+                                    return {
+                                        'title': 'Save Player Settings',
+                                        'message': 'Player Saved Successfully'
+                                    };
+                                }
+                            }
+                        });
+                    }, function(msg) {
+                        $modal.open({ templateUrl: 'template/dialog/message.html',
+                            controller: 'ModalInstanceCtrl',
+                            resolve: {
+                                settings: function() {
+                                    return {
+                                        'title': 'Player save failure',
+                                        'message': msg
+                                    };
+                                }
+                            }
+                        });
+                    }
+                );
+
             };
             $scope.$watch(function() {
                 if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
