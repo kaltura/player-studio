@@ -63,7 +63,7 @@ module.exports = function(grunt) {
             },
             libs: {
                 src: [
-                    'app/bower_components/bootstrap/dist/js/bootstrap.min.js', // soon to be removed!
+//                    'app/bower_components/bootstrap/dist/js/bootstrap.min.js', // soon to be removed!
                     'app/lib/modernizer.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mousewheel.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.min.js',
