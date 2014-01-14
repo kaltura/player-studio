@@ -83,7 +83,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                         // cleanup
                         menuSvc.menuScope.playerEdit.$dirty = false;
                         $scope.masterData = angular.copy($scope.data);
-                        // user message TODO: replace with floating success message that will disappear after few seconds
+                        // TODO: replace with floating success message that will disappear after few seconds
                         $modal.open({ templateUrl: 'template/dialog/message.html',
                             controller: 'ModalInstanceCtrl',
                             resolve: {
