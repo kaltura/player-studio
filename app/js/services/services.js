@@ -374,17 +374,16 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
 ])
 ;
 
-KMCServices.factory('editableProperties', ['$http', 'api', '$q' , function ($http, api, $q) {
-    var q = $q.defer();
-    api.then(function () {
-        if (typeof window.kWidget === 'object')
-            q.resolve($http.get(window.kWidget.getPath() + 'studio/playerFeatures.php'));
-        else {
-            var msg = 'could not load player features';
-            q.reject(msg);
-        }
+KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, api, $http) {
+    var deferred = $q.defer();
+    api.then(function() {
+        $http.get(window.kWidget.getPath()+'studio/playerFeatures.php').then(function(result){
+            deferred.resolve(result.data);
+        }, function(reason) {
+            deferred.reject(reason);
+        });
     });
-    return q.promise;
+    return deferred.promise;
 }]);
 
 KMCServices.factory('loadINI', ['$http', function ($http) {
