@@ -3,10 +3,11 @@
             <input class="prettyCheckbox"  ng-model="$parent.featureModelCon._featureEnabled" type="checkbox"/>
      </span>
     <div class="header"  data-tooltip="{{helpnote}}" data-toggle="collapse" data-target="#{{id}}">
-        <span class="featureLabel">{{ label }}</span>
+        <span class="featureLabel" ng-bind-html="label"></span>
         <i class="glyphicon glyphicon-play"></i>
     </div>
     <div class="collapse" id="{{id}}">
+        <span class='levelDesc' ng-bind-html='description'></span>
         <div ng-transclude></div>
     </div>
 </div>

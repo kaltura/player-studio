@@ -70,7 +70,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope)
 KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) {
         var menudata = null;
         var promise = editableProperties
-            .then(function(data) {
+            .then(function (data) {
                 menudata = data;
             });
 
@@ -314,6 +314,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
                 $scope.label = $attrs['label'];
                 $scope.helpnote = $attrs['helpnote'];
+                $scope.description = $attrs['description'];
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                 if ($scope.featureCheckbox) {
                     $scope.featureModelCon = $scope.$eval($attrs['model']);
