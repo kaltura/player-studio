@@ -313,6 +313,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             transclude: true,
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
                 $scope.label = $attrs['label'];
+                $scope.isCollapsed = true;
                 $scope.helpnote = $attrs['helpnote'];
                 $scope.description = $attrs['description'];
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
@@ -346,13 +347,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     transclude(scope, function (clone) {
                         element.find('ng-transclude').replaceWith(clone);
                     });
-                    element.on('show.bs.collapse hide.bs.collapse', function (e) {
-                        if (e.target.id == scope.id)
-                            $(this).find('.header:first i.glyphicon').toggleClass('rotate90');
+                    scope.$watch('isCollapsed', function (newVal, oldVal) {
+                        if (newVal != oldVal) {
+                            $(element).find('.header:first i.glyphicon-play').toggleClass('rotate90');
+                        }
                     });
                     scope.$on('openFeature', function (e, args) {
                         if (args == attributes['highlight']) {
-                            element.find('#' + scope.id).collapse('show');
+                            scope.isCollapsed = false;
                         }
                     });
                 };
