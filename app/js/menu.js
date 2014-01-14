@@ -305,7 +305,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
         };
         return menuSvc;
     }]).
-    directive('featureMenu', ['$parse', function () {
+    directive('featureMenu', [function () {
         return {
             restrict: 'EA',
             replace: true,
