@@ -71,7 +71,23 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var renderedInstance = null;
         var previewEntry;
         var playerId = 'kVideoTarget';
+        var currentRefresh = false;
+        var callback = function () {
+            currentRefresh = false;
+        };
+        var playerRefresh = function (option) {
+            if (!currentRefresh) {
+                currentRefresh = true;
+                if (option == 'aspectToggle') {
+                    $('#spacer').toggleClass('narrow');
+                }
+                playersService.renderPlayer(callback);
+            }
+        }
         var playersService = {
+            'checkCurrentRefresh': function () {
+                return currentRefresh
+            },
             'setPreviewEntry': function (previewObj) {
                 localStorageService.set('previewEntry', previewObj);
                 previewEntry = previewObj.id;
@@ -83,7 +99,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 else
                     return previewEntry;
             },
-            'renderPlayer': function () {
+            'renderPlayer': function (callback) {
                 if (currentPlayer && typeof kWidget != "undefined") {
                     var flashvars = {'jsonConfig': angular.toJson(currentPlayer.config)}; // update the player with the new configuration
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
@@ -94,6 +110,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     window.jsCallbackReady = function (playerId) {
                         document.getElementById(playerId).kBind("layoutBuildDone", function () {
                             renderedInstance = null;
+                            if (typeof callback == 'function') {
+                                callback();
+                            }
                         });
                     };
                     if (renderedInstance && renderedInstance.getTime() < currentDate.getTime()) {
@@ -112,13 +131,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     }
                 }
             },
-            playerRefresh: function (option) {
-                if (option == 'aspectToggle') {
-                    $('#spacer').toggleClass('narrow');
-                }
-                playersService.renderPlayer(); // for now does nothing different than render,
-// but could be used to trigger view changes via notify events rather than complete refresh
-            },
+            playerRefresh: playerRefresh,
             newPlayer: function () {
                 var deferred = $q.defer();
                 var request = {
@@ -374,12 +387,12 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
 ])
 ;
 
-KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, api, $http) {
+KMCServices.factory('editableProperties', ['$q', 'api', '$http', function ($q, api, $http) {
     var deferred = $q.defer();
-    api.then(function() {
-        $http.get(window.kWidget.getPath()+'studio/playerFeatures.php').then(function(result){
+    api.then(function () {
+        $http.get(window.kWidget.getPath() + 'studio/playerFeatures.php').then(function (result) {
             deferred.resolve(result.data);
-        }, function(reason) {
+        }, function (reason) {
             deferred.reject(reason);
         });
     });
