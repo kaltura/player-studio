@@ -70,7 +70,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
 KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
         var menudata = null;
         var promise = editableProperties
-            .success(function(data) {
+            .then(function(data) {
                 menudata = data;
             });
 

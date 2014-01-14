@@ -374,8 +374,16 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 ])
 ;
 
-KMCServices.factory('editableProperties', ['$http', function($http) {
-    return  $http.get(window.kWidget.getPath()+'studio/playerFeatures.php');
+KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, api, $http) {
+    var deferred = $q.defer();
+    api.then(function() {
+        $http.get(window.kWidget.getPath()+'studio/playerFeatures.php').then(function(result){
+            deferred.resolve(result.data);
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+    });
+    return deferred.promise;
 }]);
 
 KMCServices.factory('loadINI', ['$http', function($http) {
