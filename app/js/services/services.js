@@ -2,18 +2,18 @@
 /* Services */
 var KMCServices = angular.module('KMC.services', []);
 
-KMCServices.config(['$httpProvider', function($httpProvider) {
+KMCServices.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 
-KMCServices.factory('playerCache', function($cacheFactory) {
+KMCServices.factory('playerCache', function ($cacheFactory) {
     return $cacheFactory('playerCache', {
         capacity: 10
     });
 });
 
-KMCServices.factory('sortSvc', [function() {
+KMCServices.factory('sortSvc', [function () {
     var containers = {};
     var sorter = {};
 
@@ -22,25 +22,25 @@ KMCServices.factory('sortSvc', [function() {
         this.elements = [];
         containers[name] = this;
     };
-    Container.prototype.addElement = function(model) {
+    Container.prototype.addElement = function (model) {
         this.elements.push(model);
     };
-    Container.prototype.callObjectsUpdate = function() {
-        angular.forEach(this.elements, function(model) {
+    Container.prototype.callObjectsUpdate = function () {
+        angular.forEach(this.elements, function (model) {
             cl(model.sortVal + ' ' + model.model);
         });
     };
-    Container.prototype.removeElement = function(model) {
+    Container.prototype.removeElement = function (model) {
         var index = this.elements.indexOf(model);
         if (index != -1)
             this.elements.splice(index, 1);
     };
     sorter.sortScope = '';
-    sorter.register = function(containerName, model) {
+    sorter.register = function (containerName, model) {
         var container = (typeof  containers[containerName] == 'undefined') ? new Container(containerName) : containers[containerName];
         container.addElement(model);
     };
-    sorter.update = function(newVal, oldVal, model) {
+    sorter.update = function (newVal, oldVal, model) {
         var oldContainer = containers[oldVal];
         var newContainer = (!containers[newVal]) ? new Container(newVal) : containers[newVal];
         if (oldContainer) {
@@ -51,12 +51,12 @@ KMCServices.factory('sortSvc', [function() {
             sorter.sortScope.$broadcast('sortContainersChanged');
         }
     };
-    sorter.getObjects = function() {
+    sorter.getObjects = function () {
         return containers;
     };
-    sorter.saveOrder = function(containersObj) {
+    sorter.saveOrder = function (containersObj) {
         containers = containersObj;
-        angular.forEach(containers, function(container) {
+        angular.forEach(containers, function (container) {
             container.callObjectsUpdate();
         });
     };
@@ -65,25 +65,25 @@ KMCServices.factory('sortSvc', [function() {
 );
 
 KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', 'localStorageService',
-    function($http, $modal, $log, $q, apiService, $filter, localStorageService) {
+    function ($http, $modal, $log, $q, apiService, $filter, localStorageService) {
         var playersCache = [];
         var currentPlayer = {};
         var renderedInstance = null;
         var previewEntry;
         var playerId = 'kVideoTarget';
         var playersService = {
-            'setPreviewEntry': function(previewObj) {
+            'setPreviewEntry': function (previewObj) {
                 localStorageService.set('previewEntry', previewObj);
                 previewEntry = previewObj.id;
             },
-            'getPreviewEntry': function() {
+            'getPreviewEntry': function () {
                 if (!previewEntry) {
                     return localStorageService.get('previewEntry');
                 }
                 else
                     return previewEntry;
             },
-            'renderPlayer': function() {
+            'renderPlayer': function () {
                 if (currentPlayer && typeof kWidget != "undefined") {
                     var flashvars = {'jsonConfig': angular.toJson(currentPlayer.config)}; // update the player with the new configuration
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
@@ -91,8 +91,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     }
                     window.mw.setConfig('Kaltura.LeadWithHTML5', true);
                     var currentDate = new Date();
-                    window.jsCallbackReady = function(playerId) {
-                        document.getElementById(playerId).kBind("layoutBuildDone", function() {
+                    window.jsCallbackReady = function (playerId) {
+                        document.getElementById(playerId).kBind("layoutBuildDone", function () {
                             renderedInstance = null;
                         });
                     };
@@ -112,14 +112,14 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     }
                 }
             },
-            playerRefresh: function(option) {
+            playerRefresh: function (option) {
                 if (option == 'aspectToggle') {
                     $('#spacer').toggleClass('narrow');
                 }
                 playersService.renderPlayer(); // for now does nothing different than render,
 // but could be used to trigger view changes via notify events rather than complete refresh
             },
-            newPlayer: function() {
+            newPlayer: function () {
                 var deferred = $q.defer();
                 var request = {
                     'service': 'uiConf',
@@ -128,15 +128,15 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'uiConf:objType': 1,
                     'uiConf:creationMode': 2
                 };
-                apiService.doRequest(request).then(function(data) {
+                apiService.doRequest(request).then(function (data) {
                     deferred.resolve(data);
-                }, function(reason) {
+                }, function (reason) {
                     deferred.reject(reason); //TODO: how to display the error...
                 });
                 return deferred.promise;
 
             },
-            clonePlayer: function(srcUi) {
+            clonePlayer: function (srcUi) {
                 var deferred = $q.defer();
                 var request = {
                     service: 'multirequest',
@@ -152,15 +152,15 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 //'2:uiConf:objType': 1,
 // 'uiConf:creationMode': 2
                 };
-                apiService.doRequest(request).then(function(data) {
+                apiService.doRequest(request).then(function (data) {
                     deferred.resolve(data);
-                }, function(reason) {
+                }, function (reason) {
                     deferred.reject(reason); //TODO: how to display the error...
                 });
                 return deferred.promise;
 
             },
-            'getPlayer': function(id) {
+            'getPlayer': function (id) {
                 var cache = false;
                 var deferred = $q.defer();
                 if (typeof currentPlayer.id != 'undefined') { // find if player obj is already loaded
@@ -185,7 +185,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         'id': id
 
                     };
-                    apiService.doRequest(request).then(function(result) {
+                    apiService.doRequest(request).then(function (result) {
                             deferred.resolve(result);
                             currentPlayer = result;
                         }
@@ -193,12 +193,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 }
                 return deferred.promise;
             },
-            cachePlayers: function(playersList) {
+            cachePlayers: function (playersList) {
                 if ($.isArray(playersList))
                     playersCache = playersCache.concat(playersList);
                 else playersCache.push(playersList);
             },
-            'deletePlayer': function(id) {
+            'deletePlayer': function (id) {
                 var deferred = $q.defer();
                 var rejectText = $filter('i18n')('Delete action was rejected: ');
                 if (typeof id == 'undefined' && currentPlayer)
@@ -210,9 +210,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         'id': id
 
                     };
-                    apiService.doRequest(request).then(function(result) {
+                    apiService.doRequest(request).then(function (result) {
                             deferred.resolve(result);
-                        }, function(msg) {
+                        }, function (msg) {
                             deferred.reject(rejectText + msg);
                         }
                     );
@@ -222,13 +222,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 }
                 return deferred.promise;
             },
-            'getRequiredVersion': function() {
+            'getRequiredVersion': function () {
                 return 2;
             },
-            'getPlayers': function() {
+            'getPlayers': function () {
                 return $http.get('js/services/allplayers.json');
             },
-            'playerUpdate': function(playerObj, html5lib) {
+            'playerUpdate': function (playerObj, html5lib) {
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
                 var rejectText = $filter('i18n')('Update player action was rejected: ');
@@ -236,7 +236,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     url: window.kWidget.getPath() + 'services.php',
                     method: "GET",
                     params: {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")}
-                }).success(function(data, status, headers, config) {
+                }).success(function (data, status, headers, config) {
 // clean some redundant data from received object
                         if (data['uiConfId']) {
                             delete data['uiConfId'];
@@ -252,13 +252,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                             'uiConf:html5Url': html5lib,           // update the html5 lib to the new version
                             'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
                         };
-                        apiService.doRequest(request).then(function(result) {
+                        apiService.doRequest(request).then(function (result) {
                                 deferred.resolve(result);
-                            }, function(msg) {
+                            }, function (msg) {
                                 deferred.reject(rejectText + msg);
                             }
                         );
-                    }).error(function(data, status, headers, config) {
+                    }).error(function (data, status, headers, config) {
                         deferred.reject("Error updating UIConf: " + data);
                         $log.error('Error updating UIConf: ' + data);
                     });
@@ -269,20 +269,20 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
     }])
 ;
 
-KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootScope) {
+KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($rootScope) {
 // private notification messages
     var _START_REQUEST_ = '_START_REQUEST_';
     var _END_REQUEST_ = '_END_REQUEST_';
     var obj = {'customStart': null};
 // publish start request notification
-    obj.requestStarted = function(customStart) {
+    obj.requestStarted = function (customStart) {
         $rootScope.$broadcast(_START_REQUEST_);
         if (customStart) {
             obj.customStart = customStart;
         }
     };
 // publish end request notification
-    obj.requestEnded = function(customStart) {
+    obj.requestEnded = function (customStart) {
         if (obj.customStart) {
             if (customStart == obj.customStart) {
                 $rootScope.$broadcast(_END_REQUEST_);
@@ -294,14 +294,14 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
             $rootScope.$broadcast(_END_REQUEST_);
     };
 // subscribe to start request notification
-    obj.onRequestStarted = function($scope, handler) {
-        $scope.$on(_START_REQUEST_, function(event) {
+    obj.onRequestStarted = function ($scope, handler) {
+        $scope.$on(_START_REQUEST_, function (event) {
             handler();
         });
     };
 // subscribe to end request notification
-    obj.onRequestEnded = function($scope, handler) {
-        $scope.$on(_END_REQUEST_, function(event) {
+    obj.onRequestEnded = function ($scope, handler) {
+        $scope.$on(_END_REQUEST_, function (event) {
             handler();
         });
     };
@@ -311,13 +311,13 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function($rootS
 
 }]);
 
-KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(requestNotificationChannel) {
+KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (requestNotificationChannel) {
     return {
         restrict: 'EA',
         scope: {},
         replace: true,
         template: '<div class=\'loadingOverlay\'><a><div id=\'spinWrapper\'></div></a></div>',
-        controller: ['$scope', '$element', function($scope, $element) {
+        controller: ['$scope', '$element', function ($scope, $element) {
             $scope.spinner = null;
             $scope.spinRunning = false;
             $scope.opts = {
@@ -338,15 +338,15 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
                 top: 'auto',
                 left: 'auto'
             };
-            var initSpin = function() {
+            var initSpin = function () {
                 $scope.spinner = new Spinner($scope.opts).spin();
             };
-            $scope.endSpin = function() {
+            $scope.endSpin = function () {
                 if ($scope.spinner)
                     $scope.spinner.stop();
                 $scope.spinRunning = false;
             };
-            $scope.spin = function() {
+            $scope.spin = function () {
                 if ($scope.spinRunning)
                     return;
                 var target = $element.find('#spinWrapper');
@@ -356,13 +356,13 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
                 $scope.spinRunning = true;
             };
         }],
-        link: function(scope, element) {
+        link: function (scope, element) {
             element.hide();
-            var startRequestHandler = function() {
+            var startRequestHandler = function () {
                 element.show();
                 scope.spin();
             };
-            var endRequestHandler = function() {
+            var endRequestHandler = function () {
                 element.hide();
                 scope.endSpin();
             };
@@ -374,16 +374,25 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 ])
 ;
 
-KMCServices.factory('editableProperties', ['$http', function($http) {
-    return  $http.get(window.kWidget.getPath()+'studio/playerFeatures.php');
+KMCServices.factory('editableProperties', ['$http', 'api', '$q' , function ($http, api, $q) {
+    var q = $q.defer();
+    api.then(function () {
+        if (typeof window.kWidget === 'object')
+            q.resolve($http.get(window.kWidget.getPath() + 'studio/playerFeatures.php'));
+        else {
+            var msg = 'could not load player features';
+            q.reject(msg);
+        }
+    });
+    return q.promise;
 }]);
 
-KMCServices.factory('loadINI', ['$http', function($http) {
+KMCServices.factory('loadINI', ['$http', function ($http) {
     var iniConfig = null;
     return {
-        'getINIConfig': function() {
+        'getINIConfig': function () {
             if (!iniConfig) {
-                iniConfig = $http.get('studio.ini', {transformResponse: function(data, headers) {
+                iniConfig = $http.get('studio.ini', {transformResponse: function (data, headers) {
                     var config = data.match(/widgets\.studio\.config \= \'(.*)\'/)[1];
                     data = angular.fromJson(config);
                     return data;
@@ -394,17 +403,17 @@ KMCServices.factory('loadINI', ['$http', function($http) {
     };
 }]);
 
-KMCServices.provider('api', function() {
+KMCServices.provider('api', function () {
     var injector = angular.injector(['ng']);
     var $q = injector.get('$q');
 
     var apiObj = null;
     return {
-        $get: function(loadINI) {
+        $get: function (loadINI) {
             var deferred = $q.defer();
             //first request - create new kwidget.api
             if (!apiObj) {
-                var require = function(file, callback) {
+                var require = function (file, callback) {
                     var head = document.getElementsByTagName("head")[0];
                     var script = document.createElement('script');
                     script.src = file;
@@ -418,15 +427,15 @@ KMCServices.provider('api', function() {
                     }
                     head.appendChild(script);
                 };
-                var loadHTML5Lib = function(url) {
-                    var initKw = function() {
+                var loadHTML5Lib = function (url) {
+                    var initKw = function () {
                         kWidget.api.prototype.type = 'POST';
                         apiObj = new kWidget.api();
                         deferred.resolve(apiObj);
                     };
-                    require(url, function() {
+                    require(url, function () {
                         if (typeof kWidget == 'undefined') {
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 initKw();
                             }, 100);
                         }
@@ -450,7 +459,7 @@ KMCServices.provider('api', function() {
                 }
 
                 if (!html5lib) {
-                    loadINI.getINIConfig().success(function(data) {
+                    loadINI.getINIConfig().success(function (data) {
                         var url = data.html5lib;
                         loadHTML5Lib(url);
                     });
@@ -463,30 +472,30 @@ KMCServices.provider('api', function() {
     };
 });
 
-KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function(api, $q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
+KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'playerCache', 'requestNotificationChannel', function (api, $q, $timeout, $location, localStorageService, playerCache, requestNotificationChannel) {
     var apiService = {
         apiObj: api,
-        unSetks: function() {
+        unSetks: function () {
             delete this.apiObj;
         },
-        setKs: function(ks) {
-            this.apiObj.then(function(api) {
+        setKs: function (ks) {
+            this.apiObj.then(function (api) {
                 api.setKs(ks);
             });
         },
-        setWid: function(wid) {
-            this.getClient().then(function(api) {
+        setWid: function (wid) {
+            this.getClient().then(function (api) {
                 api.wid = wid;
             });
         },
-        getKey: function(params) {
+        getKey: function (params) {
             var key = '';
             for (var i in params) {
                 key += params[i] + '_';
             }
             return key;
         },
-        listMedia: function() {
+        listMedia: function () {
             var request = {
                 'service': 'media',
                 'action': 'list'
@@ -494,7 +503,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
             };
             return this.doRequest(request);
         },
-        doRequest: function(params) {
+        doRequest: function (params) {
 //Creating a deferred object
             var deferred = $q.defer();
             requestNotificationChannel.requestStarted();
@@ -502,10 +511,10 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
             if (playerCache.get(params_key)) {
                 deferred.resolve(playerCache.get(params_key));
             } else {
-                this.apiObj.then(function(api) {
-                    api.doRequest(params, function(data) {
+                this.apiObj.then(function (api) {
+                    api.doRequest(params, function (data) {
 //timeout will trigger another $digest cycle that will trigger the "then" function
-                        $timeout(function() {
+                        $timeout(function () {
                             if (data.code) {
                                 if (data.code == "INVALID_KS") {
                                     localStorageService.remove('ks');
@@ -530,12 +539,12 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
 }])
 ;
 
-KMCServices.factory('playerTemplates', ['$http', function($http) {
+KMCServices.factory('playerTemplates', ['$http', function ($http) {
     return {
-        'listSystem': function() {
+        'listSystem': function () {
             return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
         },
-        'listUser': function() {
+        'listUser': function () {
             return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
         }
     };
