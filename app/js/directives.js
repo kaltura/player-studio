@@ -539,9 +539,12 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
     var menuScope = menuSvc.menuScope;
     return {
         restrict: 'A',
-        require: 'playerRefresh',
-        controller: function ($scope) {
+        priority: 1000,
+        require: ['playerRefresh', '?ngModel'],
+        controller: function ($scope, $element, $attrs) {
             $scope.customRefresh = false;
+            $scope.modelChanged = false;
+            $scope.controlUpdateAllowed = false;
             var ctrObj = {
                 defUpdateFunction: function (prScope, elem) {
                     $(elem).find('input[ng-model], select[ng-model]').on('change', function (e) {
@@ -553,48 +556,71 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     $scope.updateFunction = func;
                 },
                 defControlFunction: function () {
-                    return  $scope.controlUpdateAllowed;
-                }, setControlFunction: function (func) {
+                    if ($attrs['playerRefresh'] == 'boolean') {
+                        return true;
+                    } else
+                        return  $scope.controlUpdateAllowed;
+                },
+                setControlFunction: function (func) {
+                    $scope.customRefresh = true;
                     $scope.controlFunction = func;
+                },
+                getPrScope: function () {
+                    return $scope;
                 }
             }
-            $scope.updateFunction = ctrObj.defUpdateFunction;
-            $scope.modelChanged = false;
-            $scope.controlUpdateAllowed = false;
-            $scope.controlFunction = ctrObj.defControlFunction;
             return ctrObj;
         },
-        link: function (iScope, iElement, iAttrs, playerRefresh) {
+        link: function (iScope, iElement, iAttrs, controllers) {
+            var playerRefresh = controllers[0];
+            ngController = null;
             if (iAttrs['playerRefresh'] != 'false') {
                 var model = iAttrs['model'];
+                if (controllers[1]) {
+                    var ngController = controllers[1];
+                    model = ngController.$modelValue;
+                }
+                if (!iScope.customRefresh) {
+                    iScope.updateFunction = playerRefresh.defUpdateFunction;
+                    iScope.controlFunction = playerRefresh.defControlFunction;
+                }
                 $timeout(function () {
                     if (!iScope.customRefresh) {
                         playerRefresh.defUpdateFunction(iScope, iElement);
                     }
                     else {
-                        iScope.updateFunction(iScope, iElement);
+                        if (!iScope.controlFunction) // if it returns true means we don't need controlUpdate
+                            iScope.updateFunction(iScope, iElement);
                     }
-                }, 500);
-                menuScope.$watch(function (menuScope) {
-                    return menuScope.$eval(model);
-                }, function (newVal, oldVal) {
-                    if (newVal != oldVal) {
-                        iScope.modelChanged = true;
-                    } else {
-                        iScope.modelChanged = false;
-                    }
+                }, 1000);
+                if (!ngController) {
+                    menuScope.$watch(function (menuScope) {
+                        return menuScope.$eval(model);
+                    }, function (newVal, oldVal) {
+                        if (newVal != oldVal) {
+                            iScope.modelChanged = true;
+                        } else {
+                            iScope.modelChanged = false;
+                        }
 
-                });
+                    });
+                }
+                else {
+                    ngController.$viewChangeListeners.push(function () {
+                        iScope.modelChanged = true;
+                    });
+                }
                 iScope.$watch(function () {
-                    if (iScope.modelChanged && iScope.controlFunction())
+                    if (!PlayerService.checkCurrentRefresh() &&  iScope.modelChanged && iScope.controlFunction())
                         return true;
                     else
                         return false;
                 }, function (val) {
                     if (val) {
-                        iScope.modelChanged = false;
-                        iScope.controlUpdateAllowed = false;
-                        PlayerService.playerRefresh(iAttrs['playerRefresh']);
+                        if(PlayerService.playerRefresh(iAttrs['playerRefresh'])){
+                            iScope.modelChanged = false;
+                            iScope.controlUpdateAllowed = false;
+                        }
                     }
                 })
             }
@@ -731,19 +757,20 @@ DirectivesModule.directive('modelCheckbox', function () {
     return {
         restrict: 'EA',
         templateUrl: 'template/formcontrols/modelCheckbox.html',
-//        require: '?playerRefresh',
+        require: '?playerRefresh',
         replace: true,
         compile: function (tElement, tAttr) {
             if (tAttr['endline'] == 'true') {
                 tElement.append('<hr/>');
             }
-//            return function ($scope, $element, $attrs, playerRefreshCnt) {
-//                if (playerRefreshCnt) {
-//                    playerRefreshCnt.setControlFunction(function () {
-//                        return true;
-//                    });
-//                }
-//            }
+            return function ($scope, $element, $attrs, playerRefreshCnt) {
+                if (playerRefreshCnt) {
+                    playerRefreshCnt.setControlFunction(function () {
+                        return true;
+                    });
+                    playerRefreshCnt.getPrScope().customRefresh = true;
+                }
+            }
         },
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
             if ($scope.model === '' || typeof $scope.model == 'undefined') {

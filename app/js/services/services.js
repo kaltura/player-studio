@@ -82,7 +82,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     $('#spacer').toggleClass('narrow');
                 }
                 playersService.renderPlayer(callback);
+                return true;
             }
+            return false;
         }
         var playersService = {
             'checkCurrentRefresh': function () {
