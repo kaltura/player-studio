@@ -60,7 +60,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             $scope.$watch('settings.previewEntry', function(newVal, oldVal) {
                 if (newVal != oldVal) {
                     PlayerService.setPreviewEntry($scope.settings.previewEntry);
-                    PlayerService.renderPlayer();
+                    //PlayerService.renderPlayer();
                 }
             });
             $(document).ready(function() {

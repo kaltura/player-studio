@@ -111,26 +111,19 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     var currentDate = new Date();
                     window.jsCallbackReady = function (playerId) {
                         document.getElementById(playerId).kBind("layoutBuildDone", function () {
-                            renderedInstance = null;
                             if (typeof callback == 'function') {
                                 callback();
                             }
                         });
                     };
-                    if (renderedInstance && renderedInstance.getTime() < currentDate.getTime()) {
-                        return;
-                    }
-                    else {
-                        renderedInstance = new Date();
-                        kWidget.embed({
-                            "targetId": playerId, // hard coded for now?
-                            "wid": "_" + currentPlayer.partnerId, //$scope.data.partnerId,
-                            "uiconf_id": currentPlayer.id,// $scope.data.id,
-                            "flashvars": flashvars,
-                            "entry_id": previewEntry //$scope.previewEntry
-                        });
+                    kWidget.embed({
+                        "targetId": playerId, // hard coded for now?
+                        "wid": "_" + currentPlayer.partnerId, //$scope.data.partnerId,
+                        "uiconf_id": currentPlayer.id,// $scope.data.id,
+                        "flashvars": flashvars,
+                        "entry_id": previewEntry //$scope.previewEntry
+                    });
 
-                    }
                 }
             },
             playerRefresh: playerRefresh,
