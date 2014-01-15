@@ -108,7 +108,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         angular.extend(flashvars, {'wmode': 'transparent'});
                     }
                     window.mw.setConfig('Kaltura.LeadWithHTML5', true);
-                    var currentDate = new Date();
                     window.jsCallbackReady = function (playerId) {
                         document.getElementById(playerId).kBind("layoutBuildDone", function () {
                             if (typeof callback == 'function') {
