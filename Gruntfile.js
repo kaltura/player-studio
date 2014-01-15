@@ -202,6 +202,13 @@ module.exports = function (grunt) {
             }
         },
         less: {
+            bootstrap:{
+                files: {'app/bower_components/bootstrap/dist/css/bootstrap.min.css': 'app/bower_components/bootstrap/less/bootstrap.less'},
+                options: {
+                    compress: true,
+                    cleancss: true
+                }
+            },
             development: {
                 files: {'app/css/studio.css': 'app/less/*.less'},
                 options: {
