@@ -84,10 +84,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 return true;
             }
             return false;
-        }
+        };
         var playersService = {
             'checkCurrentRefresh': function () {
-                return currentRefresh
+                return currentRefresh;
             },
             'setPreviewEntry': function (previewObj) {
                 localStorageService.set('previewEntry', previewObj);

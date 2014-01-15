@@ -89,7 +89,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     return false;
 
             }
-        }
+        };
         var JSON2directiveDictionary = function (jsonName) {
             //this is now the single place one need to edit in order to add a directive to the menu generator
             switch (jsonName) {

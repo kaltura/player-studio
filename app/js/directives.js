@@ -568,16 +568,16 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                 getPrScope: function () {
                     return $scope;
                 }
-            }
+            };
             return ctrObj;
         },
         link: function (iScope, iElement, iAttrs, controllers) {
             var playerRefresh = controllers[0];
-            ngController = null;
+            var ngController = null;
             if (iAttrs['playerRefresh'] != 'false') {
                 var model = iAttrs['model'];
                 if (controllers[1]) {
-                    var ngController = controllers[1];
+                     ngController = controllers[1];
                     model = ngController.$modelValue;
                 }
                 if (!iScope.customRefresh) {
@@ -622,7 +622,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                             iScope.controlUpdateAllowed = false;
                         }
                     }
-                })
+                });
             }
         }
     }
@@ -770,7 +770,7 @@ DirectivesModule.directive('modelCheckbox', function () {
                     });
                     playerRefreshCnt.getPrScope().customRefresh = true;
                 }
-            }
+            };
         },
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
             if ($scope.model === '' || typeof $scope.model == 'undefined') {
