@@ -368,8 +368,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                             $(element).find('.header:first i.glyphicon-play').toggleClass('rotate90');
                         }
                     });
-                    scope.$watch('featureModelCon._featureEnabled', function (newval) {
-                        if (!newval) {
+                    scope.$watch('featureModelCon._featureEnabled', function (newval, oldVal) {
+                        if (!newval && newval != oldVal) {
                             var ModelArr = attributes['model'].split('.');
                             var target = ModelArr.pop();
                             var parentStr = ModelArr.join('.');
