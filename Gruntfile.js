@@ -1,5 +1,5 @@
 /*global module:false*/
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -154,6 +154,9 @@ module.exports = function(grunt) {
                         cwd: 'app/bower_components/angular/',
                         src: 'angular.min.js.map',
                         dest: '_dist/vendor/'
+                    },
+                    {   src: 'app/studio.ini',
+                        dest: '_dist/studio.ini'
                     },
                     {
                         src: 'app/bower_components/select2/select2.png',
