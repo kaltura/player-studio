@@ -39,11 +39,30 @@ DirectivesModule.directive('mcustomScrollbar', [
                     }
                 };
                 angular.extend(opts, options);
-                $timeout(function () {
+                var afterScroll = $timeout(function () {
                     if (typeof $().mCustomScrollbar == 'function') {
                         scope.scroller = element.mCustomScrollbar(opts);
+
                     }
                 }, 500);
+                if ($('div#list').length) {
+                    afterScroll.then(function () {
+                        var scrollTools = $(element).find('.mCSB_scrollTools');
+                        scope.$watch(function () {
+                            return scrollTools.css('display');
+                        }, function (value) {
+                            if (value == 'block') {
+                                $('#tableHead').css('padding-right', '30px');
+                            }
+                            else {
+                                $('#tableHead').css('padding-right', '0');
+                            }
+                        });
+                        $(window).resize(function () {
+                            scope.$digest();
+                        })
+                    });
+                }
             }
         };
     }
@@ -577,7 +596,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
             if (iAttrs['playerRefresh'] != 'false') {
                 var model = iAttrs['model'];
                 if (controllers[1]) {
-                     ngController = controllers[1];
+                    ngController = controllers[1];
                     model = ngController.$modelValue;
                 }
                 if (!iScope.customRefresh) {
@@ -611,13 +630,13 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     });
                 }
                 iScope.$watch(function () {
-                    if (!PlayerService.checkCurrentRefresh() &&  iScope.modelChanged && iScope.controlFunction())
+                    if (!PlayerService.checkCurrentRefresh() && iScope.modelChanged && iScope.controlFunction())
                         return true;
                     else
                         return false;
                 }, function (val) {
                     if (val) {
-                        if(PlayerService.playerRefresh(iAttrs['playerRefresh'])){
+                        if (PlayerService.playerRefresh(iAttrs['playerRefresh'])) {
                             iScope.modelChanged = false;
                             iScope.controlUpdateAllowed = false;
                         }

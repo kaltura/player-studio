@@ -31,8 +31,8 @@
         </div>
         <div id='playerList' class="scrollerWrap maxViewPort">
             <div class="row" id="tableHead">
-                <div class="col-xs-2">{{'Preview'| i18n }}</div>
-                <div class="col-xs-3">{{ 'Name' | i18n }}</div>
+                <!--<div class="col-xs-2">{{'Preview'| i18n }}</div>-->
+                <div class="col-xs-5">{{ 'Name' | i18n }}</div>
                 <div class="col-xs-2  text-center">{{ 'ID' | i18n }}</div>
                 <div class="col-xs-2 text-center col-lg-1 ">{{ 'Save Date' | i18n }}</div>
                 <div class="col-lg-1 text-center visible-lg">{{ 'Creation Date' | i18n }}</div>
@@ -44,10 +44,10 @@
                     <tbody>
                     <tr class="row repeat-animation" on-finish-render
                         ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
-                        <td class=" playerThumbWrapper col-xs-2">
-                            <img class="playerThumb" ng-src="{{getThumbnail(item)}}"/>
-                        </td>
-                        <td class="col-xs-3"><a data-ng-click="goToEditPage(item,$event)"
+                        <!--<td class=" playerThumbWrapper col-xs-2">-->
+                            <!--<img class="playerThumb" ng-src="{{getThumbnail(item)}}"/>-->
+                        <!--</td>-->
+                        <td class="col-xs-5"><a data-ng-click="goToEditPage(item,$event)"
                                                 ng-href="edit/{{item.id}}">{{item.name}}</a>
 
                             <div class="row alertsWrapper">
