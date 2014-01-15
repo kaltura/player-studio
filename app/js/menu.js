@@ -329,7 +329,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
         return menuSvc;
     }
     ]).
-    directive('featureMenu', [function () {
+    directive('featureMenu', ['menuSvc', function (menuSvc) {
+        var menuScope = menuSvc.menuScope;
         return {
             restrict: 'EA',
             replace: true,
@@ -339,7 +340,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 $scope.isCollapsed = true;
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                 if ($scope.featureCheckbox) {
-                    $scope.featureModelCon = $scope.$eval($attrs['model']);
+                    $scope.featureModelCon = menuScope.$eval($attrs['model']);
                     if ($scope.featureModelCon) {
                         if (typeof $scope.featureModelCon._featureEnabled == 'undefined' || $scope.featureModelCon._featureEnabled.toString() != 'false')
                             $scope.featureModelCon._featureEnabled = true;
@@ -366,6 +367,16 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         if (newVal != oldVal) {
                             $(element).find('.header:first i.glyphicon-play').toggleClass('rotate90');
                         }
+                    });
+                    scope.$watch('featureModelCon._featureEnabled', function (newval) {
+                        if (!newval) {
+                            var ModelArr = attributes['model'].split('.');
+                            var target = ModelArr.pop();
+                            var parentStr = ModelArr.join('.');
+                            var parent = menuScope.$eval(parentStr);
+                            delete parent[target];
+                        }
+
                     });
                     scope.$on('openFeature', function (e, args) {
                         if (args == attributes['highlight']) {
