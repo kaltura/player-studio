@@ -68,7 +68,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
     function ($http, $modal, $log, $q, apiService, $filter, localStorageService) {
         var playersCache = [];
         var currentPlayer = {};
-        var renderedInstance = null;
         var previewEntry;
         var playerId = 'kVideoTarget';
         var currentRefresh = false;
@@ -385,7 +384,13 @@ KMCServices.factory('editableProperties', ['$q', 'api', '$http', function ($q, a
     var deferred = $q.defer();
     api.then(function () {
         $http.get(window.kWidget.getPath() + 'studio/playerFeatures.php').then(function (result) {
-            deferred.resolve(result.data);
+            var data = result.data;
+            if (typeof data == 'object') // json is OK
+                deferred.resolve(result.data);
+            else{
+                cl('JSON parse error of playerFeatures');
+                deferred.reject(false);
+            }
         }, function (reason) {
             deferred.reject(reason);
         });
