@@ -278,11 +278,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                                 lastMenu = foundLabel.substr(0, lastChild);
                             }
                         }
-                        menuSvc.menuScope.$broadcast('highlight', foundModel);
+                        menuSvc.menuScope.$broadcast('highlight', 'data.'+foundModel);
                         menuSvc.setMenu(menuPage.model);
                         if (featureMenu.length) {
                             angular.forEach(featureMenu, function (value) {
-                                menuSvc.menuScope.$broadcast('openFeature', value.model);
+                                menuSvc.menuScope.$broadcast('openFeature', 'data.' + value.model);
                             });
                         }
                         return true;
@@ -379,7 +379,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
 
                     });
                     scope.$on('openFeature', function (e, args) {
-                        if (args == attributes['highlight']) {
+                        if (args == attributes['model']) {
                             scope.isCollapsed = false;
                         }
                     });
@@ -391,7 +391,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             restrict: 'A',
             link: function (scope, iElem, iAttr) {
                 scope.$on('highlight', function (e, data) {
-                    if (iAttr.model.replace('data.', '') == data) {
+                    if (iAttr.model == data) {
                         var elm = iElem;
                         if (iElem.parent().is('li'))
                             elm = iElem.parent();
