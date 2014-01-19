@@ -60,7 +60,7 @@ DirectivesModule.directive('mcustomScrollbar', [
                         });
                         $(window).resize(function () {
                             scope.$digest();
-                        })
+                        });
                     });
                 }
             }
