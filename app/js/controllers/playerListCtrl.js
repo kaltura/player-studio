@@ -57,7 +57,6 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     $scope.totalItems = $scope.filtered.length;
                 else if ($scope.data) {
                     $scope.totalItems = $scope.data.length;
-                    return $scope.totalItems;
                 }
             };
 
