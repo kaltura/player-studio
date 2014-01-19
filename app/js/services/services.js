@@ -399,7 +399,7 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
 KMCServices.factory('editableProperties', ['$q', 'api', '$http', function ($q, api, $http) {
 	var deferred = $q.defer();
 	api.then(function () {
-		$http.get(window.kWidget.getPath() + 'studio/playerFeatures.php').then(function (result) {
+		$http.get(window.kWidget.getPath() + 'playerFeatures.php').then(function (result) {
 			var data = result.data;
 			if (typeof data == 'object') // json is OK
 				deferred.resolve(result.data);
