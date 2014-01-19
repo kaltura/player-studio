@@ -69,6 +69,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var playersCache = [];
         var currentPlayer = {};
         var previewEntry;
+	    var previewEntryObj;
         var playerId = 'kVideoTarget';
         var currentRefresh = false;
         var callback = function () {
@@ -92,17 +93,19 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'setPreviewEntry': function (previewObj) {
                 localStorageService.set('previewEntry', previewObj);
                 previewEntry = previewObj.id;
+	            previewEntryObj = previewObj;
             },
             'getPreviewEntry': function () {
                 if (!previewEntry) {
                     return localStorageService.get('previewEntry');
                 }
-                else
-                    return previewEntry;
+                else{
+                    return previewEntryObj;
+                }
             },
             'renderPlayer': function (callback) {
                 if (currentPlayer && typeof kWidget != "undefined") {
-                    var flashvars = {'jsonConfig': angular.toJson(currentPlayer.config)}; // update the player with the new configuration
+                    var flashvars = {'jsonConfig': currentPlayer.config}; // update the player with the new configuration
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
                         angular.extend(flashvars, {'wmode': 'transparent'});
                     }
@@ -132,9 +135,20 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'action': 'add',
                     'uiConf:objectType': 'KalturaUiConf',
                     'uiConf:objType': 1,
-                    'uiConf:creationMode': 2
+	                'uiConf:description': '',
+	                'uiConf:height': '395',
+	                'uiConf:width': '560',
+	                'uiConf:swfUrl': '/flash/kdp3/v3.9.4/kdp3.swf',
+	                'uiConf:fUrlVersion': '3.9.4',
+	                'uiConf:version': '161',
+	                'uiConf:name': 'New Player',
+	                'uiConf:tags': 'html5studio,player',
+	                'uiConf:html5Url': window.kWidget.getPath() + 'mwEmbedLoader.php',
+                    'uiConf:creationMode': 2,
+	                'uiConf:config': '{"plugins":{"topBarContainer":[],"controlBarContainer":[],"scrubber":[],"largePlayBtn":[],"playHead":[],"playPauseBtn":[],"volumeControl":[],"durationLabel":[],"currentTimeLabel":[],"keyboardShortcuts":[],"liveCore":[],"liveStatus":[],"liveBackBtn":[],"fullScreenBtn":[],"logo":[],"watermark":{"href":"http://www.kaltura.com/","img":"http://www.kaltura.com/content/uiconf/kaltura/kmc/appstudio/kdp3/exampleWatermark.png","padding":5,"title":"Watermark","cssClass":"bottomLeft"},"strings":{"ENTRY_CONVERTING":"Entry is processing, please try again in a few minutes."},"statistics":{"plugin":true,"width":"0%","height":"0%","includeInLayout":false},"akamaiMediaAnalytics":{"plugin":true,"width":"0%","height":"0%","includeInLayout":false,"asyncInit":true,"swfPath":"http://79423.analytics.edgesuite.net/csma/plugin/csma.swf","configPath":"http://ma193-r.analytics.edgesuite.net/config/beacon-3431.xml","securedSwfPath":"https://79423.analytics.edgekey.net/csma/plugin/csma.swf","securedConfigPath":"https://ma193-r.analytics.edgekey.net/config/beacon-3900.xml"},"kalturaShare":{"plugin":true,"uiconfId":8700151,"width":"100%","height":"100%","via":"","pubid":""}},"uiVars":{"imageDefaultDuration":2,"autoPlay":false,"autoMute":false},"pluginIds":["mediaProxy","strings","kalturaMix","statistics","akamaiMediaAnalytics","kalturaShare"],"layout":{"skin":"kdark"}}'
                 };
                 apiService.doRequest(request).then(function (data) {
+	                currentPlayer = data;
                     deferred.resolve(data);
                 }, function (reason) {
                     deferred.reject(reason); //TODO: how to display the error...
@@ -200,9 +214,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 return deferred.promise;
             },
             cachePlayers: function (playersList) {
-                if ($.isArray(playersList))
+                if ($.isArray(playersList)){
                     playersCache = playersCache.concat(playersList);
-                else playersCache.push(playersList);
+                }else{
+	                playersCache.push(playersList);
+                }
             },
             'deletePlayer': function (id) {
                 var deferred = $q.defer();
