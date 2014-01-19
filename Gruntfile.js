@@ -155,9 +155,6 @@ module.exports = function (grunt) {
                         src: 'angular.min.js.map',
                         dest: '_dist/vendor/'
                     },
-                    {   src: 'app/studio.ini',
-                        dest: '_dist/studio.ini'
-                    },
                     {
                         src: 'app/bower_components/select2/select2.png',
                         dest: '_dist/css/select2.png'
