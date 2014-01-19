@@ -7,9 +7,9 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
         function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout, $modal) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
+	        $scope.newPlayer = !$routeParams.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
-            $scope.data.config = angular.fromJson($scope.data.config); // convert string to json object
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
@@ -57,10 +57,10 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 });
             }
             $scope.settings.previewEntry = ( PlayerService.getPreviewEntry()) ? PlayerService.getPreviewEntry() : $scope.userEntriesList[0]; //default entry
-            $scope.$watch('settings.previewEntry', function(newVal, oldVal) {
+            $scope.$watch('settings.previewEntry.id', function(newVal, oldVal) {
                 if (newVal != oldVal) {
                     PlayerService.setPreviewEntry($scope.settings.previewEntry);
-                    //PlayerService.renderPlayer();
+                    PlayerService.renderPlayer();
                 }
             });
             $(document).ready(function() {
@@ -77,12 +77,17 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     'uiConf:name': $scope.data.name,
                     'uiConf:tags': $scope.data.tags,
                     'uiConf:description': $scope.data.description ? $scope.data.description : '',
-                    'uiConf:config': angular.toJson($scope.data.config)
+                    'uiConf:config': $scope.data.config
                 };
                 apiService.doRequest(request).then(function(result) {
                         // cleanup
                         menuSvc.menuScope.playerEdit.$dirty = false;
                         $scope.masterData = angular.copy($scope.data);
+		                // if this is a new player - add it to the players list
+		                if ($scope.newPlayer){
+			                // TODO: add player to cache or set flag to re-fetch the list from the server on the next list view
+			                //PlayerService.cachePlayers(result);
+		                }
                         // TODO: replace with floating success message that will disappear after few seconds
                         $modal.open({ templateUrl: 'template/dialog/message.html',
                             controller: 'ModalInstanceCtrl',
