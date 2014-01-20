@@ -530,17 +530,22 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
 			};
 			return this.doRequest(request);
 		},
+        useCache: true,
+        setCache: function(useCache){
+            this.useCache = useCache;
+        },
 		doRequest: function (params) {
-//Creating a deferred object
+            //Creating a deferred object
+            var _this = this;
 			var deferred = $q.defer();
 			requestNotificationChannel.requestStarted();
 			var params_key = this.getKey(params);
-			if (playerCache.get(params_key)) {
+			if (playerCache.get(params_key) && this.useCache) {
 				deferred.resolve(playerCache.get(params_key));
 			} else {
 				this.apiObj.then(function (api) {
 					api.doRequest(params, function (data) {
-//timeout will trigger another $digest cycle that will trigger the "then" function
+                        //timeout will trigger another $digest cycle that will trigger the "then" function
 						$timeout(function () {
 							if (data.code) {
 								if (data.code == "INVALID_KS") {
@@ -551,6 +556,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
 								deferred.reject(data.code);
 							} else {
 								playerCache.put(params_key, data);
+                                _this.useCache = true;
 								requestNotificationChannel.requestEnded();
 								deferred.resolve(data);
 							}
@@ -558,7 +564,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
 					});
 				});
 			}
-//Returning the promise object
+            //Returning the promise object
 			return deferred.promise;
 		}
 	};

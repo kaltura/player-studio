@@ -66,7 +66,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
 			});
 			$(document).ready(function() {
 				$scope.masterData = angular.copy($scope.data);
-// get the preview entry
+                // get the preview entry
 				PlayerService.setPreviewEntry($scope.settings.previewEntry);
 				PlayerService.renderPlayer();
 			});
@@ -81,15 +81,15 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
 					'uiConf:config': angular.toJson($scope.data.config)
 				};
 				apiService.doRequest(request).then(function(result) {
-// cleanup
+                        // cleanup
 						menuSvc.menuScope.playerEdit.$dirty = false;
 						$scope.masterData = angular.copy($scope.data);
-// if this is a new player - add it to the players list
+                        // if this is a new player - add it to the players list
 						if ($scope.newPlayer){
-// TODO: add player to cache or set flag to re-fetch the list from the server on the next list view
-//PlayerService.cachePlayers(result);
+                            // prevent the list controller from using the cache the next time the list loads
+                            apiService.setCache(false);
 						}
-// TODO: replace with floating success message that will disappear after few seconds
+                        // TODO: replace with floating success message that will disappear after few seconds
 						$modal.open({ templateUrl: 'template/dialog/message.html',
 							controller: 'ModalInstanceCtrl',
 							resolve: {
