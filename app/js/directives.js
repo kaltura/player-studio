@@ -294,7 +294,7 @@ DirectivesModule.directive('valType', function() {
         restrict: "A",
         compile: function(tElem, tAttr) {
             if ((tAttr['valType'] == 'url' || tAttr['valType'] == 'email') && $('html').hasClass('IE8') === false) {
-                tElem.attr('input',tAttr['valType']);
+                tElem.attr('input', tAttr['valType']);
             }
         }
     };
@@ -600,7 +600,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
             };
             return ctrObj;
         },
-        link: function(iScope, iElement, iAttrs, controllers) {
+        link: function(scope, iElement, iAttrs, controllers) {
             var playerRefresh = controllers[0];
             var ngController = null;
             if (iAttrs['playerRefresh'] != 'false') {
@@ -609,17 +609,17 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     ngController = controllers[1];
                     model = ngController.$modelValue;
                 }
-                if (!iScope.customRefresh) {
-                    iScope.updateFunction = playerRefresh.defUpdateFunction;
-                    iScope.controlFunction = playerRefresh.defControlFunction;
+                if (!scope.customRefresh) {
+                    scope.updateFunction = playerRefresh.defUpdateFunction;
+                    scope.controlFunction = playerRefresh.defControlFunction;
                 }
                 $timeout(function() {
-                    if (!iScope.customRefresh) {
-                        playerRefresh.defUpdateFunction(iScope, iElement);
+                    if (!scope.customRefresh) {
+                        playerRefresh.defUpdateFunction(scope, iElement);
                     }
                     else {
-                        if (!iScope.controlFunction) // if it returns true means we don't need controlUpdate
-                            iScope.updateFunction(iScope, iElement);
+                        if (!scope.controlFunction) // if it returns true means we don't need controlUpdate
+                            scope.updateFunction(scope, iElement);
                     }
                 }, 1000);
                 if (!ngController) {
@@ -627,28 +627,28 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                         return menuScope.$eval(model);
                     }, function(newVal, oldVal) {
                         if (newVal != oldVal) {
-                            iScope.modelChanged = true;
+                            scope.modelChanged = true;
                         } else {
-                            iScope.modelChanged = false;
+                            scope.modelChanged = false;
                         }
 
                     });
                 }
                 else {
                     ngController.$viewChangeListeners.push(function() {
-                        iScope.modelChanged = true;
+                        scope.modelChanged = true;
                     });
                 }
-                iScope.$watch(function() {
-                    if (!PlayerService.checkCurrentRefresh() && iScope.modelChanged && iScope.controlFunction())
+                scope.$watch(function() {
+                    if (!PlayerService.checkCurrentRefresh() && scope.modelChanged && scope.controlFunction())
                         return true;
                     else
                         return false;
-                }, function(val) {
-                    if (val) {
+                }, function(newVal, oldVal) {
+                    if ((newVal != oldVal) && newVal) {
                         if (PlayerService.playerRefresh(iAttrs['playerRefresh'])) {
-                            iScope.modelChanged = false;
-                            iScope.controlUpdateAllowed = false;
+                            scope.modelChanged = false;
+                            scope.controlUpdateAllowed = false;
                         }
                     }
                 });
