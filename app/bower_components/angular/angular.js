@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.2.8-build.2087+sha.affcbad
+ * @license AngularJS v1.2.9
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -68,7 +68,7 @@ function minErr(module) {
       return match;
     });
 
-    message = message + '\nhttp://errors.angularjs.org/1.2.8-build.2087+sha.affcbad/' +
+    message = message + '\nhttp://errors.angularjs.org/1.2.9/' +
       (module ? module + '/' : '') + code;
     for (i = 2; i < arguments.length; i++) {
       message = message + (i == 2 ? '?' : '&') + 'p' + (i-2) + '=' +
@@ -271,7 +271,8 @@ function isArrayLike(obj) {
  * is the value of an object property or an array element and `key` is the object property key or
  * array element index. Specifying a `context` for the function is optional.
  *
- * Note: this function was previously known as `angular.foreach`.
+ * It is worth nothing that `.forEach` does not iterate over inherited properties because it filters
+ * using the `hasOwnProperty` method.
  *
    <pre>
      var values = {name: 'misko', gender: 'male'};
@@ -1833,11 +1834,11 @@ function setupModuleLoader(window) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.2.8-build.2087+sha.affcbad',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.2.9',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 2,
-  dot: 8,
-  codeName: 'interdimensional-cartography'
+  dot: 9,
+  codeName: 'enchanted-articulacy'
 };
 
 
@@ -3399,7 +3400,7 @@ function annotate(fn) {
  * constructor function that will be used to instantiate the service instance.
  *
  * You should use {@link AUTO.$provide#methods_service $provide.service(class)} if you define your service
- * as a type/class. This is common when using {@link http://coffeescript.org CoffeeScript}.
+ * as a type/class.
  *
  * @param {string} name The name of the instance.
  * @param {Function} constructor A class (constructor function) that will be instantiated.
@@ -3407,20 +3408,25 @@ function annotate(fn) {
  *
  * @example
  * Here is an example of registering a service using
- * {@link AUTO.$provide#methods_service $provide.service(class)} that is defined as a CoffeeScript class.
+ * {@link AUTO.$provide#methods_service $provide.service(class)}.
  * <pre>
- *   class Ping
- *     constructor: (@$http) ->
- *     send: () =>
- *       @$http.get('/ping')
- *
- *   $provide.service('ping', ['$http', Ping])
+ *   $provide.service('ping', ['$http', function($http) {
+ *     var Ping = function() {
+ *       this.$http = $http;
+ *     };
+ *   
+ *     Ping.prototype.send = function() {
+ *       return this.$http.get('/ping');
+ *     }; 
+ *   
+ *     return Ping;
+ *   }]);
  * </pre>
  * You would then inject and use this service like this:
  * <pre>
- *   someModule.controller 'Ctrl', ['ping', (ping) ->
- *     ping.send()
- *   ]
+ *   someModule.controller('Ctrl', ['ping', function(ping) {
+ *     ping.send();
+ *   }]);
  * </pre>
  */
 
@@ -6786,8 +6792,7 @@ function $ControllerProvider() {
  * @requires $window
  *
  * @description
- * A {@link angular.element jQuery (lite)}-wrapped reference to the browser's `window.document`
- * element.
+ * A {@link angular.element jQuery or jqLite} wrapper for the browser's `window.document` object.
  */
 function $DocumentProvider(){
   this.$get = ['$window', function(window){
@@ -6946,9 +6951,9 @@ function $HttpProvider() {
       common: {
         'Accept': 'application/json, text/plain, */*'
       },
-      post:   CONTENT_TYPE_APPLICATION_JSON,
-      put:    CONTENT_TYPE_APPLICATION_JSON,
-      patch:  CONTENT_TYPE_APPLICATION_JSON
+      post:   copy(CONTENT_TYPE_APPLICATION_JSON),
+      put:    copy(CONTENT_TYPE_APPLICATION_JSON),
+      patch:  copy(CONTENT_TYPE_APPLICATION_JSON)
     },
 
     xsrfCookieName: 'XSRF-TOKEN',
@@ -7159,7 +7164,7 @@ function $HttpProvider() {
      * to `push` or `unshift` a new transformation function into the transformation chain. You can
      * also decide to completely override any default transformations by assigning your
      * transformation functions to these properties directly without the array wrapper.  These defaults
-     * are again available on the $http factory at run-time, which may be useful if you have run-time 
+     * are again available on the $http factory at run-time, which may be useful if you have run-time
      * services you wish to be involved in your transformations.
      *
      * Similarly, to locally override the request/response transforms, augment the
@@ -7938,7 +7943,7 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
         } else {
           completeRequest(callback, status || -2);
         }
-        delete callbacks[callbackId];
+        callbacks[callbackId] = angular.noop;
       });
     } else {
 
@@ -7968,11 +7973,12 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
 
           if(status !== ABORTED) {
             responseHeaders = xhr.getAllResponseHeaders();
-            response = xhr.responseType ? xhr.response : xhr.responseText;
+
+            // responseText is the old-school way of retrieving response (supported by IE8 & 9)
+            // response/responseType properties were introduced in XHR Level2 spec (supported by IE10)
+            response = ('response' in xhr) ? xhr.response : xhr.responseText;
           }
 
-          // responseText is the old-school way of retrieving response (supported by IE8 & 9)
-          // response/responseType properties were introduced in XHR Level2 spec (supported by IE10)
           completeRequest(callback,
               status || xhr.status,
               response,
@@ -8005,14 +8011,14 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
     }
 
     function completeRequest(callback, status, response, headersString) {
-      var protocol = urlResolve(url).protocol;
-
       // cancel timeout and subsequent timeout promise resolution
       timeoutId && $browserDefer.cancel(timeoutId);
       jsonpDone = xhr = null;
 
-      // fix status code for file protocol (it's always 0)
-      status = (protocol == 'file' && status === 0) ? (response ? 200 : 404) : status;
+      // fix status code when it is 0 (0 status is undocumented).
+      // Occurs when accessing file resources.
+      // On Android 4.1 stock browser it occurs while retrieving files from application cache.
+      status = (status === 0) ? (response ? 200 : 404) : status;
 
       // normalize IE bug (http://bugs.jquery.com/ticket/1450)
       status = status == 1223 ? 204 : status;
@@ -9126,7 +9132,7 @@ function $LocationProvider(){
    * Broadcasted before a URL will change. This change can be prevented by calling
    * `preventDefault` method of the event. See {@link ng.$rootScope.Scope#$on} for more
    * details about event object. Upon successful change
-   * {@link ng.$location#$locationChangeSuccess $locationChangeSuccess} is fired.
+   * {@link ng.$location#events_$locationChangeSuccess $locationChangeSuccess} is fired.
    *
    * @param {Object} angularEvent Synthetic event object.
    * @param {string} newUrl New URL
@@ -11836,7 +11842,7 @@ function $RootScopeProvider(){
 
           // `break traverseScopesLoop;` takes us to here
 
-          if(dirty && !(ttl--)) {
+          if((dirty || asyncQueue.length) && !(ttl--)) {
             clearPhase();
             throw $rootScopeMinErr('infdig',
                 '{0} $digest() iterations reached. Aborting!\n' +
@@ -12687,7 +12693,7 @@ function $SceDelegateProvider() {
      *
      * @param {*} value The result of a prior {@link ng.$sceDelegate#methods_trustAs `$sceDelegate.trustAs`}
      *      call or anything else.
-     * @returns {*} The value the was originally provided to {@link ng.$sceDelegate#methods_trustAs
+     * @returns {*} The `value` that was originally provided to {@link ng.$sceDelegate#methods_trustAs
      *     `$sceDelegate.trustAs`} if `value` is the result of such a call.  Otherwise, returns
      *     `value` unchanged.
      */
@@ -15199,12 +15205,10 @@ forEach(BOOLEAN_ATTR, function(propName, attrName) {
   ngAttributeAliasDirectives[normalized] = function() {
     return {
       priority: 100,
-      compile: function() {
-        return function(scope, element, attr) {
-          scope.$watch(attr[normalized], function ngBooleanAttrWatchAction(value) {
-            attr.$set(attrName, !!value);
-          });
-        };
+      link: function(scope, element, attr) {
+        scope.$watch(attr[normalized], function ngBooleanAttrWatchAction(value) {
+          attr.$set(attrName, !!value);
+        });
       }
     };
   };
@@ -17806,13 +17810,13 @@ var ngControllerDirective = [function() {
       </button>
       count: {{count}}
      </doc:source>
-     <doc:scenario>
+     <doc:protractor>
        it('should check ng-click', function() {
-         expect(binding('count')).toBe('0');
-         element('.doc-example-live :button').click();
-         expect(binding('count')).toBe('1');
+         expect(element(by.binding('count')).getText()).toMatch('0');
+         element(by.css('.doc-example-live button')).click();
+         expect(element(by.binding('count')).getText()).toMatch('1');
        });
-     </doc:scenario>
+     </doc:protractor>
    </doc:example>
  */
 /*
@@ -19775,11 +19779,9 @@ var ngSwitchWhenDirective = ngDirective({
   transclude: 'element',
   priority: 800,
   require: '^ngSwitch',
-  compile: function(element, attrs) {
-    return function(scope, element, attr, ctrl, $transclude) {
-      ctrl.cases['!' + attrs.ngSwitchWhen] = (ctrl.cases['!' + attrs.ngSwitchWhen] || []);
-      ctrl.cases['!' + attrs.ngSwitchWhen].push({ transclude: $transclude, element: element });
-    };
+  link: function(scope, element, attrs, ctrl, $transclude) {
+    ctrl.cases['!' + attrs.ngSwitchWhen] = (ctrl.cases['!' + attrs.ngSwitchWhen] || []);
+    ctrl.cases['!' + attrs.ngSwitchWhen].push({ transclude: $transclude, element: element });
   }
 });
 
@@ -19874,10 +19876,14 @@ var ngTranscludeDirective = ngDirective({
  * @restrict E
  *
  * @description
- * Load content of a script tag, with type `text/ng-template`, into `$templateCache`, so that the
- * template can be used by `ngInclude`, `ngView` or directive templates.
+ * Load the content of a `<script>` element into {@link api/ng.$templateCache `$templateCache`}, so that the
+ * template can be used by {@link api/ng.directive:ngInclude `ngInclude`},
+ * {@link api/ngRoute.directive:ngView `ngView`}, or {@link guide/directive directives}. The type of the
+ * `<script>` element must be specified as `text/ng-template`, and a cache name for the template must be
+ * assigned through the element's `id`, which can then be used as a directive's `templateUrl`.
  *
- * @param {'text/ng-template'} type must be set to `'text/ng-template'`
+ * @param {'text/ng-template'} type Must be set to `'text/ng-template'`.
+ * @param {string} id Cache name of the template.
  *
  * @example
   <doc:example>
@@ -20041,8 +20047,8 @@ var ngOptionsMinErr = minErr('ngOptions');
 var ngOptionsDirective = valueFn({ terminal: true });
 // jshint maxlen: false
 var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
-                         //0000111110000000000022220000000000000000000000333300000000000000444444444444444000000000555555555555555000000066666666666666600000000000000007777000000000000000000088888
-  var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/,
+                         //000011111111110000000000022222222220000000000000000000003333333333000000000000004444444444444440000000005555555555555550000000666666666666666000000000000000777777777700000000000000000008888888888
+  var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/,
       nullModelCtrl = {$setViewValue: noop};
 // jshint maxlen: 100
 

@@ -113,12 +113,15 @@ body div.section#edit {
           font-size: 180%;
           //    border-bottom: 2px solid #eee;
           opacity: 0.18;
+          -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=18)";
           &:hover {
             opacity: 0.5;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
             text-decoration: none;
           }
           &.active {
             opacity: 1;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
           }
         }
       }

@@ -102,7 +102,7 @@ module.exports = function(grunt) {
                     'app/lib/respond.min.js',
                     'app/lib/es5-shim.min.js',
                     'bower_components/selectivizr/selectivizr.js',
-                    'app/bower_components/jquery/jquery-1.10.2.min.js',
+                    'app/lib/jquery-1.10.2.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.mouse.min.js',
@@ -127,6 +127,13 @@ module.exports = function(grunt) {
                     '_dist/main.min.js': '_dist/main.js',
                     '_dist/lib/libs.min.js': '_dist/lib/libs.js'
                 }
+            },
+            libs:{
+                files:{
+                    'app/bower_components/angular-ui-select2/src/select2.min.js':'app/bower_components/angular-ui-select2/src/select2.js',
+                    'app/bower_components/angular-ui-sortable/src/sortable.min.js':'app/bower_components/angular-ui-sortable/src/sortable.js'
+                }
+
             }
         },
         cssmin: {
@@ -261,6 +268,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task.
-    grunt.registerTask('default', ['jshint:dev', 'clean:build', 'less', 'copy', 'cssmin', 'ngmin:dist', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
+    grunt.registerTask('default', ['jshint:dev', 'clean:build', 'less', 'copy', 'cssmin', 'ngmin:dist', 'uglify:libs', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
 
 };

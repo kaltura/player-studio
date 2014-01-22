@@ -1,26 +1,19 @@
 {
-  "author": "AngularUI Team",
   "name": "angular-ui-utils",
-  "description": "AngularUI Utilities - Companion Suite for AngularJS",
-  "version": "0.0.4",
-  "homepage": "http://angular-ui.github.com",
+  "version": "0.1.0",
   "main": "./modules/utils.js",
   "dependencies": {
     "angular": ">= 1.0.2"
   },
-  "devDependencies": {
-    "angular-mocks": "~1.0.5",
-    "jquery": ">=1.6",
-    "angular-ui-docs": "angular-ui/angular-ui-docs"
-  },
-  "_release": "0.0.4",
+  "homepage": "https://github.com/angular-ui/ui-utils",
+  "_release": "0.1.0",
   "_resolution": {
     "type": "version",
-    "tag": "v0.0.4",
-    "commit": "fa7e14e6cb254b3166ff36060f30ed69b54e7152"
+    "tag": "v0.1.0",
+    "commit": "6641b0a951671d8f6e3b052157b221d6da248ff3"
   },
   "_source": "git://github.com/angular-ui/ui-utils.git",
-  "_target": "~0.0.4",
+  "_target": "~0.1.0",
   "_originalSource": "angular-ui-utils",
   "_direct": true
 }

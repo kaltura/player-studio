@@ -85,6 +85,7 @@ angular.module('localization', [])
 
                 // checks the dictionary for a localized resource string
                 getLocalizedString: function (value, SyncAction) {
+                   // return value; // for debuggin
                     //  Contextualize missing translation
                     var translated = '!' + value + '!';                        //  check to see if the resource file has been loaded
                     if (!localize.resourceFileLoaded && !SyncAction) {

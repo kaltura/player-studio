@@ -37,7 +37,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     'service': 'uiConf',
                     'action': 'delete',
                     'id': localStorageService.get('tempPlayerID')
-                }
+                };
                 apiService.doRequest(deletePlayerRequest).then(function(data) {
                     localStorageService.remove('tempPlayerID');
                 });
@@ -77,7 +77,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             };
             $scope.sortBy = function(colName) {
                 $scope.sort.sortCol = colName;
-                $scope.sort.reverse = !$scope.sort.reverse
+                $scope.sort.reverse = !$scope.sort.reverse;
             };
             $scope.checkVersionNeedsUpgrade = function(item) {
                 var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL

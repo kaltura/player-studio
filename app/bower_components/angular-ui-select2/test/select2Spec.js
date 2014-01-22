@@ -22,69 +22,67 @@ describe('uiSelect2', function () {
   'use strict';
 
   var scope, $compile, options, $timeout;
-  beforeEach(module('ui.select2'), module("templates"));
+  beforeEach(module('ui.select2'));
   beforeEach(inject(function (_$rootScope_, _$compile_, _$window_, _$timeout_) {
-      scope = _$rootScope_.$new();
-      $compile = _$compile_;
-      $timeout = _$timeout_;
-      scope.options = {
-          query: function (query) {
-              var data = {
-                  results: [
-                      { id: 1, text: 'first' }
-                  ]
-              };
-              query.callback(data);
-          }
-      };
+    scope = _$rootScope_.$new();
+    $compile = _$compile_;
+    $timeout = _$timeout_;
+    scope.options = {
+      query: function (query) {
+        var data = {
+          results: [{ id: 1, text: 'first' }]
+        };
+        query.callback(data);
+      }
+    };
 
-      scope.transformers = {
-          fromModel: function (modelValue) {
-              if (!modelValue) {
-                  return modelValue;
-              }
+    scope.transformers = {
+      fromModel: function (modelValue) {
+        if (!modelValue) {
+          return modelValue;
+        }
 
-              if (angular.isArray(modelValue)) {
-                  return modelValue.map(function (val) {
-                      val.text += " - I've been formatted";
-                      return val;
-                  });
-              }
+        if (angular.isArray(modelValue)) {
+          return modelValue.map(function (val) {
+            val.text += " - I've been formatted";
+            return val;
+          });
+        }
 
-              if (angular.isObject(modelValue)) {
-                  modelValue.text += " - I've been formatted";
-                  return modelValue;
-              }
+        if (angular.isObject(modelValue)) {
+          modelValue.text += " - I've been formatted";
+          return modelValue;
+        }
 
-              return modelValue + " - I've been formatted";
-          },
-          fromElement: function (elementValue) {
-              var suffix = " - I've been formatted";
+        return modelValue + " - I've been formatted";
+      },
+      fromElement: function (elementValue) {
+        var suffix = " - I've been formatted";
 
-              if (!elementValue) {
-                  return elementValue;
-              }
+        if (!elementValue) {
+          return elementValue;
+        }
 
-              if (angular.isArray(elementValue)) {
-                  return elementValue.map(function (val) {
-                      val.text += val.text.slice(0, val.text.indexOf(" - I've been formatted"));
-                      return val;
-                  });
-              }
+        if (angular.isArray(elementValue)) {
+          return elementValue.map(function (val) {
+            val.text += val.text.slice(0, val.text.indexOf(" - I've been formatted"));
+            return val;
+          });
+        }
 
-              if (angular.isObject(elementValue)) {
-                  elementValue.text = elementValue.text.slice(0, elementValue.text.indexOf(suffix));
-                  return elementValue;
-              }
+        if (angular.isObject(elementValue)) {
+          elementValue.text = elementValue.text.slice(0, elementValue.text.indexOf(suffix));
+          return elementValue;
+        }
 
-              if (elementValue) {
-                  return elementValue.slice(0, elementValue.indexOf(suffix));
-              }
+        if (elementValue) {
+          return elementValue.slice(0, elementValue.indexOf(suffix));
+        }
 
-              return undefined;
-          }
-      };
-  }), module("templates"));
+        return undefined;
+      }
+    };
+  }));
 
   /**
    * Compile a template synchronously
@@ -347,11 +345,11 @@ describe('uiSelect2', function () {
 
     describe('simple_tags', function() {
 
-      beforeEach(function () {
-          scope.options['multiple'] = true;
-          scope.options['simple_tags'] = true;
-          scope.options['tags'] = [];
-      }, module("templates"));
+      beforeEach(function() {
+        scope.options['multiple'] = true;
+        scope.options['simple_tags'] = true;
+        scope.options['tags'] = [];
+      });
 
       it('Initialize the select2 view based on list of strings.', function() {
         scope.foo = ['tag1', 'tag2'];

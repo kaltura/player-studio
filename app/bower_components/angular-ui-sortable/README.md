@@ -1,4 +1,4 @@
-# ui-sortable directive [![Build Status](https://travis-ci.org/angular-ui/ui-sortable.png)](https://travis-ci.org/angular-ui/ui-sortable)
+# UI.Sortable directive [![Build Status](https://travis-ci.org/angular-ui/ui-sortable.png)](https://travis-ci.org/angular-ui/ui-sortable)
 
 This directive allows you to sort array with drag & drop.
 
@@ -6,6 +6,9 @@ This directive allows you to sort array with drag & drop.
 
 - JQuery
 - JQueryUI
+- AngularJS 1.0.x
+
+**Note for AngularJS 1.2 users:** Use the separate branch `angular1.2`.
 
 ## Usage
 
@@ -61,7 +64,7 @@ Inside the `update` callback, you can check the item that is dragged and cancel 
 $scope.sortableOptions = {
   update: function(e, ui) {
     if (ui.item.scope().item == "can't be moved") {
-      ui.item.sortable.cancel();
+      ui.item.parent().sortable('cancel');
     }
   }
 };
@@ -70,3 +73,40 @@ $scope.sortableOptions = {
 **Note:** `update` occurs before any model/scope changes but after the DOM position has been updated.
 So `ui.item.scope` and the directive's `ng-model`, are equal to the scope before the drag start.
 
+## Reporting Issues
+
+The following pen's are provided as a good starting point to demonstrate issues, proposals and use cases.
+Feel free to edit any of them for your needs (don't forget to also update the libraries used to your version).
+
+- [Simple Demo](http://codepen.io/thgreasi/pen/BlFLp)
+- [Connected Lists](http://codepen.io/thgreasi/pen/apwsb)
+
+
+## Testing
+
+We use Karma and jshint to ensure the quality of the code.  The easiest way to run these checks is to use grunt:
+
+```sh
+npm install -g grunt-cli
+npm install && bower install
+grunt
+```
+
+The karma task will try to open Firefox and Chrome as browser in which to run the tests.  Make sure this is available or change the configuration in `test\karma.conf.js`
+
+
+### Grunt Serve
+
+We have one task to serve them all !
+
+```sh
+grunt serve
+```
+
+It's equal to run separately:
+
+* `grunt connect:server` : giving you a development server at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+
+* `grunt karma:server` : giving you a Karma server to run tests (at [http://localhost:9876/](http://localhost:9876/) by default). You can force a test on this server with `grunt karma:unit:run`.
+
+* `grunt watch` : will automatically test your code and build your demo.  You can demo generation with `grunt build:gh-pages`.
