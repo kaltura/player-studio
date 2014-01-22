@@ -14,19 +14,19 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             // get studio UICONF to setup studio configuration
             var config = null;
 
-            try{
+            try {
                 var kmc = window.parent.kmc;
                 if (kmc && kmc.vars && kmc.vars.studio.config) {
                     config = kmc.vars.studio.config;
                     $scope.UIConf = angular.fromJson(config);
                 }
-            }catch(e){
+            } catch (e) {
                 $log.error('Could not located parent.kmc: ' + e);
             }
 
             // if we didin't get the uiconf from kmc.vars - load the configuration from base.ini
-            if (!config){
-                loadINI.getINIConfig().success(function (data) {
+            if (!config) {
+                loadINI.getINIConfig().success(function(data) {
                     $scope.UIConf = data;
                 });
             }
@@ -50,7 +50,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $scope.calculateTotalItems();
                 PlayerService.cachePlayers(data.objects);
             });
-            $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
+            $scope.filtered = $filter('filter')($scope.data, $scope.search) || $scope.data;
             $scope.requiredVersion = PlayerService.getRequiredVersion();
             $scope.calculateTotalItems = function() {
                 if ($scope.filtered)
@@ -59,7 +59,14 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     $scope.totalItems = $scope.data.length;
                 }
             };
-
+            $scope.sort = {
+                sortCol: 'name',
+                reverse: false
+            };
+            $scope.sortBy = function(colName) {
+                $scope.sort.sortCol = colName;
+                $scope.sort.reverse = !$scope.sort.reverse
+            };
             $scope.checkVersionNeedsUpgrade = function(item) {
                 var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL
                 return (html5libVersion == "1" || item.config === null); // need to upgrade if the version is lower than 2 or the player doesn't have a config object

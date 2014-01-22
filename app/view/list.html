@@ -31,23 +31,34 @@
         </div>
         <div id='playerList' class="scrollerWrap maxViewPort">
             <div class="row" id="tableHead">
-                <!--<div class="col-xs-2">{{'Preview'| i18n }}</div>-->
-                <div class="col-xs-5">{{ 'Name' | i18n }}</div>
-                <div class="col-xs-2  text-center">{{ 'ID' | i18n }}</div>
-                <div class="col-xs-2 text-center col-lg-1 ">{{ 'Save Date' | i18n }}</div>
-                <div class="col-lg-1 text-center visible-lg">{{ 'Creation Date' | i18n }}</div>
-                <div class="pull-right text-center col-xs-3  ">{{ 'Actions' | i18n }}
+                <div class="col-xs-2">{{'Preview'| i18n }}</div>
+                <div class="col-xs-3"><a data-ng-click="sortBy('name')"> {{ 'Name' | i18n }}
+                    <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='name' && sort.reverse==false),
+                'glyphicon-chevron-up':(sort.sortCol=='name' && sort.reverse == true)}"></i>
+                </a>
+                </div>
+                <div class="idCol pull-left text-center">{{ 'ID' | i18n }}</div>
+                <div class="col-xs-2 text-center "><a data-ng-click="sortBy('updatedAt')"> {{ 'Save Date' | i18n }}
+                    <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='updatedAt' && sort.reverse==false),
+                'glyphicon-chevron-up':(sort.sortCol=='updatedAt' && sort.reverse == true)}"></i>
+                </a></div>
+                <div class="col-lg-1 text-center visible-lg"><a data-ng-click="sortBy('createdAt')">{{ 'Creation Date' |
+                    i18n }}
+                    <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='createdAt' && sort.reverse==false),
+                'glyphicon-chevron-up':(sort.sortCol=='createdAt' && sort.reverse == true)}"></i>
+                </a></div>
+                <div class="text-center ">{{ 'Actions' | i18n }}
                 </div>
             </div>
             <div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
                 <table id="listTable">
                     <tbody>
                     <tr class="row repeat-animation" on-finish-render
-                        ng-repeat="item in filtered = (data| filter:search) |  startFrom:(currentPage - 1) * maxSize | limitTo:maxSize">
-                        <!--<td class=" playerThumbWrapper col-xs-2">-->
-                            <!--<img class="playerThumb" ng-src="{{getThumbnail(item)}}"/>-->
-                        <!--</td>-->
-                        <td class="col-xs-5"><a data-ng-click="goToEditPage(item,$event)"
+                        ng-repeat="item in filtered =  (data| filter:search) | startFrom:(currentPage - 1) * maxSize | limitTo:maxSize | orderBy:sort.sortCol:sort.reverse  track by item.id">
+                        <td class=" playerThumbWrapper col-xs-2">
+                            <img class="playerThumb" ng-src="{{getThumbnail(item)}}"/>
+                        </td>
+                        <td class="col-xs-3"><a data-ng-click="goToEditPage(item,$event)"
                                                 ng-href="edit/{{item.id}}">{{item.name}}</a>
 
                             <div class="row alertsWrapper">
@@ -58,14 +69,14 @@
                             </span>
                             </div>
                         </td>
-                        <td class="col-xs-2   text-center ">{{item.id}}</td>
-                        <td class="col-xs-2 text-center  col-lg-1"><span class="timeago"
-                                                                         timestamp="{{item.createdAt}}"></span>
+                        <td class="idCol text-center">{{item.id}}</td>
+                        <td class="col-xs-2 text-center"><span class="timeago"
+                                                               timestamp="{{item.createdAt}}"></span>
                         </td>
                         <td class="visible-lg text-center col-lg-1"><span class="timeago"
                                                                           timestamp="{{item.updatedAt}}"></span>
                         </td>
-                        <td class="actionBtns  col-xs-3  ">
+                        <td class="actionBtns   ">
                             <div class="inner">
                                 <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
                                         class="icon-copy"></span> {{'Duplicate'| i18n}}
@@ -79,10 +90,6 @@
                                     {{'Update'|
                                     i18n}}
                                 </button>
-                            <span ng-show="!checkVersionNeedsUpgrade(item)">
-                                <i class="icon-checkmark-circle"
-                                   tooltip="{{'The player version is upto date'|i18n}}"></i><span>Updated</span>
-                            </span>
                             </div>
                         </td>
                     </tr>

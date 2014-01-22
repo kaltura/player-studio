@@ -1,5 +1,5 @@
 /*global module:false*/
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -138,6 +138,22 @@ module.exports = function (grunt) {
 
             }
         },
+        watch: {
+            options: {
+                interrupt: true,
+                debounceDelay: 500,
+                livereload: true
+
+            },
+            less: {
+                files: ['app/less/*'],
+                tasks: 'less:development'
+
+            },
+            html:{
+                files: ['app/view/*']
+            }
+        },
         copy: {
             main: {
                 files: [
@@ -199,7 +215,7 @@ module.exports = function (grunt) {
             }
         },
         less: {
-            bootstrap:{
+            bootstrap: {
                 files: {'app/bower_components/bootstrap/dist/css/bootstrap.min.css': 'app/bower_components/bootstrap/less/bootstrap.less'},
                 options: {
                     compress: true,
@@ -242,6 +258,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task.
     grunt.registerTask('default', ['jshint:dev', 'clean:build', 'less', 'copy', 'cssmin', 'ngmin:dist', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);

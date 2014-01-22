@@ -72,6 +72,9 @@ html {
       padding-bottom: 80px;
 
     }
+    .idCol{
+      width:70px;
+    }
     height: 82%;
     margin-top: 50px;
     @media (max-width: 480px) {
@@ -87,6 +90,7 @@ html {
       margin: 0;
       margin-bottom: 10px;
       div {
+        a{color:#333;}
         padding: 0;
         white-space: nowrap;
         font-weight: bold;
@@ -98,6 +102,13 @@ html {
       }
       td {
         padding: 4px;
+      }
+      td:first-child{
+        padding-left: 0px;
+      }
+
+      td:last-child{
+        padding-right: 0px;
       }
       border-bottom: 2px solid #ebf1f4;
       > div {
