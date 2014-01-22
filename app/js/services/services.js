@@ -149,9 +149,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 				apiService.doRequest(request).then(function (data) {
 					currentPlayer = data;
+                    localStorageService.set('tempPlayerID', data.id);
 					deferred.resolve(data);
 				}, function (reason) {
-					deferred.reject(reason); //TODO: how to display the error...
+					deferred.reject(reason);
 				});
 				return deferred.promise;
 
