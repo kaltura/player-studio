@@ -84,6 +84,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                         // cleanup
 						menuSvc.menuScope.playerEdit.$dirty = false;
 						$scope.masterData = angular.copy($scope.data);
+                        localStorageService.remove('tempPlayerID');
                         // if this is a new player - add it to the players list
 						if ($scope.newPlayer){
                             // prevent the list controller from using the cache the next time the list loads

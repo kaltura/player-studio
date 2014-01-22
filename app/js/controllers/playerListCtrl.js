@@ -31,6 +31,18 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 });
             }
 
+            // delete temp players if exists in cache (plaers that were created but not saved
+            if (localStorageService.get('tempPlayerID')){
+                var deletePlayerRequest = {
+                    'service': 'uiConf',
+                    'action': 'delete',
+                    'id': localStorageService.get('tempPlayerID')
+                }
+                apiService.doRequest(deletePlayerRequest).then(function(data) {
+                    localStorageService.remove('tempPlayerID');
+                });
+            }
+
             // get players list from KMC
             var playersRequest = {
                 'filter:tagsMultiLikeOr': 'kdp3,html5studio',
@@ -50,6 +62,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $scope.calculateTotalItems();
                 PlayerService.cachePlayers(data.objects);
             });
+
             $scope.filtered = $filter('filter')($scope.data, $scope.search) || [];
             $scope.requiredVersion = PlayerService.getRequiredVersion();
             $scope.calculateTotalItems = function() {
