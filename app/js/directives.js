@@ -449,6 +449,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
     return {
         replace: true,
         restrict: 'EA',
+        priority: 1,
         require: '?parentContainer',
         scope: {
             label: '@',
@@ -566,16 +567,16 @@ DirectivesModule.directive('sortOrder', [
         };
     }
 ]);
-DirectivesModule.directive('makePlayerRefresh', function ($timeout) {
-    return {
-        priority: -1,
-        compile: function (tElement, tAttrs) {
-            $timeout(function () {
-                $(tElement).find('[ng-model]').attr('player-refresh', tAttrs['makePlayerRefresh']);
-            });
-        }
-    };
-});
+//DirectivesModule.directive('makePlayerRefresh', function ($timeout) {
+//    return {
+//        priority: 0,
+//        compile: function (tElement, tAttrs) {
+//            $timeout(function () {
+//                $(tElement).find('[ng-model]').attr('player-refresh', tAttrs['makePlayerRefresh']);
+//            });
+//        }
+//    };
+//});
 DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', function (PlayerService, menuSvc, $timeout) {
     var menuScope = menuSvc.menuScope;
     return {
@@ -584,30 +585,47 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
         require: ['playerRefresh', '?ngModel'],
         controller: function ($scope, $element, $attrs) {
             $scope.customRefresh = false;
-            $scope.modelChanged = false;
-            $scope.controlUpdateAllowed = false;
+            $scope.modelChanged = false; // used to track the model
+            $scope.controlUpdateAllowed = false; // used to track the input control, for example it changes to true only if text field has had a blur event
+            $scope.controlFunction = function () {
+                if ($attrs['playerRefresh'] == 'boolean') { // boolean controls don't need the extra watch so with that flag we just watch the model
+                    return $scope.modelChanged;
+                } else
+                    return  ($scope.modelChanged && $scope.controlUpdateAllowed)
+            };
+            $scope.updateFunction = function (prScope, elem) { // the function used to set controlUpdateAllowed - works for text inputs etc.
+                // a custom function can be set with setUpdateFunction
+                var triggerElm;
+                if (elem.is('input') || elem.is('select')) {
+                    triggerElm = elem;
+                }
+                else {
+                    triggerElm = $(elem).find('input[ng-model], select[ng-model]');
+                }
+                triggerElm.on('change', function (e) {
+                    prScope.controlUpdateAllowed = true;
+                });
+            };
+            var i = 0;
+            $scope.makeRefresh = function () { // once set to action it will refresh!
+                if (PlayerService.playerRefresh($attrs['playerRefresh'])) {
+                    //reset all params;
+                    i = 0;
+                    $scope.modelChanged = false;
+                    $scope.controlUpdateAllowed = false;
+                } else { // we  initiated a call but the player is still not finished rendering, we will try 10 time;
+                    while (i < 10) {
+                        i++;
+                        $timeout(function () {
+                            $scope.makeRefresh();
+                        }, 500)
+                    }
+                }
+            };
             var ctrObj = {
-                defUpdateFunction: function (prScope, elem) {
-                    var triggerElm;
-                    if (elem.is('input') || elem.is('select')) {
-                        triggerElm = elem;
-                    }
-                    else {
-                        triggerElm = $(elem).find('input[ng-model], select[ng-model]');
-                    }
-                    triggerElm.on('change', function (e) {
-                        prScope.controlUpdateAllowed = true;
-                    });
-                },
                 setUpdateFunction: function (func) {
                     $scope.customRefresh = true;
                     $scope.updateFunction = func;
-                },
-                defControlFunction: function () {
-                    if ($attrs['playerRefresh'] == 'boolean') {
-                        return true;
-                    } else
-                        return  $scope.controlUpdateAllowed;
                 },
                 setControlFunction: function (func) {
                     $scope.customRefresh = true;
@@ -628,24 +646,11 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     ngController = controllers[1];
                     model = ngController.$modelValue;
                 }
-                if (!scope.customRefresh) {
-                    scope.updateFunction = playerRefresh.defUpdateFunction;
-                    scope.controlFunction = playerRefresh.defControlFunction;
-                }
-                $timeout(function () {
-                    if (!scope.customRefresh) {
-                        playerRefresh.defUpdateFunction(scope, iElement);
-                    }
-                    else {
-                        if (!scope.controlFunction) // if it returns true means we don't need controlUpdate
-                            scope.updateFunction(scope, iElement);
-                    }
-                }, 1000);
                 if (!ngController) {
                     menuScope.$watch(function (menuScope) {
                         return menuScope.$eval(model);
                     }, function (newVal, oldVal) {
-                        if ((newVal != oldVal ) && typeof oldVal != 'undefined') {
+                        if (newVal != oldVal) {
                             scope.modelChanged = true;
                         } else {
                             scope.modelChanged = false;
@@ -658,23 +663,19 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                         scope.modelChanged = true;
                     });
                 }
-                scope.$watch(function () {
-                    if (!PlayerService.checkCurrentRefresh() && scope.modelChanged && scope.controlFunction())
-                        return true;
-                    else
-                        return false;
-                }, function (newVal, oldVal) {
-                    if ((newVal != oldVal) && newVal) {
-                        if (PlayerService.playerRefresh(iAttrs['playerRefresh'])) {
-                            scope.modelChanged = false;
-                            scope.controlUpdateAllowed = false;
+                $timeout(function () { // set the timeout to call the updateFunction watch
+                    scope.updateFunction(scope, iElement);//optional  parameters
+                    scope.$watch(function () {
+                        return scope.controlFunction(scope);//optional scope parameter
+                    }, function (newVal, oldVal) {
+                        if (newVal != oldVal) {
+                            scope.makeRefresh();
                         }
-                    }
-                });
+                    });
+                }, 1000);
             }
         }
-    }
-        ;
+    };
 }])
 ;
 DirectivesModule.directive('infoAction', ['menuSvc', function (menuSvc) {
@@ -813,10 +814,11 @@ DirectivesModule.directive('modelCheckbox', function () {
             }
             return function ($scope, $element, $attrs, playerRefreshCnt) {
                 if (playerRefreshCnt) {
-                    playerRefreshCnt.setControlFunction(function () {
-                        return true;
+                    if ($attrs['playerRefresh'] != 'boolean')
+                        $element.attr('player-refresh', 'boolean');
+                    playerRefreshCnt.setUpdateFunction(function (pRscope) { // scope here is pRscope.
+                        pRscope.controlUpdateAllowed = true; // checkbox doesn't need a control watcher, the model is enough.
                     });
-                    playerRefreshCnt.getPrScope().customRefresh = true;
                 }
             };
         },

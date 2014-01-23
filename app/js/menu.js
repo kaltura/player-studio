@@ -246,8 +246,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     }
                     if (strDirective) {
                         if (item['player-refresh'] !== false) { // undefined is also triggering player-refresh
-                            if (refreshableDirectives(strDirective))
-                                elm.attr('make-player-refresh', ( item['player-refresh'] || true));
+                            if (refreshableDirectives(strDirective)){
+                                if (item.type == 'checkbox'){
+                                    elm.attr('player-refresh', ( 'boolean'));
+                                }else
+                                elm.attr('player-refresh', ( item['player-refresh'] || true));
+                            }
                         }
                     }
                     angular.forEach(item, function (value, key) {
