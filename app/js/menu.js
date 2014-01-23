@@ -245,13 +245,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         elm.attr('model', 'data.' + item.model);
                     }
                     if (strDirective) {
-                        if (typeof item['player-refresh'] == 'undefined' || item['player-refresh'] == 'true') {
+                        if (item['player-refresh'] !== false) { // undefined is also triggering player-refresh
                             if (refreshableDirectives(strDirective))
-                                elm.attr('player-refresh', 'true');
+                                elm.attr('make-player-refresh', ( item['player-refresh'] || true));
                         }
                     }
                     angular.forEach(item, function (value, key) {
-                        if (key != 'model' && (typeof value == 'string' || typeof value == 'number' || typeof value == 'boolean')) {
+                        if (key != 'model' && key != 'player-refresh' && (typeof value == 'string' || typeof value == 'number' || typeof value == 'boolean')) {
                             elm.attr(key, value);
                         }
                     });
@@ -278,7 +278,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                                 lastMenu = foundLabel.substr(0, lastChild);
                             }
                         }
-                        menuSvc.menuScope.$broadcast('highlight', 'data.'+foundModel);
+                        menuSvc.menuScope.$broadcast('highlight', 'data.' + foundModel);
                         menuSvc.setMenu(menuPage.model);
                         if (featureMenu.length) {
                             angular.forEach(featureMenu, function (value) {

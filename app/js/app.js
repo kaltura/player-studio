@@ -12,8 +12,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
-        $routeProvider
-        //request loading indication//
+        //request load158ing indication//
         var $http, interceptor = ['$q', '$injector',
             function ($q, $injector) {
                 var notificationChannel;
@@ -165,8 +164,5 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $rootScope.$on('$routeChangeSuccess', function () {
             var url = $location.url().split('/');
             $rootScope.routeName = url[1];
-        })
+        });
     });
-
-
-

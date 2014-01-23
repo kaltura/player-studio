@@ -72,8 +72,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var previewEntryObj;
         var playerId = 'kVideoTarget';
         var currentRefresh = false;
+        var nextRefresh = false;
         var callback = function() {
             currentRefresh = false;
+            if (nextRefresh) {
+                nextRefresh = false;
+                playersService.renderPlayer(callback);
+            }
         };
         var playerRefresh = function(option) {
             if (!currentRefresh) {
@@ -84,6 +89,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 playersService.renderPlayer(callback);
                 return true;
             }
+            nextRefresh = true;
             return false;
         };
         var playersService = {
