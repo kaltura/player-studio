@@ -27,6 +27,9 @@
                 "placeholder": "Enter player description"
             },
             {
+                "type": "divider"
+            },
+            {
                 "label": "Player Tags",
                 "type": "tags",
                 "helpnote": "tags and bugs",

@@ -837,6 +837,13 @@ DirectivesModule.directive('modelCheckbox', function () {
         }
     };
 });
+DirectivesModule.directive('divider', [function () {
+    return {
+        replace: true,
+        restrict: 'EA',
+        template: '<hr class="divider"/>'
+    }
+}]);
 DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
     return {
         restrict: 'EA',
@@ -854,7 +861,7 @@ DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
                 if (typeof $scope.model == 'undefined' || $scope.model === '')
                     $scope.model = $attrs['initvalue'];
             }
-            $scope.label = $attrs.label+':';
+            $scope.label = $attrs.label + ':';
         }],
         templateUrl: 'template/formcontrols/readOnly.html'
     };

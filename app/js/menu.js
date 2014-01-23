@@ -96,6 +96,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             switch (jsonName) {
                 case 'modaledit' :
                     return '<div model-edit/>';
+                case 'divider' :
+                    return '<div divider/>';
                 case 'tags' :
                     return '<div model-tags/>';
                 case 'select2data' :
