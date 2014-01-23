@@ -421,9 +421,20 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             scope: {'data': '=', 'settings': '=', menuInitDone: '='},
             transclude: true,
             compile: function (tElement, tAttrs, transclude) {
-                var menuElem = tElement.find('ul[ng-transclude]:first');
+                var menuElem = tElement.find('#mp-base >  ul');
                 var menuData = menuSvc.buildMenu('data');
                 return function ($scope, $element) {
+                    transclude($scope, function (clone) {
+                        angular.forEach(clone, function (elem) {
+                            if ($(elem).is('li')) {
+                                menuElem.append(elem);
+                            }
+                            else {
+                                $(elem).prependTo(tElement);
+                            }
+                        });
+                        //clone.remove();
+                    });
                     $compile(menuData.contents())($scope, function (clone) { // goes back to the controller
                         menuElem.prepend(clone);
                     });
@@ -449,8 +460,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                 menuSvc.menuScope = $scope;
             }]
 
-        };
-    }]).controller('menuSearchCtl', ['$scope', 'menuSvc', function ($scope, menuSvc) {
+        }
+            ;
+    }]).
+    controller('menuSearchCtl', ['$scope', 'menuSvc', function ($scope, menuSvc) {
         var menuObj = menuSvc.get();
         $scope.menuData = [];
         $scope.checkSearch = function (val) {

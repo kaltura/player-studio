@@ -6,40 +6,38 @@
     </div>
     <!-- </menu-head>-->
     <div id="outerWrap">
-        <div id="mp-pusher"  ng-controller="menuCntrl">
+        <div id="mp-pusher" ng-controller="menuCntrl">
             <!--mp-menu-->
             <div navmenu data="data" ng-show="menuInitDone">
-                <div menu-level pagename='search' label='Menu Search'>
-                    <li class="nohover ">
-                        <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
-                              ng-submit="searchMenuFn(value)" role="search">
-                            <div class="form-group ">
-                                <div class="input-group merged">
-                                    <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
-                                    <input typeahead-on-select="checkSearch()" ng-change="checkSearch()" type="text"
-                                           typeahead="item for item in menuData | filter:$viewValue "
-                                           data-typeaheadOnSelect="checkSearch()"
-                                           class="form-control forceRightRadius"
-                                           placeholder="{{'Search for menu property'| i18n}}"
-                                           ng-model='menuSearch'/>
-                                </div>
+                <li class="nohover " menu-level pagename='search' label='Menu Search'>
+                    <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
+                          ng-submit="searchMenuFn(value)" role="search">
+                        <div class="form-group ">
+                            <div class="input-group merged">
+                                <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
+                                <input typeahead-on-select="checkSearch()" ng-change="checkSearch()" type="text"
+                                       typeahead="item for item in menuData | filter:$viewValue "
+                                       data-typeaheadOnSelect="checkSearch()"
+                                       class="form-control forceRightRadius"
+                                       placeholder="{{'Search for menu property'| i18n}}"
+                                       ng-model='menuSearch'/>
+                            </div>
                         <span class="help-block"
                               ng-show="notFound">{{ 'The property was not found '| i18n}}</span>
-                            </div>
-                        </form>
-                    </li>
-                </div>
+                        </div>
+                    </form>
+                </li>
                 <!--</menu-level>-->
             </div>
             <!--</navmenu>-->
             <!-- /mp-menu -->
-            <div id="menuTriggerWrap">
-                <a class="menu-trigger" data-ng-click="togglemenu($event)">
-                    <i class="icon-Close"></i>
-                    <span class="sr-only">{{'Toggle navigation'| i18n}}</span>
-                </a>
-            </div>
             <div class="wrapper" ng-controller="editPageDataCntrl">
+                <div id="menuTriggerWrap" ng-show="$parent.menuInitDone">
+                    <a class="menu-trigger" data-ng-click="togglemenu($event)">
+                        <i class="icon-Close"></i>
+                        <span class="sr-only">{{'Toggle navigation'| i18n}}</span>
+                    </a>
+                </div>
                 <div id='headerRow' class="container padTop">
                     <span class="pull-right">
                          <button ng-click="cancel()"
