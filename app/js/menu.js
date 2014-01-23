@@ -28,6 +28,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope)
         $('#mp-pusher >.wrapper').animate({'width': '70%'}, { duration: 200, queue: true });
     };
     $scope.menuShown = true; //initial value
+    $scope.menuInitDone = false;
     resetMenu();
     $(window).resize(function () {
         if ($scope.menuShown === true)
@@ -246,11 +247,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                     }
                     if (strDirective) {
                         if (item['player-refresh'] !== false) { // undefined is also triggering player-refresh
-                            if (refreshableDirectives(strDirective)){
-                                if (item.type == 'checkbox'){
+                            if (refreshableDirectives(strDirective)) {
+                                if (item.type == 'checkbox') {
                                     elm.attr('player-refresh', ( 'boolean'));
-                                }else
-                                elm.attr('player-refresh', ( item['player-refresh'] || true));
+                                } else
+                                    elm.attr('player-refresh', ( item['player-refresh'] || true));
                             }
                         }
                     }
@@ -417,7 +418,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
             restrict: 'EA',
-            scope: {'data': '=', 'settings': '='},
+            scope: {'data': '=', 'settings': '=', menuInitDone: '='},
             transclude: true,
             compile: function (tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('ul[ng-transclude]:first');
@@ -437,6 +438,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         menuSvc.setMenu('basicDisplay');
                         $scope.playerEdit.$dirty = false;
                         $scope.playerEdit.$setPristine();
+                        $scope.$parent.menuInitDone = true;
                     }, 500);
                 };
             },

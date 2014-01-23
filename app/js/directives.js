@@ -843,7 +843,6 @@ DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
         replace: 'true',
         scope: {
             model: '=',
-            label: '@',
             helpnote: '@'
         },
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
@@ -855,6 +854,7 @@ DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
                 if (typeof $scope.model == 'undefined' || $scope.model === '')
                     $scope.model = $attrs['initvalue'];
             }
+            $scope.label = $attrs.label+':';
         }],
         templateUrl: 'template/formcontrols/readOnly.html'
     };

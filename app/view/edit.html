@@ -6,9 +6,9 @@
     </div>
     <!-- </menu-head>-->
     <div id="outerWrap">
-        <div id="mp-pusher" ng-controller="menuCntrl">
+        <div id="mp-pusher"  ng-controller="menuCntrl">
             <!--mp-menu-->
-            <div navmenu data="data">
+            <div navmenu data="data" ng-show="menuInitDone">
                 <div menu-level pagename='search' label='Menu Search'>
                     <li class="nohover ">
                         <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"

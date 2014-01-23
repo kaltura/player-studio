@@ -1,5 +1,5 @@
 <label>
-	<span ng-bind-html="label"></span><i ng-if='icon' class='icon {{icon}}'></i>
+	<span class='control-label' ng-bind-html="label"></span><i ng-if='icon' class='icon {{icon}}'></i>
         <span class='inputHolder'>
             <input dname='strModel' ng-placeholder="{{$parent.placehold}}" ng-pattern='validation' ng-required="{{require}}" class='form-control'
                    tooltip='{{helpnote || label}}' type='text' val-type="{{type}}"

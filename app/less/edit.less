@@ -191,6 +191,11 @@ body#edit, body#new {
       #mp-base > ul > li > div.mp-level > a.mp-back {
         display: none;
       }
+
+      #mp-base > ul > li > div.menu-level-trigger > a {
+        display: none;
+      }
+
       ul.menuList > li, label, div.form-element {
         hr {
           border-top: 1px solid #ccc;
@@ -253,7 +258,9 @@ body#edit, body#new {
             float: left;
             width: 100%;
           }
-
+          span.control-label ,span.featureLabel{
+            font-weight: bold;
+          }
           i.icon {
             float: left;
             vertical-align: bottom;
@@ -580,7 +587,7 @@ body#edit, body#new {
 
     .form-control, .input-group-addon {
       font-size: 13px;
-      height: 28px;
+      height: 30px;
     }
 
     .dropdown-menu li a {
