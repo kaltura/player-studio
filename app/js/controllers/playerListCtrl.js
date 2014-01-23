@@ -11,6 +11,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
             $scope.maxSize = 5;
+            $scope.uiSelectOpts = {
+                width:'60px',
+                minimumResultsForSearch : -1
+            };
             // get studio UICONF to setup studio configuration
             var config = null;
 

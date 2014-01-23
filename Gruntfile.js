@@ -148,7 +148,7 @@ module.exports = function(grunt) {
         watch: {
             options: {
                 interrupt: true,
-                debounceDelay: 500,
+                debounceDelay: 200,
                 livereload: true
 
             },

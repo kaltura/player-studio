@@ -1,4 +1,4 @@
-<div id='list' class="fluid-container fullheight">
+<div class="fluid-container fullheight">
     <div id="wrapper">
         <div id="header">
             <h2 id="pageHeader">
@@ -70,7 +70,7 @@
                             </div>
                         </td>
                         <td class="idCol text-center">{{item.id}}</td>
-                        <td class="col-xs-2 text-center"><span class="timeago"
+                        <td class="col-xs-2 text-center"><span class="timeago"Ø
                                                                timestamp="{{item.updatedAt}}"></span>
                         </td>
                         <td class="visible-lg text-center col-lg-1"><span class="timeago"
@@ -96,26 +96,26 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-    <div id="footer" class="navbar navbar-fixed-bottom  text-center">
-        <div class="col-xs-8 col-sm-9">
-            <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
-                        page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
-        </div>
-        <div class="col-xs-4 col-sm-3">
-            <form class="form-inline" role="form">
-                <div class="padTop">
-                    <small> {{filtered.length}} Players in total, Show</small>
-                    <select class="form-control inline" id="maxSizeSelect" ng-model="maxSize">
-                        <option value='5'>5</option>
-                        <option value='10'>10</option>
-                        <option value='15'>15</option>
-                        <option value='20'>20</option>
-                    </select>
-                    <small> per page</small>
+            <div id="footer" class="text-center">
+                <div id="paginationWrap">
+                    <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
+                                page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
                 </div>
-            </form>
+                <div id="maxSizeSelect">
+                    <form class="form-inline" role="form">
+                        <div class="">
+                            <small> {{filtered.length}} Players in total, Show</small>
+                            <select  ui-select2="uiSelectOpts" ng-model="maxSize">
+                                <option value='5'>5</option>
+                                <option value='10'>10</option>
+                                <option value='15'>15</option>
+                                <option value='20'>20</option>
+                            </select>
+                            <small> per page</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

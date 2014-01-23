@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-	['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries', '$timeout','$modal',
-		function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout, $modal) {
+	['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries', '$timeout','$modal','$location',
+		function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout, $modal,$location) {
 			$scope.ks = localStorageService.get('ks');
 			$scope.playerId = PlayerData.id;
 			$scope.newPlayer = !$routeParams.id;
@@ -15,7 +15,6 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
 			$scope.userEntriesList = [];
 			$scope.userEntries = userEntries;
 			$scope.settings = {};
-			window.scope = $scope;
 // set tags
 			$scope.tags = [];
 // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
@@ -70,80 +69,85 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
 				PlayerService.setPreviewEntry($scope.settings.previewEntry);
 				PlayerService.renderPlayer();
 			});
-			$scope.save = function() {
-				var request = {
-					'service': 'uiConf',
-					'action': 'update',
-					'id': $scope.playerId,
-					'uiConf:name': $scope.data.name,
-					'uiConf:tags': $scope.data.tags,
-					'uiConf:description': $scope.data.description ? $scope.data.description : '',
-					'uiConf:config': angular.toJson($scope.data.config)
-				};
-				apiService.doRequest(request).then(function(result) {
-                        // cleanup
-						menuSvc.menuScope.playerEdit.$dirty = false;
-						$scope.masterData = angular.copy($scope.data);
-                        localStorageService.remove('tempPlayerID');
-                        // if this is a new player - add it to the players list
-						if ($scope.newPlayer){
-                            // prevent the list controller from using the cache the next time the list loads
-                            apiService.setCache(false);
-						}
-                        // TODO: replace with floating success message that will disappear after few seconds
-						$modal.open({ templateUrl: 'template/dialog/message.html',
-							controller: 'ModalInstanceCtrl',
-							resolve: {
-								settings: function() {
-									return {
-										'title': 'Save Player Settings',
-										'message': 'Player Saved Successfully'
-									};
-								}
-							}
-						});
-					}, function(msg) {
-						$modal.open({ templateUrl: 'template/dialog/message.html',
-							controller: 'ModalInstanceCtrl',
-							resolve: {
-								settings: function() {
-									return {
-										'title': 'Player save failure',
-										'message': msg
-									};
-								}
-							}
-						});
-					}
-				);
-
-			};
-			$scope.$watch(function() {
-				if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
-					if (menuSvc.menuScope.playerEdit.$error) {
-						return menuSvc.menuScope.playerEdit.$error;
-
-					}
-				}
-			}, function(obj, oldVal) {
-				if (obj != oldVal) {
-					$scope.validationObject = obj;
-				}
-
-			});
-			$scope.saveEnabled = function() {
-//instead of using the form dirty state we compare to the master copy.
-				if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
-					if (menuSvc.menuScope.playerEdit.$valid)
-						return !angular.equals($scope.data, $scope.masterData);
-					else
-						return false;
-				}
-			};
 		}
 	]);
 
-angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', function($scope) {
+angular.module('KMCModule').controller('editPageDataCntrl', ['$scope','apiService','$modal','$location','menuSvc','localStorageService', function($scope,apiService,$modal,$location,menuSvc,localStorageService) {
+    $scope.save = function() {
+        var request = {
+            'service': 'uiConf',
+            'action': 'update',
+            'id': $scope.playerId,
+            'uiConf:name': $scope.data.name,
+            'uiConf:tags': $scope.data.tags,
+            'uiConf:description': $scope.data.description ? $scope.data.description : '',
+            'uiConf:config': angular.toJson($scope.data.config)
+        };
+        apiService.doRequest(request).then(function(result) {
+                // cleanup
+                menuSvc.menuScope.playerEdit.$dirty = false;
+                $scope.masterData = angular.copy($scope.data);
+                localStorageService.remove('tempPlayerID');
+                // if this is a new player - add it to the players list
+                if ($scope.newPlayer){
+                    // prevent the list controller from using the cache the next time the list loads
+                    apiService.setCache(false);
+                }
+                // TODO: replace with floating success message that will disappear after few seconds
+                $modal.open({ templateUrl: 'template/dialog/message.html',
+                    controller: 'ModalInstanceCtrl',
+                    resolve: {
+                        settings: function() {
+                            return {
+                                'title': 'Save Player Settings',
+                                'message': 'Player Saved Successfully'
+                            };
+                        }
+                    }
+                });
+            }, function(msg) {
+                $modal.open({ templateUrl: 'template/dialog/message.html',
+                    controller: 'ModalInstanceCtrl',
+                    resolve: {
+                        settings: function() {
+                            return {
+                                'title': 'Player save failure',
+                                'message': msg
+                            };
+                        }
+                    }
+                });
+            }
+        );
+
+    };
+    $scope.$watch(function() {
+        if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
+            if (menuSvc.menuScope.playerEdit.$error) {
+                return menuSvc.menuScope.playerEdit.$error;
+
+            }
+        }
+    }, function(obj, oldVal) {
+        if (obj != oldVal) {
+            $scope.validationObject = obj;
+        }
+
+    });
+    $scope.cancel= function(){
+        if (menuSvc.menuScope.playerEdit.$pristine){
+            $location.url('/list');
+        }
+    };
+    $scope.saveEnabled = function() {
+//instead of using the form dirty state we compare to the master copy.
+        if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
+            if (menuSvc.menuScope.playerEdit.$valid)
+                return !angular.equals($scope.data, $scope.masterData);
+            else
+                return false;
+        }
+    };
 
 
 }]);

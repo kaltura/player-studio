@@ -8,21 +8,10 @@ html {
   /* Pad & margin   by footer height */
   margin: 0 auto -80px;
   padding: 0 0 80px;
-  @media (max-width: 767px) {
-    margin: 0 auto -120px;
-    padding: 0 0 120px;
-  }
-}
-
-/* Set the fixed height of the footer here */
-#footer {
-  height: 80px;
-  @media (max-width: 767px) {
-    height: 120px;
-  }
 }
 
 #list {
+  background: #f4f4f4;
   > #header {
     position: absolute;
     width: 96%;
@@ -45,9 +34,9 @@ html {
         color: #666;
       }
     }
-    input{
-      border-radius: 0 5px  5px 0;
-      border-left:none;
+    input {
+      border-radius: 0 5px 5px 0;
+      border-left: none;
     }
     ul.typeahead.dropdown-menu {
       max-width: 360px;
@@ -67,59 +56,53 @@ html {
     max-width: 160px;
   }
   #playerList {
-    .scroller {
-      margin-bottom: -80px;
-      padding-bottom: 80px;
-
-    }
-    .idCol{
-      width:70px;
-    }
-    height: 82%;
-    margin-top: 50px;
+    background: white;
+    height: 90%;
+    margin-top: 25px;
+    border: 1px solid #dddddd;
+    border-radius: 7px;
     @media (max-width: 480px) {
       margin-top: 60px;
+    }
+    .scroller {
+      margin-bottom: -105px;
+      padding-bottom: 105px;
+    }
+    .idCol {
+      width: 70px;
     }
     > tr.row:last-child {
       margin: 0;
       margin-top: 10px;
-      border-top: 3px solid #f1f1e9;
+      border-top: 1px solid #dddddd;
     }
     #tableHead {
-      border-bottom: 3px solid #f1f1e9;
+      background: #f5f5f5;
+      padding: 5px 4px;
+      border-bottom: 1px solid #dddddd;
+      border-top: 1px solid #dddddd;
       margin: 0;
-      margin-bottom: 10px;
       div {
-        a{color:#333;}
+        a {
+          color: #333;
+        }
         padding: 0;
         white-space: nowrap;
         font-weight: bold;
       }
     }
-    tr.row:not(#tableHead) {
+    tr.row {
       &:hover {
         background-color: #ebf1f4;
       }
       td {
         padding: 4px;
       }
-      td:first-child{
-        padding-left: 0px;
-      }
-
-      td:last-child{
-        padding-right: 0px;
-      }
-      border-bottom: 2px solid #ebf1f4;
+      border-bottom: 2px solid #dddddd;
       > div {
         display: table-cell;
         vertical-align: middle;
       }
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-    tr.row {
       .alertsWrapper {
         margin-top: 5px;
         text-align: center;
@@ -151,9 +134,39 @@ html {
         }
       }
     }
+    #footer {
+      position: relative;
+      margin: auto;
+      border-top: 1px solid #dddddd;
+      padding: 10px 0;
+      #paginationWrap {
+        .pagination {
+          margin-top: 5px;
+        }
+      }
+      #maxSizeSelect {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        width: 240px;
+        @media (max-width: 767px) {
+          width: 130px;
+          top: 0px;
+        }
+      }
+    }
     .mCustomScrollBox {
+      .mCSB_container {
+        margin-right: 15px;
+        &.mCS_no_scrollbar {
+          margin-right: 0px;
+        }
+      }
       .mCSB_draggerRail {
-        background: #ffffff;
+        background: #fafafa;
+        width: 15px;
+        border: 1px solid #DDDDDD;
+        border-radius: 0;
       }
       .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
         width: 11px;
@@ -165,10 +178,5 @@ html {
       }
     }
   }
-}
 
-#maxSizeSelect {
-  max-width: 49px;
-  padding: 0;
-  text-align: left
 }

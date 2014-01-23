@@ -477,7 +477,9 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function(menuSvc) {
                     });
                 }
                 var menuData = menuSvc.getControlData($attrs.model);
-                $scope.options = menuData.options;
+                if (menuData){
+                    $scope.options = menuData.options;
+                }
             };
         },
         controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
