@@ -57,14 +57,19 @@ DirectivesModule.directive('mcustomScrollbar', [
                     afterScroll.then(function () {
                         var scrollTools = $(element).find('.mCSB_scrollTools');
                         scope.scrollerCss = scrollTools.css('display')
-                        checkScroll(scrollTools.css('display'));
+                        $timeout(function () {
+                            checkScroll(scrollTools.css('display'));
+                        }, 800);
                         scope.$watch(function () {
                             return  scope.scrollerCss = scrollTools.css('display')
                         }, function (value) {
                             checkScroll(value);
                         });
                         $(window).resize(function () {
-                            checkScroll(scrollTools.css('display'));
+                            $timeout(function () {
+                                checkScroll(scrollTools.css('display'));
+                            }, 800);
+
                         });
                     });
                 }
