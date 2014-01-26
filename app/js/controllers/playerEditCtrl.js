@@ -85,7 +85,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
         };
         apiService.doRequest(request).then(function (result) {
                 // cleanup
-                menuSvc.menuScope.playerEdit.$dirty = false;
+                menuSvc.menuScope.playerEdit.$setPristine();
                 $scope.masterData = angular.copy($scope.data);
                 localStorageService.remove('tempPlayerID');
                 // if this is a new player - add it to the players list

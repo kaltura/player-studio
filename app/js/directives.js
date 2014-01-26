@@ -566,16 +566,6 @@ DirectivesModule.directive('sortOrder', [
         };
     }
 ]);
-//DirectivesModule.directive('makePlayerRefresh', function ($timeout) {
-//    return {
-//        priority: 0,
-//        compile: function (tElement, tAttrs) {
-//            $timeout(function () {
-//                $(tElement).find('[ng-model]').attr('player-refresh', tAttrs['makePlayerRefresh']);
-//            });
-//        }
-//    };
-//});
 DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', function(PlayerService, menuSvc, $timeout) {
     var menuScope = menuSvc.menuScope;
     return {

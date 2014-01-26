@@ -3,21 +3,23 @@
 ///* Filters */
 //
 angular.module('KMC.filters', ['ngSanitize' ])
-    .filter('HTMLunsafe',function ($sce) {
-        return function (val) {
+    .filter('HTMLunsafe',function($sce) {
+        return function(val) {
             return $sce.trustAsHtml(val);
         };
-    }).filter('timeago', function () {
-        return function (input) {
-            if (typeof $.timeago == 'function') {
+    }).filter('timeago', function() {
+        return function(input) {
+            if (typeof $.timeago == 'function' && parseInt(input) > 0) {
                 var date = input * 1000;
                 return $.timeago(date);
             }
+            else
+                return input;
         };
     })
     .
-    filter('range',function () {
-        return function (input) {
+    filter('range',function() {
+        return function(input) {
             var lowBound, highBound;
             switch (input.length) {
                 case 1:
@@ -36,8 +38,8 @@ angular.module('KMC.filters', ['ngSanitize' ])
                 result.push(i);
             return result;
         };
-    }).filter('startFrom', function () {
-        return function (input, start) {
+    }).filter('startFrom', function() {
+        return function(input, start) {
             if (input) {
                 start = +start; //parse to int
                 return input.slice(start);
