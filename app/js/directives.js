@@ -904,11 +904,11 @@ DirectivesModule.directive('modelNumber', function($timeout) {
             $timeout(function() {
                 $spinner.
                     spinedit({
-                        minimum: parseFloat($attrs.from),
-                        maximum: parseFloat($attrs.to),
-                        step: parseFloat($attrs.stepsize),
-                        value: parseFloat($attrs.initvalue),
-                        numberOfDecimals: parseFloat($attrs.numberofdecimals)
+                        minimum: parseFloat($attrs.from) || 0,
+                        maximum: parseFloat($attrs.to) || 100,
+                        step: parseFloat($attrs.stepsize) || 1,
+                        value: parseFloat($attrs.initvalue) || 0,
+                        numberOfDecimals: parseFloat($attrs.numberofdecimals) || 0
                     });
             });
             $spinner.on('valueChanged', function(e) {
