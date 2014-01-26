@@ -132,7 +132,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                                             {result: false, label: 'Cancel', cssClass: 'btn-default'},
                                             {result: true, label: 'Upgrade', cssClass: 'btn-primary'}
                                         ]
-                                    }
+                                    };
                                 }}
                         }
                     );
@@ -140,7 +140,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                         if (result) {
                             $scope.update(item).then(function () {
                                 $location.url('edit/' + item.id);
-                            })
+                            });
                         }
                     }, function () {
                         return $log.info('edit when outdated modal dismissed at: ' + new Date());

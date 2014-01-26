@@ -52,7 +52,7 @@ DirectivesModule.directive('mcustomScrollbar', [
                     else {
                         $('#tableHead').css('padding-right', '0px');
                     }
-                }
+                };
                 if ($('#tableHead').length) {
                     afterScroll.then(function() {
                         var scrollTools = $(element).find('.mCSB_scrollTools');
@@ -583,7 +583,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                 if ($attrs['playerRefresh'] == 'boolean') { // boolean controls don't need the extra watch so with that flag we just watch the model
                     return $scope.modelChanged;
                 } else
-                    return  ($scope.modelChanged && $scope.controlUpdateAllowed)
+                    return  ($scope.modelChanged && $scope.controlUpdateAllowed);
             };
             $scope.updateFunction = function(prScope, elem) { // the function used to set controlUpdateAllowed - works for text inputs etc.
                 // a custom function can be set with setUpdateFunction
@@ -618,7 +618,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                                 timeOutRun = null;
                             }
                             $scope.makeRefresh();
-                        }, 500)
+                        }, 500);
                     }
                 }
             };
@@ -842,7 +842,7 @@ DirectivesModule.directive('divider', [function() {
         replace: true,
         restrict: 'EA',
         template: '<hr class="divider"/>'
-    }
+    };
 }]);
 DirectivesModule.directive('readOnly', ['$filter', function($filter) {
     return {

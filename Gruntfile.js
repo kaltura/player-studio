@@ -21,6 +21,7 @@ module.exports = function(grunt) {
                 '-W097': true,
                 '-W093': true,
                 '-W064': true,
+                '-W083': true,
                 "globals": {
                     "jQuery": true,
                     "cl": true,
