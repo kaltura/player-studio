@@ -96,6 +96,7 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
     return {
         restrict: 'EA',
         replace: true,
+        require:'?playerRefresh',
         templateUrl: 'template/formcontrols/modelRadio.html',
         scope: {
             'model': '=',
@@ -130,9 +131,12 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
             };
         }
         ],
-        link: function (scope, element, attributes) {
+        link: function (scope, element, attributes,prController) {
+            if (prController){
+                element.attr('player-refresh','boolean');
+            }
             if (scope.require) {
-                scope.$watch('model', function (newval) {
+                scope.$watch('model', function (newval) { //TODO: change to ngmodel + $setValidity
                     if (!newval)
                         $(element).find('.form-group').addClass('ng-invalid');
                     else {
@@ -149,14 +153,25 @@ DirectivesModule.directive('modelColor', function () {
     return {
         restrict: 'EA',
         replace: true,
+        require: "?playerRefresh",
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
             if (typeof $scope.model == 'undefined') {
                 if ($attrs.initvalue)
                     $scope.model = $attrs.initvalue;
                 else
-                    $scope.model = '#fff';
+                    $scope.model = '#ffffff';
             }
         }],
+        link: function (scope, element, attrs, prController) {
+            if (prController) {
+                scope.prScope = prController.getPrScope();
+                prController.setUpdateFunction(function(prScope){
+                    scope.$on('colorPickerClosed',function(){
+                        prScope.controlUpdateAllowed = true;
+                    });
+                })
+            }
+        },
         scope: {
             'class': '@',
             'label': '@',
@@ -601,9 +616,11 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                 else {
                     triggerElm = $(elem).find('input[ng-model], select[ng-model]');
                 }
-                triggerElm.on('change', function (e) {
-                    prScope.controlUpdateAllowed = true;
-                });
+                prScope.$apply(function(){
+                    triggerElm.on('change', function (e) {
+                        prScope.controlUpdateAllowed = true;
+                    });
+                })
             };
             var i = 0;
             var timeOutRun = null;

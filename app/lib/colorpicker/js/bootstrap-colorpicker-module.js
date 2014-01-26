@@ -205,7 +205,7 @@ angular.module('colorpicker.module', [])
             }
         }
     }])
-    .directive('colorpicker', ['$document', '$compile', 'Color', 'helper', '$timeout', function($document, $compile, Color, helper, $timeout) {
+    .directive('colorpicker', ['$document', '$compile', 'Color', 'helper', '$timeout', '$rootScope', function($document, $compile, Color, helper, $timeout,$rootScope) {
         return {
             require: '?ngModel',
             restrict: 'A',
@@ -419,6 +419,7 @@ angular.module('colorpicker.module', [])
                         if (!$(event.target).is('.colorpicker-color-value input')) {
                             if (colorpickerTemplate.hasClass('colorpicker-visible')) {
                                 colorpickerTemplate.removeClass('colorpicker-visible');
+                                $rootScope.$broadcast('colorPickerClosed');
                             }
                         }
                     }
