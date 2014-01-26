@@ -77,6 +77,9 @@ html {
       border-top: 1px solid #dddddd;
     }
     #tableHead {
+      .idCol{
+        margin-left: 2px;
+      }
       background: #F4F4F4;
       background-image: -ms-linear-gradient(bottom, #F4F4F4 0%, #FAFAFA 100%);
       background-image: -moz-linear-gradient(bottom, #F4F4F4 0%, #FAFAFA 100%);
@@ -84,18 +87,20 @@ html {
       background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #F4F4F4), color-stop(1, #FAFAFA));
       background-image: -webkit-linear-gradient(bottom, #F4F4F4 0%, #FAFAFA 100%);
       background-image: linear-gradient(to top, #F4F4F4 0%, #FAFAFA 100%);
-      padding: 5px 4px;
-      border-bottom: 1px solid #dddddd;
       border-radius: 7px 7px 0 0;
       margin: 0;
       div {
         a {
           color: #333;
         }
-      // border:1px solid #ccc;
-        padding: 0;
+        border-right:1px solid #ccc;
+        padding: 4px;
         white-space: nowrap;
         font-weight: bold;
+        margin-left: 1px;
+        &:last-child{
+          border-right:none;
+        }
       }
     }
     tr.row {
@@ -107,6 +112,9 @@ html {
         padding: 4px;
         &:first-child {
           border-left:none;
+        }
+        &:last-child {
+          border-right: none;
         }
       }
      // border-bottom: 2px solid #dddddd;

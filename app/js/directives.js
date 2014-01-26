@@ -45,21 +45,24 @@ DirectivesModule.directive('mcustomScrollbar', [
 
                     }
                 }, 500);
-                if ($('div#list').length) {
+                var checkScroll = function(value) {
+                    if (value == 'block') {
+                        $('#tableHead').css('padding-right', '18px');
+                    }
+                    else {
+                        $('#tableHead').css('padding-right', '0px');
+                    }
+                }
+                if ($('#tableHead').length) {
                     afterScroll.then(function() {
                         var scrollTools = $(element).find('.mCSB_scrollTools');
                         scope.$watch(function() {
                             return scrollTools.css('display');
                         }, function(value) {
-                            if (value == 'block') {
-                                $('#tableHead').css('padding-right', '30px');
-                            }
-                            else {
-                                $('#tableHead').css('padding-right', '0');
-                            }
+                            checkScroll(value);
                         });
                         $(window).resize(function() {
-                            scope.$digest();
+                            checkScroll(scrollTools.css('display'));
                         });
                     });
                 }
