@@ -56,12 +56,12 @@ DirectivesModule.directive('mcustomScrollbar', [
                 if ($('#tableHead').length) {
                     afterScroll.then(function () {
                         var scrollTools = $(element).find('.mCSB_scrollTools');
-                        scope.scrollerCss = scrollTools.css('display')
+                        scope.scrollerCss = scrollTools.css('display');
                         $timeout(function () {
                             checkScroll(scope.scrollerCss);
                         }, 800);
                         scope.$watch(function () {
-                            return  scope.scrollerCss = scrollTools.css('display')
+                            return  scope.scrollerCss = scrollTools.css('display');
                         }, function (value) {
                             checkScroll(value);
                         });
@@ -169,7 +169,7 @@ DirectivesModule.directive('modelColor', function () {
                     scope.$on('colorPickerClosed',function(){
                         prScope.controlUpdateAllowed = true;
                     });
-                })
+                });
             }
         },
         scope: {
@@ -620,7 +620,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     triggerElm.on('change', function (e) {
                         prScope.controlUpdateAllowed = true;
                     });
-                })
+                });
             };
             var i = 0;
             var timeOutRun = null;
