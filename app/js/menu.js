@@ -263,7 +263,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function (editableProperties) 
                         }
                     });
                     if (item.require) {
-                        item.label = '* ' + item.label;
+                        elm.attr('label', '* ' + item.label);
                     }
                     return elm;
                 }
