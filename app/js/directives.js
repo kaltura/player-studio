@@ -58,7 +58,7 @@ DirectivesModule.directive('mcustomScrollbar', [
                         var scrollTools = $(element).find('.mCSB_scrollTools');
                         scope.scrollerCss = scrollTools.css('display')
                         $timeout(function () {
-                            checkScroll(scrollTools.css('display'));
+                            checkScroll(scope.scrollerCss);
                         }, 800);
                         scope.$watch(function () {
                             return  scope.scrollerCss = scrollTools.css('display')
@@ -617,7 +617,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     $scope.modelChanged = false;
                     $scope.controlUpdateAllowed = false;
                 } else { // we  initiated a call but the player is still not finished rendering, we will try 10 time;
-                    while (i < 10) {
+                    if (i < 10) {
                         i++;
                         timeOutRun = $timeout(function () {
                             if (timeOutRun) {
@@ -675,7 +675,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     scope.$watch(function () {
                         return scope.controlFunction(scope);//optional scope parameter
                     }, function (newVal, oldVal) {
-                        if (newVal != oldVal) {
+                        if (newVal != oldVal && newVal) {
                             scope.makeRefresh();
                         }
                     });
