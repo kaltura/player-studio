@@ -149,11 +149,11 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
     };
 }])
 ;
-DirectivesModule.directive('modelColor', function () {
+DirectivesModule.directive('modelColor', function (PlayerService) {
     return {
         restrict: 'EA',
         replace: true,
-        require: "?playerRefresh",
+        require: "playerRefresh",
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
             if (typeof $scope.model == 'undefined') {
                 if ($attrs.initvalue)
@@ -161,8 +161,14 @@ DirectivesModule.directive('modelColor', function () {
                 else
                     $scope.model = '#ffffff';
             }
+            $scope.$watch('model', function (newVal, oldVal) {
+                if (newVal != oldVal) {
+                    PlayerService.setKDPAttribute($scope.kdpattr, newVal);
+                }
+            });
         }],
         link: function (scope, element, attrs, prController) {
+            /*
             if (prController) {
                 scope.prScope = prController.getPrScope();
                 prController.setUpdateFunction(function(prScope){
@@ -170,11 +176,12 @@ DirectivesModule.directive('modelColor', function () {
                         prScope.controlUpdateAllowed = true;
                     });
                 });
-            }
+            }*/
         },
         scope: {
             'class': '@',
             'label': '@',
+            'kdpattr': '@',
             'helpnote': '@',
             'model': '=',
             'strModel': '@model',
@@ -911,7 +918,7 @@ DirectivesModule.directive('modelButton', ['menuSvc', function (menuSvc) {
         templateUrl: 'template/formcontrols/modelButton.html'
     };
 }]);
-DirectivesModule.directive('modelNumber', function ($timeout) {
+DirectivesModule.directive('modelNumber', ['$timeout', 'PlayerService',function ($timeout, PlayerService) {
     return {
         templateUrl: 'template/formcontrols/spinEdit.html',
         replace: true,
@@ -921,7 +928,8 @@ DirectivesModule.directive('modelNumber', function ($timeout) {
             helpnote: '@',
             label: '@',
             'strModel': '@model',
-            'require': '@'
+            'require': '@',
+            'kdpattr': '@'
         },
         link: function ($scope, $element, $attrs) {
             var $spinner = $element.find('input');
@@ -938,6 +946,9 @@ DirectivesModule.directive('modelNumber', function ($timeout) {
             $spinner.on('valueChanged', function (e) {
                 if (typeof e.value == 'number') {
                     $scope.model = e.value;
+                    if ($scope.kdpattr){
+                        PlayerService.setKDPAttribute($scope.kdpattr, e.value);
+                    }
                 }
             });
         },
@@ -962,6 +973,8 @@ DirectivesModule.directive('modelNumber', function ($timeout) {
             });
             if (typeof $scope.model != 'undefined') {
                 $scope.initvalue = $scope.model;
+                var $spinner = $element.find('input');
+                $spinner.spinedit({value: parseFloat($scope.initvalue)});
             } else {
                 if (!$attrs['initvalue'])
                     $scope.initvalue = 1;
@@ -970,7 +983,7 @@ DirectivesModule.directive('modelNumber', function ($timeout) {
             }
         }]
     };
-});
+}]);
 DirectivesModule.directive('onFinishRender', [
     '$timeout',
     'requestNotificationChannel',

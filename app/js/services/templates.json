@@ -1,187 +1,42 @@
 [
     {
-        "id": 11219761,
-        "thumbnailUrl": "img/mockPlayerThumb.png",
-        "partnerId": 1281471,
-        "objType": 8,
-        "objTypeAsString": "KDP3",
-        "width": "400",
-        "height": "285",
-        "tags": null,
-        "createdAt": 1355392741,
-        "updatedAt": 1355392741,
-        "settings": {
-            "name": "Widescreen player - light skin - with live support",
-            "basicDisplay": {
-                "topOverlay": {
-                    "title": true,
-                    "share": true,
-                    "info": true,
-                    "color": "#fff"
+        "name": "Default Player",
+        "description": "Basic player template",
+        "config":{
+            "plugins":{
+                "topBarContainer": {},
+                "titleLabel": {},
+                "controlBarContainer": {
+                    "hover": true
                 },
-                "controlBar": {
-                    "volume": true,
-                    "size": 1,
-                    "initialvolume": "80",
-                    "counters": true,
-                    "quality": true,
-                    "fullscreen": true
-                }
-            }
-        }
-    },
-    {
-        "id": 11219762,
-        "thumbnailUrl": "img/mockPlayerThumb.png",
-        "partnerId": 1281471,
-        "objType": 8,
-        "objTypeAsString": "KDP3",
-        "width": "400",
-        "height": "285",
-        "tags": null,
-        "createdAt": 1355392741,
-        "updatedAt": 1355392741,
-        "settings": {
-            "name": "Widescreen player - light skin - with live support",
-            "basicDisplay": {
-                "topOverlay": {
-                    "title": true,
-                    "share": true,
-                    "info": true,
-                    "color": "#fff"
+                "largePlayBtn": {},
+                "scrubber": {},
+                "playPauseBtn": {},
+                "volumeControl": {},
+                "fullScreenBtn": {},
+                "durationLabel": {},
+                "currentTimeLabel": {},
+                "sourceSelector": {},
+                "closedCaptions": {},
+                "watermark": {
+                    "cssClass": "topLeft",
+                    "img": "http://www.kaltura.com/content/uiconf/kaltura/kmc/appstudio/kdp3/exampleWatermark.png"
                 },
-                "controlBar": {
-                    "volume": true,
-                    "size": 1,
-                    "initialvolume": "80",
-                    "counters": true,
-                    "quality": true,
-                    "fullscreen": true
+                "logo": {},
+                "infoScreen": {},
+                "share": {},
+                "related": {}
+            },
+            "uiVars":[
+                {
+                    "key":"autoPlay",
+                    "value":false,
+                    "overrideFlashvar":false
                 }
-            }
-        }
-    },
-    {
-        "id": 11219763,
-        "thumbnailUrl": "img/mockPlayerThumb.png",
-        "partnerId": 1281471,
-        "objType": 8,
-        "objTypeAsString": "KDP3",
-        "width": "400",
-        "height": "285",
-        "tags": null,
-        "createdAt": 1355392741,
-        "updatedAt": 1355392741,
-        "settings": {
-            "name": "Widescreen player - light skin - with live support",
-            "basicDisplay": {
-                "topOverlay": {
-                    "title": true,
-                    "share": true,
-                    "info": true,
-                    "color": "#fff"
-                },
-                "controlBar": {
-                    "volume": true,
-                    "size": 1,
-                    "initialvolume": "80",
-                    "counters": true,
-                    "quality": true,
-                    "fullscreen": true
-                }
-            }
-        }
-    },
-    {
-        "id": 11219764,
-        "thumbnailUrl": "img/mockPlayerThumb.png",
-        "partnerId": 1281471,
-        "objType": 8,
-        "objTypeAsString": "KDP3",
-        "width": "400",
-        "height": "285",
-        "tags": null,
-        "createdAt": 1355392741,
-        "updatedAt": 1355392741,
-        "settings": {
-            "name": "Widescreen player - light skin - with live support",
-            "basicDisplay": {
-                "topOverlay": {
-                    "title": true,
-                    "share": true,
-                    "info": true,
-                    "color": "#fff"
-                },
-                "controlBar": {
-                    "volume": true,
-                    "size": 1,
-                    "initialvolume": "80",
-                    "counters": true,
-                    "quality": true,
-                    "fullscreen": true
-                }
-            }
-        }
-    },
-    {
-        "id": 11219765,
-        "thumbnailUrl": "img/mockPlayerThumb.png",
-        "partnerId": 1281471,
-        "objType": 8,
-        "objTypeAsString": "KDP3",
-        "width": "400",
-        "height": "285",
-        "tags": null,
-        "createdAt": 1355392741,
-        "updatedAt": 1355392741,
-        "settings": {
-            "name": "Widescreen player - light skin - with live support",
-            "basicDisplay": {
-                "topOverlay": {
-                    "title": true,
-                    "share": true,
-                    "info": true,
-                    "color": "#fff"
-                },
-                "controlBar": {
-                    "volume": true,
-                    "size": 1,
-                    "initialvolume": "80",
-                    "counters": true,
-                    "quality": true,
-                    "fullscreen": true
-                }
-            }
-        }
-    },
-    {
-        "id": 11219766,
-        "thumbnailUrl": "img/mockPlayerThumb.png",
-        "partnerId": 1281471,
-        "objType": 8,
-        "objTypeAsString": "KDP3",
-        "width": "400",
-        "height": "285",
-        "tags": null,
-        "createdAt": 1355392741,
-        "updatedAt": 1355392741,
-        "settings": {
-            "name": "Widescreen player - light skin - with live support",
-            "basicDisplay": {
-                "topOverlay": {
-                    "title": true,
-                    "share": true,
-                    "info": true,
-                    "color": "#fff"
-                },
-                "controlBar": {
-                    "volume": true,
-                    "size": 1,
-                    "initialvolume": "80",
-                    "counters": true,
-                    "quality": true,
-                    "fullscreen": true
-                }
+            ],
+            "layout":{
+                "skin": "kdark",
+                "cssFiles":[]
             }
         }
     }

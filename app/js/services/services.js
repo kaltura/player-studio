@@ -133,6 +133,14 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 
                 }
             },
+            'setKDPAttribute': function(attrStr, value) {
+                var kdp = document.getElementById('kVideoTarget');
+                if ($.isFunction(kdp.setKDPAttribute)){
+                    var obj = attrStr.split(".")[0];
+                    var property = attrStr.split(".")[1];
+                    kdp.setKDPAttribute(obj, property, value);
+                }
+            },
             playerRefresh: playerRefresh,
             newPlayer: function() {
                 var deferred = $q.defer();
@@ -151,7 +159,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'uiConf:tags': 'html5studio,player',
                     'uiConf:html5Url': window.kWidget.getPath() + 'mwEmbedLoader.php',
                     'uiConf:creationMode': 2,
-                    'uiConf:config': '{"plugins":{"topBarContainer":[],"controlBarContainer":[],"scrubber":[],"largePlayBtn":[],"playHead":[],"playPauseBtn":[],"volumeControl":[],"durationLabel":[],"currentTimeLabel":[],"keyboardShortcuts":[],"liveCore":[],"liveStatus":[],"liveBackBtn":[],"fullScreenBtn":[],"logo":[],"watermark":{"href":"http://www.kaltura.com/","img":"http://www.kaltura.com/content/uiconf/kaltura/kmc/appstudio/kdp3/exampleWatermark.png","padding":5,"title":"Watermark","cssClass":"bottomLeft"},"strings":{"ENTRY_CONVERTING":"Entry is processing, please try again in a few minutes."},"statistics":{"plugin":true,"width":"0%","height":"0%","includeInLayout":false},"akamaiMediaAnalytics":{"plugin":true,"width":"0%","height":"0%","includeInLayout":false,"asyncInit":true,"swfPath":"http://79423.analytics.edgesuite.net/csma/plugin/csma.swf","configPath":"http://ma193-r.analytics.edgesuite.net/config/beacon-3431.xml","securedSwfPath":"https://79423.analytics.edgekey.net/csma/plugin/csma.swf","securedConfigPath":"https://ma193-r.analytics.edgekey.net/config/beacon-3900.xml"},"kalturaShare":{"plugin":true,"uiconfId":8700151,"width":"100%","height":"100%","via":"","pubid":""}},"uiVars":{"imageDefaultDuration":2,"autoPlay":false,"autoMute":false},"pluginIds":["mediaProxy","strings","kalturaMix","statistics","akamaiMediaAnalytics","kalturaShare"],"layout":{"skin":"kdark"}}'
+                    'uiConf:config': '{"plugins":{"topBarContainer":[],"controlBarContainer":[],"scrubber":[],"largePlayBtn":[],"playHead":[],"playPauseBtn":[],"volumeControl":[],"durationLabel":[],"currentTimeLabel":[],"keyboardShortcuts":[],"liveCore":[],"liveStatus":[],"liveBackBtn":[],"fullScreenBtn":[],"logo":[],"theme":[],"watermark":{"href":"http://www.kaltura.com/","img":"http://www.kaltura.com/content/uiconf/kaltura/kmc/appstudio/kdp3/exampleWatermark.png","padding":5,"title":"Watermark","cssClass":"bottomLeft"},"strings":{"ENTRY_CONVERTING":"Entry is processing, please try again in a few minutes."},"statistics":{"plugin":true,"width":"0%","height":"0%","includeInLayout":false},"akamaiMediaAnalytics":{"plugin":true,"width":"0%","height":"0%","includeInLayout":false,"asyncInit":true,"swfPath":"http://79423.analytics.edgesuite.net/csma/plugin/csma.swf","configPath":"http://ma193-r.analytics.edgesuite.net/config/beacon-3431.xml","securedSwfPath":"https://79423.analytics.edgekey.net/csma/plugin/csma.swf","securedConfigPath":"https://ma193-r.analytics.edgekey.net/config/beacon-3900.xml"},"kalturaShare":{"plugin":true,"uiconfId":8700151,"width":"100%","height":"100%","via":"","pubid":""}},"uiVars":{"imageDefaultDuration":2,"autoPlay":false,"autoMute":false},"pluginIds":["mediaProxy","strings","kalturaMix","statistics","akamaiMediaAnalytics","kalturaShare"],"layout":{"skin":"kdark"}}'
                 };
                 apiService.doRequest(request).then(function(data) {
                     currentPlayer = data;
