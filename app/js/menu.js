@@ -337,7 +337,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
     }
     ]).
     directive('featureMenu', ['menuSvc', function(menuSvc) {
-        return {    
+        return {
             restrict: 'EA',
             replace: true,
             templateUrl: 'template/menu/featureMenu.html',
@@ -371,7 +371,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     });
                     scope.$watch('isCollapsed', function(newVal, oldVal) {
                         if (newVal != oldVal) {
-                            menuSvc.menuScope.$broadcast('layoutChange');
+                            scope.$emit('layoutChange');
                             $(element).find('.header:first i.glyphicon-play').toggleClass('rotate90');
                         }
                     });
@@ -381,10 +381,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             var ModelArr = attributes['model'].split('.');
                             var target = ModelArr.pop();
                             var parentStr = ModelArr.join('.');
-                            var parent = menuScope.$eval(parentStr);
+                            var parent = menuSvc.menuScope.$eval(parentStr);
                             delete parent[target];
                         }
-
                     });
                     scope.$on('openFeature', function(e, args) {
                         if (args == attributes['model']) {
@@ -420,13 +419,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
             restrict: 'EA',
-            priority:10000,
+            priority: 10000,
             scope: {'data': '=', 'settings': '=', menuInitDone: '='},
             transclude: true,
             compile: function(tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('#mp-base >  ul');
                 var menuData = menuSvc.buildMenu('data');
                 return function($scope, $element) {
+                    $scope.scroller = null;
                     menuSvc.menuScope = $scope;
                     transclude($scope, function(clone) {
                         angular.forEach(clone, function(elem) {
@@ -443,16 +443,32 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                         menuElem.prepend(clone);
                     });
                     var timeVar = null;
+                    var timeVar1 = null;
                     $scope.$on('menuChange', function(e, page) {
-                        $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
                         if (page != 'search')
                             timeVar = $timeout(function() {
                                 if (timeVar) {
                                     $timeout.cancel(timeVar);
                                 }
-                                $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
+                                if ($scope.scroller) {
+                                    $scope.scroller.mCustomScrollbar('destroy');
+                                    $scope.scroller = null;
+                                }
+                                $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
+                                if (!$scope.scroller)
+                                    $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
                             }, 500);
                     });
+                    $scope.$on('layoutChange', function() {
+                        timeVar1 = $timeout(function() {
+                            if (timeVar1) {
+                                $timeout.cancel(timeVar1);
+                            }
+                            if ($scope.scroller)
+                                $scope.scroller.mCustomScrollbar('update');
+                        }, 500);
+
+                    })
                     $timeout(function() {
                         var page = $routeParams['menuPage'] | 'basicDisplay';
                         menuSvc.setMenu('basicDisplay');
