@@ -349,6 +349,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 $scope.parentModel = menuSvc.menuScope.$eval(parentStr);
                 $scope.featureModelCon = menuSvc.menuScope.$eval($attrs['model']);
                 $scope.isCollapsed = true;
+                // feature made enabled - open the settings
+                $scope.openFeature = function() {
+                    if ($scope.isCollapsed) {
+                        $scope.isCollapsed = false;
+                    }
+                };
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                 if ($scope.featureCheckbox) {
                     if ($scope.featureModelCon) {
@@ -384,7 +390,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     });
                     var initDone = menuSvc.menuScope.$watch('$parent.menuInitDone', function(newVal, oldVal) {
                         if (newVal & newVal != oldVal) {
-                            initDone();
+                            initDone(); //remove the $watch
                             var oldModel = angular.copy(scope.featureModelCon);
                             // to enable a plugin when some of its data has changed
                             scope.$watch(function() {
@@ -408,11 +414,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                                     if (newval != oldVal) {
                                         if (!newval) {// feature disabled  - delete control data
                                             delete scope.parentModel[scope.FeatureModel];
-                                        }
-                                        else { // feature enabled - open the settings
-                                            if (scope.isCollapsed) {
-                                                scope.isCollapsed = false;
-                                            }
                                         }
                                     }
                                 });

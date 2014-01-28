@@ -658,46 +658,36 @@ DirectivesModule.directive('infoAction', ['menuSvc', function(menuSvc) {
         templateUrl: 'template/formcontrols/infoAction.html'
     };
 }]);
-DirectivesModule.directive('prettyCheckbox', function() {
+DirectivesModule.directive('prettycheckbox', function() {
     return {
         restrict: 'AC',
         require: 'ngModel',
-        transclude: 'element',
-        compile: function(tElement, tAttrs, transclude) {
-            return function(scope, $element, iAttr, ngController) {
-                var wrapper = angular.element('<div class="prettycheckbox"></div>');
-                var clickHandler = $('<a href="#" class=""></a>').appendTo(wrapper);
-                transclude(scope, function(clone) {
-                    return $element.replaceWith(wrapper).append(clone);
-                });
-                ngController.$render = function() {
-                    if (ngController.$viewValue) {
-                        clickHandler.addClass('checked');
-                    }
-                    else
-                        ngController.$viewValue = false;
-                };
-                clickHandler.on('click', function(e) {
-                    e.preventDefault();
-                    scope.$apply(function() {
-                        ngController.$setViewValue(!ngController.$viewValue);
-                    });
-                    return false;
-                });
-                var formatter = function() {
-                    if (ngController.$viewValue) {
-                        clickHandler.addClass('checked');
-                    }
-                    else {
-                        clickHandler.removeClass('checked');
-                    }
-                };
-                ngController.$viewChangeListeners.push(formatter);
-                if (scope['require']) {
-                    ngController.$setValidity('required', true);
+        template: '<a data-ng-click="check()"></a>',
+        link: function(scope, $element, iAttr, ngController) {
+            var clickHandler = $($element).find('a');
+            ngController.$render = function() {
+                if (ngController.$viewValue) {
+                    clickHandler.addClass('checked');
                 }
-
+                else
+                    ngController.$viewValue = false;
             };
+            scope.check = function() {
+                ngController.$setViewValue(!ngController.$viewValue);
+            };
+
+            var formatter = function() {
+                if (ngController.$viewValue) {
+                    clickHandler.addClass('checked');
+                }
+                else {
+                    clickHandler.removeClass('checked');
+                }
+            };
+            ngController.$viewChangeListeners.push(formatter);
+            if (scope['require']) {
+                ngController.$setValidity('required', true);
+            }
         }
     };
 });
