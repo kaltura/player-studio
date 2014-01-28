@@ -109,9 +109,9 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     $scope.calculateTotalItems();
                 }, 100);
             });
-            $scope.oldVersionEditText = $filter('i18n')('Warning this player is out of date. \n' +
-                'Saving changes to this player upgrade, some features and \n' +
-                'design may be lost. (read more about upgrading players)');
+            $scope.oldVersionEditText = $filter('i18n')(
+                'This player must be updated before editing. <br/>' +
+                'Some features and design may be lost.');
             $scope.goToEditPage = function (item, $event) {
                 $event.preventDefault();
 //TODO filter according to what? we don't have "version" field
