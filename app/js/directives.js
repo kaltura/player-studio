@@ -7,25 +7,22 @@ var DirectivesModule = angular.module('KMC.directives', [
 ]);
 DirectivesModule.directive('mcustomScrollbar', [
     '$timeout',
-    function ($timeout) {
+    function($timeout) {
         return {
             priority: 0,
             restrict: 'AC',
-            controller: [
-                '$scope',
-                '$element',
-                '$attrs',
-                function ($scope, $element, $attrs) {
-                    $scope.$on('layoutChange', function () {
-                        if ($scope.scroller)
-                            $timeout(function () {
-                                $scope.scroller.mCustomScrollbar('update');
-                            }, 500);
-                    });
-                }
-            ],
-            link: function (scope, element, attr) {
+            link: function(scope, element, attr) {
                 var options = scope.$eval(attr['mcustomScrollbar']);
+                var timeVar = null;
+                scope.$on('layoutChange', function() {
+                    if (scope.scroller)
+                        timeVar = $timeout(function() {
+                            if (timeVar) {
+                                $timeout.cancel(timeVar);
+                            }
+                            scope.scroller.mCustomScrollbar('update');
+                        }, 500);
+                });
                 var opts = {
                     horizontalScroll: false,
                     mouseWheel: true,
@@ -35,17 +32,16 @@ DirectivesModule.directive('mcustomScrollbar', [
                     advanced: {
                         autoScrollOnFocus: false,
                         updateOnBrowserResize: true,
-                        updateOnContentResize: true
+                        updateOnContentResize: false
                     }
                 };
                 angular.extend(opts, options);
-                var afterScroll = $timeout(function () {
+                var afterScroll = $timeout(function() {
                     if (typeof $().mCustomScrollbar == 'function') {
                         scope.scroller = element.mCustomScrollbar(opts);
-
                     }
                 }, 500);
-                var checkScroll = function (value) {
+                var checkScroll = function(value) {
                     if (value == 'block') {
                         $('#tableHead').css('padding-right', '18px');
                     }
@@ -54,21 +50,25 @@ DirectivesModule.directive('mcustomScrollbar', [
                     }
                 };
                 if ($('#tableHead').length) {
-                    afterScroll.then(function () {
+                    afterScroll.then(function() {
                         var scrollTools = $(element).find('.mCSB_scrollTools');
                         scope.scrollerCss = scrollTools.css('display');
-                        $timeout(function () {
+                        $timeout(function() {
                             checkScroll(scope.scrollerCss);
-                        }, 800);
-                        scope.$watch(function () {
+                        }, 200);
+                        scope.$watch(function() {
                             return  scope.scrollerCss = scrollTools.css('display');
-                        }, function (value) {
+                        }, function(value) {
                             checkScroll(value);
                         });
-                        $(window).resize(function () {
-                            $timeout(function () {
+                        var timeVar;
+                        $(window).resize(function() { //TODO: wrap in single timeout check
+                            timeVar = $timeout(function() {
+                                if (timeVar) {
+                                    $timeout.cancel(timeVar);
+                                }
                                 checkScroll(scrollTools.css('display'));
-                            }, 800);
+                            }, 200);
 
                         });
                     });
@@ -77,13 +77,13 @@ DirectivesModule.directive('mcustomScrollbar', [
         };
     }
 ]);
-DirectivesModule.directive('timeago', [function () {
+DirectivesModule.directive('timeago', [function() {
     return {
         scope: { timestamp: '@' },
         restrict: 'CA',
-        link: function (scope, iElement, iAttrs) {
+        link: function(scope, iElement, iAttrs) {
             if (typeof $.timeago == 'function')
-                scope.$watch('timestamp', function (newVal, oldVal) {
+                scope.$watch('timestamp', function(newVal, oldVal) {
                     if (newVal) {
                         var date = scope.timestamp * 1000;
                         iElement.text($.timeago(date));
@@ -92,11 +92,11 @@ DirectivesModule.directive('timeago', [function () {
         }
     };
 }]);
-DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
+DirectivesModule.directive('modelRadio', ['menuSvc', function(menuSvc) {
     return {
         restrict: 'EA',
         replace: true,
-        require:'?playerRefresh',
+        require: '?playerRefresh',
         templateUrl: 'template/formcontrols/modelRadio.html',
         scope: {
             'model': '=',
@@ -105,24 +105,24 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
             'strModel': '@model',
             'require': '@'
         },
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             var menuData = menuSvc.getControlData($attrs.model);
             $scope.options = menuData.options;
             var ngModelCntrl;
             var controls = [];
             return {
-                setChoice: function (value) {
-                    angular.forEach(controls, function (control) {
+                setChoice: function(value) {
+                    angular.forEach(controls, function(control) {
                         control.setValue(value);
                     });
                 },
-                registerControl: function (cntrl) {
+                registerControl: function(cntrl) {
                     controls.push(cntrl);
                 },
-                getValue: function () {
+                getValue: function() {
                     return $scope.model;
                 },
-                regContoller: function (cntrl) {
+                regContoller: function(cntrl) {
                     if (!ngModelCntrl)
                         menuSvc.menuScope.playerEdit.$addControl(cntrl);
                     ngModelCntrl = cntrl;
@@ -131,12 +131,12 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
             };
         }
         ],
-        link: function (scope, element, attributes,prController) {
-            if (prController){
-                element.attr('player-refresh','boolean');
+        link: function(scope, element, attributes, prController) {
+            if (prController) {
+                element.attr('player-refresh', 'boolean');
             }
             if (scope.require) {
-                scope.$watch('model', function (newval) { //TODO: change to ngmodel + $setValidity
+                scope.$watch('model', function(newval) { //TODO: change to ngmodel + $setValidity
                     if (!newval)
                         $(element).find('.form-group').addClass('ng-invalid');
                     else {
@@ -149,34 +149,34 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
     };
 }])
 ;
-DirectivesModule.directive('modelColor', function (PlayerService) {
+DirectivesModule.directive('modelColor', function(PlayerService) {
     return {
         restrict: 'EA',
         replace: true,
         require: "playerRefresh",
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             if (typeof $scope.model == 'undefined') {
                 if ($attrs.initvalue)
                     $scope.model = $attrs.initvalue;
                 else
                     $scope.model = '#ffffff';
             }
-            $scope.$watch('model', function (newVal, oldVal) {
+            $scope.$watch('model', function(newVal, oldVal) {
                 if (newVal != oldVal) {
                     PlayerService.setKDPAttribute($scope.kdpattr, newVal);
                 }
             });
         }],
-        link: function (scope, element, attrs, prController) {
+        link: function(scope, element, attrs, prController) {
             /*
-            if (prController) {
-                scope.prScope = prController.getPrScope();
-                prController.setUpdateFunction(function(prScope){
-                    scope.$on('colorPickerClosed',function(){
-                        prScope.controlUpdateAllowed = true;
-                    });
-                });
-            }*/
+             if (prController) {
+             scope.prScope = prController.getPrScope();
+             prController.setUpdateFunction(function(prScope){
+             scope.$on('colorPickerClosed',function(){
+             prScope.controlUpdateAllowed = true;
+             });
+             });
+             }*/
         },
         scope: {
             'class': '@',
@@ -190,12 +190,12 @@ DirectivesModule.directive('modelColor', function (PlayerService) {
         templateUrl: 'template/formcontrols/modelColor.html'
     };
 });
-DirectivesModule.directive('dname', function (menuSvc) { // made to help with validation registers dynamic directives with form controller
+DirectivesModule.directive('dname', function(menuSvc) { // made to help with validation registers dynamic directives with form controller
     return {
         require: '?ngModel',
         priority: 100,
-        compile: function (tElement, tAttrs) {
-            return function ($scope, $element, $attrs, $ngModelCntrl) {
+        compile: function(tElement, tAttrs) {
+            return function($scope, $element, $attrs, $ngModelCntrl) {
                 if ($ngModelCntrl) {
                     var dname = $scope.$eval($attrs['dname']);
                     $element.attr('name', dname);
@@ -206,38 +206,36 @@ DirectivesModule.directive('dname', function (menuSvc) { // made to help with va
         }
     };
 });
-DirectivesModule.directive('ngPlaceholder', function ($timeout) {
+DirectivesModule.directive('ngPlaceholder', function($timeout) {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function (scope, element, attr, ctrl) {
+        link: function(scope, element, attr, ctrl) {
             if (attr['ngPlaceholder']) {
                 var value;
-                var placehold = function () {
+                var placehold = function() {
                     element.val(attr['ngPlaceholder']);
                     if (attr['require']) {
-                        $timeout(function () {
-                            ctrl.$setValidity('required', false);
-                        });
+                        ctrl.$setValidity('required', false);
                     }
                     element.addClass('placeholder');
                 };
-                var unplacehold = function () {
+                var unplacehold = function() {
                     element.val('');
                     element.removeClass('placeholder');
                 };
-                scope.$watch(function () {
+                scope.$watch(function() {
                     return element.val();
-                }, function (val) {
+                }, function(val) {
                     value = val || '';
                 });
-                element.bind('focus', function () {
+                element.bind('focus', function() {
                     if (value === '' || value == attr['ngPlaceholder']) unplacehold();
                 });
-                element.bind('blur', function () {
+                element.bind('blur', function() {
                     if (element.val() === '') placehold();
                 });
-                ctrl.$formatters.unshift(function (val) {
+                ctrl.$formatters.unshift(function(val) {
                     if (!val) {
                         placehold();
                         value = '';
@@ -249,15 +247,15 @@ DirectivesModule.directive('ngPlaceholder', function ($timeout) {
         }
     };
 });
-DirectivesModule.directive('modelText', function (menuSvc) {
+DirectivesModule.directive('modelText', function(menuSvc) {
     return {
         replace: true,
         restrict: 'EA',
-        controller: function ($scope, $element, $attrs) {
+        controller: function($scope, $element, $attrs) {
             $scope.type = 'text';
             $scope.form = menuSvc.menuScope.playerEdit;
-            var makeWatch = function (value, retProp) {
-                $scope.$watch(function () {
+            var makeWatch = function(value, retProp) {
+                $scope.$watch(function() {
                         if ($scope.form[$scope['strModel']]) {
                             var inputCntrl = $scope.form[$scope['strModel']];
                             if (typeof inputCntrl.$error[value] != 'undefined');
@@ -265,7 +263,7 @@ DirectivesModule.directive('modelText', function (menuSvc) {
                         }
                         return false;
                     },
-                    function (newVal) {
+                    function(newVal) {
                         $scope[retProp] = newVal;
                     }
                 );
@@ -296,9 +294,9 @@ DirectivesModule.directive('modelText', function (menuSvc) {
                 }
             }
             $scope.validation = {
-                test: function () { // mock the RegExp object
+                test: function() { // mock the RegExp object
                     return true;
-                }, match: function () { // mock the RegExp object
+                }, match: function() { // mock the RegExp object
                     return true;
                 }
             };
@@ -312,7 +310,7 @@ DirectivesModule.directive('modelText', function (menuSvc) {
             'helpnote': '@',
             'require': '@'
         },
-        compile: function (tElement, tAttr) {
+        compile: function(tElement, tAttr) {
             if (tAttr['endline'] == 'true') {
                 tElement.append('<hr/>');
             }
@@ -320,10 +318,10 @@ DirectivesModule.directive('modelText', function (menuSvc) {
         templateUrl: 'template/formcontrols/modelText.html'
     };
 });
-DirectivesModule.directive('valType', function () {
+DirectivesModule.directive('valType', function() {
     return {
         restrict: "A",
-        compile: function (tElem, tAttr) {
+        compile: function(tElem, tAttr) {
             if ((tAttr['valType'] == 'url' || tAttr['valType'] == 'email') && $('html').hasClass('IE8') === false) {
                 tElem.attr('input', tAttr['valType']);
             }
@@ -332,7 +330,7 @@ DirectivesModule.directive('valType', function () {
 });
 DirectivesModule.directive('select2Data', [
     'menuSvc',
-    function (menuSvc) {
+    function(menuSvc) {
         return {
             replace: true,
             restrict: 'EA',
@@ -345,7 +343,7 @@ DirectivesModule.directive('select2Data', [
                 "require": '@',
                 'strModel': '@model'
             },
-            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.selectOpts = {};
                 $scope.selectOpts['data'] = menuSvc.doAction($attrs.source);
                 if ($attrs.query) {
@@ -358,7 +356,7 @@ DirectivesModule.directive('select2Data', [
                 $scope.selectOpts['width'] = $attrs.width;
             }],
             templateUrl: 'template/formcontrols/select2Data.html',
-            compile: function (tElement, tAttr) {
+            compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
@@ -367,15 +365,15 @@ DirectivesModule.directive('select2Data', [
                 }
                 if (tAttr.placeholder)
                     tElement.find('input').attr('data-placeholder', tAttr.placeholder);
-                return function (scope, element) {
+                return function(scope, element) {
                 };
             }
         };
     }
 ]);
 DirectivesModule.directive('modelEdit', ['$modal',
-    function ($modal) {
-        var modalEditCntrl = ['$scope' , function ($scope) {
+    function($modal) {
+        var modalEditCntrl = ['$scope' , function($scope) {
             if (typeof $scope.model == 'undefined')
                 $scope.model = '';
             $scope.modelValue = $scope.model;
@@ -393,19 +391,19 @@ DirectivesModule.directive('modelEdit', ['$modal',
             },
             controller: modalEditCntrl,
             templateUrl: 'template/formcontrols/modelEdit.html',
-            compile: function (tElement, tAttr) {
+            compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
-                return function (scope, element, attrs) {
-                    scope.doModal = function () {
+                return function(scope, element, attrs) {
+                    scope.doModal = function() {
                         var modal = $modal.open({
                             templateUrl: 'template/dialog/textarea.html',
                             controller: 'ModalInstanceCtrl',
                             resolve: {
-                                settings: function () {
+                                settings: function() {
                                     return {
-                                        'close': function (result, value) {
+                                        'close': function(result, value) {
                                             scope.model = value;
                                             modal.close(result);
                                         },
@@ -422,8 +420,8 @@ DirectivesModule.directive('modelEdit', ['$modal',
     }
 ]);
 DirectivesModule.directive('modelTags', [
-    'menuSvc', '$timeout',
-    function (menuSvc, $timeout) {
+    'menuSvc',
+    function(menuSvc) {
         return {
             replace: true,
             restrict: 'EA',
@@ -433,7 +431,7 @@ DirectivesModule.directive('modelTags', [
                 'helpnote': '@',
                 'icon': '@'
             },
-            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.selectOpts = {
                     simple_tags: true,
                     'multiple': true,
@@ -445,22 +443,22 @@ DirectivesModule.directive('modelTags', [
                 $scope.selectOpts['tags'] = menuSvc.doAction($attrs.source);
             }],
             templateUrl: 'template/formcontrols/modelTags.html',
-            compile: function (tElement, tAttr) {
+            compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
-                return function (scope, element, attr) {
+                return function(scope, element, attr) {
                 };
             }
         };
     }
 ]);
-DirectivesModule.directive('listEntriesThumbs', function () {
+DirectivesModule.directive('listEntriesThumbs', function() {
     return {
         restrict: 'A',
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             if ($attrs.listEntriesThumbs == 'true') {
-                var format = function (player) {
+                var format = function(player) {
                     if (!player.thumbnailUrl)
                         return player.name;
                     return '<img class=\'thumb\' src=\'' + player.thumbnailUrl + '\'/>' + player.name;
@@ -468,7 +466,7 @@ DirectivesModule.directive('listEntriesThumbs', function () {
                 $scope.addOption({
                     formatResult: format,
                     formatSelection: format,
-                    escapeMarkup: function (m) {
+                    escapeMarkup: function(m) {
                         return m;
                     }
                 });
@@ -476,7 +474,7 @@ DirectivesModule.directive('listEntriesThumbs', function () {
         }]
     };
 });
-DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
+DirectivesModule.directive('modelSelect', ['menuSvc', function(menuSvc) {
     return {
         replace: true,
         restrict: 'EA',
@@ -491,11 +489,11 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
             'strModel': '@model',
             'require': '@'
         },
-        compile: function (tElement, tAttr) {
+        compile: function(tElement, tAttr) {
             if (tAttr['endline'] == 'true') {
                 tElement.append('<hr/>');
             }
-            return function ($scope, $element, $attrs, controller) {
+            return function($scope, $element, $attrs, controller) {
                 if (controller) {
                     var pubObj = {
                         model: $attrs.model,
@@ -503,7 +501,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
                         sortVal: menuSvc.getControlData($attrs.model).sortVal
                     };
                     controller.register($scope.model, pubObj);
-                    $scope.$watch('model', function (newVal, oldVal) {
+                    $scope.$watch('model', function(newVal, oldVal) {
                         if (newVal != oldVal)
                             controller.update(newVal, oldVal, pubObj);
                     });
@@ -514,7 +512,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
                 }
             };
         },
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             if (!$scope.selectOpts) {
                 $scope.selectOpts = {};
             }
@@ -525,7 +523,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
                 $scope.selectOpts.minimumResultsForSearch = -1;
             }
             $scope.options = [];
-            $scope.checkSelection = function (value) {
+            $scope.checkSelection = function(value) {
                 if (value == $scope.model)
                     return true;
                 else if (typeof value == 'number' && parseFloat($scope.model) == value) {
@@ -533,7 +531,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
                 }
                 return false;
             };
-            $scope.initSelection = function () {
+            $scope.initSelection = function() {
                 if ($scope.model === '' || typeof $scope.model == 'undefined') {
                     $scope.model = $attrs.initvalue;
                 }
@@ -541,22 +539,22 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
             };
             $scope.selectOpts.initSelection = $scope.initSelection();
             $scope.uiselectOpts = angular.toJson($scope.selectOpts);
-            this.setOptions = function (optsArr) {
+            this.setOptions = function(optsArr) {
                 $scope.options = optsArr;
             };
         }],
         templateUrl: 'template/formcontrols/modelSelect.html'
     };
 }]);
-DirectivesModule.directive('parentContainer', ['sortSvc', function (sortSvc) {
+DirectivesModule.directive('parentContainer', ['sortSvc', function(sortSvc) {
     return {
         restrict: 'A',
-        controller: function () {
+        controller: function() {
             var cntrl = {
-                register: function (container, model) {
+                register: function(container, model) {
                     sortSvc.register(container, model);
                 },
-                update: function (newVal, oldVal, model) {
+                update: function(newVal, oldVal, model) {
                     sortSvc.update(newVal, oldVal, model);
                 }
             };
@@ -566,55 +564,55 @@ DirectivesModule.directive('parentContainer', ['sortSvc', function (sortSvc) {
 }]);
 DirectivesModule.directive('sortOrder', [
     'sortSvc',
-    function (sortSvc) {
+    function(sortSvc) {
         return {
             restrict: 'EA',
             replace: true,
             scope: {},
             templateUrl: 'template/formcontrols/sortOrder.html',
-            controller: ['$scope', function ($scope) {
-                $scope.getObjects = function () {
+            controller: ['$scope', function($scope) {
+                $scope.getObjects = function() {
                     $scope.containers = sortSvc.getObjects();
                 };
                 $scope.getObjects();
                 sortSvc.sortScope = $scope;
-                $scope.$on('sortContainersChanged', function () {
+                $scope.$on('sortContainersChanged', function() {
                     $scope.getObjects();
                 });
-                $scope.$watchCollection('containers', function (newVal, oldVal) {
+                $scope.$watchCollection('containers', function(newVal, oldVal) {
                     if (newVal != oldVal) {
                         sortSvc.saveOrder($scope.containers);
                     }
                 });
                 $scope.sortableOptions = {
-                    update: function (e, ui) {
+                    update: function(e, ui) {
                         cl($scope.containers);
                     },
                     axis: 'y'
                 };
             }],
-            link: function (scope, element, attrs) {
+            link: function(scope, element, attrs) {
             }
         };
     }
 ]);
-DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', function (PlayerService, menuSvc, $timeout) {
+DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', function(PlayerService, menuSvc, $timeout) {
     var menuScope = menuSvc.menuScope;
     return {
         restrict: 'A',
         priority: 1000,
         require: ['playerRefresh', '?ngModel'],
-        controller: function ($scope, $element, $attrs) {
+        controller: function($scope, $element, $attrs) {
             $scope.customRefresh = false;
             $scope.modelChanged = false; // used to track the model
             $scope.controlUpdateAllowed = false; // used to track the input control, for example it changes to true only if text field has had a blur event
-            $scope.controlFunction = function () {
+            $scope.controlFunction = function() {
                 if ($attrs['playerRefresh'] == 'boolean') { // boolean controls don't need the extra watch so with that flag we just watch the model
                     return $scope.modelChanged;
                 } else
                     return  ($scope.modelChanged && $scope.controlUpdateAllowed);
             };
-            $scope.updateFunction = function (prScope, elem) { // the function used to set controlUpdateAllowed - works for text inputs etc.
+            $scope.updateFunction = function(prScope, elem) { // the function used to set controlUpdateAllowed - works for text inputs etc.
                 // a custom function can be set with setUpdateFunction
                 var triggerElm;
                 if (elem.is('input') || elem.is('select')) {
@@ -623,15 +621,15 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                 else {
                     triggerElm = $(elem).find('input[ng-model], select[ng-model]');
                 }
-                prScope.$apply(function(){
-                    triggerElm.on('change', function (e) {
+                prScope.$apply(function() {
+                    triggerElm.on('change', function(e) {
                         prScope.controlUpdateAllowed = true;
                     });
                 });
             };
             var i = 0;
             var timeOutRun = null;
-            $scope.makeRefresh = function () { // once set to action it will refresh!
+            $scope.makeRefresh = function() { // once set to action it will refresh!
                 if (PlayerService.playerRefresh($attrs['playerRefresh'])) {
                     if (timeOutRun) {
                         $timeout.cancel(timeOutRun);
@@ -643,7 +641,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                 } else { // we  initiated a call but the player is still not finished rendering, we will try 10 time;
                     if (i < 10) {
                         i++;
-                        timeOutRun = $timeout(function () {
+                        timeOutRun = $timeout(function() {
                             if (timeOutRun) {
                                 $timeout.cancel(timeOutRun);
                                 timeOutRun = null;
@@ -654,21 +652,21 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                 }
             };
             var ctrObj = {
-                setUpdateFunction: function (func) {
+                setUpdateFunction: function(func) {
                     $scope.customRefresh = true;
                     $scope.updateFunction = func;
                 },
-                setControlFunction: function (func) {
+                setControlFunction: function(func) {
                     $scope.customRefresh = true;
                     $scope.controlFunction = func;
                 },
-                getPrScope: function () {
+                getPrScope: function() {
                     return $scope;
                 }
             };
             return ctrObj;
         },
-        link: function (scope, iElement, iAttrs, controllers) {
+        link: function(scope, iElement, iAttrs, controllers) {
             var playerRefresh = controllers[0];
             var ngController = null;
             if (iAttrs['playerRefresh'] != 'false') {
@@ -678,9 +676,9 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     model = ngController.$modelValue;
                 }
                 if (!ngController) {
-                    menuScope.$watch(function (menuScope) {
+                    menuScope.$watch(function(menuScope) {
                         return menuScope.$eval(model);
-                    }, function (newVal, oldVal) {
+                    }, function(newVal, oldVal) {
                         if (newVal != oldVal) {
                             scope.modelChanged = true;
                         } else {
@@ -690,34 +688,34 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     });
                 }
                 else {
-                    ngController.$viewChangeListeners.push(function () {
+                    ngController.$viewChangeListeners.push(function() {
                         scope.modelChanged = true;
                     });
                 }
-                $timeout(function () { // set the timeout to call the updateFunction watch
+                $timeout(function() { // set the timeout to call the updateFunction watch
                     scope.updateFunction(scope, iElement);//optional  parameters
-                    scope.$watch(function () {
+                    scope.$watch(function() {
                         return scope.controlFunction(scope);//optional scope parameter
-                    }, function (newVal, oldVal) {
+                    }, function(newVal, oldVal) {
                         if (newVal != oldVal && newVal) {
                             scope.makeRefresh();
                         }
                     });
-                }, 1000);
+                }, 200);
             }
         }
     };
 }])
 ;
-DirectivesModule.directive('infoAction', ['menuSvc', function (menuSvc) {
+DirectivesModule.directive('infoAction', ['menuSvc', function(menuSvc) {
     return {
         restrict: 'EA',
         replace: 'true',
-        controller: ['$scope', function ($scope) {
-            $scope.check = function (action) {
+        controller: ['$scope', function($scope) {
+            $scope.check = function(action) {
                 return menuSvc.checkAction(action);
             };
-            $scope.btnAction = function (action) {
+            $scope.btnAction = function(action) {
                 menuSvc.doAction(action);
             };
         }],
@@ -732,25 +730,25 @@ DirectivesModule.directive('infoAction', ['menuSvc', function (menuSvc) {
         templateUrl: 'template/formcontrols/infoAction.html'
     };
 }]);
-DirectivesModule.directive('prettyCheckbox', function () {
+DirectivesModule.directive('prettyCheckbox', function() {
     return {
         restrict: 'AC',
         require: 'ngModel',
         transclude: 'element',
-        compile: function (tElement, tAttrs, transclude) {
-            return function (scope, $element, iAttr, ngController) {
+        compile: function(tElement, tAttrs, transclude) {
+            return function(scope, $element, iAttr, ngController) {
                 var wrapper = angular.element('<div class="prettycheckbox"></div>');
                 var clickHandler = $('<a href="#" class=""></a>').appendTo(wrapper);
-                transclude(scope, function (clone) {
+                transclude(scope, function(clone) {
                     return $element.replaceWith(wrapper).append(clone);
                 });
                 var watchProp = iAttr['model'] || iAttr['ngModel'];
-                clickHandler.on('click', function (e) {
+                clickHandler.on('click', function(e) {
                     e.preventDefault();
                     ngController.$setViewValue(!ngController.$viewValue);
                     return false;
                 });
-                var formatter = function () {
+                var formatter = function() {
                     if (ngController.$viewValue) {
                         clickHandler.addClass('checked');
                         if (scope['require']) {
@@ -775,14 +773,14 @@ DirectivesModule.directive('prettyCheckbox', function () {
         }
     };
 });
-DirectivesModule.directive('prettyRadio', function () {
+DirectivesModule.directive('prettyRadio', function() {
     return {
         restrict: 'AC',
         require: ['ngModel', '^modelRadio'],
         transclude: 'element',
-        controller: function ($scope, $element, $attrs) {
+        controller: function($scope, $element, $attrs) {
             $scope.checked = false;
-            $scope.setValue = function (value) {
+            $scope.setValue = function(value) {
                 if (value == $attrs.value) {
                     $scope.checked = true;
                 } else
@@ -792,8 +790,8 @@ DirectivesModule.directive('prettyRadio', function () {
                 $scope.checked = true;
             }
         },
-        compile: function (tElement, tAttrs, transclude) {
-            return function (scope, iElement, iAttr, cntrls) {
+        compile: function(tElement, tAttrs, transclude) {
+            return function(scope, iElement, iAttr, cntrls) {
                 var ngController = cntrls[0];
                 var modelRadioCntrl = cntrls[1];
                 var wrapper = $('<span class="clearfix prettyradio"></span>');
@@ -805,24 +803,24 @@ DirectivesModule.directive('prettyRadio', function () {
                 if (typeof iAttr['model'] != 'undefined') {
                     watchProp = iAttr['model'];
                 }
-                transclude(scope, function (clone) {
+                transclude(scope, function(clone) {
                     return iElement.replaceWith(wrapper).append(clone);
                 });
-                clickHandler.on('click', function (e) {
+                clickHandler.on('click', function(e) {
                     e.preventDefault();
                     ngController.$setViewValue(inputVal);
 
-                    scope.$apply(function () {
+                    scope.$apply(function() {
                             modelRadioCntrl.setChoice(inputVal);
                         }
                     );
                     return false;
                 });
-                var formatter = function () {
+                var formatter = function() {
                     modelRadioCntrl.setChoice(inputVal);
                 };
                 ngController.$viewChangeListeners.push(formatter);
-                scope.$watch('checked', function (newVal) {
+                scope.$watch('checked', function(newVal) {
                     if (newVal) {
                         clickHandler.addClass('checked');
                     }
@@ -833,27 +831,27 @@ DirectivesModule.directive('prettyRadio', function () {
         }
     };
 });
-DirectivesModule.directive('modelCheckbox', function () {
+DirectivesModule.directive('modelCheckbox', function() {
     return {
         restrict: 'EA',
         templateUrl: 'template/formcontrols/modelCheckbox.html',
         require: '?playerRefresh',
         replace: true,
-        compile: function (tElement, tAttr) {
+        compile: function(tElement, tAttr) {
             if (tAttr['endline'] == 'true') {
                 tElement.append('<hr/>');
             }
-            return function ($scope, $element, $attrs, playerRefreshCnt) {
+            return function($scope, $element, $attrs, playerRefreshCnt) {
                 if (playerRefreshCnt) {
                     if ($attrs['playerRefresh'] != 'boolean')
                         $element.attr('player-refresh', 'boolean');
-                    playerRefreshCnt.setUpdateFunction(function (pRscope) { // scope here is pRscope.
+                    playerRefreshCnt.setUpdateFunction(function(pRscope) { // scope here is pRscope.
                         pRscope.controlUpdateAllowed = true; // checkbox doesn't need a control watcher, the model is enough.
                     });
                 }
             };
         },
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             if ($scope.model === '' || typeof $scope.model == 'undefined') {
                 if ($attrs.initvalue === 'true')
                     $scope.model = true;
@@ -868,14 +866,14 @@ DirectivesModule.directive('modelCheckbox', function () {
         }
     };
 });
-DirectivesModule.directive('divider', [function () {
+DirectivesModule.directive('divider', [function() {
     return {
         replace: true,
         restrict: 'EA',
         template: '<hr class="divider"/>'
     };
 }]);
-DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
+DirectivesModule.directive('readOnly', ['$filter', function($filter) {
     return {
         restrict: 'EA',
         replace: 'true',
@@ -883,7 +881,7 @@ DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
             model: '=',
             helpnote: '@'
         },
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             if ($attrs['filter']) {
                 if (typeof $filter($attrs['filter']) == 'function')
                     $scope.model = $filter($attrs['filter'])($scope.model);
@@ -897,15 +895,15 @@ DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
         templateUrl: 'template/formcontrols/readOnly.html'
     };
 }]);
-DirectivesModule.directive('modelButton', ['menuSvc', function (menuSvc) {
+DirectivesModule.directive('modelButton', ['menuSvc', function(menuSvc) {
     return {
         restrict: 'EA',
         replace: 'true',
-        controller: ['$scope', function ($scope) {
-            $scope.check = function (action) {
+        controller: ['$scope', function($scope) {
+            $scope.check = function(action) {
                 return menuSvc.checkAction(action);
             };
-            $scope.btnAction = function (action) {
+            $scope.btnAction = function(action) {
                 menuSvc.doAction(action);
             };
         }],
@@ -918,7 +916,7 @@ DirectivesModule.directive('modelButton', ['menuSvc', function (menuSvc) {
         templateUrl: 'template/formcontrols/modelButton.html'
     };
 }]);
-DirectivesModule.directive('modelNumber', ['$timeout', 'PlayerService',function ($timeout, PlayerService) {
+DirectivesModule.directive('modelNumber', ['PlayerService', function(PlayerService) {
     return {
         templateUrl: 'template/formcontrols/spinEdit.html',
         replace: true,
@@ -931,28 +929,27 @@ DirectivesModule.directive('modelNumber', ['$timeout', 'PlayerService',function 
             'require': '@',
             'kdpattr': '@'
         },
-        link: function ($scope, $element, $attrs) {
+        link: function($scope, $element, $attrs) {
             var $spinner = $element.find('input');
-            $timeout(function () {
-                $spinner.
-                    spinedit({
-                        minimum: parseFloat($attrs.from) || 0,
-                        maximum: parseFloat($attrs.to) || 100,
-                        step: parseFloat($attrs.stepsize) || 1,
-                        value: parseFloat($attrs.initvalue) || 0,
-                        numberOfDecimals: parseFloat($attrs.numberofdecimals) || 0
-                    });
+            $scope.$apply(function() {
+                $spinner.spinedit({
+                    minimum: parseFloat($attrs.from) || 0,
+                    maximum: parseFloat($attrs.to) || 100,
+                    step: parseFloat($attrs.stepsize) || 1,
+                    value: parseFloat($attrs.initvalue) || 0,
+                    numberOfDecimals: parseFloat($attrs.numberofdecimals) || 0
+                });
             });
-            $spinner.on('valueChanged', function (e) {
+            $spinner.on('valueChanged', function(e) {
                 if (typeof e.value == 'number') {
                     $scope.model = e.value;
-                    if ($scope.kdpattr){
+                    if ($scope.kdpattr) {
                         PlayerService.setKDPAttribute($scope.kdpattr, e.value);
                     }
                 }
             });
         },
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             var def = {
                 from: 5,
                 to: 10,
@@ -965,7 +962,7 @@ DirectivesModule.directive('modelNumber', ['$timeout', 'PlayerService',function 
                 'stepsize',
                 'numberofdecimals'
             ];
-            angular.forEach(keys, function (keyName) {
+            angular.forEach(keys, function(keyName) {
                 if (!$attrs[keyName])
                     $scope[keyName] = def[keyName];
                 else
@@ -987,12 +984,16 @@ DirectivesModule.directive('modelNumber', ['$timeout', 'PlayerService',function 
 DirectivesModule.directive('onFinishRender', [
     '$timeout',
     'requestNotificationChannel',
-    function ($timeout, requestNotificationChannel) {
+    function($timeout, requestNotificationChannel) {
         return {
             restrict: 'A',
-            link: function (scope, element, attr) {
+            link: function(scope, element, attr) {
                 if (scope.$last === true) {
-                    $timeout(function () {
+                    var timeVar;
+                    timeVar = $timeout(function() {
+                        if (timeVar) {
+                            $timeout.cancel(timeVar);
+                        }
                         requestNotificationChannel.requestEnded('list');
                     });
                 }
