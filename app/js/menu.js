@@ -372,10 +372,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     });
                     scope.$watch('isCollapsed', function(newVal, oldVal) {
                         if (newVal != oldVal) {
-                            scope.$emit('accordionCollapse');
+                            menuSvc.menuScope.$broadcast('layoutChange');
                             $(element).find('.header:first i.glyphicon-play').toggleClass('rotate90');
                         }
                     });
+                    // to delete control data when plugin is  disabled
                     scope.$watch('featureModelCon._featureEnabled', function(newval, oldVal) {
                         if (!newval && newval != oldVal) {
                             var ModelArr = attributes['model'].split('.');
@@ -409,7 +410,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             elm.animate({'backgroundColor': 'rgba(253,255,187,0)'}, 1000, function() {
                                 elm.css({'backgroundColor': originalBG}, 1000);
                             });
-
                         }, 4000);
                     }
                 });
@@ -427,6 +427,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 var menuElem = tElement.find('#mp-base >  ul');
                 var menuData = menuSvc.buildMenu('data');
                 return function($scope, $element) {
+                    menuSvc.menuScope = $scope;
                     transclude($scope, function(clone) {
                         angular.forEach(clone, function(elem) {
                             if ($(elem).is('li')) {
@@ -441,10 +442,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     $compile(menuData.contents())($scope, function(clone) { // goes back to the controller
                         menuElem.prepend(clone);
                     });
+                    var timeVar = null;
                     $scope.$on('menuChange', function(e, page) {
                         $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
                         if (page != 'search')
-                            $timeout(function() {
+                            timeVar = $timeout(function() {
+                                if (timeVar) {
+                                    $timeout.clear(timeVar);
+                                }
                                 $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
                             }, 500);
                     });
@@ -457,15 +462,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     }, 500);
                 };
             },
-            controller: ['$scope', '$element', function($scope, $element) {
-                $scope.$on('accordionCollapse', function() {
-                    $('.mCustomScrollbar').mCustomScrollbar('update');
-                });
-                menuSvc.menuScope = $scope;
-            }]
-
-        }
-            ;
+        };
     }]).
     controller('menuSearchCtl', ['$scope', 'menuSvc', function($scope, menuSvc) {
         var menuObj = menuSvc.get();
