@@ -670,33 +670,29 @@ DirectivesModule.directive('prettyCheckbox', function() {
                 transclude(scope, function(clone) {
                     return $element.replaceWith(wrapper).append(clone);
                 });
-                var watchProp = iAttr['model'] || iAttr['ngModel'];
                 clickHandler.on('click', function(e) {
                     e.preventDefault();
                     ngController.$setViewValue(!ngController.$viewValue);
+                    scope.$apply(formatter);
                     return false;
                 });
                 var formatter = function() {
                     if (ngController.$viewValue) {
                         clickHandler.addClass('checked');
-                        if (scope['require']) {
-                            clickHandler.removeClass('ng-invalid');
-                        }
                     }
                     else {
                         clickHandler.removeClass('checked');
-                        if (scope['require']) {
-                            clickHandler.addClass('ng-invalid');
-                        }
                     }
                 };
-                ngController.$viewChangeListeners.push(formatter);
-                if (scope.$eval(watchProp)) {
-                    clickHandler.addClass('checked');
+                ngController.$render = function() {
+                    if (ngController.$viewValue) {
+                        clickHandler.addClass('checked');
+                    }
+                    if (scope['require']) {
+                        ngController.$setValidity('required', true);
+                    }
                 }
-                if (scope['require'] && !ngController.$viewValue) {
-                    clickHandler.addClass('ng-invalid');
-                }
+
             };
         }
     };

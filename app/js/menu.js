@@ -381,10 +381,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             var ModelArr = attributes['model'].split('.');
                             var target = ModelArr.pop();
                             var parentStr = ModelArr.join('.');
-                            var parent = menuScope.$eval(parentStr);
+                            var parent = menuSvc.menuScope.$eval(parentStr);
                             delete parent[target];
                         }
-
                     });
                     scope.$on('openFeature', function(e, args) {
                         if (args == attributes['model']) {
