@@ -773,7 +773,7 @@ DirectivesModule.directive('prettyCheckbox', function() {
         }
     };
 });
-DirectivesModule.directive('prettyRadio', function() {
+DirectivesModule.directive('prettyRadio', ['$rootScope', function($rootScope) {
     return {
         restrict: 'AC',
         require: ['ngModel', '^modelRadio'],
@@ -810,7 +810,7 @@ DirectivesModule.directive('prettyRadio', function() {
                     e.preventDefault();
                     ngController.$setViewValue(inputVal);
 
-                    scope.$apply(function() {
+                    $rootScope.$safeApply(scope, function() {
                             modelRadioCntrl.setChoice(inputVal);
                         }
                     );
@@ -830,7 +830,7 @@ DirectivesModule.directive('prettyRadio', function() {
             };
         }
     };
-});
+}]);
 DirectivesModule.directive('modelCheckbox', function() {
     return {
         restrict: 'EA',
@@ -916,7 +916,7 @@ DirectivesModule.directive('modelButton', ['menuSvc', function(menuSvc) {
         templateUrl: 'template/formcontrols/modelButton.html'
     };
 }]);
-DirectivesModule.directive('modelNumber', ['PlayerService', function(PlayerService) {
+DirectivesModule.directive('modelNumber', ['PlayerService', '$timeout', function(PlayerService, $timeout) {
     return {
         templateUrl: 'template/formcontrols/spinEdit.html',
         replace: true,
@@ -931,7 +931,7 @@ DirectivesModule.directive('modelNumber', ['PlayerService', function(PlayerServi
         },
         link: function($scope, $element, $attrs) {
             var $spinner = $element.find('input');
-            $scope.$apply(function() {
+            $timeout(function() {
                 $spinner.spinedit({
                     minimum: parseFloat($attrs.from) || 0,
                     maximum: parseFloat($attrs.to) || 100,

@@ -448,7 +448,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                         if (page != 'search')
                             timeVar = $timeout(function() {
                                 if (timeVar) {
-                                    $timeout.clear(timeVar);
+                                    $timeout.cancel(timeVar);
                                 }
                                 $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
                             }, 500);

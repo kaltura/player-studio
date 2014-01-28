@@ -166,8 +166,15 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }]}
         });
     }]).run(function($rootScope, $rootElement, $location) {
-        $rootScope.$on('$routeChangeSuccess', function() {
-            var url = $location.url().split('/');
-            $rootScope.routeName = url[1];
-        });
+    $rootScope.$safeApply = function(scope, fn) {
+        var phase = scope.$root.$$phase;
+        if (phase == '$apply' || phase == '$digest')
+            scope.$eval(fn);
+        else
+            scope.$apply(fn);
+    };
+    $rootScope.$on('$routeChangeSuccess', function() {
+        var url = $location.url().split('/');
+        $rootScope.routeName = url[1];
     });
+});
