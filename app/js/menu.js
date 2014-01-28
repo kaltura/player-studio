@@ -337,8 +337,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
     }
     ]).
     directive('featureMenu', ['menuSvc', function(menuSvc) {
-        var menuScope = menuSvc.menuScope;
-        return {
+        return {    
             restrict: 'EA',
             replace: true,
             templateUrl: 'template/menu/featureMenu.html',
@@ -347,7 +346,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 $scope.isCollapsed = true;
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                 if ($scope.featureCheckbox) {
-                    $scope.featureModelCon = menuScope.$eval($attrs['model']);
+                    $scope.featureModelCon = menuSvc.menuScope.$eval($attrs['model']);
                     if ($scope.featureModelCon) {
                         if (typeof $scope.featureModelCon._featureEnabled == 'undefined' || $scope.featureModelCon._featureEnabled.toString() != 'false')
                             $scope.featureModelCon._featureEnabled = true;
