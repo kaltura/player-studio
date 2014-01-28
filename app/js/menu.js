@@ -421,6 +421,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
             restrict: 'EA',
+            priority:10000,
             scope: {'data': '=', 'settings': '=', menuInitDone: '='},
             transclude: true,
             compile: function(tElement, tAttrs, transclude) {
