@@ -672,8 +672,9 @@ DirectivesModule.directive('prettyCheckbox', function() {
                 });
                 clickHandler.on('click', function(e) {
                     e.preventDefault();
-                    ngController.$setViewValue(!ngController.$viewValue);
-                    scope.$apply(formatter);
+                    scope.$apply(function() {
+                        ngController.$setViewValue(!ngController.$viewValue);
+                    });
                     return false;
                 });
                 var formatter = function() {
@@ -684,13 +685,16 @@ DirectivesModule.directive('prettyCheckbox', function() {
                         clickHandler.removeClass('checked');
                     }
                 };
+                ngController.$viewChangeListeners.push(formatter);
+                if (scope['require']) {
+                    ngController.$setValidity('required', true);
+                }
                 ngController.$render = function() {
                     if (ngController.$viewValue) {
                         clickHandler.addClass('checked');
                     }
-                    if (scope['require']) {
-                        ngController.$setValidity('required', true);
-                    }
+                    else
+                        ngController.$viewValue = false;
                 }
 
             };

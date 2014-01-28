@@ -343,19 +343,27 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             templateUrl: 'template/menu/featureMenu.html',
             transclude: true,
             controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
+                var ModelArr = $attrs['model'].split('.');
+                $scope.FeatureModel = ModelArr.pop();
+                var parentStr = ModelArr.join('.');
+                $scope.parentModel = menuSvc.menuScope.$eval(parentStr);
+                $scope.featureModelCon = menuSvc.menuScope.$eval($attrs['model']);
                 $scope.isCollapsed = true;
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                 if ($scope.featureCheckbox) {
-                    $scope.featureModelCon = menuSvc.menuScope.$eval($attrs['model']);
                     if ($scope.featureModelCon) {
-                        if (typeof $scope.featureModelCon._featureEnabled == 'undefined' || $scope.featureModelCon._featureEnabled.toString() != 'false')
-                            $scope.featureModelCon._featureEnabled = true;
+                        $scope.featureModelCon._featureEnabled = true;
+                        $scope._featureEnabled = true;
                     }
                     else {
-                        $scope.featureModelCon = {};
+                        if ($scope.parentModel)
+                            $scope.featureModelCon = $scope.parentModel[$scope.FeatureModel] = {};
+                        else
+                            $scope.featureModelCon = {};
                     }
                 }
-            }],
+            }
+            ],
             scope: {
                 label: '@',
                 helpnote: "@",
@@ -375,16 +383,28 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             $(element).find('.header:first i.glyphicon-play').toggleClass('rotate90');
                         }
                     });
-                    // to delete control data when plugin is  disabled
-                    scope.$watch('featureModelCon._featureEnabled', function(newval, oldVal) {
-                        if (!newval && newval != oldVal) {
-                            var ModelArr = attributes['model'].split('.');
-                            var target = ModelArr.pop();
-                            var parentStr = ModelArr.join('.');
-                            var parent = menuSvc.menuScope.$eval(parentStr);
-                            delete parent[target];
+                    scope.$watchCollection('featureModelCon', function(newVal, oldVal) {
+                        if (newVal != oldVal && newVal) {
+                            //TODO : check if not defaults
+                            scope._featureEnabled = true;
                         }
                     });
+                    if (scope.featureCheckbox) {
+                        // to delete control data when plugin is  disabled
+                        scope.$watch('_featureEnabled', function(newval, oldVal) {
+                            if (newval != oldVal) {
+                                if (!newval)
+                                    delete scope.parentModel[scope.FeatureModel];
+                                else {
+                                    if (!scope.parentModel[scope.FeatureModel])
+                                        scope.parentModel[scope.FeatureModel] = {_featureEnabled: true};
+                                    else {
+                                        scope.featureModelCon._featureEnabled = true;
+                                    }
+                                }
+                            }
+                        });
+                    }
                     scope.$on('openFeature', function(e, args) {
                         if (args == attributes['model']) {
                             scope.isCollapsed = false;
@@ -393,7 +413,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 };
             }
         };
-    }]).directive('model', ['$timeout', function($timeout) {
+    }]).
+    directive('model', ['$timeout', function($timeout) {
         return {
             restrict: 'A',
             link: function(scope, iElem, iAttr) {
