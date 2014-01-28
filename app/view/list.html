@@ -98,7 +98,7 @@
             </div>
             <div id="footer" class="text-center">
                 <div id="paginationWrap">
-                    <pagination ng-show='filtered.length > maxSize' previous-text='&laquo;' next-text='&raquo;'
+                    <pagination ng-show='filtered.length > maxSize'  ng-click='triggerLayoutChange()' previous-text='&laquo;' next-text='&raquo;'
                                 page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
                 </div>
                 <div id="maxSizeSelect">
