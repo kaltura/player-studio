@@ -382,38 +382,43 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             scope.$emit('layoutChange');
                         }
                     });
-                    var oldModel = angular.copy(scope.featureModelCon);
-                    // to enable a plugin when some of its data has changed
-                    scope.$watch(function() {
-                        var returnVal = false;
-                        angular.forEach(scope.featureModelCon, function(value, key) {
-                            if (key != '_featureEnabled') {
-                                if (scope.featureModelCon[key] != oldModel[key]) {
-                                    oldModel = angular.copy(scope.featureModelCon);
-                                    return returnVal = true;
+                    var initDone = menuSvc.menuScope.$watch('$parent.menuInitDone', function(newVal, oldVal) {
+                        if (newVal & newVal != oldVal) {
+                            initDone();
+                            var oldModel = angular.copy(scope.featureModelCon);
+                            // to enable a plugin when some of its data has changed
+                            scope.$watch(function() {
+                                var returnVal = false;
+                                angular.forEach(scope.featureModelCon, function(value, key) {
+                                    if (key != '_featureEnabled') {
+                                        if (scope.featureModelCon[key] != oldModel[key]) {
+                                            oldModel = angular.copy(scope.featureModelCon);
+                                            return returnVal = true;
+                                        }
+                                    }
+                                });
+                                return returnVal;
+                            }, function(newVal, oldVal) {
+                                if (newVal != oldVal && newVal) {
+                                    scope.featureModelCon._featureEnabled = true;
                                 }
+                            });
+                            if (scope.featureCheckbox) {
+                                scope.$watch('featureModelCon._featureEnabled', function(newval, oldVal) {
+                                    if (newval != oldVal) {
+                                        if (!newval) {// feature disabled  - delete control data
+                                            delete scope.parentModel[scope.FeatureModel];
+                                        }
+                                        else { // feature enabled - open the settings
+                                            if (scope.isCollapsed) {
+                                                scope.isCollapsed = false;
+                                            }
+                                        }
+                                    }
+                                });
                             }
-                        });
-                        return returnVal;
-                    }, function(newVal, oldVal) {
-                        if (newVal != oldVal && newVal) {
-                            scope.featureModelCon._featureEnabled = true;
                         }
                     });
-                    if (scope.featureCheckbox) {
-                        scope.$watch('featureModelCon._featureEnabled', function(newval, oldVal) {
-                            if (newval != oldVal) {
-                                if (!newval) {// feature disabled  - delete control data
-                                    delete scope.parentModel[scope.FeatureModel];
-                                }
-                                else { // feature enabled - open the settings
-                                    if (scope.isCollapsed) {
-                                        scope.isCollapsed = false;
-                                    }
-                                }
-                            }
-                        });
-                    }
                     scope.$on('openFeature', function(e, args) {
                         if (args == attributes['model']) {
                             scope.isCollapsed = false;
@@ -444,7 +449,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             }
         };
     }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout', '$routeParams' , function(menuSvc, $compile, $timeout, $routeParams) {
-
         return  {
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
@@ -467,7 +471,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                                 $(elem).prependTo(tElement);
                             }
                         });
-                        //clone.remove();
                     });
                     $compile(menuData.contents())($scope, function(clone) { // goes back to the controller
                         menuElem.prepend(clone);
@@ -500,14 +503,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
 
                     })
                     $timeout(function() {
-                        var page = $routeParams['menuPage'] | 'basicDisplay';
+                        // var page = $routeParams['menuPage'] | 'basicDisplay';
                         menuSvc.setMenu('basicDisplay');
-                        $scope.playerEdit.$dirty = false;
                         $scope.playerEdit.$setPristine();
                         $scope.$parent.menuInitDone = true;
                     }, 500);
                 };
-            },
+            }
         };
     }]).
     controller('menuSearchCtl', ['$scope', 'menuSvc', function($scope, menuSvc) {
