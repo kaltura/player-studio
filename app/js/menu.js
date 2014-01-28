@@ -352,8 +352,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                 $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                 if ($scope.featureCheckbox) {
                     if ($scope.featureModelCon) {
-                        $scope.featureModelCon._featureEnabled = true;
-                        $scope._featureEnabled = true;
+                        if (typeof $scope.featureModelCon._featureEnabled == 'undefined' || $scope.featureModelCon._featureEnabled.toString() != 'false')
+                            $scope.featureModelCon._featureEnabled = true;
                     }
                     else {
                         if ($scope.parentModel)
@@ -380,26 +380,35 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     scope.$watch('isCollapsed', function(newVal, oldVal) {
                         if (newVal != oldVal) {
                             scope.$emit('layoutChange');
-                            $(element).find('.header:first i.glyphicon-play').toggleClass('rotate90');
                         }
                     });
-                    scope.$watchCollection('featureModelCon', function(newVal, oldVal) {
+                    var oldModel = angular.copy(scope.featureModelCon);
+                    // to enable a plugin when some of its data has changed
+                    scope.$watch(function() {
+                        var returnVal = false;
+                        angular.forEach(scope.featureModelCon, function(value, key) {
+                            if (key != '_featureEnabled') {
+                                if (scope.featureModelCon[key] != oldModel[key]) {
+                                    oldModel = angular.copy(scope.featureModelCon);
+                                    return returnVal = true;
+                                }
+                            }
+                        });
+                        return returnVal;
+                    }, function(newVal, oldVal) {
                         if (newVal != oldVal && newVal) {
-                            //TODO : check if not defaults
-                            scope._featureEnabled = true;
+                            scope.featureModelCon._featureEnabled = true;
                         }
                     });
                     if (scope.featureCheckbox) {
-                        // to delete control data when plugin is  disabled
-                        scope.$watch('_featureEnabled', function(newval, oldVal) {
+                        scope.$watch('featureModelCon._featureEnabled', function(newval, oldVal) {
                             if (newval != oldVal) {
-                                if (!newval)
+                                if (!newval) {// feature disabled  - delete control data
                                     delete scope.parentModel[scope.FeatureModel];
-                                else {
-                                    if (!scope.parentModel[scope.FeatureModel])
-                                        scope.parentModel[scope.FeatureModel] = {_featureEnabled: true};
-                                    else {
-                                        scope.featureModelCon._featureEnabled = true;
+                                }
+                                else { // feature enabled - open the settings
+                                    if (scope.isCollapsed) {
+                                        scope.isCollapsed = false;
                                     }
                                 }
                             }

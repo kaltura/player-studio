@@ -670,6 +670,13 @@ DirectivesModule.directive('prettyCheckbox', function() {
                 transclude(scope, function(clone) {
                     return $element.replaceWith(wrapper).append(clone);
                 });
+                ngController.$render = function() {
+                    if (ngController.$viewValue) {
+                        clickHandler.addClass('checked');
+                    }
+                    else
+                        ngController.$viewValue = false;
+                };
                 clickHandler.on('click', function(e) {
                     e.preventDefault();
                     scope.$apply(function() {
@@ -688,13 +695,6 @@ DirectivesModule.directive('prettyCheckbox', function() {
                 ngController.$viewChangeListeners.push(formatter);
                 if (scope['require']) {
                     ngController.$setValidity('required', true);
-                }
-                ngController.$render = function() {
-                    if (ngController.$viewValue) {
-                        clickHandler.addClass('checked');
-                    }
-                    else
-                        ngController.$viewValue = false;
                 }
 
             };
