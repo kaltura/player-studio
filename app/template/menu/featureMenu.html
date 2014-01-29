@@ -1,6 +1,6 @@
 <div class="form-element" >
-     <span class="pull-right"  ng-if="featureCheckbox">
-            <input class="prettyCheckbox"  player-refresh="boolean" ng-model="featureModelCon._featureEnabled" type="checkbox"/>
+     <span class="pull-right" ng-if="featureCheckbox">
+            <div class="prettycheckbox"  player-refresh="boolean"   ng-click="openFeature()"  ng-model="featureModelCon._featureEnabled" ></div>
      </span>
     <span class='featureDesc' ng-if="description">
             <i class="glyphicon glyphicon-question-sign" data-tooltip-trigger="mouseenter"
@@ -9,7 +9,7 @@
 
     <div class="header" data-tooltip="{{helpnote}}" ng-click="$parent.isCollapsed = !$parent.isCollapsed">
             <span class="featureLabel" ng-bind-html="label"> </span>
-        <i class="glyphicon glyphicon-play"></i>
+        <i  ng-class="{rotate90:!$parent.isCollapsed}" class="glyphicon glyphicon-play"></i>
     </div>
     <div collapse="isCollapsed">
         <div ng-transclude></div>

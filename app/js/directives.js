@@ -658,42 +658,36 @@ DirectivesModule.directive('infoAction', ['menuSvc', function(menuSvc) {
         templateUrl: 'template/formcontrols/infoAction.html'
     };
 }]);
-DirectivesModule.directive('prettyCheckbox', function() {
+DirectivesModule.directive('prettycheckbox', function() {
     return {
         restrict: 'AC',
         require: 'ngModel',
-        transclude: 'element',
-        compile: function(tElement, tAttrs, transclude) {
-            return function(scope, $element, iAttr, ngController) {
-                var wrapper = angular.element('<div class="prettycheckbox"></div>');
-                var clickHandler = $('<a href="#" class=""></a>').appendTo(wrapper);
-                transclude(scope, function(clone) {
-                    return $element.replaceWith(wrapper).append(clone);
-                });
-                clickHandler.on('click', function(e) {
-                    e.preventDefault();
-                    ngController.$setViewValue(!ngController.$viewValue);
-                    scope.$apply(formatter);
-                    return false;
-                });
-                var formatter = function() {
-                    if (ngController.$viewValue) {
-                        clickHandler.addClass('checked');
-                    }
-                    else {
-                        clickHandler.removeClass('checked');
-                    }
-                };
-                ngController.$render = function() {
-                    if (ngController.$viewValue) {
-                        clickHandler.addClass('checked');
-                    }
-                    if (scope['require']) {
-                        ngController.$setValidity('required', true);
-                    }
+        template: '<a data-ng-click="check()"></a>',
+        link: function(scope, $element, iAttr, ngController) {
+            var clickHandler = $($element).find('a');
+            ngController.$render = function() {
+                if (ngController.$viewValue) {
+                    clickHandler.addClass('checked');
                 }
-
+                else
+                    ngController.$viewValue = false;
             };
+            scope.check = function() {
+                ngController.$setViewValue(!ngController.$viewValue);
+            };
+
+            var formatter = function() {
+                if (ngController.$viewValue) {
+                    clickHandler.addClass('checked');
+                }
+                else {
+                    clickHandler.removeClass('checked');
+                }
+            };
+            ngController.$viewChangeListeners.push(formatter);
+            if (scope['require']) {
+                ngController.$setValidity('required', true);
+            }
         }
     };
 });
@@ -838,71 +832,6 @@ DirectivesModule.directive('modelButton', ['menuSvc', function(menuSvc) {
             helpnote: '@'
         },
         templateUrl: 'template/formcontrols/modelButton.html'
-    };
-}]);
-DirectivesModule.directive('modelNumber', ['PlayerService', '$timeout', function(PlayerService, $timeout) {
-    return {
-        templateUrl: 'template/formcontrols/spinEdit.html',
-        replace: true,
-        restrict: 'EA',
-        scope: {
-            model: '=',
-            helpnote: '@',
-            label: '@',
-            'strModel': '@model',
-            'require': '@',
-            'kdpattr': '@'
-        },
-        link: function($scope, $element, $attrs) {
-            var $spinner = $element.find('input');
-            $timeout(function() {
-                $spinner.spinedit({
-                    minimum: parseFloat($attrs.from) || 0,
-                    maximum: parseFloat($attrs.to) || 100,
-                    step: parseFloat($attrs.stepsize) || 1,
-                    value: parseFloat($attrs.initvalue) || 0,
-                    numberOfDecimals: parseFloat($attrs.numberofdecimals) || 0
-                });
-            });
-            $spinner.on('valueChanged', function(e) {
-                if (typeof e.value == 'number') {
-                    $scope.model = e.value;
-                    if ($scope.kdpattr) {
-                        PlayerService.setKDPAttribute($scope.kdpattr, e.value);
-                    }
-                }
-            });
-        },
-        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
-            var def = {
-                from: 5,
-                to: 10,
-                stepsize: 1,
-                numberOfDecimals: 0
-            };
-            var keys = [
-                'from',
-                'to',
-                'stepsize',
-                'numberofdecimals'
-            ];
-            angular.forEach(keys, function(keyName) {
-                if (!$attrs[keyName])
-                    $scope[keyName] = def[keyName];
-                else
-                    $scope[keyName] = $attrs[keyName];
-            });
-            if (typeof $scope.model != 'undefined') {
-                $scope.initvalue = $scope.model;
-                var $spinner = $element.find('input');
-                $spinner.spinedit({value: parseFloat($scope.initvalue)});
-            } else {
-                if (!$attrs['initvalue'])
-                    $scope.initvalue = 1;
-                else
-                    $scope.initvalue = $attrs['initvalue'];
-            }
-        }]
     };
 }]);
 DirectivesModule.directive('onFinishRender', [

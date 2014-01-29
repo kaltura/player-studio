@@ -135,7 +135,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             },
             'setKDPAttribute': function(attrStr, value) {
                 var kdp = document.getElementById('kVideoTarget');
-                if ($.isFunction(kdp.setKDPAttribute)){
+                if ($.isFunction(kdp.setKDPAttribute)) {
                     var obj = attrStr.split(".")[0];
                     var property = attrStr.split(".")[1];
                     kdp.setKDPAttribute(obj, property, value);
@@ -283,30 +283,30 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     params: {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")}
                 }).success(function(data, status, headers, config) {
 // clean some redundant data from received object
-                        if (data['uiConfId']) {
-                            delete data['uiConfId'];
-                            delete data['widgetId'];
-                            delete data.vars['ks'];
-                        }
+                    if (data['uiConfId']) {
+                        delete data['uiConfId'];
+                        delete data['widgetId'];
+                        delete data.vars['ks'];
+                    }
 // set an api request to update the uiconf
-                        var request = {
-                            'service': 'uiConf',
-                            'action': 'update',
-                            'id': playerObj.id,                   // the id of the player to update
-                            'uiConf:tags': 'html5studio,player',  // update tags to prevent breaking the old studio which looks for the tag kdp3
-                            'uiConf:html5Url': html5lib,           // update the html5 lib to the new version
-                            'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
-                        };
-                        apiService.doRequest(request).then(function(result) {
-                                deferred.resolve(result);
-                            }, function(msg) {
-                                deferred.reject(rejectText + msg);
-                            }
-                        );
-                    }).error(function(data, status, headers, config) {
-                        deferred.reject("Error updating UIConf: " + data);
-                        $log.error('Error updating UIConf: ' + data);
-                    });
+                    var request = {
+                        'service': 'uiConf',
+                        'action': 'update',
+                        'id': playerObj.id,                   // the id of the player to update
+                        'uiConf:tags': 'html5studio,player',  // update tags to prevent breaking the old studio which looks for the tag kdp3
+                        'uiConf:html5Url': html5lib,           // update the html5 lib to the new version
+                        'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
+                    };
+                    apiService.doRequest(request).then(function(result) {
+                            deferred.resolve(result);
+                        }, function(msg) {
+                            deferred.reject(rejectText + msg);
+                        }
+                    );
+                }).error(function(data, status, headers, config) {
+                    deferred.reject("Error updating UIConf: " + data);
+                    $log.error('Error updating UIConf: ' + data);
+                });
                 return deferred.promise;
             }
         };
@@ -573,7 +573,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
             if (playerCache.get(params_key) && this.useCache) {
                 deferred.resolve(playerCache.get(params_key));
             } else {
-                this.apiObj.then(function(api) {
+                apiService.apiObj.then(function(api) {
                     api.doRequest(params, function(data) {
                         //timeout will trigger another $digest cycle that will trigger the "then" function
                         $timeout(function() {
