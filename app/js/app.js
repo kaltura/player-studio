@@ -66,13 +66,15 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 templateUrl: 'view/list.html',
                 controller: 'PlayerListCtrl',
                 resolve: {
-                    'apiService': ['apiService', 'localStorageService', '$location', function(apiService, localStorageService, $location) {
-                        return ksCheck(apiService, localStorageService, $location);
+                    'apiService': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+                        return ksCheck(api, apiService, localStorageService, $location).then(function() {
+                            return apiService;
+                        });
                     }]
                 }
             }
         );
-        var ksCheck = function(apiService, localStorageService, $location) {
+        var ksCheck = function(api, apiService, localStorageService, $location) {
             // Check if we have ks in locaclstorage
             try {
                 var kmc = window.parent.kmc;
@@ -89,17 +91,21 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 $location.path("/login");
                 return false;
             } else {
-                apiService.setKs(ks);
+                api.then(function() {
+                    apiService.setKs(ks);
+                });
             }
-            return apiService;
+            return api // changed to return the promise of the API
         };
         $routeProvider.when('/edit/:id/:menuPage?/:plugin?',
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
                 resolve: {
-                    'PlayerData': ['PlayerService', '$route', 'apiService', 'localStorageService', '$location', function(PlayerService, $route, apiService, localStorageService, $location) {
-                        ksCheck(apiService, localStorageService, $location);
-                        return  PlayerService.getPlayer($route.current.params.id);
+                    'PlayerData': ['PlayerService', '$route', 'api', 'apiService', 'localStorageService', '$location', function(PlayerService, $route, api, apiService, localStorageService, $location) {
+                        var apiLoaded = ksCheck(api, apiService, localStorageService, $location);
+                        return apiLoaded.then(function(api) {
+                            return PlayerService.getPlayer($route.current.params.id);
+                        });
                     }],
 //                    'defaultPage': ['$location', '$route', function($location, $route) {
 //                        if (typeof $route.current.params['menuPage'] == 'undefined') {
@@ -109,9 +115,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     'editProperties': 'editableProperties',
                     'menuSvc': 'menuSvc',
                     'localize': 'localize',
-                    'userEntries': ['apiService', 'localStorageService', '$location', function(apiService, localStorageService, $location) {
-                        ksCheck(apiService, localStorageService, $location);
-                        return apiService.listMedia(); // should only load the first 20...
+                    'userEntries': ['api', 'apiService', function(api, apiService) {
+                        return api.then(function() {
+                            return apiService.listMedia(); // should only load the first 20...
+                        });
+
                     }]
                 }
             }
@@ -134,16 +142,21 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
                 resolve: {
-                    'PlayerData': ['PlayerService', 'apiService', 'localStorageService', '$location', function(PlayerService, apiService, localStorageService, $location) {
-                        ksCheck(apiService, localStorageService, $location);
-                        return  PlayerService.newPlayer();
+                    'Api': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+                        return ksCheck(api, apiService, localStorageService, $location);
                     }],
+                    'PlayerData': function($q, api, PlayerService) {
+                        return api.then(function() {
+                            return PlayerService.newPlayer()
+                        });
+                    },
                     'editProperties': 'editableProperties',
                     'menuSvc': 'menuSvc',
                     'localize': 'localize',
-                    'userEntries': ['apiService', 'localStorageService', '$location', function(apiService, localStorageService, $location) {
-                        ksCheck(apiService, localStorageService, $location);
-                        return apiService.listMedia(); // should only load the first 20...
+                    'userEntries': ['api', 'apiService', function(api, apiService) {
+                        return api.then(function() {
+                            return apiService.listMedia();
+                        });// should only load the first 20...
                     }]
                 }
             }
@@ -159,8 +172,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
         });
         $routeProvider.otherwise({
-            resolve: {'res': ['apiService', 'localStorageService', '$location', function(apiService, localStorageService, $location) {
-                if (ksCheck(apiService, localStorageService, $location)) {
+            resolve: {'res': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+                if (ksCheck(api, apiService, localStorageService, $location)) {
                     return $location.path('/list');
                 }
             }]}
