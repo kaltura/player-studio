@@ -144,34 +144,39 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             playerRefresh: playerRefresh,
             newPlayer: function() {
                 var deferred = $q.defer();
-                var request = {
-                    'service': 'uiConf',
-                    'action': 'add',
-                    'uiConf:objectType': 'KalturaUiConf',
-                    'uiConf:objType': 1,
-                    'uiConf:description': '',
-                    'uiConf:height': '395',
-                    'uiConf:width': '560',
-                    'uiConf:swfUrl': '/flash/kdp3/v3.9.4/kdp3.swf',
-                    'uiConf:fUrlVersion': '3.9.4',
-                    'uiConf:version': '161',
-                    'uiConf:name': 'New Player',
-                    'uiConf:tags': 'html5studio,player',
-                    'uiConf:html5Url': window.kWidget.getPath() + 'mwEmbedLoader.php',
-                    'uiConf:creationMode': 2,
-                    'uiConf:config': '{"plugins":{"topBarContainer":[],"controlBarContainer":[],"scrubber":[],"largePlayBtn":[],"playHead":[],"playPauseBtn":[],"volumeControl":[],"durationLabel":[],"currentTimeLabel":[],"keyboardShortcuts":[],"liveCore":[],"liveStatus":[],"liveBackBtn":[],"fullScreenBtn":[],"logo":[],"strings":{"ENTRY_CONVERTING":"Entry is processing, please try again in a few minutes."}},"uiVars":{"imageDefaultDuration":2,"autoPlay":false,"autoMute":false},"layout":{"skin":"kdark"}}'
-                };
-                apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
-                apiService.doRequest(request).then(function(data) {
-                    currentPlayer = data;
-                    apiService.setCache(true); // restore cache usage
-                    localStorageService.set('tempPlayerID', data.id);
-                    deferred.resolve(data);
-                }, function(reason) {
-                    deferred.reject(reason);
-                });
+                this.getDefaultConfig().
+                    success(function(data, status, headers, config) {
+                        var request = {
+                            'service': 'uiConf',
+                            'action': 'add',
+                            'uiConf:objectType': 'KalturaUiConf',
+                            'uiConf:objType': 1,
+                            'uiConf:description': '',
+                            'uiConf:height': '395',
+                            'uiConf:width': '560',
+                            'uiConf:swfUrl': '/flash/kdp3/v3.9.4/kdp3.swf',
+                            'uiConf:fUrlVersion': '3.9.4',
+                            'uiConf:version': '161',
+                            'uiConf:name': 'New Player',
+                            'uiConf:tags': 'html5studio,player',
+                            'uiConf:html5Url': window.kWidget.getPath() + 'mwEmbedLoader.php',
+                            'uiConf:creationMode': 2,
+                            'uiConf:config': angular.toJson(data)
+                        };
+                        apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
+                        apiService.doRequest(request).then(function(data) {
+                            currentPlayer = data;
+                            apiService.setCache(true); // restore cache usage
+                            localStorageService.set('tempPlayerID', data.id);
+                            deferred.resolve(data);
+                        }, function(reason) {
+                            deferred.reject(reason);
+                        });
+                    }).
+                    error(function(data, status, headers, config) {
+                        cl("Error getting default player config");
+                    });
                 return deferred.promise;
-
             },
             clonePlayer: function(srcUi) {
                 var deferred = $q.defer();
@@ -265,8 +270,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getRequiredVersion': function() {
                 return 2;
             },
-            'getPlayers': function() {
-                return $http.get('js/services/allplayers.json');
+            'getDefaultConfig': function() {
+                return $http.get('js/services/defaultPlayer.json');
             },
             'playerUpdate': function(playerObj, html5lib) {
 // use the upgradePlayer service to convert the old XML config to the new json config object
