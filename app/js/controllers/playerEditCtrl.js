@@ -73,24 +73,19 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
     ]);
 
 angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', function($scope, apiService, $modal, $location, menuSvc, localStorageService) {
-//    var filterData = function(data, path) {
-//        if (!path) path = '';
-//        var location = (path) ? data : data[path];
-//        var globalReturn = {};
-//        angular.forEach(location, function(value, key) {
-//            if (typeof value == 'object') {
-//                globalReturn[key] = filterData(value, path + '.' + key);
-//            }
-//            else {
-//                if (key != '_featureEnabled') {
-//                    globalReturn[key] = data[key];
-//                }
-//            }
-//        });
-//        return globalReturn;
-//    }
     var filterData = function(data) {
-       return $.map([data], function(value, key) {
+        return $.map([data], function(value, key) {
+            if (typeof value == 'object') { // this is a plugin
+                if (typeof value['_featureEnabled'] != 'undefined') { // this is a featureMenu/subMenu plugin
+                    if (value['_featureEnabled'] == true) { // it is enabled
+                        return value;
+                    }
+                    else
+                        return null; // feature is disabled;
+                }
+                else
+                    return value;
+            }
             if (key != '_featureEnabled') {
                 return value;
             }
