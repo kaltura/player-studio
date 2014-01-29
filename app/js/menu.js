@@ -369,8 +369,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                             angular.forEach($scope.featureModelCon, function(value, key) {
                                 if ($scope.controlChildren[key] &&  // we have control data
                                     (value != $scope.controlChildren[key].initvalue &&// compare to default
-                                        (value !== 0 && $scope.controlChildren[key].type != 'number') &&
-                                        (value != '#ffffff' && $scope.controlChildren[key].type != 'color')
+                                        (value !== 0 && $scope.controlChildren[key].type == 'number') ||
+                                        (typeof value == 'string' && value.length > 0) ||
+                                        (value != '#ffffff' && $scope.controlChildren[key].type == 'color')
                                         )) { // or hard-coded default for number & color
                                     enabled = true;
                                 }
