@@ -51,10 +51,14 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
     });
     $scope.togglemenu = function(e) {
         $scope.menuShown = !$scope.menuShown;
+        var disTarget = $(e.target);
+        if (disTarget.is('i')) {
+            disTarget = disTarget.parent('a');
+        }
         if (!$scope.menuShown)
-            $(e.target).parent().css('transform', 'rotate(180deg)');//.delay(500).toggleClass('icon-open icon-Close');
+            disTarget.css('transform', 'rotate(180deg)');//.delay(500).toggleClass('icon-open icon-Close');
         else
-            $(e.target).parent().css('transform', '');//.delay(500).toggleClass('icon-open icon-Close');
+            disTarget.css('transform', '');//.delay(500).toggleClass('icon-open icon-Close');
     };
 
     $scope.$watch('menuShown', function(newVal, oldVal) {
@@ -68,7 +72,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
         }
     });
 }]);
-KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
+KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function(editableProperties, $modal) {
         var menudata = null;
         var promise = editableProperties
             .then(function(data) {
@@ -330,30 +334,105 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     return true;
                 }
                 return false;
-            }
+            },
+            makeFeatureCheckbox: function($scope, $attrs) {
+                if ($attrs['model']) {
+                    var ModelArr = $attrs['model'].split('.');
+                    $scope.FeatureModel = ModelArr.pop();
+                    var parentStr = ModelArr.join('.');
+                    $scope.parentModel = menuSvc.menuScope.$eval(parentStr);
+                    $scope.featureModelCon = menuSvc.menuScope.$eval($attrs['model']);
+                    $scope.controlData = menuSvc.getControlData($attrs['model']);
+                    $scope.controlChildren = {};
+                    angular.forEach($scope.controlData['children'], function(value, key) {
+                        if (value.model) {
+                            var model = value.model.split('.').pop(); // last in model str
+                            $scope.controlChildren[model] = value;
+                        }
+                    });
+                    $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
+                    if ($scope.featureCheckbox) {
+                        if ($scope.featureModelCon) {
+                            if (typeof $scope.featureModelCon._featureEnabled == 'undefined' || $scope.featureModelCon._featureEnabled.toString() != 'false') {
+                                var enabled = false;
+                                angular.forEach($scope.featureModelCon, function(value, key) {
+                                    if ($scope.controlChildren[key] &&  // we have control data
+                                        (value != $scope.controlChildren[key].initvalue &&// compare to default
+                                            (value !== 0 && $scope.controlChildren[key].type != 'number') &&
+                                            (value != '#ffffff' && $scope.controlChildren[key].type != 'color')
+                                            )) { // or hard-coded default for number & color
+                                        enabled = true;
+                                    }
+                                });
+                                $scope.featureModelCon._featureEnabled = enabled;
+                            }
+                        }
+                        else {
+                            if ($scope.parentModel)
+                                $scope.featureModelCon = $scope.parentModel[$scope.FeatureModel] = {};
+                            else
+                                $scope.featureModelCon = {};
+                        }
+                    }
+                }
+            },
+            linkFn4FeatureCheckbox: function(scope) {
+                var oldModel = angular.copy(scope.featureModelCon);
+                // to enable a plugin when some of its data has changed
+                scope.$watch(function() {
+                    var returnVal = false;
+                    angular.forEach(scope.featureModelCon, function(value, key) {
+                        if (key != '_featureEnabled') {
+                            if (scope.featureModelCon[key] != oldModel[key]) {
+                                oldModel = angular.copy(scope.featureModelCon);
+                                return returnVal = true;
+                            }
+                        }
+                    });
+                    return returnVal;
+                }, function(newVal, oldVal) {
+                    if (newVal != oldVal && newVal) {
+                        scope.featureModelCon._featureEnabled = true;
+                    }
+                });
+                if (scope.featureCheckbox) {
+                    scope.$watch('featureModelCon._featureEnabled', function(newval, oldVal) {
+                        if (newval != oldVal) {
+                            if (!newval) {// feature disabled  - delete control data
+                                var dialog = $modal.open({ templateUrl: 'template/dialog/message.html',
+                                    controller: 'ModalInstanceCtrl',
+                                    resolve: {
+                                        settings: function() {
+                                            return {
+                                                'title': 'Data reset confirmation',
+                                                'message': 'Once disabled and saved plugin data will be removed, shall we remove it now?'
+                                            };
+                                        }
+                                    }
+                                });
+                                dialog.result.then(function(result) {
+                                    if (result) {
+                                        delete scope.parentModel[scope.FeatureModel];
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
 
+            }
         };
         return menuSvc;
     }
     ]).
-    directive('featureMenu', ['menuSvc', '$modal', function(menuSvc, $modal) { //TODO: implement ng-form controller for dirty state
+    directive('featureMenu', ['menuSvc', function(menuSvc) { //TODO: implement ng-form controller for dirty state
         return {
             restrict: 'EA',
             replace: true,
             templateUrl: 'template/menu/featureMenu.html',
             transclude: true,
             controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
-                var ModelArr = $attrs['model'].split('.');
-                $scope.FeatureModel = ModelArr.pop();
-                var parentStr = ModelArr.join('.');
-                $scope.parentModel = menuSvc.menuScope.$eval(parentStr);
-                $scope.featureModelCon = menuSvc.menuScope.$eval($attrs['model']);
-                $scope.controlData = menuSvc.getControlData($attrs['model']);
-                $scope.controlChildren = {};
-                angular.forEach($scope.controlData['children'], function(value, key) {
-                    var model = value.model.split('.').pop(); // last in model str
-                    $scope.controlChildren[model] = value;
-                });
+                menuSvc.makeFeatureCheckbox($scope, $attrs);
                 $scope.isCollapsed = true;
                 // feature made enabled - open the settings
                 $scope.openFeature = function() {
@@ -361,30 +440,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                         $scope.isCollapsed = false;
                     }
                 };
-                $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
-                if ($scope.featureCheckbox) {
-                    if ($scope.featureModelCon) {
-                        if (typeof $scope.featureModelCon._featureEnabled == 'undefined' || $scope.featureModelCon._featureEnabled.toString() != 'false') {
-                            var enabled = false;
-                            angular.forEach($scope.featureModelCon, function(value, key) {
-                                if ($scope.controlChildren[key] &&  // we have control data
-                                    (value != $scope.controlChildren[key].initvalue &&// compare to default
-                                        (value !== 0 && $scope.controlChildren[key].type != 'number') &&
-                                        (value != '#ffffff' && $scope.controlChildren[key].type != 'color')
-                                        )) { // or hard-coded default for number & color
-                                    enabled = true;
-                                }
-                            });
-                            $scope.featureModelCon._featureEnabled = enabled;
-                        }
-                    }
-                    else {
-                        if ($scope.parentModel)
-                            $scope.featureModelCon = $scope.parentModel[$scope.FeatureModel] = {};
-                        else
-                            $scope.featureModelCon = {};
-                    }
-                }
             }
             ],
             scope: {
@@ -407,49 +462,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
                     });
                     var initDone = menuSvc.menuScope.$watch('$parent.menuInitDone', function(newVal, oldVal) {
                         if (newVal & newVal != oldVal) {
+                            menuSvc.linkFn4FeatureCheckbox(scope);
                             initDone(); //remove the $watch
-                            var oldModel = angular.copy(scope.featureModelCon);
-                            // to enable a plugin when some of its data has changed
-                            scope.$watch(function() {
-                                var returnVal = false;
-                                angular.forEach(scope.featureModelCon, function(value, key) {
-                                    if (key != '_featureEnabled') {
-                                        if (scope.featureModelCon[key] != oldModel[key]) {
-                                            oldModel = angular.copy(scope.featureModelCon);
-                                            return returnVal = true;
-                                        }
-                                    }
-                                });
-                                return returnVal;
-                            }, function(newVal, oldVal) {
-                                if (newVal != oldVal && newVal) {
-                                    scope.featureModelCon._featureEnabled = true;
-                                }
-                            });
-                            if (scope.featureCheckbox) {
-                                scope.$watch('featureModelCon._featureEnabled', function(newval, oldVal) {
-                                    if (newval != oldVal) {
-                                        if (!newval) {// feature disabled  - delete control data
-                                            var dialog = $modal.open({ templateUrl: 'template/dialog/message.html',
-                                                controller: 'ModalInstanceCtrl',
-                                                resolve: {
-                                                    settings: function() {
-                                                        return {
-                                                            'title': 'Data reset confirmation',
-                                                            'message': 'Once disabled and saved plugin data will be removed, shall we remove it now?'
-                                                        };
-                                                    }
-                                                }
-                                            });
-                                            dialog.result.then(function(result) {
-                                                if (result) {
-                                                    delete scope.parentModel[scope.FeatureModel];
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            }
                         }
                     });
                     scope.$on('openFeature', function(e, args) {
@@ -583,6 +597,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             transclude: 'true',
             restrict: 'EA',
             controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
+                menuSvc.makeFeatureCheckbox($scope, $attrs);
                 $scope.selfOpenLevel = function() {
                     menuSvc.setMenu($attrs.pagename);
                 };
@@ -602,11 +617,21 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             }],
             compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
-                    tElement.find('div.menu-level-trigger').append('<hr/>');
+                    tElement.find('div.header').append('<hr/>');
+                }
+                if (tAttr['parentPage']) {
+                    var content = tElement.html();
+                    tElement.replaceWith(angular.element('<div type="menupage" class="form-element"></div>').append(content));
                 }
                 return  function($scope, $element, $attrs) {
                     $scope.$on('menuChange', function(event, arg) {
                         $scope.openLevel(arg);
+                    });
+                    var initDone = menuSvc.menuScope.$watch('$parent.menuInitDone', function(newVal, oldVal) {
+                        if (newVal & newVal != oldVal) {
+                            menuSvc.linkFn4FeatureCheckbox($scope);
+                            initDone(); //remove the $watch
+                        }
                     });
                     $scope.$watch('isOnTop', function(newVal) {
                         if (newVal) { // open
@@ -624,7 +649,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', function(editableProperties) {
             },
             scope: {
                 'label': '@',
-                model: '=',
+                'model': '=',
                 'pagename': '@',
                 'parentPage': '@',
                 'parentLabel': '@',

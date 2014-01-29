@@ -25,8 +25,8 @@ body#edit, body#new {
       padding: 4px;
       background: #eee;
       position: absolute;
-      top:0px;
-      left:0px;
+      top: 0px;
+      left: 0px;
       width: 30px;
       height: 34px;
       .menu-trigger {
@@ -203,7 +203,8 @@ body#edit, body#new {
           clear: both;
           margin-top: 16px;
           margin-bottom: 0px;
-          &.divider { // from the directive
+          &.divider {
+            // from the directive
             margin-top: 36px;
           }
         }
@@ -220,7 +221,7 @@ body#edit, body#new {
       }
       h2.subMenuHeader {
         margin: 0;
-        display:inline-block;
+        display: inline-block;
         padding: 0.7em;
         padding-top: 24px;
         padding-bottom: 11px;
@@ -230,8 +231,8 @@ body#edit, body#new {
         font-family: arial, sans-serif;
         font-size: 18px;
       }
-      span[ng-if="parentPage"]{
-        position:relative;
+      span[ng-if="parentPage"] {
+        position: relative;
       }
 
       .levelDesc {
@@ -265,7 +266,7 @@ body#edit, body#new {
             float: left;
             width: 100%;
           }
-          span.control-label ,span.featureLabel{
+          span.control-label, span.featureLabel {
             font-weight: bold;
           }
           i.icon {
@@ -279,11 +280,18 @@ body#edit, body#new {
               width: 85%;
             }
           }
-          &[type="featuremenu"] {
+          &[type="featuremenu"], &[type="menupage"], {
             .featureDesc {
               float: right;
             }
             div.header {
+              a.menu-level-trigger {
+                &:after {
+                  .booticon;
+                  display:inline;
+                  content: "\e080";
+                }
+              }
               cursor: pointer;
               .featureLabel {
                 color: #009dff;
@@ -468,33 +476,6 @@ body#edit, body#new {
         }
       }
 
-      ul[ng-transclude] > li {
-//        display: block;
-//        min-height: 40px;
-
-        div.menu-level-trigger {
-          padding: 0.6em 1em;
-          width: 100%;
-          a {
-            margin-bottom: 16px;
-            float: left;
-            font-size: 14px;
-            font-weight: bold;
-            display: block;
-            color: #272727;
-            &:hover {
-              text-decoration: none;
-            }
-            &:after {
-              .booticon;
-              float: right;
-              content: "\e080";
-              color: #272727;
-            }
-          }
-        }
-      }
-
       ul.dropdown-menu {
         border-radius: 5px;
         li {
@@ -593,14 +574,15 @@ body#edit, body#new {
       color: #555;
     }
 
-//    .form-control, .input-group-addon {
-//      font-size: 13px;
-//      height: 30px;
-//    }
+    //    .form-control, .input-group-addon {
+    //      font-size: 13px;
+    //      height: 30px;
+    //    }
 
     .dropdown-menu li a {
       padding: 3px 11px;
     }
 
   }
+
 }

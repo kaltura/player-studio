@@ -526,7 +526,6 @@ DirectivesModule.directive('sortOrder', [
     }
 ]);
 DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', function(PlayerService, menuSvc, $timeout) {
-    var menuScope = menuSvc.menuScope;
     return {
         restrict: 'A',
         priority: 1000,
@@ -596,6 +595,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
             return ctrObj;
         },
         link: function(scope, iElement, iAttrs, controllers) {
+            var menuScope = menuSvc.menuScope;
             var playerRefresh = controllers[0];
             var ngController = null;
             if (iAttrs['playerRefresh'] != 'false') {
