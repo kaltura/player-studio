@@ -1,0 +1,207 @@
+[
+    {
+        "label": "Basic Display",
+        "type": "menu",
+        "description": "basic settings let you set bla bla bla\n lorem ipsum test goes here",
+        "model": "basicDisplay",
+        "icon": "TabBasicSettings",
+        "children": [
+            {
+                "label": "Player's Name",
+                "type": "text",
+                "require": true,
+                "validation": "^[a-z _-]*$",
+                "player-refresh": "// if you will want to auto add this to all properties than false will make an exception..",
+                "player-refresh": false,
+                "model": "name",
+                "default": "New Player",
+                "helpnote": "Please enter your player's name blah blah blah",
+                "endline": "true"
+            },
+            {
+                "label": "Long Description",
+                "type": "modaledit",
+                "require": true,
+                "helpnote": "this is the edit modal",
+                "model": "basicDisplay.description",
+                "placeholder": "Enter player description"
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "label": "Player Tags",
+                "type": "tags",
+                "helpnote": "tags and bugs",
+                "model": "tags",
+                "source": "getTags"
+            },
+            {
+                "label": "Preview entry",
+                "type": "select2data",
+                "source": "listEntries",
+                "query": "queryEntries",
+                "helpnote": "testing112143",
+                "player-refresh": true,
+                "endline": "true",
+                "width": "100%",
+                "model": "previewentry",
+                "initvalue": "2",
+                "data-placeholder": "Pick a entry1"
+            },
+            {
+                "options": [
+                    {
+                        "label": "Right",
+                        "value": "right"
+                    },
+                    {
+                        "label": "Center",
+                        "value": "center"
+                    },
+                    {
+                        "label": "Left",
+                        "value": "left"
+                    }
+                ],
+                "initvalue": "right",
+                "type": "radio",
+                "model": "basicDisplay.playbackRatealign"
+            },
+            {
+                "player-refresh": "aspectToggle",
+                "options": [
+                    {},
+                    {
+                        "label": "4/3",
+                        "value": "narrow"
+                    },
+                    {
+                        "label": "16/9",
+                        "value": "wide"
+                    }
+                ],
+                "showSearch": false,
+                "helpnote": "select whatever",
+                "type": "dropdown",
+                "require": true,
+                "placehold": "Choose...",
+                "label": "Aspect Ratio",
+                "endline": "true",
+                "model": "basicDisplay.aspectRatio"
+            },
+            {
+                "label": "Control Bar Size (%)",
+                "type": "number",
+                "from": "0",
+                "to": "100",
+                "stepsize": "5",
+                "require": true,
+                "helpnote": "the number is percentage from the player size",
+                "model": "basicDisplay.controlBarSize"
+            },
+            {
+                "label": "ControlBar Background",
+                "default": "#000",
+                "type": "color",
+                "require": true,
+                "helpnote": "something of the sort of that"
+            },
+            {
+                "type": "featuremenu",
+                "model": "basicDisplay.transport",
+                "label": "Transport",
+                "helpnote": "what do you want to do?",
+                "children": [
+                    {
+                        "options": [
+                            {
+                                "label": "2mbs",
+                                "value": 2
+                            },
+                            {
+                                "label": "1mbs",
+                                "value": 1
+                            }
+                        ],
+                        "initvalue": 1,
+                        "type": "dropdown",
+                        "label": "Prefered Bitrate",
+                        "model": "basicDisplay.transport.preferedFlavorBR"
+                    },
+                    {
+                        "options": [
+                            {
+                                "label": "option",
+                                "value": "0.75"
+                            }
+                        ],
+                        "initvalue": "0.75",
+                        "type": "dropdown",
+                        "label": "Delivery type",
+                        "model": "basicDisplay.transport.deliveryType"
+                    }
+                ]
+            },
+            {
+                "type": "featuremenu",
+                "model": "basicDisplay.deviceSpecific",
+                "label": "Device Specific Flags",
+                "children": [
+                    {
+                        "type": "checkbox",
+                        "helpnote": "to check",
+                        "label": "Html Controls on iPad",
+                        "model": "basicDisplay.deviceSpecific.ipadHTMLcontrols"
+                    },
+                    {
+                        "type": "checkbox",
+                        "label": "Native Controls Fullscreen",
+                        "model": "basicDisplay.deviceSpecific.nativeFullscreenControls"
+                    },
+                    {
+                        "initvalue": "videoHolder",
+                        "type": "container",
+                        "sortVal": 0,
+                        "label": "Control Bar Location",
+                        "model": "basicDisplay.deviceSpecific.controlBarContainer",
+                        "options": [
+                            {
+                                "label": "videoHolder",
+                                "value": "videoHolder"
+                            },
+                            {
+                                "label": "ContentHolder",
+                                "value": "contentHolder"
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            {
+                "type": "checkbox",
+                "helpnote": "check validation",
+                "label": "Agree to terms",
+                "model": "terms",
+                "require": true
+            },
+            {
+                "label": "Last Update",
+                "type": "readonly",
+                "filter": "timeago",
+                "helpnote": "to read",
+                "model": "updatedAt"
+            },
+            {
+                "label": "Version:",
+                "btn-label": "Update Player",
+                "type": "infoAction",
+                "helpnote": "this is the players version",
+                "btn-class": "btn-xs btn-primary",
+                "action": "update",
+                "model": "version"
+            }
+        ]
+    }
+]

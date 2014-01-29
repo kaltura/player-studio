@@ -1,0 +1,12 @@
+<input type="number" ng-model="$parent.model" min="{{defaults.from}}" max="{{defaults.to}}"
+       dname="$parent.strModel" ng-readonly='defaults.readonly' ng-required="require" ng-pattern="/[0-9].*/"
+       class="small pull-left"/>
+<div class="input-group-addon spinedit">
+    <i class="glyphicon glyphicon-chevron-up" ng-click="increment()"></i>
+    <i class="glyphicon glyphicon-chevron-down" ng-click="decrement()"></i></div>
+<div ng-show="inputForm.$invalid">
+    <span class="help-inline alert-danger" ng-show="inputForm.$error['max']">{{'The maximum value is'|i18n}} {{defaults.to}}</span>
+    <span class="help-inline alert-danger" ng-show="inputForm.$error['min']">{{'The minimum value is' |i18n}} {{defaults.from}</span>
+    <span class="help-inline alert-danger"
+          ng-show="inputForm.$error['pattern']">{{'Only numbers are accepted' |i18n}}</span>
+</div>

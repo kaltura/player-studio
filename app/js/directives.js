@@ -28,9 +28,9 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function(menuSvc) {
         templateUrl: 'template/formcontrols/modelRadio.html',
         scope: {
             'model': '=',
+            'strModel': '@model',
             'label': '@',
             'helpnote': '@',
-            'strModel': '@model',
             'require': '@'
         },
         controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
@@ -110,9 +110,9 @@ DirectivesModule.directive('modelColor', function(PlayerService) {
             'class': '@',
             'label': '@',
             'kdpattr': '@',
+            'strModel': '@model',
             'helpnote': '@',
             'model': '=',
-            'strModel': '@model',
             require: '@'
         },
         templateUrl: 'template/formcontrols/modelColor.html'
@@ -184,8 +184,8 @@ DirectivesModule.directive('modelText', function(menuSvc) {
             $scope.form = menuSvc.menuScope.playerEdit;
             var makeWatch = function(value, retProp) {
                 $scope.$watch(function() {
-                        if ($scope.form[$scope['strModel']]) {
-                            var inputCntrl = $scope.form[$scope['strModel']];
+                        if ($scope.form[$attrs['model']]) {
+                            var inputCntrl = $scope.form[$attrs['model']];
                             if (typeof inputCntrl.$error[value] != 'undefined');
                             return inputCntrl.$error[value];
                         }
@@ -231,10 +231,10 @@ DirectivesModule.directive('modelText', function(menuSvc) {
         },
         scope: {
             'label': '@',
-            'strModel': '@model',
             'model': '=',
             'icon': '@',
             'placehold': '@',
+            'strModel': '@model',
             'helpnote': '@',
             'require': '@'
         },
@@ -269,7 +269,7 @@ DirectivesModule.directive('select2Data', [
                 'helpnote': '@',
                 'initvalue': '@',
                 "require": '@',
-                'strModel': '@model'
+                'strModel': '=model'
             },
             controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.selectOpts = {};
@@ -315,7 +315,7 @@ DirectivesModule.directive('modelEdit', ['$modal',
                 'model': '=',
                 'icon': '@',
                 'require': '@',
-                'strModel': '@model'
+                'strModel': '=model'
             },
             controller: modalEditCntrl,
             templateUrl: 'template/formcontrols/modelEdit.html',
@@ -357,7 +357,8 @@ DirectivesModule.directive('modelTags', [
                 'label': '@',
                 'model': '=',
                 'helpnote': '@',
-                'icon': '@'
+                'icon': '@',
+                'strModel': '=model'
             },
             controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.selectOpts = {
