@@ -1,10 +1,15 @@
 <div class="spinEdit clearfix">
     <label data-tooltip="{{helpnote}}"><span class="control-label" ng-bind-html="label"></span>
-
         <div class="col-xs-4 pull-right">
-            <div number-input dname='strModel' ng-form='$parent.inputForm' defaults="defaults" ng-model='$parent.model'
+            <div number-input dname='strModel' ng-form='$parent.inputForm' defaults="defaults" ng-model="$parent.model"
                  class="input-group">
             </div>
+        </div>
+        <div ng-show="inputForm.$invalid">
+            <span class="help-inline alert-danger" ng-show="inputForm.$error['max']">{{'The maximum value is'|i18n}} {{defaults.to}}</span>
+            <span class="help-inline alert-danger" ng-show="inputForm.$error['min']">{{'The minimum value is' |i18n}} {{defaults.from}}</span>
+    <span class="help-inline alert-danger"
+          ng-show="inputForm.$error['pattern']">{{'Only numbers are accepted' |i18n}}</span>
         </div>
     </label>
 </div>

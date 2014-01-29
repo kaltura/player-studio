@@ -422,11 +422,11 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, api, $http) {
     var deferred = $q.defer();
     api.then(function() {
-//        for debbuging
-//        return $http.get('js/services/basicProperties.json').then(function(result) {
-//            deferred.resolve(result.data);
+        //for debbuging
+//       return $http.get('js/services/editableProperties.json').then(function(result){
+//           deferred.resolve(result.data);
 //        });
-////
+//
         $http.get(window.kWidget.getPath() + 'services.php?service=studioService').then(function(result) {
             var data = result.data;
             if (typeof data == 'object') // json is OK

@@ -39,9 +39,10 @@
     border:1px solid #AAA;
     border-left:none;
     border-radius:  0 4px 4px 0;
-    padding-top: 1px;
+    padding-top: 2px;
     top: 0px;
     right: 2px;
+    height:31px;
 }
 
 .spinEdit input.small {

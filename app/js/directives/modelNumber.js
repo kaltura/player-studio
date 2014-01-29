@@ -21,6 +21,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                     stepSize: parseInt($attrs['stepsize']) || 1,
                     readonly: false  /// note that a input can be made readonly
                 };
+                $scope.inputForm = {};
                 return $scope;
             }]
         };
@@ -34,15 +35,27 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
             link: function($scope, $element, $attrs, controllers) {
                 var modelScope = controllers[0];
                 var ngModelCtrl = controllers[1];
+                var inputControl = $element.find('input');
                 modelScope.modelCntrl = ngModelCtrl;
+                modelScope.inputForm = $scope.inputForm;
                 if (typeof $scope.model != 'number' && !(typeof $scope.model == 'string' && parseInt($scope.model))) {
                     ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
                 }
+                inputControl.on('blur', function() {
+                    if (inputControl.val() == '') {
+                        $scope.$apply(function() {
+                            ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
+                        });
+                    }
+                })
                 if ($scope.kdpattr) {
                     ngModelCtrl.$viewChangeListeners.push(function(value) {
                         PlayerService.setKDPAttribute($scope.kdpattr, value);
                     });
                 }
+                ngModelCtrl.$viewChangeListeners.push(function() {
+                    modelScope.model = ngModelCtrl.$viewValue;
+                });
                 var change = function(value) {
                     ngModelCtrl.$setViewValue(value);
                 };
