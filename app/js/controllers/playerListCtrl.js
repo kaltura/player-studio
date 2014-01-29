@@ -205,7 +205,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.update = function(player) {
                 var upgradeProccess = $q.defer();
                 var currentVersion = player.html5Url.split("/v")[1].split("/")[0];
-                var text = '<span><b>' + $filter("i18n")("upgradeMsg") + '</b><br></br>' + $filter("i18n")("upgradeFromVersion") + currentVersion + '<br> ' + $filter("i18n")("upgradeToVersion") + $scope.UIConf.html5_version.substr(1) + '</span>';
+                var text = '<span>' + $filter("i18n")("upgradeMsg") + '</span>';
                 var html5lib = player.html5Url.substr(0, player.html5Url.indexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
                 var modal = $modal.open({
                     templateUrl: 'template/dialog/message.html',
