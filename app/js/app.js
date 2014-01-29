@@ -95,7 +95,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     apiService.setKs(ks);
                 });
             }
-            return api // changed to return the promise of the API
+            return api; // changed to return the promise of the API
         };
         $routeProvider.when('/edit/:id/:menuPage?/:plugin?',
             {templateUrl: 'view/edit.html',
@@ -147,7 +147,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     }],
                     'PlayerData': function($q, api, PlayerService) {
                         return api.then(function() {
-                            return PlayerService.newPlayer()
+                            return PlayerService.newPlayer();
                         });
                     },
                     'editProperties': 'editableProperties',

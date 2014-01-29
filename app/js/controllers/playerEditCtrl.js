@@ -77,7 +77,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
         return $.map([data], function(value, key) {
             if (typeof value == 'object') { // this is a plugin
                 if (typeof value['_featureEnabled'] != 'undefined') { // this is a featureMenu/subMenu plugin
-                    if (value['_featureEnabled'] == true) { // it is enabled
+                    if (value['_featureEnabled'] === true) { // it is enabled
                         return value;
                     }
                     else
