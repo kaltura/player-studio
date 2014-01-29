@@ -42,12 +42,12 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                     ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
                 }
                 inputControl.on('blur', function() {
-                    if (inputControl.val() == '') {
+                    if (inputControl.val() === '') {
                         $scope.$apply(function() {
                             ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
                         });
                     }
-                })
+                });
                 if ($scope.kdpattr) {
                     ngModelCtrl.$viewChangeListeners.push(function(value) {
                         PlayerService.setKDPAttribute($scope.kdpattr, value);
@@ -63,15 +63,15 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                     var resultVal = ngModelCtrl.$viewValue + $scope.defaults.stepSize;
                     if (resultVal < $scope.defaults.to)
                         change(resultVal);
-                    else change($scope.defaults.to)
-                }
+                    else change($scope.defaults.to);
+                };
                 $scope.decrement = function() {
                     var resultVal = ngModelCtrl.$viewValue - $scope.defaults.stepSize;
                     if (resultVal > $scope.defaults.from)
                         change(resultVal);
-                    else change($scope.defaults.from)
-                }
+                    else change($scope.defaults.from);
+                };
             }
-        }
+        };
     }
     ]);
