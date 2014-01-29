@@ -28,6 +28,7 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function(menuSvc) {
         templateUrl: 'template/formcontrols/modelRadio.html',
         scope: {
             'model': '=',
+            'strModel': '@model',
             'label': '@',
             'helpnote': '@',
             'require': '@'
@@ -109,6 +110,7 @@ DirectivesModule.directive('modelColor', function(PlayerService) {
             'class': '@',
             'label': '@',
             'kdpattr': '@',
+            'strModel': '@model',
             'helpnote': '@',
             'model': '=',
             require: '@'
@@ -232,6 +234,7 @@ DirectivesModule.directive('modelText', function(menuSvc) {
             'model': '=',
             'icon': '@',
             'placehold': '@',
+            'strModel': '@model',
             'helpnote': '@',
             'require': '@'
         },
@@ -266,6 +269,7 @@ DirectivesModule.directive('select2Data', [
                 'helpnote': '@',
                 'initvalue': '@',
                 "require": '@',
+                'strModel': '=model'
             },
             controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.selectOpts = {};
@@ -311,6 +315,7 @@ DirectivesModule.directive('modelEdit', ['$modal',
                 'model': '=',
                 'icon': '@',
                 'require': '@',
+                'strModel': '=model'
             },
             controller: modalEditCntrl,
             templateUrl: 'template/formcontrols/modelEdit.html',
@@ -352,7 +357,8 @@ DirectivesModule.directive('modelTags', [
                 'label': '@',
                 'model': '=',
                 'helpnote': '@',
-                'icon': '@'
+                'icon': '@',
+                'strModel': '=model'
             },
             controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.selectOpts = {
@@ -409,6 +415,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function(menuSvc) {
             initvalue: '@',
             helpnote: '@',
             selectOpts: '@',
+            'strModel': '@model',
             'require': '@'
         },
         compile: function(tElement, tAttr) {
