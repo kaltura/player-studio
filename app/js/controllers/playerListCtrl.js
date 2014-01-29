@@ -10,7 +10,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.search = '';
             $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
-            $scope.maxSize = 5;
+            $scope.maxSize = 10;
             $scope.$watch('maxSize', function(newval, oldval) {
                 if (newval != oldval)
                     $scope.$broadcast('layoutChange');
