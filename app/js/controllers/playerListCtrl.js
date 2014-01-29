@@ -83,8 +83,8 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 }
             };
             $scope.sort = {
-                sortCol: 'name',
-                reverse: false
+                sortCol: 'createdAt',
+                reverse: true
             };
             $scope.sortBy = function(colName) {
                 $scope.sort.sortCol = colName;
