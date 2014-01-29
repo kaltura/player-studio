@@ -30,7 +30,6 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function(menuSvc) {
             'model': '=',
             'label': '@',
             'helpnote': '@',
-            'strModel': '@model',
             'require': '@'
         },
         controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
@@ -112,7 +111,6 @@ DirectivesModule.directive('modelColor', function(PlayerService) {
             'kdpattr': '@',
             'helpnote': '@',
             'model': '=',
-            'strModel': '@model',
             require: '@'
         },
         templateUrl: 'template/formcontrols/modelColor.html'
@@ -184,8 +182,8 @@ DirectivesModule.directive('modelText', function(menuSvc) {
             $scope.form = menuSvc.menuScope.playerEdit;
             var makeWatch = function(value, retProp) {
                 $scope.$watch(function() {
-                        if ($scope.form[$scope['strModel']]) {
-                            var inputCntrl = $scope.form[$scope['strModel']];
+                        if ($scope.form[$attrs['model']]) {
+                            var inputCntrl = $scope.form[$attrs['model']];
                             if (typeof inputCntrl.$error[value] != 'undefined');
                             return inputCntrl.$error[value];
                         }
@@ -231,7 +229,6 @@ DirectivesModule.directive('modelText', function(menuSvc) {
         },
         scope: {
             'label': '@',
-            'strModel': '@model',
             'model': '=',
             'icon': '@',
             'placehold': '@',
@@ -269,7 +266,6 @@ DirectivesModule.directive('select2Data', [
                 'helpnote': '@',
                 'initvalue': '@',
                 "require": '@',
-                'strModel': '@model'
             },
             controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.selectOpts = {};
@@ -315,7 +311,6 @@ DirectivesModule.directive('modelEdit', ['$modal',
                 'model': '=',
                 'icon': '@',
                 'require': '@',
-                'strModel': '@model'
             },
             controller: modalEditCntrl,
             templateUrl: 'template/formcontrols/modelEdit.html',
@@ -414,7 +409,6 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function(menuSvc) {
             initvalue: '@',
             helpnote: '@',
             selectOpts: '@',
-            'strModel': '@model',
             'require': '@'
         },
         compile: function(tElement, tAttr) {
@@ -779,7 +773,6 @@ DirectivesModule.directive('modelCheckbox', function() {
             label: '@',
             helpnote: '@',
             model: '=',
-            'strModel': '@model',
             'require': '@'
         }
     };
