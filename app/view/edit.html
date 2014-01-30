@@ -59,6 +59,7 @@
                              itemtype="http://schema.org/VideoObject"></div>
                     </div>
                 </div>
+	            <textarea style="width: 100%" ng-model="getDebugInfo" ng-show="debug"></textarea>
                 <div ng-if="validationObject.length>0" class="container"><p>these property values are not valid:</p>
 
                     <div ng-repeat="obj in validationObject">
