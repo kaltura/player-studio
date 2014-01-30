@@ -363,6 +363,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function(editablePro
                                             (value != '#ffffff' && $scope.controlChildren[key].type == 'color')
                                             )) { // or hard-coded default for number & color
                                         enabled = true;
+                                        if (typeof $scope.featureModelCon._featureEnabled == 'undefined')
+                                            enabled=false;
                                     }
                                 });
                                 $scope.featureModelCon._featureEnabled = enabled;
