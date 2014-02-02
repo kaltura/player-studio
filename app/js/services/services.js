@@ -114,7 +114,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             },
             'renderPlayer': function(callback) {
                 if (currentPlayer && typeof kWidget != "undefined") {
-                    var flashvars = {'jsonConfig': angular.toJson(currentPlayer.config)}; // update the player with the new configuration
+                    var data2Save = angular.copy(currentPlayer.config);
+                    data2Save.plugins = this.filterPlayerData(data2Save.plugins);
+                    var flashvars = {'jsonConfig': angular.toJson(data2Save)}; // update the player with the new configuration
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
                         angular.extend(flashvars, {'wmode': 'transparent'});
                     }
@@ -231,8 +233,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 
                     };
                     apiService.doRequest(request).then(function(result) {
-                            deferred.resolve(result);
                             currentPlayer = result;
+                            deferred.resolve(result);
+
                         }
                     );
                 }
@@ -277,6 +280,45 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getDefaultConfig': function() {
                 return $http.get('js/services/defaultPlayer.json');
             },
+            'filterPlayerData' : function(data){
+                var _this = this;
+                var copyobj = data.plugins || data;
+                angular.forEach(copyobj, function(value, key) {
+                if (angular.isObject(value)) {
+                    if (typeof value._featureEnabled == 'undefined' || value._featureEnabled === false) {
+                        delete copyobj[key];
+                    }
+                    else {
+                        _this.filterPlayerData(value);
+                    }
+                } else {
+                    if (key == "_featureEnabled") {
+                        delete copyobj[key];
+                    }
+                }
+                });
+             return copyobj;
+             },
+             'savePlayer' :function(data){
+                 var deferred = $q.defer();
+
+                 var data2Save = angular.copy(data.config);
+                 data2Save.plugins = this.filterPlayerData(data2Save.plugins);
+                 var request = {
+                     'service': 'uiConf',
+                     'action': 'update',
+                     'id': data.id,
+                     'uiConf:name': data.name,
+                     'uiConf:tags': data.tags,
+                     'uiConf:description': data.description ? data.description : '',
+                     'uiConf:config': angular.toJson(data2Save)
+                 };
+                 apiService.doRequest(request).then(function(result) {
+                     playersCache.put(data.id,data);
+                     deferred.resolve(result);
+                 });
+                 return deferred.promise;
+             },
             'playerUpdate': function(playerObj, html5lib) {
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();

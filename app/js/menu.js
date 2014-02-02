@@ -262,7 +262,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function(editablePro
                         }
                     }
                     angular.forEach(item, function(value, key) {
-                        if (key != 'model' && key != 'player-refresh' && (typeof value == 'string' || typeof value == 'number' || typeof value == 'boolean')) {
+                        if (key != 'model' && key != 'player-refresh' &&
+                        (typeof value == 'string' ||
+                         typeof value == 'number' ||
+                         typeof value == 'boolean')) {
                             elm.attr(key, value);
                         }
                     });

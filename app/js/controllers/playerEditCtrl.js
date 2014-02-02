@@ -23,7 +23,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 if ($routeParams.debug) {
                     return angular.toJson($scope.data.config);
                 }
-            }
+            };
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
@@ -86,7 +86,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
         }
     ]);
 
-angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', 'playerCache', function($scope, apiService, $modal, $location, menuSvc, localStorageService, playerCache) {
+angular.module('KMCModule').controller('editPageDataCntrl', ['$scope','PlayerService', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', 'playerCache', function($scope,playerService, apiService, $modal, $location, menuSvc, localStorageService, playerCache) {
     var filterData = function(copyobj) {
         angular.forEach(copyobj, function(value, key) {
             if (angular.isObject(value)) {
@@ -106,22 +106,10 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
     };
 
     $scope.save = function() {
-        var data2Save = angular.copy($scope.data.config);
-        data2Save.plugins = filterData(data2Save.plugins);
-        var request = {
-            'service': 'uiConf',
-            'action': 'update',
-            'id': $scope.playerId,
-            'uiConf:name': $scope.data.name,
-            'uiConf:tags': $scope.data.tags,
-            'uiConf:description': $scope.data.description ? $scope.data.description : '',
-            'uiConf:config': angular.toJson(data2Save)
-        };
-        apiService.doRequest(request).then(function(result) {
+       playerService.savePlayer($scope.data).then(function(value){
                 // cleanup
-                playerCache.put($scope.playerId, $scope.data);
                 menuSvc.menuScope.playerEdit.$setPristine();
-                $scope.masterData = angular.copy($scope.data);
+                $scope.masterData = value;
                 localStorageService.remove('tempPlayerID');
                 // if this is a new player - add it to the players list
                 if ($scope.newPlayer) {
@@ -140,8 +128,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
                         }
                     }
                 });
-            }
-            ,
+            },
             function(msg) {
                 $modal.open({ templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
@@ -193,7 +180,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
             modal.result.then(function(result) {
                 if (result) {
                     apiService.setCache(false);
-                    PlayerService.clearCurrentPlayer();
+                    playerService.clearCurrentPlayer();
                     $location.url('/list');
                 }
             });
