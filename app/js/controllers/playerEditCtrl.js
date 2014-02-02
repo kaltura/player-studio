@@ -16,7 +16,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 if ($routeParams.debug){
                     return angular.toJson($scope.data.config);
                 }
-            }
+            };
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
