@@ -23,7 +23,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 if ($routeParams.debug) {
                     return angular.toJson($scope.data.config);
                 }
-            };
+            }
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
@@ -192,6 +192,8 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
                     }});
             modal.result.then(function(result) {
                 if (result) {
+                    apiService.setCache(false);
+                    PlayerService.clearCurrentPlayer();
                     $location.url('/list');
                 }
             });
