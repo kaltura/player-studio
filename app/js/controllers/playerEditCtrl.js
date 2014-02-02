@@ -10,7 +10,6 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             $scope.newPlayer = !$routeParams.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
-            $scope.data.config = angular.fromJson($scope.data.config)
             $scope.debug = $routeParams.debug;
             $scope.getDebugInfo = function(){
                 if ($routeParams.debug){
