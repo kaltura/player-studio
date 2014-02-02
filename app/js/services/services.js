@@ -96,6 +96,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'checkCurrentRefresh': function() {
                 return currentRefresh;
             },
+            'clearCurrentPlayer': function(){
+                currentPlayer = {};
+            },
             'setPreviewEntry': function(previewObj) {
                 localStorageService.set('previewEntry', previewObj);
                 previewEntry = previewObj.id;
