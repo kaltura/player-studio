@@ -223,7 +223,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     if (result)
                         PlayerService.playerUpdate(player, html5lib).then(function(data) {
 // update local data (we will not retrieve from the server again)
-                            player.config = angular.toJson(data);
+                            player.config = angular.fromJson(data.config);
                             player.html5Url = html5lib;
                             player.tags = 'html5studio,player';
                             upgradeProccess.resolve('upgrade canceled');
