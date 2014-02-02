@@ -78,7 +78,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
         }
     ]);
 
-angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', function($scope, apiService, $modal, $location, menuSvc, localStorageService) {
+angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService','PlayerService', function($scope, apiService, $modal, $location, menuSvc, localStorageService, PlayerService) {
     var filterData = function(data) {
         return $.map([data], function(value, key) {
             if (typeof value == 'object') { // this is a plugin
@@ -180,6 +180,8 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
                     }});
             modal.result.then(function(result) {
                 if (result) {
+                    apiService.setCache(false);
+                    PlayerService.clearCurrentPlayer();
                     $location.url('/list');
                 }
             });
