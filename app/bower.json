@@ -5,17 +5,17 @@
     "private": true,
     "dependencies": {
         "angular": ">= 1.2.9",
-        'angular-animate': ">= 1.2.9",
-        'angular-mocks': ">= 1.2.9",
-        'angular-route': ">= 1.2.9",
-        'angular-sanitize': ">= 1.2.9",
-        'angular-ui-select2': ">= 0",
-        'angular-ui-sortable': ">= 0",
-        'angular-ui-utils': ">= 0",
-        'bootstrap': ">= 3.0.3",
-        'select2': ">= 2",
-        'jquery': ">= 2",
-        'jquery-ui': ">= 2",
-        'selectivizr': ">= 0"
+        "angular-animate": ">= 1.2.9",
+        "angular-mocks": ">= 1.2.9",
+        "angular-route": ">= 1.2.9",
+        "angular-sanitize": ">= 1.2.9",
+        "angular-ui-select2": ">= 0",
+        "angular-ui-sortable": ">= 0",
+        "angular-ui-utils": ">= 0",
+        "bootstrap": ">= 3.0.3",
+        "select2": ">= 2",
+        "jquery": ">= 2",
+        "jquery-ui": ">= 2",
+        "selectivizr": ">= 0"
     }
 }

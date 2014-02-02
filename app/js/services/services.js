@@ -205,12 +205,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getPlayer': function(id) {
                 var foundInCache = false;
                 var deferred = $q.defer();
-                if (typeof currentPlayer.id != 'undefined') { // find if player obj is already loaded
-                    if (currentPlayer.id == id || id == 'currentEdit') { // this ability to get the player data  we alreayd work on is there for future revert update feature.
-                        deferred.resolve(currentPlayer);
-                        foundInCache = true;
-                    }
-                }
+                // disbaled as our edit page makes the data dirty.
+//                if (typeof currentPlayer.id != 'undefined') { // find if player obj is already loaded
+//                    if (currentPlayer.id == id || id == 'currentEdit') { // this ability to get the player data  we alreayd work on is there for future revert update feature.
+//                        deferred.resolve(currentPlayer);
+//                        foundInCache = true;
+//                    }
+//                }
                 if (!foundInCache) {
                     // find player data by its ID in the list cache
                     if (typeof playersCache[id] != 'undefined') {

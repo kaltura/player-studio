@@ -352,25 +352,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function(editablePro
                     });
                     $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
                     if ($scope.featureCheckbox) {
-                        if ($scope.featureModelCon) {
-                            if (typeof $scope.featureModelCon._featureEnabled == 'undefined' || $scope.featureModelCon._featureEnabled.toString() != 'false') {
-                                var enabled = false;
-                                angular.forEach($scope.featureModelCon, function(value, key) {
-                                    if ($scope.controlChildren[key] &&  // we have control data
-                                        (value != $scope.controlChildren[key].initvalue &&// compare to default
-                                            (value !== 0 && $scope.controlChildren[key].type == 'number') ||
-                                            (typeof value == 'string' && value.length > 0) ||
-                                            (value != '#ffffff' && $scope.controlChildren[key].type == 'color')
-                                            )) { // or hard-coded default for number & color
-                                        enabled = true;
-                                        if (typeof $scope.featureModelCon._featureEnabled == 'undefined')
-                                            enabled=false;
-                                    }
-                                });
-                                $scope.featureModelCon._featureEnabled = enabled;
-                            }
-                        }
-                        else {
+                        if (!$scope.featureModelCon) {
                             if ($scope.parentModel)
                                 $scope.featureModelCon = $scope.parentModel[$scope.FeatureModel] = {};
                             else

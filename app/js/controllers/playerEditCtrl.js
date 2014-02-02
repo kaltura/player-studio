@@ -3,24 +3,32 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries', '$timeout', '$modal', '$location',
-        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries, $timeout, $modal, $location) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries',
+        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
             $scope.newPlayer = !$routeParams.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
-            $scope.data.config = angular.fromJson($scope.data.config)
+            var addFeatureState = function(data) {
+                angular.forEach(data.plugins, function(value, key) {
+                    if ($.isArray(value)) data.plugins[key] = {};
+                    data.plugins[key]._featureEnabled = true;
+                });
+                return data;
+            };
+            $scope.data.config = addFeatureState(angular.fromJson($scope.data.config));
             $scope.debug = $routeParams.debug;
-            $scope.getDebugInfo = function(){
-                if ($routeParams.debug){
+            $scope.getDebugInfo = function() {
+                if ($routeParams.debug) {
                     return angular.toJson($scope.data.config);
                 }
-            }
+            };
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
             $scope.userEntries = userEntries;
             $scope.settings = {};
+
 // set tags
             $scope.tags = [];
 // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
@@ -78,29 +86,28 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
         }
     ]);
 
-angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', function($scope, apiService, $modal, $location, menuSvc, localStorageService) {
-    var filterData = function(data) {
-        return $.map([data], function(value, key) {
-            if (typeof value == 'object') { // this is a plugin
-                if (typeof value['_featureEnabled'] != 'undefined') { // this is a featureMenu/subMenu plugin
-                    if (value['_featureEnabled'] === true) { // it is enabled
-                        return value;
-                    }
-                    else
-                        return null; // feature is disabled;
+angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', 'playerCache', function($scope, apiService, $modal, $location, menuSvc, localStorageService, playerCache) {
+    var filterData = function(copyobj) {
+        angular.forEach(copyobj, function(value, key) {
+            if (angular.isObject(value)) {
+                if (typeof value._featureEnabled == 'undefined' || value._featureEnabled === false) {
+                    delete copyobj[key];
                 }
-                else
-                    return value;
+                else {
+                    filterData(value);
+                }
+            } else {
+                if (key == "_featureEnabled") {
+                    delete copyobj[key];
+                }
             }
-            if (key != '_featureEnabled') {
-                return value;
-            }
-            return null;
         });
-
+        return copyobj;
     };
+
     $scope.save = function() {
-        var data2Save = filterData($scope.data.config)[0];
+        var data2Save = angular.copy($scope.data.config);
+        data2Save.plugins = filterData(data2Save.plugins);
         var request = {
             'service': 'uiConf',
             'action': 'update',
@@ -112,12 +119,13 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
         };
         apiService.doRequest(request).then(function(result) {
                 // cleanup
+                playerCache.put($scope.playerId, $scope.data);
                 menuSvc.menuScope.playerEdit.$setPristine();
                 $scope.masterData = angular.copy($scope.data);
                 localStorageService.remove('tempPlayerID');
                 // if this is a new player - add it to the players list
                 if ($scope.newPlayer) {
-                    // prevent the list controller from using the cache the next time the list loads
+//                            prevent the list controller from using the cache the next time the list loads
                     apiService.setCache(false);
                 }
                 // TODO: replace with floating success message that will disappear after few seconds
@@ -132,7 +140,9 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
                         }
                     }
                 });
-            }, function(msg) {
+            }
+            ,
+            function(msg) {
                 $modal.open({ templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
@@ -145,7 +155,9 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
                     }
                 });
             }
-        );
+
+        )
+        ;
 
     };
     $scope.$watch(function() {
@@ -196,5 +208,6 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'apiServi
     };
 
 
-}])
+}
+])
 ;
