@@ -189,8 +189,8 @@ module.exports = function(grunt) {
                         dest: '_dist/img/prettyCheckable.png'
                     },
                     { // dev only
-                        src: 'app/js/services/editableProperties.json',
-                        dest: '_dist/js/services/editableProperties.json'
+                        src: 'app/js/services/defaultPlayer.json',
+                        dest: '_dist/js/services/defaultPlayer.json'
                     },
                     {
                         expand: true,
