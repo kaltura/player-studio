@@ -66,7 +66,7 @@ KMCServices.factory('sortSvc', [function() {
 
 KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', 'localStorageService',
     function($http, $modal, $log, $q, apiService, $filter, localStorageService) {
-        var playersCache = [];
+        var playersCache = {};
         var currentPlayer = {};
         var previewEntry;
         var previewEntryObj;
@@ -140,7 +140,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             },
             'setKDPAttribute': function(attrStr, value) {
                 var kdp = document.getElementById('kVideoTarget');
-                if ($.isFunction(kdp.setKDPAttribute)) {
+                if ($.isFunction(kdp.setKDPAttribute) && typeof attrStr != "undefined" && attrStr.indexOf(".") != -1) {
                     var obj = attrStr.split(".")[0];
                     var property = attrStr.split(".")[1];
                     kdp.setKDPAttribute(obj, property, value);
@@ -314,7 +314,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                      'uiConf:config': angular.toJson(data2Save)
                  };
                  apiService.doRequest(request).then(function(result) {
-                     playersCache.put(data.id,data);
+                     playersCache[data.id] = data;
                      deferred.resolve(result);
                  });
                  return deferred.promise;
