@@ -410,7 +410,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
                                 scope.featureModelCon._featureEnabled = true;
                                 angular.forEach(scope.controlChildren, function (value, key) {
                                     if (!scope.featureModelCon[key]) {
-                                        if (value.initvalue)
+                                        if (typeof value.initvalue != 'undefined')
                                             scope.featureModelCon[key] = value.initvalue;
                                         else
                                             scope.featureModelCon[key] = '';
