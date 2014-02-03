@@ -293,6 +293,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     }
                 } else {
                     if (key == "_featureEnabled") {
+                        copyobj["plugin"] = true;
                         delete copyobj[key];
                     }
                 }
