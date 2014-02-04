@@ -180,8 +180,6 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                     }});
             modal.result.then(function (result) {
                 if (result) {
-                    apiService.setCache(false);
-                    playerService.clearCurrentPlayer();
                     $location.url('/list');
                 }
             });
