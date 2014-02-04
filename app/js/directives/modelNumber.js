@@ -32,7 +32,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                     $scope.isDisabled = false;
                 });
             }
-        }
+        };
     }
     ]).directive('numberInput', ['PlayerService', function (PlayerService) {
         return {
