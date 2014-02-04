@@ -253,7 +253,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             addFeatureState: function (data) {
                 angular.forEach(data.plugins, function (value, key) {
                     if ($.isArray(value)) data.plugins[key] = {};
-                    if (data.plugins[key]._featureEnabled != false)
+                    if (data.plugins[key]._featureEnabled !== false)
                         data.plugins[key]._featureEnabled = true;
                 });
                 return data;
