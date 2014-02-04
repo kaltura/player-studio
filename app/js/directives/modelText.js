@@ -49,6 +49,7 @@ DirectivesModule.directive('modelText', function (menuSvc) {
                     makeWatch('pattern', 'valState');
                 }
             }
+            $scope.isDisabled = false;
             $scope.validation = {
                 test: function () { // mock the RegExp object
                     return true;
@@ -71,8 +72,16 @@ DirectivesModule.directive('modelText', function (menuSvc) {
                 tElement.append('<hr/>');
             }
             return function ($scope, $element, $attrs) {
+                var inputElm = $($element).find('input');
+                $scope.$on('disableControls', function () {
+                    $scope.isDisabled = true;
+                    //inputElm.attr('disabled','disabled');
+                });
+                $scope.$on('enableControls', function () {
+                    $scope.isDisabled = false;
+//                    inputElm.removeAttr('disabled','disabled');
+                });
                 if ($attrs.initvalue) {
-                    var inputElm = $($element).find('input');
                     inputElm.on('click', function (e) {
                         if (inputElm.val() == $attrs.initvalue) {
                             e.preventDefault();

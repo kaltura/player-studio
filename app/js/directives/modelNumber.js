@@ -23,8 +23,16 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                 };
                 $scope.inputForm = {};
                 return $scope;
-            }]
-        };
+            }], link: function ($scope) {
+                $scope.isDisabled = false;
+                $scope.$on('disableControls', function () {
+                    $scope.isDisabled = true;
+                });
+                $scope.$on('enableControls', function () {
+                    $scope.isDisabled = false;
+                });
+            }
+        }
     }
     ]).directive('numberInput', ['PlayerService', function (PlayerService) {
         return {
@@ -99,8 +107,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                     else change($scope.defaults.from);
                 };
             }
-        }
-            ;
+        };
     }
     ])
 ;

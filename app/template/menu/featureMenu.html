@@ -11,7 +11,7 @@
             <span class="featureLabel" ng-bind-html="label"> </span>
         <i  ng-class="{rotate90:!$parent.isCollapsed}" class="glyphicon glyphicon-play"></i>
     </div>
-    <div collapse="isCollapsed">
+    <div ng-class="{disabled:isDisabled}" collapse="isCollapsed">
         <div ng-transclude></div>
     </div>
 </div>

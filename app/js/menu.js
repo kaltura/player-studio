@@ -343,6 +343,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                 return false;
             },
             makeFeatureCheckbox: function ($scope, $attrs) {
+                $scope.isDisabled = false;
                 if ($attrs['model']) {
                     var ModelArr = $attrs['model'].split('.');
                     $scope.FeatureModel = ModelArr.pop();
@@ -369,39 +370,21 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                 }
             },
             linkFn4FeatureCheckbox: function (scope) {
-                var oldModel = angular.copy(scope.featureModelCon);
-                // to enable a plugin when some of its data has changed
-                scope.$watch(function () {
-                    var returnVal = false;
-                    angular.forEach(scope.featureModelCon, function (value, key) {
-                        if (key != '_featureEnabled') {
-                            if (scope.featureModelCon[key] != oldModel[key]) {
-                                oldModel = angular.copy(scope.featureModelCon);
-                                return returnVal = true;
-                            }
-                        }
-                    });
-                    return returnVal;
-                }, function (newVal, oldVal) {
-                    if (newVal != oldVal && newVal) {
-                        scope.featureModelCon._featureEnabled = true;
-                    }
-                });
                 if (scope.featureCheckbox) {
                     scope.$watch('featureModelCon._featureEnabled', function (newval, oldVal) {
                         if (newval != oldVal) {
                             if (!newval) {// feature disabled  - delete control data
                                 delete scope.parentModel[scope.FeatureModel];
+                                scope.$parent.$broadcast('disableControls');
+                                scope.isDisabled = true;
                                 if (typeof scope.isCollapsed != 'undefined') { // if featureMenu
                                     $timeout(function () {
                                         scope.isCollapsed = true;
                                     });
-
                                 }
                                 else {// it's a subpage
                                     if (typeof scope.goBack == 'function') {
                                         scope.goBack();
-                                        scope.featureModelCon._featureEnabled = false;
                                     }
                                 }
                             }
@@ -409,6 +392,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                                 //reEnabled feature
                                 scope.parentModel[scope.FeatureModel] = (scope.featureModelCon) ? scope.featureModelCon : {};
                                 scope.featureModelCon._featureEnabled = true;
+                                scope.isDisabled = false;
+                                scope.$parent.$broadcast('enableControls');
                                 angular.forEach(scope.controlChildren, function (value, key) {
                                     if (!scope.featureModelCon[key]) {
                                         if (typeof value.initvalue != 'undefined')
@@ -421,7 +406,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                         }
                     });
                 }
-
             }
         };
         return menuSvc;
