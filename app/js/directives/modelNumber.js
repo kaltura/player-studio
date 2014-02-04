@@ -41,34 +41,44 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                 if (typeof $scope.model != 'number' && !(typeof $scope.model == 'string' && parseInt($scope.model))) {
                     ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
                 }
-                inputControl.on('blur', function () {
-                    if (inputControl.val() === '') {
+                inputControl.on('blur change', function () {
+                    var inValue = inputControl.val();
+                    if (inValue === '') {
                         $scope.$apply(function () {
                             ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
                         });
                     }
-                });
-                inputControl.on('keydown', function (e) { // modern browsers will do this on thier own but we also and support old browers..
-                    if (e.keyCode == 38 || e.keyCode == 40) {
-                        e.preventDefault();
-                        $scope.$apply(function () {
-                            if (e.keyCode == 38) {
-                                $scope.increment();
-                            }
-                            else {
-                                $scope.decrement();
-                            }
-                        });
+                    else {
+                        inValue = parseInt(inValue);
+                        if ($scope.passValidation(inValue)) {
+                            $scope.$apply(function () {
+                                change(inValue);
+                            });
+                        }
                     }
-
                 });
+                inputControl.on('keydown', function (e) { // modern browsers will do this on their own but we also and support old browsers..
+                        if (e.keyCode == 38 || e.keyCode == 40) {
+                            e.preventDefault();
+                            $scope.$apply(function () {
+                                if (e.keyCode == 38) {
+                                    $scope.increment();
+                                }
+                                else {
+                                    $scope.decrement();
+                                }
+                            });
+                        }
+                    }
+                );
                 if ($scope.kdpattr) {
-                    ngModelCtrl.$viewChangeListeners.push(function () {
-                        PlayerService.setKDPAttribute($scope.kdpattr, ngModelCtrl.$viewValue);
+                    ngModelCtrl.$parsers.push(function (value) {
+                        PlayerService.setKDPAttribute($scope.kdpattr, value);
+                        return value;
                     });
                 }
-                ngModelCtrl.$viewChangeListeners.push(function () {
-                    modelScope.model = ngModelCtrl.$viewValue;
+                ngModelCtrl.$parsers.push(function (value) {
+                    return modelScope.model = value;
                 });
                 var change = function (value) {
                     ngModelCtrl.$setViewValue(value);
@@ -79,6 +89,9 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                         change(resultVal);
                     else change($scope.defaults.to);
                 };
+                $scope.passValidation = function (resultVal) {
+                    if (typeof resultVal == 'number' && resultVal > $scope.defaults.from && resultVal < $scope.defaults.to) return true;
+                };
                 $scope.decrement = function () {
                     var resultVal = ngModelCtrl.$viewValue - $scope.defaults.stepSize;
                     if (resultVal > $scope.defaults.from)
@@ -86,6 +99,8 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                     else change($scope.defaults.from);
                 };
             }
-        };
+        }
+            ;
     }
-    ]);
+    ])
+;

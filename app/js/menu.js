@@ -170,9 +170,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
             menuScope: {},
             currentTooltip: null,
             closeTooltips: function (e) {
-                if (menuSvc.currentTooltip && e.target != menuSvc.currentTooltip){
+                if (menuSvc.currentTooltip && e.target != menuSvc.currentTooltip) {
                     $(menuSvc.currentTooltip).trigger('customShow');
-                    menuSvc.currentTooltip = null;}
+                    menuSvc.currentTooltip = null;
+                }
             },
             get: function () {
                 return menudata;
@@ -260,10 +261,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
                     if (strDirective) {
                         if (item['player-refresh'] !== false) { // undefined is also triggering player-refresh
                             if (refreshableDirectives(strDirective)) {
-                                if (item.type == 'checkbox') {
-                                    elm.attr('player-refresh', ( 'boolean'));
-                                } else
-                                    elm.attr('player-refresh', ( item['player-refresh'] || true));
+                                elm.attr('player-refresh', ( item['player-refresh'] || true));
                             }
                         }
                     }

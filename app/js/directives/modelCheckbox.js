@@ -12,11 +12,7 @@ DirectivesModule.directive('modelCheckbox',function() {
             }
             return function($scope, $element, $attrs, playerRefreshCnt) {
                 if (playerRefreshCnt) {
-                    if ($attrs['playerRefresh'] != 'boolean')
-                        $element.attr('player-refresh', 'boolean');
-                    playerRefreshCnt.setUpdateFunction(function(pRscope) { // scope here is pRscope.
-                        pRscope.controlUpdateAllowed = true; // checkbox doesn't need a control watcher, the model is enough.
-                    });
+                    playerRefreshCnt.setBoolean(); // by such disable use of control function
                 }
             };
         },
