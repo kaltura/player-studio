@@ -280,10 +280,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getDefaultConfig': function () {
                 return $http.get('js/services/defaultPlayer.json');
             },
-            'filterPlayerData': function (data) {
+            'filterPlayerData' : function(data){
                 var _this = this;
                 var copyobj = data.plugins || data;
-                angular.forEach(copyobj, function (value, key) {
+                angular.forEach(copyobj, function(value, key) {
                     if (angular.isObject(value)) {
                         if (typeof value._featureEnabled == 'undefined' || value._featureEnabled === false) {
                             delete copyobj[key];
@@ -293,6 +293,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         }
                     } else {
                         if (key == "_featureEnabled") {
+                            copyobj["plugin"] = true;
                             delete copyobj[key];
                         }
                     }
