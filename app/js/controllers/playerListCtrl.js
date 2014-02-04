@@ -116,10 +116,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     if (oldValue)
                         $scope.title = $filter('i18n')('Players list');
                 }
+                if (timeVar){
+                    $timeout.cancel(timeVar);
+                }
                 timeVar =  $timeout(function() {
-                    if (timeVar){
-                        $timeout.cancel(timeVar);
-                    }
                     $scope.triggerLayoutChange();
                     $scope.calculateTotalItems();
                 }, 100);

@@ -46,7 +46,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     $scope.modelChanged = false;
                     $scope.controlUpdateAllowed = false;
                 } else { // we  initiated a call but the player is still not finished rendering, we will try 10 time;
-                    if (i < 10) {
+                    while (i < 10) {
                         i++;
                         timeOutRun = $timeout(function () {
                             if (timeOutRun) {

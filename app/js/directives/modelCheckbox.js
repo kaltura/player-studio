@@ -36,17 +36,9 @@ DirectivesModule.directive('modelCheckbox',function() {
         template: '<a data-ng-click="check()"></a>',
         link: function(scope, $element, iAttr, ngController) {
             var clickHandler = $($element).find('a');
-            ngController.$render = function() {
-                if (ngController.$viewValue) {
-                    clickHandler.addClass('checked');
-                }
-                else
-                    ngController.$viewValue = false;
-            };
             scope.check = function() {
                 ngController.$setViewValue(!ngController.$viewValue);
             };
-
             var formatter = function() {
                 if (ngController.$viewValue) {
                     clickHandler.addClass('checked');
@@ -55,6 +47,7 @@ DirectivesModule.directive('modelCheckbox',function() {
                     clickHandler.removeClass('checked');
                 }
             };
+            ngController.$render = formatter;
             ngController.$viewChangeListeners.push(formatter);
             if (scope['require']) {
                 ngController.$setValidity('required', true);

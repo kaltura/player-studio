@@ -12,10 +12,10 @@ DirectivesModule.directive('mcustomScrollbar', [
                 var timeVar = null;
                 scope.$on('layoutChange', function() {
                     if (scope.scroller)
+                        if (timeVar) {
+                            $timeout.cancel(timeVar);
+                        }
                         timeVar = $timeout(function() {
-                            if (timeVar) {
-                                $timeout.cancel(timeVar);
-                            }
                             scope.scroller.mCustomScrollbar('update');
                         }, 800);
                 });

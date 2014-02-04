@@ -72,7 +72,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope)
         }
     });
 }]);
-KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editableProperties, $modal) {
+KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editableProperties, $timeout) {
         var menudata = null;
         var promise = editableProperties
             .then(function (data) {
@@ -392,8 +392,17 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
                         if (newval != oldVal) {
                             if (!newval) {// feature disabled  - delete control data
                                 delete scope.parentModel[scope.FeatureModel];
-                                if (typeof scope.isCollapsed != 'undefined') {
-                                    scope.isCollapsed = true;
+                                if (typeof scope.isCollapsed != 'undefined') { // if featureMenu
+                                    $timeout(function () {
+                                        scope.isCollapsed = true;
+                                    });
+
+                                }
+                                else {// it's a subpage
+                                    if (typeof scope.goBack == 'function') {
+                                        scope.goBack();
+                                        scope.featureModelCon._featureEnabled = false;
+                                    }
                                 }
                             }
                             else {
@@ -522,12 +531,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
                     });
                     var timeVar = null;
                     var timeVar1 = null;
-                    $scope.$on('menuChange', function (e, page) {
+                    $scope.$on('menuChange', function (e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
+                    // instate a scroller on the selected menupage withut using the css selector
                         if (page != 'search')
+                            if (timeVar) {
+                                $timeout.cancel(timeVar);
+                            }
                             timeVar = $timeout(function () {
-                                if (timeVar) {
-                                    $timeout.cancel(timeVar);
-                                }
                                 if ($scope.scroller) {
                                     $scope.scroller.mCustomScrollbar('destroy');
                                     $scope.scroller = null;
@@ -538,14 +548,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
                             }, 500);
                     });
                     $scope.$on('layoutChange', function () {
+                        if (timeVar1) {
+                            $timeout.cancel(timeVar1);
+                        }
                         timeVar1 = $timeout(function () {
-                            if (timeVar1) {
-                                $timeout.cancel(timeVar1);
-                            }
                             if ($scope.scroller)
                                 $scope.scroller.mCustomScrollbar('update');
                         }, 500);
-
                     });
                     $timeout(function () {
                         // var page = $routeParams['menuPage'] | 'basicDisplay';

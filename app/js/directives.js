@@ -481,10 +481,10 @@ DirectivesModule.directive('onFinishRender', [
             link: function(scope, element, attr) {
                 if (scope.$last === true) {
                     var timeVar;
+                    if (timeVar) {
+                        $timeout.cancel(timeVar);
+                    }
                     timeVar = $timeout(function() {
-                        if (timeVar) {
-                            $timeout.cancel(timeVar);
-                        }
                         requestNotificationChannel.requestEnded('list');
                     });
                 }
