@@ -49,8 +49,8 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                     }
                 });
                 if ($scope.kdpattr) {
-                    ngModelCtrl.$viewChangeListeners.push(function(value) {
-                        PlayerService.setKDPAttribute($scope.kdpattr, value);
+                    ngModelCtrl.$viewChangeListeners.push(function() {
+                        PlayerService.setKDPAttribute($scope.kdpattr, ngModelCtrl.$viewValue);
                     });
                 }
                 ngModelCtrl.$viewChangeListeners.push(function() {
