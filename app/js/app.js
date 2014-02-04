@@ -10,6 +10,10 @@ var KMCModule = angular.module('KMCModule',
 
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
         $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
+        $tooltipProvider.setTriggers({
+            'customShow': 'customShow'
+        });
+
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
         //request load158ing indication//

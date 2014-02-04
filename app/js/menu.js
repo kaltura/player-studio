@@ -168,6 +168,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
         var menuSvc = {
             promise: promise,
             menuScope: {},
+            currentTooltip: null,
+            closeTooltips: function (e) {
+                if (menuSvc.currentTooltip && e.target != menuSvc.currentTooltip){
+                    $(menuSvc.currentTooltip).trigger('customShow');
+                    menuSvc.currentTooltip = null;}
+            },
             get: function () {
                 return menudata;
             },
@@ -429,6 +435,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
                         $scope.isCollapsed = false;
                     }
                 };
+                $scope.openTooltip = function ($event) {
+                    menuSvc.currentTooltip = $event.target;
+                    $($event.target).trigger('customShow');
+                };
+
             }
             ],
             scope: {
@@ -542,6 +553,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
                         // var page = $routeParams['menuPage'] | 'basicDisplay';
                         menuSvc.setMenu('basicDisplay');
                         $scope.playerEdit.$setPristine();
+                        $('div.section[ng-view]').on('click', menuSvc.closeTooltips);
                         $scope.$parent.menuInitDone = true;
                     }, 500);
                 };
