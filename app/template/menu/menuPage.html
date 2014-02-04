@@ -15,6 +15,6 @@
         </span>
         </span>
         <span class='levelDesc' ng-bind-html='description'></span>
-        <ul class='menuList' ng-transclude></ul>
+        <ul ng-class="{disabled:isDisabled}" class='menuList' ng-transclude></ul>
     </div>
 </li>
