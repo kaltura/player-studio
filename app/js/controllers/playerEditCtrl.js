@@ -10,14 +10,6 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             $scope.newPlayer = !$routeParams.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
-            var addFeatureState = function (data) {
-                angular.forEach(data.plugins, function (value, key) {
-                    if ($.isArray(value)) data.plugins[key] = {};
-                    data.plugins[key]._featureEnabled = true;
-                });
-                return data;
-            };
-            $scope.data.config = addFeatureState(angular.fromJson($scope.data.config));
             $scope.debug = $routeParams.debug;
             $scope.getDebugInfo = function (partial) {
                 if (!partial)

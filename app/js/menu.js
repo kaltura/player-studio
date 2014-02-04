@@ -387,22 +387,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$modal', function (editablePr
                     scope.$watch('featureModelCon._featureEnabled', function (newval, oldVal) {
                         if (newval != oldVal) {
                             if (!newval) {// feature disabled  - delete control data
-                                var dialog = $modal.open({ templateUrl: 'template/dialog/message.html',
-                                    controller: 'ModalInstanceCtrl',
-                                    resolve: {
-                                        settings: function () {
-                                            return {
-                                                'title': 'Data reset confirmation',
-                                                'message': 'Once disabled and saved plugin data will be removed, shall we remove it now?'
-                                            };
-                                        }
-                                    }
-                                });
-                                dialog.result.then(function (result) {
-                                    if (result) {
-                                        delete scope.parentModel[scope.FeatureModel];
-                                    }
-                                });
+                                delete scope.parentModel[scope.FeatureModel];
+                                if (typeof scope.isCollapsed != 'undefined') {
+                                    scope.isCollapsed = true;
+                                }
                             }
                             else {
                                 //reEnabled feature

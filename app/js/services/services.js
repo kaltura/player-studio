@@ -115,7 +115,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'renderPlayer': function (callback) {
                 if (currentPlayer && typeof kWidget != "undefined") {
                     var data2Save = angular.copy(currentPlayer.config);
-                    data2Save.plugins = this.filterPlayerData(data2Save.plugins);
+                    data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
                     var flashvars = {'jsonConfig': angular.toJson(data2Save)}; // update the player with the new configuration
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
                         angular.extend(flashvars, {'wmode': 'transparent'});
@@ -149,7 +149,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             playerRefresh: playerRefresh,
             newPlayer: function () {
                 var deferred = $q.defer();
-                this.getDefaultConfig().
+                playersService.getDefaultConfig().
                     success(function (data, status, headers, config) {
                         var request = {
                             'service': 'uiConf',
@@ -170,7 +170,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         };
                         apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
                         apiService.doRequest(request).then(function (data) {
-                            currentPlayer = data;
+                            playersService.setCurrentPlayer(data);
                             apiService.setCache(true); // restore cache usage
                             localStorageService.set('tempPlayerID', data.id);
                             deferred.resolve(data);
@@ -212,7 +212,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 var deferred = $q.defer();
                 if (typeof currentPlayer.id != 'undefined') { // find if player obj is already loaded
                     if (currentPlayer.id == id || id == 'currentEdit') { // this ability to get the player data  we alreayd work on is there for future revert update feature.
-                        currentPlayer.config.plugins = this.filterPlayerData(currentPlayer.config.plugins);
+                        currentPlayer.config.plugins = this.preparePluginsDataForRender(currentPlayer.config.plugins); // refilter the data incase it was made dirty
+                        playersService.setCurrentPlayer(currentPlayer); // reEnabled plugins.
                         deferred.resolve(currentPlayer);
                         foundInCache = true;
                     }
@@ -220,9 +221,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 if (!foundInCache) {
                     // find player data by its ID in the list cache
                     if (typeof playersCache[id] != 'undefined') {
-                        currentPlayer = playersCache[id];
-                        currentPlayer.config.plugins = this.filterPlayerData(currentPlayer.config.plugins);
-                        deferred.resolve(playersCache[id]);
+                        playersService.setCurrentPlayer(playersCache[id]);
+                        deferred.resolve(currentPlayer);
                         foundInCache = true;
                     }
                 }
@@ -234,12 +234,29 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 
                     };
                     apiService.doRequest(request).then(function (result) {
-                            currentPlayer = result;
-                            deferred.resolve(result);
+                            playersService.setCurrentPlayer(result);
+                            deferred.resolve(currentPlayer);
                         }
                     );
                 }
                 return deferred.promise;
+            },
+            setCurrentPlayer: function (player) {
+                if (typeof player.config == 'string') {
+                    player.config = angular.fromJson(player.config);
+                }
+                if (typeof player.config != 'undefined' && typeof player.config.plugins != 'undefined') {
+                    player.config = playersService.addFeatureState(player.config); // preloaded data will get _featureEnabled
+                }
+                currentPlayer = player;
+            },
+            addFeatureState: function (data) {
+                angular.forEach(data.plugins, function (value, key) {
+                    if ($.isArray(value)) data.plugins[key] = {};
+                    if (data.plugins[key]._featureEnabled != false)
+                        data.plugins[key]._featureEnabled = true;
+                });
+                return data;
             },
             cachePlayers: function (playersList) {
                 if ($.isArray(playersList)) { // it is an array
@@ -280,16 +297,15 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getDefaultConfig': function () {
                 return $http.get('js/services/defaultPlayer.json');
             },
-            'filterPlayerData' : function(data){
-                var _this = this;
+            "preparePluginsDataForRender": function (data) {
                 var copyobj = data.plugins || data;
-                angular.forEach(copyobj, function(value, key) {
+                angular.forEach(copyobj, function (value, key) {
                     if (angular.isObject(value)) {
                         if (typeof value._featureEnabled == 'undefined' || value._featureEnabled === false) {
                             delete copyobj[key];
                         }
                         else {
-                            _this.filterPlayerData(value);
+                            playersService.preparePluginsDataForRender(value);
                         }
                     } else {
                         if (key == "_featureEnabled") {
@@ -302,9 +318,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             },
             'savePlayer': function (data) {
                 var deferred = $q.defer();
-
                 var data2Save = angular.copy(data.config);
-                data2Save.plugins = this.filterPlayerData(data2Save.plugins);
+                data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
                 var request = {
                     'service': 'uiConf',
                     'action': 'update',
@@ -580,15 +595,15 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
     var apiService = {
         apiObj: api,
         unSetks: function () {
-            delete this.apiObj;
+            delete apiService.apiObj;
         },
         setKs: function (ks) {
-            this.apiObj.then(function (api) {
+            apiService.apiObj.then(function (api) {
                 api.setKs(ks);
             });
         },
         setWid: function (wid) {
-            this.getClient().then(function (api) {
+            apiService.getClient().then(function (api) {
                 api.wid = wid;
             });
         },
@@ -605,19 +620,18 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
                 'action': 'list'
 
             };
-            return this.doRequest(request);
+            return apiService.doRequest(request);
         },
         useCache: true,
         setCache: function (useCache) {
-            this.useCache = useCache;
+            apiService.useCache = useCache;
         },
         doRequest: function (params) {
             //Creating a deferred object
-            var _this = this;
             var deferred = $q.defer();
             requestNotificationChannel.requestStarted();
-            var params_key = this.getKey(params);
-            if (apiCache.get(params_key) && this.useCache) {
+            var params_key = apiService.getKey(params);
+            if (apiCache.get(params_key) && apiService.useCache) {
                 deferred.resolve(apiCache.get(params_key));
             } else {
                 apiService.apiObj.then(function (api) {
@@ -633,7 +647,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
                                 deferred.reject(data.code);
                             } else {
                                 apiCache.put(params_key, data);
-                                _this.useCache = true;
+                                apiService.useCache = true;
                                 requestNotificationChannel.requestEnded();
                                 deferred.resolve(data);
                             }
