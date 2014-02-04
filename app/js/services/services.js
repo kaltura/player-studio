@@ -473,7 +473,7 @@ KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, ap
 //           deferred.resolve(result.data);
 //        });
 //
-        $http.get(window.kWidget.getPath() + 'services.php?service=studioService').then(function(result) {
+        $http.jsonp(window.kWidget.getPath() + 'services.php?service=studioService&callback=jsonCallback').then(function(result) {
             var data = result.data;
             if (typeof data == 'object') // json is OK
                 deferred.resolve(result.data);
@@ -651,10 +651,10 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
 KMCServices.factory('playerTemplates', ['$http', function($http) {
     return {
         'listSystem': function() {
-            return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
+            return $http.jsonp('http://mrjson.com/data/5263e32d85f7fef869f2a63b/template/list.json');
         },
         'listUser': function() {
-            return $http.get('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
+            return $http.jsonp('http://mrjson.com/data/5263e32d85f7fef869f2a63b/userTemplates/list.json');
         }
     };
 
