@@ -14,7 +14,8 @@
         "liveStatus": [],
         "liveBackBtn": [],
         "fullScreenBtn": [],
-        "logo": []
+        "logo": [],
+        "skipBtn": []
     },
     "uiVars": {
         "imageDefaultDuration": 2,

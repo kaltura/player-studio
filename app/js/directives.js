@@ -206,6 +206,9 @@ DirectivesModule.directive('modelText', function(menuSvc) {
                     $scope.placehold = 'http://';
                 }
             }
+            if ($attrs["initvalue"]){
+                $scope.placehold = $attrs["initvalue"];
+            }
             else if ($attrs['validation']) {
                 var pattern = $attrs['validation'];
                 var isValid, regex;
