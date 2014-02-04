@@ -5,7 +5,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
         replace: true,
         restrict: 'EA',
         priority: 1,
-        require: ['?parentContainer', '?playerRefresh'],
+        require: ['?parentContainer'],
         scope: {
             label: '@',
             model: '=',
@@ -20,10 +20,6 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
                 tElement.append('<hr/>');
             }
             return function ($scope, $element, $attrs, controllers) {
-                var playerRefreshCnt = (controllers[1]) ? controllers[1] : null;
-                if (playerRefreshCnt) {
-                    playerRefreshCnt.setBoolean(); // by such disable use of control function
-                }
                 var parentCntrl = (controllers[0]) ? controllers[0] : null;
                 if (parentCntrl) {
                     var pubObj = {
