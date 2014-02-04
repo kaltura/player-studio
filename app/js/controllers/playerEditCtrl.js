@@ -87,7 +87,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
         }
     ]);
 
-angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerService', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', 'playerCache', function ($scope, playerService, apiService, $modal, $location, menuSvc, localStorageService, playerCache) {
+angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerService', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', function ($scope, playerService, apiService, $modal, $location, menuSvc, localStorageService) {
     var filterData = function (copyobj) {
         angular.forEach(copyobj, function (value, key) {
             if (angular.isObject(value)) {
