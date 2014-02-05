@@ -108,7 +108,7 @@ DirectivesModule.directive('ngPlaceholder', function () {
                 element.addClass('placeholder');
             };
             var unplacehold = function () {
-                if (!placeholder == 'http://')
+                if (placeholder != 'http://')
                     element.val('');
                 element.removeClass('placeholder');
             };
@@ -120,7 +120,7 @@ DirectivesModule.directive('ngPlaceholder', function () {
                     return '';
                 }
                 return val;
-            }
+            };
             ctrl.$parsers.unshift(makePlace);
             ctrl.$formatters.unshift(makePlace);
             element.bind('focus', function () {

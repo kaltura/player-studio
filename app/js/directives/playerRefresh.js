@@ -39,18 +39,18 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     //reset all params;
                     ctrObj.stopTrigger = false;
                 }
-//                else {
-//                    timeOutRun = $interval(function () {
-//                        $scope.makeRefresh();
-//                    }, 500, 10);
-//                }
-            }
+                else {
+                    timeOutRun = $interval(function () {
+                        $scope.makeRefresh();
+                    }, 500, 10);
+                }
+            };
             $scope.$on('$destroy', function () {
                 if (timeOutRun) {
                     $interval.cancel(timeOutRun);
                 }
             });
-            var stopTimeVar = null
+            var stopTimeVar = null;
             var ctrObj = {
                 stopTrigger: false,
                 setStopTrigger: function () {

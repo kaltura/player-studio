@@ -45,7 +45,7 @@ DirectivesModule.directive('modelCheckbox',function () {
                     ngController.$setViewValue(!ngController.$viewValue);
                 };
                 var formatter = function (value) {
-                    var innerVal = (typeof value != "undefined") ?  value : ngController.$modelValue
+                    var innerVal = (typeof value != "undefined") ?  value : ngController.$modelValue;
                     if (innerVal) {
                         clickHandler.addClass('checked');
                     }
