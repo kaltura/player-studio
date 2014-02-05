@@ -114,6 +114,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
                         angular.extend(flashvars, {'wmode': 'transparent'});
                     }
+                    // clear companion divs
+                    $("#Companion_300x250").empty();
+                    $("#Companion_728x90").empty();
                     window.mw.setConfig('Kaltura.LeadWithHTML5', true);
                     window.jsCallbackReady = function (playerId) {
                         document.getElementById(playerId).kBind("layoutBuildDone", function () {

@@ -16,7 +16,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                 $scope.defaults = {
                     initvalue: parseInt($attrs['initvalue']) || 0,
                     from: parseInt($attrs['from']) || 0,
-                    to: parseInt($attrs['to']) || 100,
+                    to: parseInt($attrs['to']) || 1000,
                     stepSize: parseInt($attrs['stepsize']) || 1,
                     readonly: false  /// note that a input can be made readonly
                 };
