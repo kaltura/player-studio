@@ -142,7 +142,9 @@ angular.module('localization', [])
     .filter('i18n', ['localize',
         function (localize) {
             return function (input) {
-                return localize.getLocalizedString(input, true);
+                //global disable //TODO:replace i18n
+                return input;
+                //return localize.getLocalizedString(input, true);
             };
         }
     ])
