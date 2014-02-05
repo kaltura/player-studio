@@ -2,22 +2,22 @@
 var DirectivesModule = angular.module('KMC.directives');
 DirectivesModule.directive('mcustomScrollbar', [
     '$timeout',
-    function($timeout) {
+    function ($timeout) {
         return {
             priority: 0,
             restrict: 'AC',
-            link: function(scope, element, attr) {
+            link: function (scope, element, attr) {
                 scope.scroller = null;
                 var options = scope.$eval(attr['mcustomScrollbar']);
                 var timeVar = null;
-                scope.$on('layoutChange', function() {
-                    if (scope.scroller)
-                        if (timeVar) {
-                            $timeout.cancel(timeVar);
-                        }
-                        timeVar = $timeout(function() {
+                scope.$on('layoutChange', function () {
+                    if (timeVar) {
+                        $timeout.cancel(timeVar);
+                    }
+                    timeVar = $timeout(function () {
+                        if (scope.scroller)
                             scope.scroller.mCustomScrollbar('update');
-                        }, 800);
+                    }, 800);
                 });
                 var opts = {
                     horizontalScroll: false,
@@ -32,12 +32,12 @@ DirectivesModule.directive('mcustomScrollbar', [
                     }
                 };
                 angular.extend(opts, options);
-                var afterScroll = $timeout(function() {
+                var afterScroll = $timeout(function () {
                     if (typeof $().mCustomScrollbar == 'function') {
                         scope.scroller = element.mCustomScrollbar(opts);
                     }
                 }, 1000);
-                var checkScroll = function(value) {
+                var checkScroll = function (value) {
                     if (value == 'block') {
                         $('#tableHead').css('padding-right', '18px');
                     }
@@ -46,20 +46,20 @@ DirectivesModule.directive('mcustomScrollbar', [
                     }
                 };
                 if ($('#tableHead').length) {
-                    afterScroll.then(function() {
+                    afterScroll.then(function () {
                         var scrollTools = $(element).find('.mCSB_scrollTools');
                         scope.scrollerCss = scrollTools.css('display');
-                        $timeout(function() {
+                        $timeout(function () {
                             checkScroll(scope.scrollerCss);
                         }, 200);
-                        scope.$watch(function() {
+                        scope.$watch(function () {
                             return  scope.scrollerCss = scrollTools.css('display');
-                        }, function(value) {
+                        }, function (value) {
                             checkScroll(value);
                         });
                         var timeVar;
-                        $(window).resize(function() { //TODO: wrap in single timeout check
-                            timeVar = $timeout(function() {
+                        $(window).resize(function () { //TODO: wrap in single timeout check
+                            timeVar = $timeout(function () {
                                 if (timeVar) {
                                     $timeout.cancel(timeVar);
                                 }
