@@ -517,19 +517,20 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     var timeVar1 = null;
                     $scope.$on('menuChange', function (e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
                         // instate a scroller on the selected menupage withut using the css selector
-                        if (page != 'search')
+                        if (page != 'search'){
                             if (timeVar) {
                                 $timeout.cancel(timeVar);
                             }
-                        timeVar = $timeout(function () {
-                            if ($scope.scroller) {
-                                $scope.scroller.mCustomScrollbar('destroy');
-                                $scope.scroller = null;
-                            }
-                            $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
-                            if (!$scope.scroller)
-                                $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
-                        }, 500);
+                            timeVar = $timeout(function () {
+                                if ($scope.scroller) {
+                                    $scope.scroller.mCustomScrollbar('destroy');
+                                    $scope.scroller = null;
+                                }
+                                $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
+                                if (!$scope.scroller)
+                                    $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
+                            }, 500);
+                        }
                     });
                     $scope.$on('layoutChange', function () {
                         if (timeVar1) {

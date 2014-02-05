@@ -6,11 +6,11 @@ DirectivesModule.directive('modelText', function (menuSvc) {
         restrict: 'EA',
         controller: function ($scope, $element, $attrs) {
             $scope.type = 'text';
-            $scope.form = menuSvc.menuScope.playerEdit;
+            var form = menuSvc.menuScope.playerEdit;
             var makeWatch = function (value, retProp) {
                 $scope.$watch(function () {
-                        if ($scope.form[$attrs['model']]) {
-                            var inputCntrl = $scope.form[$attrs['model']];
+                        if (form[$attrs['model']]) {
+                            var inputCntrl = form[$attrs['model']];
                             if (typeof inputCntrl.$error[value] != 'undefined');
                             return inputCntrl.$error[value];
                         }
@@ -27,9 +27,6 @@ DirectivesModule.directive('modelText', function (menuSvc) {
             if ($attrs['validation'] == 'url' || $attrs['validation'] == 'email') {
                 makeWatch($attrs['validation'], 'valState');
                 $scope.type = $attrs['validation'];
-                if ($attrs['validation'] == 'url') {
-                    $scope.placehold = 'http://';
-                }
             }
             if ($attrs["initvalue"] && (typeof $scope.model == 'undefined' || $scope.model === '' )) {
                 $scope.model = $attrs["initvalue"];
@@ -92,47 +89,48 @@ DirectivesModule.directive('modelText', function (menuSvc) {
             };
         },
         templateUrl: 'template/formcontrols/modelText.html'
-    };
-});
+    }
+        ;
+})
+;
 
-DirectivesModule.directive('ngPlaceholder', function ($timeout) {
+DirectivesModule.directive('ngPlaceholder', function () {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function (scope, element, attr, ctrl) {
-            if (attr['ngPlaceholder']) {
-                var value;
-                var placehold = function () {
-                    element.val(attr['ngPlaceholder']);
-                    if (attr['require']) {
-                        ctrl.$setValidity('required', false);
-                    }
-                    element.addClass('placeholder');
-                };
-                var unplacehold = function () {
+            var placeholder = ((attr['type'] == 'url' || attr['valType'] == 'url' ) && attr['ngPlaceholder'].length <= 0) ? 'http://' : attr['ngPlaceholder'];
+            var placehold = function () {
+                element.val(placeholder);
+                if (attr['require']) {
+                    ctrl.$setValidity('required', false);
+                }
+                element.addClass('placeholder');
+            };
+            var unplacehold = function () {
+                if (!placeholder == 'http://')
                     element.val('');
-                    element.removeClass('placeholder');
-                };
-                scope.$watch(function () {
-                    return element.val();
-                }, function (val) {
-                    value = val || '';
-                });
-                element.bind('focus', function () {
-                    if (value === '' || value == attr['ngPlaceholder']) unplacehold();
-                });
-                element.bind('blur', function () {
-                    if (element.val() === '') placehold();
-                });
-                ctrl.$formatters.unshift(function (val) {
-                    if (!val) {
-                        placehold();
-                        value = '';
-                        return attr['ngPlaceholder'];
-                    }
-                    return val;
-                });
+                element.removeClass('placeholder');
+            };
+            var value = ctrl.$viewValue;
+            var makePlace = function (val) {
+                value = val;
+                if (!val) {
+                    placehold();
+                    return '';
+                }
+                return val;
             }
+            ctrl.$parsers.unshift(makePlace);
+            ctrl.$formatters.unshift(makePlace);
+            element.bind('focus', function () {
+                if (value === '' || value == placeholder) unplacehold();
+            });
+            element.bind('blur', function () {
+                if (element.val() === '' || value == placeholder) placehold();
+            });
         }
-    };
-});
+    }
+        ;
+})
+;

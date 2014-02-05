@@ -97,9 +97,9 @@ DirectivesModule.directive('dname', function (menuSvc) { // made to help with va
 DirectivesModule.directive('valType', function () {
     return {
         restrict: "A",
-        compile: function (tElem, tAttr) {
-            if ((tAttr['valType'] == 'url' || tAttr['valType'] == 'email') && $('html').hasClass('IE8') === false) {
-                tElem.attr('input', tAttr['valType']);
+        link: function ($scope, $element, $attrs) {
+            if (($attrs['valType'] == 'url' || $attrs['valType'] == 'email') && $('html').hasClass('IE8') === false) {
+                $element.attr('type', $attrs['valType']);
             }
         }
     };
