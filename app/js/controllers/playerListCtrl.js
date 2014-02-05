@@ -189,6 +189,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     if (result)
                         PlayerService.deletePlayer(item.id).then(function() {
                             $scope.data.splice($scope.data.indexOf(item), 1);
+                            $scope.triggerLayoutChange();
                         }, function(reason) {
                             $modal.open({ templateUrl: 'template/dialog/message.html',
                                 controller: 'ModalInstanceCtrl',
