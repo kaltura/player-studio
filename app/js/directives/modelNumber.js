@@ -10,7 +10,6 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                 helpnote: '@',
                 label: '@',
                 'require': '@',
-                'kdpattr': '@',
                 'strModel': '@model'
             },
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
@@ -23,15 +22,16 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                 };
                 $scope.inputForm = {};
                 return $scope;
-            }], link: function ($scope) {
-                $scope.isDisabled = false;
-                $scope.$on('disableControls', function () {
-                    $scope.isDisabled = true;
-                });
-                $scope.$on('enableControls', function () {
-                    $scope.isDisabled = false;
-                });
-            }
+            }]
+//           , link: function ($scope) {
+////                $scope.isDisabled = false;
+////                $scope.$on('disableControls', function () {
+////                    $scope.isDisabled = true;
+////                });
+////                $scope.$on('enableControls', function () {
+////                    $scope.isDisabled = false;
+////                });
+//            }
         };
     }
     ]).directive('numberInput', ['PlayerService', function (PlayerService) {
@@ -79,12 +79,6 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                         }
                     }
                 );
-                if ($scope.kdpattr) {
-                    ngModelCtrl.$parsers.push(function (value) {
-                        PlayerService.setKDPAttribute($scope.kdpattr, value);
-                        return value;
-                    });
-                }
                 ngModelCtrl.$parsers.push(function (value) {
                     return modelScope.model = value;
                 });

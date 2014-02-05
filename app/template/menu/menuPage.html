@@ -1,7 +1,7 @@
 <li>
     <div class="header" data-ng-click='selfOpenLevel()'>
      <span ng-if="parentPage && featureCheckbox" class="pull-right">
-            <span class="prettycheckbox" player-refresh="boolean" ng-click="selfOpenLevel()"
+            <span class="prettycheckbox" player-refresh="true" ng-click="selfOpenLevel()"
                   ng-model="featureModelCon._featureEnabled"></span>
     </span>
         <a class='menu-level-trigger'>{{label}}</a>
@@ -11,7 +11,7 @@
 
         <h2 class="subMenuHeader">{{label}}</h2>
         <span ng-if="parentPage" class="pull-right">
-            <span class="prettycheckbox" player-refresh="boolean" ng-model="featureModelCon._featureEnabled">
+            <span class="prettycheckbox" player-refresh="true" ng-model="featureModelCon._featureEnabled">
         </span>
         </span>
         <span class='levelDesc' ng-bind-html='description'></span>

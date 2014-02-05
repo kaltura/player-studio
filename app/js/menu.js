@@ -375,7 +375,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                         if (newval != oldVal) {
                             if (!newval) {// feature disabled  - delete control data
                                 delete scope.parentModel[scope.FeatureModel];
-                                scope.$parent.$broadcast('disableControls');
+                                //scope.$parent.$broadcast('disableControls');
                                 scope.isDisabled = true;
                                 if (typeof scope.isCollapsed != 'undefined') { // if featureMenu
                                     $timeout(function () {
@@ -393,7 +393,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                                 scope.parentModel[scope.FeatureModel] = (scope.featureModelCon) ? scope.featureModelCon : {};
                                 scope.featureModelCon._featureEnabled = true;
                                 scope.isDisabled = false;
-                                scope.$parent.$broadcast('enableControls');
+                               //scope.$parent.$broadcast('enableControls');
                                 angular.forEach(scope.controlChildren, function (value, key) {
                                     if (!scope.featureModelCon[key]) {
                                         if (typeof value.initvalue != 'undefined')

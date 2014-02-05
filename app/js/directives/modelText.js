@@ -73,14 +73,14 @@ DirectivesModule.directive('modelText', function (menuSvc) {
             }
             return function ($scope, $element, $attrs) {
                 var inputElm = $($element).find('input');
-                $scope.$on('disableControls', function () {
-                    $scope.isDisabled = true;
-                    //inputElm.attr('disabled','disabled');
-                });
-                $scope.$on('enableControls', function () {
-                    $scope.isDisabled = false;
-//                    inputElm.removeAttr('disabled','disabled');
-                });
+//                $scope.$on('disableControls', function () {
+//                    $scope.isDisabled = true;
+//                    //inputElm.attr('disabled','disabled');
+//                });
+//                $scope.$on('enableControls', function () {
+//                    $scope.isDisabled = false;
+////                    inputElm.removeAttr('disabled','disabled');
+//                });
                 if ($attrs.initvalue) {
                     inputElm.on('click', function (e) {
                         if (inputElm.val() == $attrs.initvalue) {
