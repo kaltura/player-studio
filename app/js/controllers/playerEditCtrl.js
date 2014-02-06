@@ -74,7 +74,6 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 $scope.masterData = angular.copy($scope.data);
                 // get the preview entry
                 PlayerService.setPreviewEntry($scope.settings.previewEntry);
-                PlayerService.renderPlayer();
             });
         }
     ]);

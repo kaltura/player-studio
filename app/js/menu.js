@@ -486,7 +486,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                 });
             }
         };
-    }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout', '$routeParams' , function (menuSvc, $compile, $timeout, $routeParams) {
+    }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout', '$routeParams','PlayerService' , function (menuSvc, $compile, $timeout, $routeParams, PlayerService) {
         return  {
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
@@ -547,6 +547,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                         $scope.playerEdit.$setPristine();
                         $('div.section[ng-view]').on('click', menuSvc.closeTooltips);
                         $scope.$parent.menuInitDone = true;
+                        PlayerService.renderPlayer();
                     }, 500);
                 };
             }
