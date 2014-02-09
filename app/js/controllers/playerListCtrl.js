@@ -130,7 +130,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 'Some features and design may be lost.');
             $scope.goToEditPage = function (item, $event) {
                 $event.preventDefault();
-//TODO filter according to what? we don't have "version" field
+                   //TODO filter according to what? we don't have "version" field
                 if (!$scope.checkVersionNeedsUpgrade(item)) {
                     $location.path('/edit/' + item.id);
                     return false;
