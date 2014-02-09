@@ -12,7 +12,7 @@ angular.module('localization', [])
 // localization service responsible for retrieving resource files from the server and
 // managing the translation dictionary
     .factory('localize', ['$http', '$rootScope', '$window', '$filter',
-        function ($http, $rootScope, $window, $filter) {
+        function($http, $rootScope, $window, $filter) {
             var localize = {
                 // use the $window service to get the language of the user's browser
                 language: '',
@@ -24,7 +24,7 @@ angular.module('localization', [])
                 resourceFileLoaded: false,
 
                 // success handler for all server communication
-                successCallback: function (data) {
+                successCallback: function(data) {
                     // store the returned array in the dictionary
                     localize.dictionary = data;
                     // set the flag that the resource are loaded
@@ -34,19 +34,19 @@ angular.module('localization', [])
                 },
 
                 // allows setting of language on the fly
-                setLanguage: function (value) {
+                setLanguage: function(value) {
                     localize.language = value;
                     localize.initLocalizedResources();
                 },
 
                 // allows setting of resource url on the fly
-                setUrl: function (value) {
+                setUrl: function(value) {
                     localize.url = value;
                     localize.initLocalizedResources();
                 },
 
                 // builds the url for locating the resource file
-                buildUrl: function () {
+                buildUrl: function() {
                     if (!localize.language) {
                         var lang, androidLang;
                         // works for earlier version of Android (2.3.x)
@@ -63,7 +63,7 @@ angular.module('localization', [])
                 },
 
                 // loads the language resource file from the server
-                initLocalizedResources: function () {
+                initLocalizedResources: function() {
                     // build the url to retrieve the localized resource file
                     var url = localize.url || localize.buildUrl();
                     // request the resource file
@@ -71,21 +71,21 @@ angular.module('localization', [])
                         method: "GET",
                         url: url,
                         cache: false
-                    }).success(localize.successCallback).error(function () {
-                            // the request failed set the url to the default resource file
-                            var url = '/i18n/resources-locale_en_US.json';
-                            // request the default resource file
-                            $http({
-                                method: "GET",
-                                url: url,
-                                cache: false
-                            }).success(localize.successCallback);
-                        });
+                    }).success(localize.successCallback).error(function() {
+                        // the request failed set the url to the default resource file
+                        var url = '/i18n/resources-locale_en_US.json';
+                        // request the default resource file
+                        $http({
+                            method: "GET",
+                            url: url,
+                            cache: false
+                        }).success(localize.successCallback);
+                    });
                 },
 
                 // checks the dictionary for a localized resource string
-                getLocalizedString: function (value, SyncAction) {
-                   // return value; // for debuggin
+                getLocalizedString: function(value, SyncAction) {
+                    // return value; // for debuggin
                     //  Contextualize missing translation
                     var translated = '!' + value + '!';                        //  check to see if the resource file has been loaded
                     if (!localize.resourceFileLoaded && !SyncAction) {
@@ -94,7 +94,7 @@ angular.module('localization', [])
                         //  set the flag to keep from looping in init
                         localize.resourceFileLoaded = true;
                         //  return the empty string
-                        return promise.then(function () {
+                        return promise.then(function() {
                             return localize.getLocalizedString(value)
                         });
                     }                        //  make sure the dictionary has valid data
@@ -104,7 +104,7 @@ angular.module('localization', [])
                         for (var i = 1; i < arguments.length; i++) {
                             placeholders.push(arguments[i]);
                         }
-                        var translate = function (value, placeholders) {
+                        var translate = function(value, placeholders) {
                             var placeholders = placeholders || null;
                             var translated = localize.dictionary[value];
                             if (translated === undefined) {
@@ -139,9 +139,11 @@ angular.module('localization', [])
     ])
 // simple translation filter
 // usage {{ TOKEN | i18n }}
-    .filter('i18n', ['localize',
-        function (localize) {
-            return function (input) {
+    .filter('i18n', [
+        //.filter('i18n', ['localize',
+        //function (localize) {
+        function() {
+            return function(input) {
                 //global disable //TODO:replace i18n
                 return input;
                 //return localize.getLocalizedString(input, true);
@@ -154,10 +156,10 @@ angular.module('localization', [])
 // or
 // <span data-i18n="TOKEN|VALUE1|VALUE2" ></span>
     .directive('i18n', ['localize',
-        function (localize) {
+        function(localize) {
             var i18nDirective = {
                 restrict: "EAC",
-                updateText: function (elm, token) {
+                updateText: function(elm, token) {
                     var values = token.split('|');
                     if (values.length >= 1) {
                         // construct the tag to insert into the element
@@ -176,12 +178,12 @@ angular.module('localization', [])
                     }
                 },
 
-                link: function (scope, elm, attrs) {
-                    scope.$on('localizeResourcesUpdated', function () {
+                link: function(scope, elm, attrs) {
+                    scope.$on('localizeResourcesUpdated', function() {
                         i18nDirective.updateText(elm, attrs.i18n);
                     });
 
-                    attrs.$observe('i18n', function (value) {
+                    attrs.$observe('i18n', function(value) {
                         i18nDirective.updateText(elm, attrs.i18n);
                     });
                 }
@@ -196,10 +198,10 @@ angular.module('localization', [])
 // or
 // <span data-i18n-attr="TOKEN|ATTRIBUTE|VALUE1|VALUE2" ></span>
     .directive('i18nAttr', ['localize',
-        function (localize) {
+        function(localize) {
             var i18NAttrDirective = {
                 restrict: "EAC",
-                updateText: function (elm, token) {
+                updateText: function(elm, token) {
                     var values = token.split('|');
                     // construct the tag to insert into the element
                     var tag = localize.getLocalizedString(values[0]);
@@ -215,12 +217,12 @@ angular.module('localization', [])
                         elm.attr(values[1], tag);
                     }
                 },
-                link: function (scope, elm, attrs) {
-                    scope.$on('localizeResourcesUpdated', function () {
+                link: function(scope, elm, attrs) {
+                    scope.$on('localizeResourcesUpdated', function() {
                         i18NAttrDirective.updateText(elm, attrs.i18nAttr);
                     });
 
-                    attrs.$observe('i18nAttr', function (value) {
+                    attrs.$observe('i18nAttr', function(value) {
                         i18NAttrDirective.updateText(elm, value);
                     });
                 }
