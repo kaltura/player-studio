@@ -50,7 +50,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                         //reset all params;
                         ctrObj.stopTrigger = false;
                         //delete the currentRefresh
-                        delete ctrObj.currentRefreshes[$scope.prModel.key]
+                        delete ctrObj.currentRefreshes[$scope.prModel.key];
                     }
                     else {
                         timeOutRun = $interval(function() {

@@ -46,16 +46,14 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                 var inputControl = $element.find('input');
                 modelScope.modelCntrl = ngModelCtrl;
                 modelScope.inputForm = $scope.inputForm;
-                if (controllers[2]) {
-                    var prController = controllers[2];
-                }
+                var prController = (controllers[2]) ? controllers[2] : null;
                 var timevar = null;
                 if (prController) {
                     prController.setUpdateFunction(function(scope, element, $q) {
                         var q = $q.defer();
                         inputControl.on('change softChange', function() {
                                 if (timevar) {
-                                    $timeout.cancel(timevar)
+                                    $timeout.cancel(timevar);
                                 }
                                 timevar = $timeout(function() {
                                     q.resolve(ngModelCtrl.$viewValue);
