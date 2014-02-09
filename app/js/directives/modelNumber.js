@@ -1,6 +1,6 @@
 'use strict';
 var DirectivesModule = angular.module('KMC.directives');
-DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
+DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
         return {
             templateUrl: 'template/formcontrols/modelNumber.html',
             replace: true,
@@ -12,7 +12,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                 'require': '@',
                 'strModel': '@model'
             },
-            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.defaults = {
                     initvalue: parseInt($attrs['initvalue']) || 0,
                     from: parseInt($attrs['from']) || 0,
@@ -34,41 +34,62 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
 //            }
         };
     }
-    ]).directive('numberInput', ['PlayerService', function (PlayerService) {
+    ]).directive('numberInput', ['$timeout', function($timeout) {
         return {
-            require: ['^modelNumber', 'ngModel'],
+            require: ['^modelNumber', 'ngModel', '?^playerRefresh'],
             restrict: 'A',
             scope: true,
             templateUrl: 'template/formcontrols/numberInput.html',
-            link: function ($scope, $element, $attrs, controllers) {
+            link: function($scope, $element, $attrs, controllers) {
                 var modelScope = controllers[0];
                 var ngModelCtrl = controllers[1];
                 var inputControl = $element.find('input');
                 modelScope.modelCntrl = ngModelCtrl;
                 modelScope.inputForm = $scope.inputForm;
+                if (controllers[2]) {
+                    var prController = controllers[2];
+                }
+                var timevar = null;
+                if (prController) {
+                    prController.setUpdateFunction(function(scope, element, $q) {
+                        var q = $q.defer();
+                        inputControl.on('change softChange', function() {
+                                if (timevar) {
+                                    $timeout.cancel(timevar)
+                                }
+                                timevar = $timeout(function() {
+                                    q.resolve(ngModelCtrl.$viewValue);
+                                    timevar = null;
+                                }, 1000);
+                            }
+
+                        );
+                        return q.promise;
+                    });
+                }
                 if (typeof $scope.model != 'number' && !(typeof $scope.model == 'string' && parseInt($scope.model))) {
                     ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
                 }
-                inputControl.on('blur change', function () {
+                inputControl.on('blur change', function() {
                     var inValue = inputControl.val();
                     if (inValue === '') {
-                        $scope.$apply(function () {
+                        $scope.$apply(function() {
                             ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
                         });
                     }
                     else {
                         inValue = parseInt(inValue);
                         if ($scope.passValidation(inValue)) {
-                            $scope.$apply(function () {
+                            $scope.$apply(function() {
                                 change(inValue);
                             });
                         }
                     }
                 });
-                inputControl.on('keydown', function (e) { // modern browsers will do this on their own but we also and support old browsers..
+                inputControl.on('keydown', function(e) { // modern browsers will do this on their own but we also and support old browsers..
                         if (e.keyCode == 38 || e.keyCode == 40) {
                             e.preventDefault();
-                            $scope.$apply(function () {
+                            $scope.$apply(function() {
                                 if (e.keyCode == 38) {
                                     $scope.increment();
                                 }
@@ -79,22 +100,23 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function (menuSvc) {
                         }
                     }
                 );
-                ngModelCtrl.$parsers.push(function (value) {
+                ngModelCtrl.$parsers.push(function(value) {
                     return modelScope.model = value;
                 });
-                var change = function (value) {
+                var change = function(value) {
+                    inputControl.trigger('softChange');
                     ngModelCtrl.$setViewValue(value);
                 };
-                $scope.increment = function () {
+                $scope.increment = function() {
                     var resultVal = ngModelCtrl.$viewValue + $scope.defaults.stepSize;
                     if (resultVal < $scope.defaults.to)
                         change(resultVal);
                     else change($scope.defaults.to);
                 };
-                $scope.passValidation = function (resultVal) {
+                $scope.passValidation = function(resultVal) {
                     if (typeof resultVal == 'number' && resultVal > $scope.defaults.from && resultVal < $scope.defaults.to) return true;
                 };
-                $scope.decrement = function () {
+                $scope.decrement = function() {
                     var resultVal = ngModelCtrl.$viewValue - $scope.defaults.stepSize;
                     if (resultVal > $scope.defaults.from)
                         change(resultVal);

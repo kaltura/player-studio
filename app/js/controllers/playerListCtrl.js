@@ -122,6 +122,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 timeVar =  $timeout(function() {
                     $scope.triggerLayoutChange();
                     $scope.calculateTotalItems();
+                    timeVar = null;
                 }, 100);
             });
             $scope.oldVersionEditText = $filter('i18n')(

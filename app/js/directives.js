@@ -446,6 +446,7 @@ DirectivesModule.directive('onFinishRender', [
                     }
                     timeVar = $timeout(function () {
                         requestNotificationChannel.requestEnded('list');
+                        timeVar = null;
                     });
                 }
             }
