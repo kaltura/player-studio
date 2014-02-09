@@ -4,6 +4,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
     return {
         restrict: 'A',
         priority: 1000,
+        scope:true,
         require: ['playerRefresh', '?ngModel'],
         controller: function ($scope, $element, $attrs) {
             $scope.options = {
