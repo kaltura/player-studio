@@ -5,6 +5,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
             templateUrl: 'template/formcontrols/modelNumber.html',
             replace: true,
             restrict: 'EA',
+            priority:10,
             scope: {
                 model: '=',
                 helpnote: '@',
@@ -34,10 +35,11 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
 //            }
         };
     }
-    ]).directive('numberInput', ['$timeout','$q', function($timeout,$q) {
+    ]).directive('numberInput', ['$timeout', '$q', function($timeout, $q) {
         return {
             require: ['^modelNumber', 'ngModel', '?^playerRefresh'],
             restrict: 'A',
+            priority:500,
             scope: true,
             templateUrl: 'template/formcontrols/numberInput.html',
             link: function($scope, $element, $attrs, controllers) {
@@ -49,20 +51,17 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                 var prController = (controllers[2]) ? controllers[2] : null;
                 var timeVar = null;
                 if (prController) {
-                    prController.setUpdateFunction(function(scope, element) {
-                        var q = $q.defer();
+                    prController.setUpdateFunction(function(prScope, element) {
                         inputControl.on('change softChange', function() {
                                 if (timeVar) {
                                     $timeout.cancel(timeVar);
                                 }
                                 timeVar = $timeout(function() {
-                                    q.resolve(ngModelCtrl.$viewValue);
-                                   // timeVar = null;
+                                    prScope.$emit('controlUpdateAllowed', prScope.prModel);
+                                     timeVar = null;
                                 }, 1000);
                             }
-
                         );
-                        return q.promise;
                     });
                 }
                 if (typeof $scope.model != 'number' && !(typeof $scope.model == 'string' && parseInt($scope.model))) {

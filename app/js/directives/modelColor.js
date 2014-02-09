@@ -3,6 +3,7 @@ var DirectivesModule = angular.module('KMC.directives');
 DirectivesModule.directive('modelColor', [function () {
     return {
         restrict: 'EA',
+        priority:10,
         require: '?playerRefresh',
         replace: true,
         controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {

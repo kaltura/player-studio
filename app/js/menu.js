@@ -190,13 +190,32 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                 menuSvc.currentPage = setTo;
                 menuSvc.menuScope.$parent.$broadcast('menuChange', setTo);
             },
+            menuCache: null,
+            compliedMenuCache: null,
+            getPutCompliedMenu2Cache: function(menuFn) {
+                if (!menuFn) {
+                    if (menuSvc.compliedMenuCache) {
+                        return menuSvc.compliedMenuCache;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    return menuSvc.compliedMenuCache = menuFn;
+                }
+            },
             buildMenu: function(baseData) {
-                var menuJsonObj = menuSvc.get(); // gets the  editableProperties json
-                var menuElm = angular.element('<ul></ul>');
-                angular.forEach(menuJsonObj, function(value) {
-                    menuElm.append(menuSvc.buildMenuItem(value, menuElm, baseData));
-                });
-                return menuElm;
+                if (!menuSvc.menuCache) {
+                    var menuJsonObj = menuSvc.get(); // gets the  editableProperties manifest json
+                    var menuElm = angular.element('<ul></ul>');
+                    angular.forEach(menuJsonObj, function(value) {
+                        menuElm.append(menuSvc.buildMenuItem(value, menuElm, baseData));
+                    });
+                    menuSvc.menuCache = menuElm; //TODO: we should have a hash table set by player version ?
+                    return menuElm
+                }
+                else return menuSvc.menuCache;
             },
             buildMenuItem: function(item, targetMenu, BaseData, parentModel) {
                 var elm = '';
@@ -380,8 +399,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                                 }
                             }
                             else {
-                                //reEnabled feature
+                                //Enabled feature
                                 scope.isDisabled = false;
+                                if (scope.parentModel)
+                                    scope.parentModel[scope.FeatureModel] = scope.featureModelCon;
                                 //scope.$parent.$broadcast('enableControls');
                             }
                         }
@@ -435,6 +456,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                     var initDone = menuSvc.menuScope.$watch('$parent.menuInitDone', function(newVal, oldVal) {
                         if (newVal & newVal != oldVal) {
                             menuSvc.linkFn4FeatureCheckbox(scope);
+                            scope.$broadcast('menuInitDone');
                             initDone(); //remove the $watch
                         }
                     });
@@ -477,7 +499,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
             transclude: true,
             compile: function(tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('#mp-base >  ul');
-                var menuData = menuSvc.buildMenu('data');
                 return function($scope, $element) {
                     $scope.scroller = null;
                     menuSvc.menuScope = $scope;
@@ -491,7 +512,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                             }
                         });
                     });
-                    $compile(menuData.contents())($scope, function(clone) { // goes back to the controller
+                    var menuHtml = menuSvc.getPutCompliedMenu2Cache();
+                    if (!menuHtml) {
+                        var menuData = menuSvc.buildMenu('data');
+                        menuHtml = $compile(menuData.contents())
+                        menuSvc.getPutCompliedMenu2Cache(menuHtml);
+                    }
+                    menuHtml($scope, function(clone) { // here the menu is invoked aginst the scope and so populated with data
                         menuElem.prepend(clone);
                     });
                     var timeVar = null;
