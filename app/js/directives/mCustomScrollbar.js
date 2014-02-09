@@ -18,7 +18,7 @@ DirectivesModule.directive('mcustomScrollbar', [
                         if (scope.scroller)
                             scope.scroller.mCustomScrollbar('update');
                         timeVar = null;
-                    }, 800);
+                    }, 300);
                 });
                 var opts = {
                     horizontalScroll: false,

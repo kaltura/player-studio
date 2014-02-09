@@ -57,7 +57,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                                     $timeout.cancel(timeVar);
                                 }
                                 timeVar = $timeout(function() {
-                                    prScope.$emit('controlUpdateAllowed', prScope.prModel);
+                                    prScope.$emit('controlUpdateAllowed', prScope.prModel.key);
                                      timeVar = null;
                                 }, 1000);
                             }

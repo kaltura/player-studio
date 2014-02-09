@@ -145,7 +145,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 else {
                     throw function() {
                         return "player could not be rendered";
-                    }
+                    };
                 }
             },
             'setKDPAttribute': function(attrStr, value) {
@@ -661,7 +661,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
                                 requestNotificationChannel.requestEnded();
                                 deferred.resolve(data);
                             }
-                        }, 0);
+                        });
                     });
                 });
             }

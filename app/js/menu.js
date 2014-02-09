@@ -213,7 +213,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                         menuElm.append(menuSvc.buildMenuItem(value, menuElm, baseData));
                     });
                     menuSvc.menuCache = menuElm; //TODO: we should have a hash table set by player version ?
-                    return menuElm
+                    return menuElm;
                 }
                 else return menuSvc.menuCache;
             },
@@ -453,13 +453,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                             scope.$emit('layoutChange');
                         }
                     });
-                    var initDone = menuSvc.menuScope.$watch('$parent.menuInitDone', function(newVal, oldVal) {
-                        if (newVal & newVal != oldVal) {
-                            menuSvc.linkFn4FeatureCheckbox(scope);
-                            scope.$broadcast('menuInitDone');
-                            initDone(); //remove the $watch
-                        }
-                    });
+                   // var initDone = menuSvc.menuScope.$on('menuInitDone', function() {
+                        menuSvc.linkFn4FeatureCheckbox(scope);
+                    //    initDone(); //remove the $on listener
+                    //});
                     scope.$on('openFeature', function(e, args) {
                         if (args == attributes['model']) {
                             scope.isCollapsed = false;
@@ -515,7 +512,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                     var menuHtml = menuSvc.getPutCompliedMenu2Cache();
                     if (!menuHtml) {
                         var menuData = menuSvc.buildMenu('data');
-                        menuHtml = $compile(menuData.contents())
+                        menuHtml = $compile(menuData.contents());
                         menuSvc.getPutCompliedMenu2Cache(menuHtml);
                     }
                     menuHtml($scope, function(clone) { // here the menu is invoked aginst the scope and so populated with data
@@ -539,7 +536,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                                     $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
                                 }
                                 timeVar = null;
-                            }, 500);
+                            }, 200);
                         }
                     });
                     $scope.$on('layoutChange', function() {
@@ -550,7 +547,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                             if ($scope.scroller)
                                 $scope.scroller.mCustomScrollbar('update');
                             timeVar1 = null;
-                        }, 500);
+                        }, 200);
                     });
                     $timeout(function() {
                         // var page = $routeParams['menuPage'] | 'basicDisplay';
@@ -558,8 +555,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                         $scope.playerEdit.$setPristine();
                         $('div.section[ng-view]').on('click', menuSvc.closeTooltips);
                         $scope.$parent.menuInitDone = true;
-                        PlayerService.renderPlayer();
-                    }, 500);
+                        $scope.$broadcast('menuInitDone');
+                    }, 100).then(function() {
+                        $timeout(function() {
+                            PlayerService.renderPlayer();
+                        }, 200);
+                    });
                 };
             }
         };
@@ -635,12 +636,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                     $scope.$on('menuChange', function(event, arg) {
                         $scope.openLevel(arg);
                     });
-                    var initDone = menuSvc.menuScope.$watch('$parent.menuInitDone', function(newVal, oldVal) {
-                        if (newVal & newVal != oldVal) {
-                            menuSvc.linkFn4FeatureCheckbox($scope);
-                            initDone(); //remove the $watch
-                        }
-                    });
+                   // var initDone = menuSvc.menuScope.$on('menuInitDone', function() {
+                        menuSvc.linkFn4FeatureCheckbox($scope);
+                     //   initDone(); //remove the listener
+                    //});
                     $scope.$watch('isOnTop', function(newVal) {
                         if (newVal) { // open
 //                            if (!$routeParams['menuPage'])

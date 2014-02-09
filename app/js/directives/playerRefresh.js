@@ -90,49 +90,44 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     scope.prModel.key = iAttrs['ngModel'];
                 }
             }
-            var deregister = scope.$on('menuInitDone', function() {
-                        $timeout(function() {
+//            var deregister = scope.$on('menuInitDone', function() {
+            $timeout(function() {
+                if (!scope.options.valueBased) {
+                    scope.updateFunction(scope, iElement);//optional  parameters -expected to trigger controlUpdateAllowed event with modelKey as event.data
+                    scope.$parent.$parent.$on('controlUpdateAllowed', function(e, modelKey) {
+                        if (modelKey == scope.prModel.key && scope.prModel.valueChanged === true) {
+                            e.stopPropagation();
+                            scope.prController.makeRefresh();
+                        }
+                    });
+                }
+                scope.$watch(function() {
+                        if (!ngController) {
+                            return  scope.prModel.value = menuScope.$eval(iAttrs['model']);
+                        }
+                        else {
+                            return scope.prModel.value = ngController.$viewValue;
+                        }
+                    },
+                    function(newVal, oldVal) {
+                        if (newVal != oldVal) {
+                            if (iAttrs['playerRefresh'] == 'true' || iAttrs['playerRefresh'] == 'aspectToggle') {
                                 if (!scope.options.valueBased) {
-                                    scope.updateFunction(scope, iElement);//optional  parameters -expected to trigger controlUpdateAllowed event with modelKey as event.data
-                                    scope.$parent.$parent.$on('controlUpdateAllowed', function(e, modelKey) {
-                                        if (modelKey == scope.prModel.key && scope.prModel.valueChanged == true) {
-                                            e.stopPropagation();
-                                            scope.prController.makeRefresh();
-                                        }
-                                    });
+                                    scope.prModel.valueChanged = true;
+                                    PlayerService.refreshNeeded = true;
                                 }
-                                scope.$watch(function() {
-                                        if (!ngController) {
-                                            return  scope.prModel.value = menuScope.$eval(iAttrs['model']);
-                                        }
-                                        else {
-                                            return scope.prModel.value = ngController.$viewValue
-                                        }
-                                    },
-                                    function(newVal, oldVal) {
-                                        if (newVal != oldVal) {
-                                            if (iAttrs['playerRefresh'] == 'true' || iAttrs['playerRefresh'] == 'aspectToggle') {
-                                                if (!scope.options.valueBased) {
-                                                    scope.prModel.valueChanged = true;
-                                                    PlayerService.refreshNeeded = true;
-                                                }
-                                                else {
-                                                    scope.prController.makeRefresh();
-                                                }
-                                            }
-                                            else {
-                                                PlayerService.setKDPAttribute(iAttrs['playerRefresh'], scope.prModel.value);
-                                            }
-                                        }
-                                    });
-                                deregister();
-                            }, 200
-                        )
-                    }
-                )
-                ;
+                                else {
+                                    scope.prController.makeRefresh();
+                                }
+                            }
+                            else {
+                                PlayerService.setKDPAttribute(iAttrs['playerRefresh'], scope.prModel.value);
+                            }
+                        }
+                    });
+//                                deregister();
+            }, 100);
+            // });
         }
-    }
-        ;
-}])
-;
+    };
+}]);
