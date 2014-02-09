@@ -34,7 +34,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
 //            }
         };
     }
-    ]).directive('numberInput', ['$timeout', function($timeout) {
+    ]).directive('numberInput', ['$timeout','$q', function($timeout,$q) {
         return {
             require: ['^modelNumber', 'ngModel', '?^playerRefresh'],
             restrict: 'A',
@@ -49,7 +49,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                 var prController = (controllers[2]) ? controllers[2] : null;
                 var timevar = null;
                 if (prController) {
-                    prController.setUpdateFunction(function(scope, element, $q) {
+                    prController.setUpdateFunction(function(scope, element) {
                         var q = $q.defer();
                         inputControl.on('change softChange', function() {
                                 if (timevar) {

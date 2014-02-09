@@ -57,7 +57,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                         //reset all params;
                         playerRefresh.stopTrigger = false;
                         //delete the currentRefresh
-                        delete playerRefresh.currentRefreshes[$scope.prModel.key];
+                        playerRefresh.currentRefreshes.splice($scope.prModel.key, 1);
                     }
                     else {
                         timeOutRun = $interval(function() {
@@ -66,7 +66,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     }
                 },
                 setStopTrigger: function() {
-                    playerRefresh.currentRefreshes[$scope.prModel.key] = true;
+                    playerRefresh.currentRefreshes.push($scope.prModel.key);
                     var time = ($scope.prModel.key.indexOf('_featureEnabled') > 0) ? 3000 : 1000;
                     playerRefresh.stopTrigger = true;
                     if (stopTimeVar) {
@@ -118,7 +118,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
             }
             $timeout(function() { // set the timeout to call the updateFunction watch
                     if (!scope.options.valueBased) {
-                        scope.promise = scope.updateFunction(scope, iElement, $q);//optional  parameters
+                        var promise = scope.updateFunction(scope, iElement, $q);//optional  parameters
                     }
                     scope.$watch('prModel.value',
                         function(newVal, oldVal) {
@@ -126,12 +126,11 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                                 if (iAttrs['playerRefresh'] == 'true' || iAttrs['playerRefresh'] == 'aspectToggle') {
                                     if (!playerRefresh.stopTrigger && !playerRefresh.currentRefreshes[scope.prModel.key]) {
                                         prController.setStopTrigger();
-                                        if (scope.promise && typeof scope.promise.then == "function") {// verify we got a promise to work with (ducktyping..)}
-                                            //have no more than one then function
-                                            scope.promise.then(function() {
+                                        if (promise && typeof promise.then == "function") {// verify we got a promise to work with (ducktyping..)}
+                                            promise.then(function() {
                                                 prController.makeRefresh();
                                                 //re-set the promise
-                                                scope.promise = scope.updateFunction(scope, iElement, $q);//optional  parameters
+                                                promise = scope.updateFunction(scope, iElement);//optional  parameters
                                             });
                                         }
                                         else {
