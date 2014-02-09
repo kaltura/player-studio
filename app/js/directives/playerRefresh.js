@@ -1,6 +1,13 @@
 'use strict';
 var DirectivesModule = angular.module('KMC.directives');
-DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', '$interval', '$q', function(PlayerService, menuSvc, $timeout, $interval, $q) {
+DirectivesModule.service('playerRefresh', function() {
+    var prSvc = {
+        stopTrigger: false,
+        currentRefreshes: []
+    };
+    return prSvc;
+});
+DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', '$interval', '$q', 'playerRefresh' , function(PlayerService, menuSvc, $timeout, $interval, $q, playerRefresh) {
     return {
         restrict: 'A',
         priority: 1000,
@@ -50,7 +57,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                         //reset all params;
                         ctrObj.stopTrigger = false;
                         //delete the currentRefresh
-                        delete ctrObj.currentRefreshes[$scope.prModel.key];
+                        delete playerRefresh.currentRefreshes[$scope.prModel.key];
                     }
                     else {
                         timeOutRun = $interval(function() {
@@ -58,19 +65,17 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                         }, 500, 10);
                     }
                 },
-                currentRefreshes: {},
-                stopTrigger: false,
                 setStopTrigger: function() {
+                    playerRefresh.currentRefreshes[$scope.prModel.key] = true;
                     var time = ($scope.prModel.key.indexOf('_featureEnabled') > 0) ? 3000 : 1000;
-                    ctrObj.stopTrigger = true;
+                    playerRefresh.stopTrigger = true;
                     if (stopTimeVar) {
                         $timeout.cancel(stopTimeVar);
                     }
                     stopTimeVar = $timeout(function() {
-                        ctrObj.stopTrigger = false;
+                        playerRefresh.stopTrigger = false;
                         stopTimeVar = null;
                     }, time);// necessary because sometime one change inflicts a dozen or more changes in the model .e.g feature enable
-
                 },
                 setValueBased: function() {
                     $scope.options.valueBased = true;
@@ -87,7 +92,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                 scope.options.valueBased = true;
             }
             var menuScope = menuSvc.menuScope;
-            var playerRefresh = controllers[0];
+            var prController = controllers[0];
             var ngController = null;
             if (iAttrs['playerRefresh'] != 'false') {
                 if (controllers[1]) {
@@ -117,22 +122,20 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     }
                     scope.$watch('prModel.value',
                         function(newVal, oldVal) {
-                            if (newVal != oldVal) {
+                            if (newVal !== oldVal) {
                                 if (iAttrs['playerRefresh'] == 'true' || iAttrs['playerRefresh'] == 'aspectToggle') {
-                                    if (!playerRefresh.stopTrigger) {
-                                        playerRefresh.setStopTrigger();
+                                    if (!playerRefresh.stopTrigger && !playerRefresh.currentRefreshes[scope.prModel.key]) {
+                                        prController.setStopTrigger();
                                         if (scope.promise && typeof scope.promise.then == "function") {// verify we got a promise to work with (ducktyping..)}
                                             //have no more than one then function
-                                            if (!playerRefresh.currentRefreshes[scope.prModel.key]) {
-                                                playerRefresh.currentRefreshes[scope.prModel.key] = scope.promise.then(function() {
-                                                    playerRefresh.makeRefresh();
-                                                    //re-set the promise
-                                                    scope.promise = scope.updateFunction(scope, iElement, $q);//optional  parameters
-                                                });
-                                            }
+                                            scope.promise.then(function() {
+                                                prController.makeRefresh();
+                                                //re-set the promise
+                                                scope.promise = scope.updateFunction(scope, iElement, $q);//optional  parameters
+                                            });
                                         }
                                         else {
-                                            playerRefresh.makeRefresh();
+                                            prController.makeRefresh();
                                         }
                                     }
                                 }
