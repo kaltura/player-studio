@@ -55,7 +55,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     }
                     if (PlayerService.playerRefresh($attrs['playerRefresh'])) {
                         //reset all params;
-                        ctrObj.stopTrigger = false;
+                        playerRefresh.stopTrigger = false;
                         //delete the currentRefresh
                         delete playerRefresh.currentRefreshes[$scope.prModel.key];
                     }
