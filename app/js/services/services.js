@@ -626,7 +626,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
         },
         listMedia: function() {
             var request = {
-                'service': 'media',
+                'service': 'baseentry',
                 'action': 'list'
 
             };
