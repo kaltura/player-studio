@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService', 'userEntries',
-        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, userEntries) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService',
+        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
             $scope.newPlayer = !$routeParams.id;
@@ -19,7 +19,12 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             };
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
-            $scope.userEntries = userEntries;
+            apiService.listMedia().then(function(data) {
+                $scope.userEntries = data;
+                angular.forEach($scope.userEntries.objects, function (value) {
+                    $scope.userEntriesList.push({'id': value.id, 'text': value.name});
+                });
+            });
             $scope.settings = {};
 
 // set tags
@@ -34,9 +39,6 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
 //registers the tags to be available to the directive
             menuSvc.registerAction('getTags', function() {
                 return $scope.tags;
-            });
-            angular.forEach($scope.userEntries.objects, function(value) {
-                $scope.userEntriesList.push({'id': value.id, 'text': value.name});
             });
             menuSvc.registerAction('listEntries', function() { // those should be the first 20...
                 return $scope.userEntriesList;

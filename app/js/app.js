@@ -118,13 +118,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 //                    }],
                     'editProperties': 'editableProperties',
                     'menuSvc': 'menuSvc',
-                    'localize': 'localize',
-                    'userEntries': ['api', 'apiService', function(api, apiService) {
-                        return api.then(function() {
-                            return apiService.listMedia(); // should only load the first 20...
-                        });
-
-                    }]
+                    'localize': 'localize'
                 }
             }
         );
@@ -156,12 +150,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     },
                     'editProperties': 'editableProperties',
                     'menuSvc': 'menuSvc',
-                    'localize': 'localize',
-                    'userEntries': ['api', 'apiService', function(api, apiService) {
-                        return api.then(function() {
-                            return apiService.listMedia();
-                        });// should only load the first 20...
-                    }]
+                    'localize': 'localize'
                 }
             }
         );
