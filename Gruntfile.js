@@ -185,6 +185,10 @@ module.exports = function(grunt) {
                         dest: '_dist/css/select2.png'
                     },
                     {
+                        src: 'app/bower_components/select2/select2-spinner.gif',
+                        dest: '_dist/css/select2-spinner.gif'
+                    },
+                    {
                         src: 'app/lib/prettycheckable/img/prettyCheckable.png',
                         dest: '_dist/img/prettyCheckable.png'
                     },
