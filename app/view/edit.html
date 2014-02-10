@@ -40,7 +40,6 @@
                 </div>
                 <div id='headerRow' class="container padTop">
                     <span class="pull-right">
-                        <!--button class="btn btn-default"  ng-class="{'btn-danger':checkPlayerRefresh()}" ng-click="refreshPlayer()">{{'Refresh Player'|i18n}}</button-->
                          <button ng-click="cancel()"
                                  class="btn btn-default">{{'Back To List'|| i18n}}
                          </button>
@@ -49,9 +48,10 @@
                         </button>
                     </span>
 
-                    <h2 class=" inline text-muted" id="pageHeader">
+	                <button class="btn btn-default"  ng-class="{'btn-success':refreshNeeded}" ng-click="refreshPlayer()"><i class="glyphicon glyphicon-refresh">&nbsp;</i>{{'Apply Changes'|i18n}}</button>
+                    <!--h2 class=" inline text-muted" id="pageHeader">
                         {{title}}
-                    </h2>
+                    </h2-->
                 </div>
                 <div class="container" ng-show="debug">
                     <pre style="width: 100%;height:300px;overflow-x: scroll"> {{getDebugInfo() | json}}"</pre>

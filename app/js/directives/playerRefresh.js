@@ -1,3 +1,4 @@
+/*
 'use strict';
 var DirectivesModule = angular.module('KMC.directives');
 DirectivesModule.service('prSvc', [function() {
@@ -130,4 +131,4 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
             // });
         }
     };
-}]);
+}]);*/

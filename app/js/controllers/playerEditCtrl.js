@@ -3,14 +3,30 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService',
-        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService','$timeout',
+        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, $timeout) {
             $scope.ks = localStorageService.get('ks');
             $scope.playerId = PlayerData.id;
             $scope.newPlayer = !$routeParams.id;
             $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
             $scope.debug = $routeParams.debug;
+
+            // handle data changes
+            $scope.refreshNeeded = false;
+            $scope.$on("dataChanged", function(event, message){
+                if (message.refresh == "true"){
+                    $scope.refreshNeeded = true;
+                }else{
+                    if (typeof message.refresh != "undefined" && message.refresh.indexOf(".")!=-1)
+                        PlayerService.setKDPAttribute(message.refresh, message.data);
+                }
+                if (message.refresh == "aspectToggle")
+                    $('#spacer').toggleClass('narrow');
+            });
+            $scope.$on("refreshNeededEvent", function(event, needed){
+                $scope.refreshNeeded = needed;
+            });
             $scope.getDebugInfo = function(partial) {
                 if (!partial)
                     return $scope.data;
@@ -99,10 +115,8 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
         return copyobj;
     };
     $scope.refreshPlayer = function() {
+        $scope.$emit("refreshNeededEvent",false);
         playerService.renderPlayer();
-    };
-    $scope.checkPlayerRefresh = function() {
-        return playerService.refreshNeeded;
     };
     $scope.save = function() {
         playerService.savePlayer($scope.data).then(function(value) {

@@ -13,6 +13,10 @@ DirectivesModule.directive('modelColor', [function () {
                 else
                     $scope.model = '#ffffff';
             }
+            $scope.refresh = $attrs.playerRefresh;
+            $scope.onChange = function() {
+                $scope.$emit('dataChanged',{"refresh":$scope.refresh, "data":$scope.model});
+            };
         }],
         link: function ($scope, $elemennt, $attrs, prController) {
             if (prController) {

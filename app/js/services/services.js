@@ -71,11 +71,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var previewEntry;
         var previewEntryObj;
         var playerId = 'kVideoTarget';
+
+        /*
         var currentRefresh = null;
 
         var callback = function() {
             currentRefresh.resolve(true);
-            playersService.refreshNeeded = false;
             currentRefresh = null;
         };
         var playerRefresh = function(option) {
@@ -92,12 +93,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 }
             }
             return currentRefresh.promise;
-        };
+        };*/
+
         var playersService = {
-            'refreshNeeded': false,
+            /*
             getCurrentRefresh:function(){
                 return currentRefresh;
-            },
+            },*/
             'clearCurrentPlayer': function() {
                 currentPlayer = {};
             },
@@ -156,7 +158,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     kdp.setKDPAttribute(obj, property, value);
                 }
             },
-            playerRefresh: playerRefresh,
+            //playerRefresh: playerRefresh,
             newPlayer: function() {
                 var deferred = $q.defer();
                 playersService.getDefaultConfig().
@@ -206,8 +208,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     '2:id': '{1:result:id}',
                     '2:uiConf:name': 'Copy of ' + srcUi.name,
                     '2:uiConf:objectType': 'KalturaUiConf'
-//'2:uiConf:objType': 1,
-// 'uiConf:creationMode': 2
                 };
                 apiService.doRequest(request).then(function(data) {
                     deferred.resolve(data);

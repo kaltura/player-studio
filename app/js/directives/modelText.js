@@ -21,6 +21,10 @@ DirectivesModule.directive('modelText', function(menuSvc) {
                     }
                 );
             };
+            $scope.refresh = $attrs.playerRefresh;
+            $scope.onChange = function() {
+                $scope.$emit('dataChanged',{"refresh":$scope.refresh, "data":$scope.model});
+            };
             if ($scope.require) {
                 makeWatch('required', 'reqState');
             }

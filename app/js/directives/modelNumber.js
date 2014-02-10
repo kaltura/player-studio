@@ -19,6 +19,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                     from: parseInt($attrs['from']) || 0,
                     to: parseInt($attrs['to']) || 1000,
                     stepSize: parseInt($attrs['stepsize']) || 1,
+                    playerRefresh: $attrs['playerRefresh'],
                     readonly: false  /// note that a input can be made readonly
                 };
                 $scope.inputForm = {};
@@ -103,6 +104,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                 var change = function(value) {
                     inputControl.trigger('softChange');
                     ngModelCtrl.$setViewValue(value);
+                    $scope.$emit('dataChanged',{"refresh":$scope.defaults.playerRefresh, "data":value});
                 };
                 $scope.increment = function() {
                     var resultVal = ngModelCtrl.$viewValue + $scope.defaults.stepSize;

@@ -72,7 +72,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
         }
     });
 }]);
-KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableProperties, $timeout) {
+KMCMenu.factory('menuSvc', ['editableProperties', '$timeout','PlayerService', function(editableProperties, $timeout, PlayerService) {
         var menudata = null;
         var promise = editableProperties
             .then(function(data) {
@@ -405,6 +405,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                                     scope.parentModel[scope.FeatureModel] = scope.featureModelCon;
                                 //scope.$parent.$broadcast('enableControls');
                             }
+                            PlayerService.renderPlayer();
                         }
                     });
                 }

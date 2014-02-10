@@ -29,8 +29,9 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
                     };
                     parentCntrl.register($scope.model, pubObj);
                     $scope.$watch('model', function (newVal, oldVal) {
-                        if (newVal != oldVal)
+                        if (newVal != oldVal){
                             parentCntrl.update(newVal, oldVal, pubObj);
+                        }
                     });
                 }
                 var menuData = menuSvc.getControlData($attrs.model);
@@ -68,6 +69,10 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
             $scope.uiselectOpts = angular.toJson($scope.selectOpts);
             $scope.setOptions = function (optsArr) {
                 $scope.options = optsArr;
+            };
+            $scope.refresh = $attrs.playerRefresh;
+            $scope.onChange = function() {
+                $scope.$emit('dataChanged',{"refresh":$scope.refresh, "data":$scope.model});
             };
         }],
         templateUrl: 'template/formcontrols/modelSelect.html'

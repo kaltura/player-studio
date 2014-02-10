@@ -21,6 +21,10 @@ DirectivesModule.directive('modelCheckbox',function () {
                 if ($attrs.initvalue === 'true')
                     $scope.model = true;
             }
+            $scope.refresh = $attrs.playerRefresh;
+            $scope.onClick = function() {
+                $scope.$emit('dataChanged',{"refresh":$scope.refresh, "data":$scope.model});
+            };
         }],
         scope: {
             label: '@',
