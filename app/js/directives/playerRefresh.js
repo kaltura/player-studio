@@ -104,6 +104,10 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                 }
                 var actOnModelChange = function() {
                     if (iAttrs['playerRefresh'] == 'true') {
+                        if (scope.prModel.key =='featureModelCon._featureEnabled'){
+                            scope.prController.makeRefresh();
+                        }
+                        else{
 //                        if (!scope.options.valueBased) {
 //                            scope.prModel.valueChanged = true;
 //                            PlayerService.refreshNeeded = true;
@@ -111,7 +115,7 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
 //                        else {
 //                            scope.prController.makeRefresh();
 //                        }
-                        PlayerService.refreshNeeded = true;
+                        PlayerService.refreshNeeded = true;}
 
                     }
                     else {
