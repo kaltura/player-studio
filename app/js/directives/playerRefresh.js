@@ -5,7 +5,7 @@ DirectivesModule.service('prSvc', [function() {
         currentRefreshes: {}
     };
 }]);
-DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', '$interval', 'prSvc', '$q', function(PlayerService, menuSvc, $timeout, $interval, prSvc, $q) {
+DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeout', '$interval', 'prSvc', function(PlayerService, menuSvc, $timeout, $interval, prSvc) {
     return {
         restrict: 'A',
         priority: 100,
@@ -19,7 +19,8 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
             $scope.prModel = {
                 key: '',
                 value: null,
-                valueChanged: false
+                valueChanged: false,
+                oldValue: null // used only when not using $watch (ngController);
             };
             // used to track the input control, for example it changes to true only if text field has had a blur event
             $scope.updateFunction = function(prScope, elem) { // the function used to set controlUpdateAllowed - works for text inputs etc.
@@ -90,7 +91,6 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     scope.prModel.key = iAttrs['ngModel'];
                 }
             }
-//            var deregister = scope.$on('menuInitDone', function() {
             $timeout(function() {
                 if (!scope.options.valueBased) {
                     scope.updateFunction(scope, iElement);//optional  parameters -expected to trigger controlUpdateAllowed event with modelKey as event.data
@@ -101,33 +101,41 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                         }
                     });
                 }
-                scope.$watch(function() {
-                        if (!ngController) {
-                            return  scope.prModel.value = menuScope.$eval(iAttrs['model']);
+                var actOnModelChange = function() {
+                    if (iAttrs['playerRefresh'] == 'true' || iAttrs['playerRefresh'] == 'aspectToggle') {
+                        if (!scope.options.valueBased) {
+                            scope.prModel.valueChanged = true;
+                            PlayerService.refreshNeeded = true;
                         }
                         else {
-                            return scope.prModel.value = ngController.$viewValue;
+                            scope.prController.makeRefresh();
                         }
-                    },
-                    function(newVal, oldVal) {
-                        if (newVal != oldVal) {
-                            if (iAttrs['playerRefresh'] == 'true' || iAttrs['playerRefresh'] == 'aspectToggle') {
-                                if (!scope.options.valueBased) {
-                                    scope.prModel.valueChanged = true;
-                                    PlayerService.refreshNeeded = true;
-                                }
-                                else {
-                                    scope.prController.makeRefresh();
-                                }
+                    }
+                    else {
+                        PlayerService.setKDPAttribute(iAttrs['playerRefresh'], scope.prModel.value);
+                    }
+                };
+                if (!ngController) {
+                    scope.$watch(function() {
+                            return  scope.prModel.value = menuScope.$eval(iAttrs['model']);
+                        },
+                        function(newVal, oldVal) {
+                            if (newVal != oldVal) {
+                                actOnModelChange();
                             }
-                            else {
-                                PlayerService.setKDPAttribute(iAttrs['playerRefresh'], scope.prModel.value);
-                            }
+                        });
+                }
+                else { // ngmodel based
+                    ngController.$parsers.push(function(newVal) {
+                        scope.prModel.oldValue = scope.prModel.value;
+                        scope.prModel.value = newVal;
+                        if (scope.prModel.oldValue != newVal) {
+                            actOnModelChange();
                         }
+                        return newVal;
                     });
-//                                deregister();
+                }
             }, 100);
-            // });
         }
     };
 }]);
