@@ -453,8 +453,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                             scope.$emit('layoutChange');
                         }
                     });
-                   // var initDone = menuSvc.menuScope.$on('menuInitDone', function() {
-                        menuSvc.linkFn4FeatureCheckbox(scope);
+                    // var initDone = menuSvc.menuScope.$on('menuInitDone', function() {
+                    menuSvc.linkFn4FeatureCheckbox(scope);
                     //    initDone(); //remove the $on listener
                     //});
                     scope.$on('openFeature', function(e, args) {
@@ -494,13 +494,21 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
             priority: 10000,
             scope: {menuInitDone: '='},
             transclude: true,
+            controller: function($scope) {
+                $scope.scroller = null;
+                menuSvc.menuScope = $scope;
+                $scope.data = $scope.$parent.data;
+                $scope.settings = $scope.$parent.settings;
+            },
             compile: function(tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('#mp-base >  ul');
+                var menuHtml = menuSvc.getPutCompliedMenu2Cache();
+                if (!menuHtml) {
+                    var menuData = menuSvc.buildMenu('data');
+                    menuHtml = $compile(menuData.contents());
+                    menuSvc.getPutCompliedMenu2Cache(menuHtml);
+                }
                 return function($scope, $element) {
-                    $scope.scroller = null;
-                    menuSvc.menuScope = $scope;
-                    $scope.data = $scope.$parent.data;
-                    $scope.settings = $scope.$parent.settings;
                     transclude($scope, function(clone) {
                         angular.forEach(clone, function(elem) {
                             if ($(elem).is('li')) {
@@ -511,12 +519,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                             }
                         });
                     });
-                    var menuHtml = menuSvc.getPutCompliedMenu2Cache();
-                    if (!menuHtml) {
-                        var menuData = menuSvc.buildMenu('data');
-                        menuHtml = $compile(menuData.contents());
-                        menuSvc.getPutCompliedMenu2Cache(menuHtml);
-                    }
                     menuHtml($scope, function(clone) { // here the menu is invoked aginst the scope and so populated with data
                         menuElem.prepend(clone);
                     });
@@ -638,9 +640,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                     $scope.$on('menuChange', function(event, arg) {
                         $scope.openLevel(arg);
                     });
-                   // var initDone = menuSvc.menuScope.$on('menuInitDone', function() {
-                        menuSvc.linkFn4FeatureCheckbox($scope);
-                     //   initDone(); //remove the listener
+                    // var initDone = menuSvc.menuScope.$on('menuInitDone', function() {
+                    menuSvc.linkFn4FeatureCheckbox($scope);
+                    //   initDone(); //remove the listener
                     //});
                     $scope.$watch('isOnTop', function(newVal) {
                         if (newVal) { // open
