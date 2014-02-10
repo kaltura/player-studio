@@ -492,13 +492,15 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
             replace: true,
             restrict: 'EA',
             priority: 10000,
-            scope: {'data': '=', 'settings': '=', menuInitDone: '='},
+            scope: {menuInitDone: '='},
             transclude: true,
             compile: function(tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('#mp-base >  ul');
                 return function($scope, $element) {
                     $scope.scroller = null;
                     menuSvc.menuScope = $scope;
+                    $scope.data = $scope.$parent.data;
+                    $scope.settings = $scope.$parent.settings;
                     transclude($scope, function(clone) {
                         angular.forEach(clone, function(elem) {
                             if ($(elem).is('li')) {

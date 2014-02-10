@@ -8,7 +8,7 @@
     <div id="outerWrap">
         <div id="mp-pusher" ng-controller="menuCntrl">
             <!--mp-menu-->
-            <div navmenu data="data" ng-show="menuInitDone">
+            <div navmenu ng-show="menuInitDone">
                 <li class="nohover " menu-level pagename='search' label='Menu Search'>
                     <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
                           ng-submit="searchMenuFn(value)" role="search">
