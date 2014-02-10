@@ -122,7 +122,10 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                         settings: function() {
                             return {
                                 'title': 'Save Player Settings',
-                                'message': 'Player Saved Successfully'
+                                'message': 'Player Saved Successfully',
+                                buttons: [
+                                    {result: true, label: 'OK', cssClass: 'btn-primary'}
+                                ]
                             };
                         }
                     }
