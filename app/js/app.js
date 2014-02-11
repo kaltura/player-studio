@@ -182,7 +182,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 var diff = Math.abs(appLoad.getTime() - now.getTime());
                 cl(eventName + ' ' + Math.ceil(diff/1000)+'sec '+  diff % 1000 + 'ms');
             }
-        }
+        };
         window.logTime = logTime;
         logTime('AppJsLoad');
         $rootScope.$safeApply = function (scope, fn) {

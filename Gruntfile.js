@@ -29,6 +29,7 @@ module.exports = function(grunt) {
                     "$": true,
                     "kWidget": true,
                     "window": true,
+                    "logTime": true,
                     "console": true,
                     "document": true,
                     "setTimeout": true,
