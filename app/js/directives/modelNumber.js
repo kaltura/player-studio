@@ -22,6 +22,10 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                     readonly: false  /// note that a input can be made readonly
                 };
                 $scope.inputForm = {};
+                if (typeof $scope.model != 'number' && !(typeof $scope.model == 'string' && parseInt($scope.model))) {
+
+                    $scope.model = ($scope.defaults['initvalue'] || 0);
+                }
                 return $scope;
             }]
 //           , link: function ($scope) {
@@ -65,6 +69,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                     });
                 }
                 if (typeof $scope.model != 'number' && !(typeof $scope.model == 'string' && parseInt($scope.model))) {
+
                     ngModelCtrl.$setViewValue($scope.defaults['initvalue'] || 0);
                 }
                 inputControl.on('blur change', function() {
@@ -100,6 +105,7 @@ DirectivesModule.directive('modelNumber', [ 'menuSvc', function(menuSvc) {
                 ngModelCtrl.$parsers.push(function(value) {
                     return modelScope.model = value;
                 });
+
                 var change = function(value) {
                     inputControl.trigger('softChange');
                     ngModelCtrl.$setViewValue(value);
