@@ -136,13 +136,12 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                         });
                 }
                 else { // ngmodel based
-                    ngController.$parsers.push(function(newVal) {
+                    ngController.$viewChangeListeners.push(function() {
                         scope.prModel.oldValue = scope.prModel.value;
-                        scope.prModel.value = newVal;
-                        if (scope.prModel.oldValue != newVal) {
+                        scope.prModel.value = ngController.$viewValue;
+                        if (scope.prModel.oldValue != ngController.$viewValue) {
                             actOnModelChange();
                         }
-                        return newVal;
                     });
                 }
             }, 100);
