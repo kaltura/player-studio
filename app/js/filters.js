@@ -9,7 +9,7 @@ angular.module('KMC.filters', ['ngSanitize' ])
         };
     }).filter('timeago', function() {
         return function(input) {
-            if (typeof $.timeago == 'function' && parseInt(input) > 0) {
+            if (typeof $.timeago == 'function' && !isNaN(input)) {
                 var date = input * 1000;
                 return $.timeago(date);
             }
