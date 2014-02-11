@@ -1,83 +1,83 @@
 <div class='section'>
-    <div menu-head>
-        <li><a menupage='search' class='icon icon-TabSearch' tooltip-placement='right'
-               tooltip='Search for menu properties'></a>
-        </li>
-    </div>
-    <!-- </menu-head>-->
-    <div id="outerWrap">
-        <div id="mp-pusher" ng-controller="menuCntrl">
-            <!--mp-menu-->
-            <div navmenu ng-show="menuInitDone">
-                <li class="nohover " menu-level pagename='search' label='Menu Search'>
-                    <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
-                          ng-submit="searchMenuFn(value)" role="search">
-                        <div class="form-group ">
-                            <div class="input-group merged">
-                                <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
-                                <input typeahead-on-select="checkSearch()" ng-change="checkSearch()" type="text"
-                                       typeahead="item for item in menuData | filter:$viewValue "
-                                       data-typeaheadOnSelect="checkSearch()"
-                                       class="form-control forceRightRadius"
-                                       placeholder="{{'Search for menu property'| i18n}}"
-                                       ng-model='menuSearch'/>
-                            </div>
+	<div menu-head>
+		<li><a menupage='search' class='icon icon-TabSearch' tooltip-placement='right'
+		       tooltip='Search for menu properties'></a>
+		</li>
+	</div>
+	<!-- </menu-head>-->
+	<div id="outerWrap">
+		<div id="mp-pusher" ng-controller="menuCntrl">
+			<!--mp-menu-->
+			<div navmenu ng-show="menuInitDone">
+				<li class="nohover " menu-level pagename='search' label='Menu Search'>
+					<form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
+					      ng-submit="searchMenuFn(value)" role="search">
+						<div class="form-group ">
+							<div class="input-group merged">
+								<span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
+								<input typeahead-on-select="checkSearch()" ng-change="checkSearch()" type="text"
+								       typeahead="item for item in menuData | filter:$viewValue "
+								       data-typeaheadOnSelect="checkSearch()"
+								       class="form-control forceRightRadius"
+								       placeholder="{{'Search for menu property'| i18n}}"
+								       ng-model='menuSearch'/>
+							</div>
                         <span class="help-block"
                               ng-show="notFound">{{ 'The property was not found '| i18n}}</span>
-                        </div>
-                    </form>
-                </li>
-                <!--</menu-level>-->
-            </div>
-            <!--</navmenu>-->
-            <!-- /mp-menu -->
-            <div class="wrapper" ng-controller="editPageDataCntrl">
-                <div id="menuTriggerWrap" ng-show="$parent.menuInitDone">
-                    <a class="menu-trigger" data-ng-click="togglemenu($event)">
-                        <i class="icon-Close"></i>
-                        <span class="sr-only">{{'Toggle navigation'| i18n}}</span>
-                    </a>
-                </div>
-                <div id='headerRow' class="container padTop">
+						</div>
+					</form>
+				</li>
+				<!--</menu-level>-->
+			</div>
+			<!--</navmenu>-->
+			<!-- /mp-menu -->
+			<div class="wrapper" ng-controller="editPageDataCntrl">
+				<div id="menuTriggerWrap" ng-show="$parent.menuInitDone">
+					<a class="menu-trigger" data-ng-click="togglemenu($event)">
+						<i class="icon-Close"></i>
+						<span class="sr-only">{{'Toggle navigation'| i18n}}</span>
+					</a>
+				</div>
+				<div id='headerRow' class="container padTop">
                     <span class="pull-right">
-                        <button class="btn btn-default"  ng-class="{'btn-danger':checkPlayerRefresh()}" ng-click="refreshPlayer()">{{'Refresh Player'|i18n}}</button>
                          <button ng-click="cancel()"
-                                 class="btn btn-default">{{'Back To List'|| i18n}}
+                                 class="btn btn-default">{{'Back To Players List'|| i18n}}
                          </button>
                         <button ng-disabled="!saveEnabled()" ng-click="save()"
                                 class="btn btn-primary">{{'Save Player Settings'| i18n}}
                         </button>
                     </span>
 
-                    <h2 class=" inline text-muted" id="pageHeader">
-                        {{title}}
-                    </h2>
-                </div>
-                <div class="container" ng-show="debug">
-                    <pre style="width: 100%;height:300px;overflow-x: scroll"> {{getDebugInfo() | json}}"</pre>
-                </div>
-                <!-- Companion placeholders for VAST -->
-                <div id="Companion_300x250"></div>
-                <div id="Companion_728x90"></div>
+					<button class="btn btn-default"  ng-class="{'btn-success':refreshNeeded}" ng-click="refreshPlayer()"><i class="glyphicon glyphicon-refresh">&nbsp;</i>{{'Apply Changes'|i18n}}</button>
+					<!--h2 class=" inline text-muted" id="pageHeader">
+						{{title}}
+					</h2-->
+				</div>
+				<div class="container" ng-show="debug">
+					<pre style="width: 100%;height:300px;overflow-x: scroll"> {{getDebugInfo() | json}}"</pre>
+				</div>
+				<!-- Companion placeholders for VAST -->
+				<div id="Companion_300x250"></div>
+				<div id="Companion_728x90"></div>
 
-                <div class="container" id="videoWrapper">
-                    <div id="spacer"></div>
-                    <div id="kVideoContainer">
-                        <div id="kVideoTarget" itemprop="video" itemscope
-                             itemtype="http://schema.org/VideoObject"></div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div ng-if="validationObject.length>0" class="container"><p>these property values are not valid:</p>
+				<div class="container" id="videoWrapper">
+					<div id="spacer"></div>
+					<div id="kVideoContainer">
+						<div id="kVideoTarget" itemprop="video" itemscope
+						     itemtype="http://schema.org/VideoObject"></div>
+					</div>
+				</div>
+				<div class="container">
+					<div ng-if="validationObject.length>0" class="container"><p>these property values are not valid:</p>
 
-                        <div ng-repeat="obj in validationObject">
-                            <p ng-repeat="objSub in obj">
-                                {{objSub.$name}}:{{objSub.$error | json}}</p>
-                        </div>
-                    </div>
-                </div>
+						<div ng-repeat="obj in validationObject">
+							<p ng-repeat="objSub in obj">
+								{{objSub.$name}}:{{objSub.$error | json}}</p>
+						</div>
+					</div>
+				</div>
 
-            </div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 </div>
