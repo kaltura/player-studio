@@ -189,7 +189,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
             currentPage: '',
             setMenu: function (setTo) {
                 menuSvc.currentPage = setTo;
-                menuSvc.menuScope.$parent.$broadcast('menuChange', setTo);
+                menuSvc.menuScope.$broadcast('menuChange', setTo);
             },
             menuCache: null,
             compliedMenuCache: null,
@@ -492,13 +492,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
             replace: true,
             restrict: 'EA',
             priority: 10000,
-            scope: {menuInitDone: '='},
             transclude: true,
             controller: function ($scope) {
                 $scope.scroller = null;
                 menuSvc.menuScope = $scope;
-                $scope.data = $scope.$parent.data;
-                $scope.settings = $scope.$parent.settings;
+                $scope.menuInitDone = false;
             },
             compile: function (tElement, tAttrs, transclude) {
                 var menuElem = tElement.find('#mp-base >  ul');
@@ -524,6 +522,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     });
                     var timeVar = null;
                     var timeVar1 = null;
+                    $scope.menuInitDone = false;
                     $scope.$on('menuChange', function (e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
                         // instate a scroller on the selected menupage withut using the css selector
                         if (page != 'search') {
@@ -558,11 +557,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                         menuSvc.setMenu('basicDisplay');
                         logTime('menuInitDone');
                         $('div.section[ng-view]').on('click', menuSvc.closeTooltips);
-                        $scope.$parent.menuInitDone = true;
-                        $scope.$broadcast('menuInitDone');
+                        $scope.menuInitDone = true;
+                        $scope.$root.$broadcast('menuInitDone');
                     }, 200).then(function () {
                             $timeout(function () {
-                                if (!$scope.$parent.newPlayer) {
+                                if (!$scope.newPlayer) {
                                     $scope.playerEdit.$setPristine();
                                 }
                             }, 500);
