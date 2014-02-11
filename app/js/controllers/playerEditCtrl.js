@@ -10,6 +10,9 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             $scope.newPlayer = !$routeParams.id;
             $scope.data = PlayerData;
             $scope.debug = $routeParams.debug;
+            $scope.$on('$destory',function(){
+               PlayerService.clearCurrentRefresh();
+            });
             $scope.getDebugInfo = function (partial) {
                 if (!partial)
                     return $scope.data;

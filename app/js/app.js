@@ -193,7 +193,13 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 scope.$apply(fn);
         };
         $rootScope.$on('$routeChangeSuccess', function () {
+            appLoad = new Date();
             var url = $location.url().split('/');
             $rootScope.routeName = url[1];
+        });
+        $rootScope.$on('$routeChangeStart', function () {
+            if ($location.search()['debug']){
+
+            }
         });
     });
