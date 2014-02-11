@@ -3,6 +3,7 @@
 
 var KMCMenu = angular.module('KMC.menu', []);
 KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope) {
+    logTime('menuCntrl');
     var getWidth = function () {
         return $('#mp-menu').width();
     };
@@ -556,15 +557,16 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     $timeout(function () {
                         // var page = $routeParams['menuPage'] | 'basicDisplay';
                         menuSvc.setMenu('basicDisplay');
+                        logTime('menuInitDone');
                         $('div.section[ng-view]').on('click', menuSvc.closeTooltips);
                         $scope.$parent.menuInitDone = true;
                         $scope.$broadcast('menuInitDone');
-                    }, 100).then(function () {
+                    }, 200).then(function () {
                             $timeout(function () {
                                 if (!$scope.$parent.newPlayer) {
                                     $scope.playerEdit.$setPristine();
                                 }
-                                PlayerService.renderPlayer();
+                                PlayerService.playerRefresh();
                             }, 500);
                         });
                 };
@@ -642,10 +644,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     $scope.$on('menuChange', function (event, arg) {
                         $scope.openLevel(arg);
                     });
-                    var initDone = menuSvc.menuScope.$on('menuInitDone', function () {
-                        menuSvc.linkFn4FeatureCheckbox($scope);
-                        initDone(); //remove the listener
-                    });
+                    menuSvc.linkFn4FeatureCheckbox($scope);
                     $scope.$watch('isOnTop', function (newVal) {
                         if (newVal) { // open
 //                            if (!$routeParams['menuPage'])

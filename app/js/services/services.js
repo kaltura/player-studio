@@ -77,6 +77,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             currentRefresh.resolve(true);
             playersService.refreshNeeded = false;
             currentRefresh = null;
+            logTime('renderPlayerDone');
         };
         var playerRefresh = function(option) {
             if (!currentRefresh) {
@@ -112,6 +113,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 }
             },
             'renderPlayer': function(callback) {
+                logTime('renderPlayer');
                 if (currentPlayer && typeof kWidget != "undefined") {
                     var data2Save = angular.copy(currentPlayer.config);
                     data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
@@ -637,29 +639,29 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
         doRequest: function(params) {
             //Creating a deferred object
             var deferred = $q.defer();
-            requestNotificationChannel.requestStarted();
             var params_key = apiService.getKey(params);
             if (apiCache.get(params_key) && apiService.useCache) {
                 deferred.resolve(apiCache.get(params_key));
             } else {
+                requestNotificationChannel.requestStarted('api');
                 apiService.apiObj.then(function(api) {
                     api.doRequest(params, function(data) {
                         //timeout will trigger another $digest cycle that will trigger the "then" function
-                        $timeout(function() {
+//                        $timeout(function() {
                             if (data.code) {
                                 if (data.code == "INVALID_KS") {
                                     localStorageService.remove('ks');
                                     $location.path("/login");
                                 }
-                                requestNotificationChannel.requestEnded();
+                                requestNotificationChannel.requestEnded('api');
                                 deferred.reject(data.code);
                             } else {
                                 apiCache.put(params_key, data);
                                 apiService.useCache = true;
-                                requestNotificationChannel.requestEnded();
+                                requestNotificationChannel.requestEnded('api');
                                 deferred.resolve(data);
                             }
-                        });
+//                        });
                     });
                 });
             }
