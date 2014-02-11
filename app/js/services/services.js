@@ -81,9 +81,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var playerRefresh = function(option) {
             if (!currentRefresh) {
                 currentRefresh = $q.defer();
-                if (option == 'aspectToggle') {
-                    $('#spacer').toggleClass('narrow');
-                }
                 try {
                     playersService.renderPlayer(callback);
                 }

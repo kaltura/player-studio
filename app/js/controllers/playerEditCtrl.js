@@ -99,7 +99,9 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
         return copyobj;
     };
     $scope.refreshPlayer = function() {
-        playerService.renderPlayer();
+        playerService.playerRefresh().then(function(){
+            playerService.refreshNeeded = false;
+        });
     };
     $scope.checkPlayerRefresh = function() {
         return playerService.refreshNeeded;

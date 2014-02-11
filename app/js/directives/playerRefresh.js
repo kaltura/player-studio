@@ -97,22 +97,28 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     scope.$parent.$parent.$on('controlUpdateAllowed', function(e, modelKey) {
                         if (modelKey == scope.prModel.key && scope.prModel.valueChanged === true) {
                             e.stopPropagation();
-                            scope.prController.makeRefresh();
+
+                           scope.prController.makeRefresh();
                         }
                     });
                 }
                 var actOnModelChange = function() {
-                    if (iAttrs['playerRefresh'] == 'true' || iAttrs['playerRefresh'] == 'aspectToggle') {
-                        if (!scope.options.valueBased) {
-                            scope.prModel.valueChanged = true;
-                            PlayerService.refreshNeeded = true;
-                        }
-                        else {
-                            scope.prController.makeRefresh();
-                        }
+                    if (iAttrs['playerRefresh'] == 'true') {
+//                        if (!scope.options.valueBased) {
+//                            scope.prModel.valueChanged = true;
+//                            PlayerService.refreshNeeded = true;
+//                        }
+//                        else {
+//                            scope.prController.makeRefresh();
+//                        }
+                        PlayerService.refreshNeeded = true;
+
                     }
                     else {
-                        PlayerService.setKDPAttribute(iAttrs['playerRefresh'], scope.prModel.value);
+                        if (iAttrs['playerRefresh'] == 'aspectToggle'){
+                            $('#spacer').toggleClass('narrow');
+                        }else {
+                        PlayerService.setKDPAttribute(iAttrs['playerRefresh'], scope.prModel.value);}
                     }
                 };
                 if (!ngController) {
