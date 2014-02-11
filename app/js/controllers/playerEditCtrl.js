@@ -5,12 +5,10 @@
 angular.module('KMCModule').controller('PlayerEditCtrl',
     ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', 'localStorageService','$timeout',
         function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, localStorageService, $timeout) {
-            $scope.ks = localStorageService.get('ks');
-            $scope.playerId = PlayerData.id;
             $scope.newPlayer = !$routeParams.id;
-            $scope.title = ($routeParams.id) ? $filter('i18n')('Edit player') : $filter('i18n')('New  player');
             $scope.data = PlayerData;
-            $scope.debug = $routeParams.debug;
+            // save data copy for reverting changes
+            $scope.masterData = angular.copy($scope.data);
 
             // handle data changes
             $scope.refreshNeeded = false;
@@ -21,19 +19,34 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     if (typeof message.refresh != "undefined" && message.refresh.indexOf(".")!=-1)
                         PlayerService.setKDPAttribute(message.refresh, message.data);
                 }
-                if (message.refresh == "aspectToggle")
+                if (message.refresh == "aspectToggle"){
                     $('#spacer').toggleClass('narrow');
+                }else{
+                    $scope.isDirty = true;
+                }
             });
+            // refreshNeededEvent send from child scope (editPageDataCntrl) upon player refresh
             $scope.$on("refreshNeededEvent", function(event, needed){
                 $scope.refreshNeeded = needed;
             });
+
+            // debug info for adding "debug" to the url
+            $scope.debug = $routeParams.debug;
             $scope.getDebugInfo = function(partial) {
                 if (!partial)
                     return $scope.data;
                 else
                     return $scope.data[partial];
             };
-            $scope.masterData = angular.copy($scope.data);
+
+            // isDirty is used to notify the user if there are unsaved changes before exiting the edit page
+            $scope.isDirty = $scope.newPlayer ? true : false;
+            // playerSavedEvent is send from child scope (editPageDataCntrl) upon player save
+            $scope.$on("playerSavedEvent", function(event, saved){
+                $scope.isDirty = false;
+            });
+
+            // load user entries list
             $scope.userEntriesList = [];
             apiService.listMedia().then(function(data) {
                 $scope.userEntries = data;
@@ -41,6 +54,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     $scope.userEntriesList.push({'id': value.id, 'text': value.name});
                 });
             });
+
             $scope.settings = {};
 
 // set tags
@@ -129,6 +143,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
 //                            prevent the list controller from using the cache the next time the list loads
                     apiService.setCache(false);
                 }
+                $scope.$emit("playerSavedEvent",true);
                 // TODO: replace with floating success message that will disappear after few seconds
                 $modal.open({ templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
@@ -177,7 +192,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
 
     });
     $scope.cancel = function() {
-        if (menuSvc.menuScope.playerEdit.$pristine) {
+        if (!$scope.isDirty) {
             $location.url('/list');
         }
         else {

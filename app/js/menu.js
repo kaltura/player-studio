@@ -405,6 +405,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout','PlayerService', fu
                                     scope.parentModel[scope.FeatureModel] = scope.featureModelCon;
                                 //scope.$parent.$broadcast('enableControls');
                             }
+                            scope.$emit('dataChanged',{"refresh":"false", "data":""});
                             PlayerService.renderPlayer();
                         }
                     });
