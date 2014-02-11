@@ -198,7 +198,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         appLoad = new Date();
         var url = $location.url().split('/');
         if (debug) {
-            $location.search({debug: true})
+            $location.search({debug: true});
         }
         $rootScope.routeName = url[1];
     });
