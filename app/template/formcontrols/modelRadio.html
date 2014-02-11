@@ -1,6 +1,6 @@
 <div class="form-element">
     <div class="radioLabel"><span class="control-label" ng-bind-html="label"></span></div>
-    <div class="form-group" data-tooltip="{{helpnote}}">
+    <div class="form-group" data-tooltip-html-unsafe="$scope.helpnote">
         <label ng-repeat="option in options">
             <input dname='$parent.$parent.strModel' value="{{ option.value }}" type="radio"
                    ng-required="!$parent.$parent.model && require" ng-model="$parent.$parent.model"

@@ -1,4 +1,4 @@
 <label ng-if="check(action)">
     <i class="icon {{icon}}"></i>
-    <button data-tooltip="{{helpnote}}" type="button" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}">{{ label }}</button>
+    <button data-tooltip-html-unsafe="$scope.helpnote" type="button" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}">{{ label }}</button>
 </label>

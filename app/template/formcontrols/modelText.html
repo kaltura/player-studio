@@ -2,7 +2,7 @@
 	<span class='control-label' ng-bind-html="label"></span><i ng-if='icon' class='icon {{icon}}'></i>
         <span class='inputHolder'>
             <input ng-disabled="$parent.isDisabled" dname='strModel' ng-placeholder="{{placehold}}" ng-pattern='validation' ng-required="{{require}}" class='form-control'
-                   tooltip='{{helpnote || label}}' type='text' val-type="{{type}}"
+                   tooltip-html-unsafe='{{helpnote || label}}' type='text' val-type="{{type}}"
                    ng-model='$parent.model'/>
             <span class="help-inline alert-danger" ng-show="require && reqState">{{"This field is required." | i18n }}</span>
             <span class="help-inline alert-danger" ng-show="validation && valState">{{"This field doesn't have the right format of value." | i18n}}</span>

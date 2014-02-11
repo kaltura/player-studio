@@ -438,7 +438,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
             ],
             scope: {
                 label: '@',
-                helpnote: "@",
                 description: '@'
             },
             compile: function (tElement, tAttr, transclude) {

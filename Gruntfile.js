@@ -66,12 +66,11 @@ module.exports = function(grunt) {
             },
             libs: {
                 src: [
-//                    'app/bower_components/bootstrap/dist/js/bootstrap.min.js', // soon to be removed!
                     'app/lib/modernizer.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mousewheel.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.min.js',
                     'app/lib/spinedit/js/bootstrap-spinedit.min.js',
-                    'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.10.0.min.js',
+                    'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.10.0.js',
                     'app/lib/localStorage/angular-local-storage.min.js',
                     'app/lib/sprintf.js',
                     'app/lib/localize.js',

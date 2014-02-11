@@ -1,5 +1,5 @@
 <label>
-     <span class="tooltipWrap" data-tooltip="{{helpnote}}">
+     <span class="tooltipWrap" data-tooltip-html-unsafe="$scope.helpnote">
         <span class="control-label"><span ng-bind-html="label"></span></span>
         <select dname='strModel' ng-required="require" ui-select2="{{uiselectOpts}}" ng-model="$parent.model">
             <option ng-selected="checkSelection(item.value)" value="{{item.value}}"  ng-repeat="item in options">{{item.label}}</option>

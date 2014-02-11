@@ -4,7 +4,7 @@
             <span class="prettycheckbox" player-refresh="true" ng-click="selfOpenLevel()"
                   ng-model="featureModelCon._featureEnabled"></span>
     </span>
-        <a class='menu-level-trigger'>{{label}}</a>
+        <a class='menu-level-trigger'>{{(parentPage) ? label : ''}}</a>
     </div>
     <div class='mp-level'>
         <a class='mp-back' ng-click='goBack()' ng-show='parentPage'>Back to {{parentLabel}}</a>
