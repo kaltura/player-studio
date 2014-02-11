@@ -206,5 +206,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         if ($location.search()['debug']) {
             debug = true;
         }
+        else {
+            debug = false;
+        }
     });
 });
