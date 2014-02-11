@@ -1,5 +1,5 @@
 <label>
-    <span data-tooltip="{{helpnote}}" class="tooltipWrap">
+    <span data-tooltip-html-unsafe="$scope.helpnote" class="tooltipWrap">
          <span class="control-label" ng-bind-html="label"></span>
     <div class='fullwidth'><i ng-if='icon' class='icon {{icon}}'></i>
         <input dname="strModel" type="text" ng-required="$parent.require" ui-select2="selectOpts" ng-model="model"/>

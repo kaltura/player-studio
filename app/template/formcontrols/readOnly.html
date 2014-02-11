@@ -1,5 +1,9 @@
 <label>
-        <span class="control-label"  data-tooltip="{{helpnote}}"><span ng-bind-html="label"></span></span>
+    <span class="tooltipWrap" data-tooltip-html-unsafe="$scope.helpnote">
+            <span class="control-label">
+                <span ng-bind-html="label"></span>
+            </span>
             <i ng-if="icon" class="icon {{icon}}"></i>
-            <span class="control-data infodata"  data-tooltip="{{helpnote}}">{{ model }}</span>
+            <span class="control-data infodata">{{ model }}</span>
+    </span>
 </label>

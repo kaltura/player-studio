@@ -1,5 +1,5 @@
 <div class="spinEdit clearfix">
-    <label data-tooltip="{{helpnote}}"><span class="control-label" ng-bind-html="label"></span>
+    <label data-tooltip-html-unsafe="$scope.helpnote"><span class="control-label" ng-bind-html="label"></span>
         <div class="col-xs-4 pull-right">
             <div number-input dname='strModel' ng-form='$parent.inputForm' ng-disabled="$parent.isDisabled" defaults="defaults" ng-model="$parent.model"
                  class="input-group">

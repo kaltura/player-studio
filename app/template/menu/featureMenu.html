@@ -1,15 +1,17 @@
-<div class="form-element" >
+<div class="form-element">
      <span class="pull-right" ng-if="featureCheckbox">
-            <div class="prettycheckbox"  player-refresh="true"   ng-click="openFeature()"  ng-model="featureModelCon._featureEnabled" ></div>
+            <div class="prettycheckbox" player-refresh="true" ng-click="openFeature()"
+                 ng-model="featureModelCon._featureEnabled"></div>
      </span>
-    <span class='featureDesc' ng-if="description">
-            <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)"   data-tooltip-trigger="customShow"
-               tooltip-html-unsafe="{{description}}"></i>
-        </span>
 
-    <div class="header" data-tooltip="{{helpnote}}" ng-click="$parent.isCollapsed = !$parent.isCollapsed">
-            <span class="featureLabel" ng-bind-html="label"> </span>
-        <i  ng-class="{rotate90:!$parent.isCollapsed}" class="glyphicon glyphicon-play"></i>
+    <div class="header" data-tooltip-html-unsafe="$scope.description" ng-click="$parent.isCollapsed = !$parent.isCollapsed">
+        <span class="featureLabel" ng-bind-html="label"></span>
+        <i ng-class="{rotate90:!$parent.isCollapsed}" class="glyphicon glyphicon-play"></i>
+         <span class='featureDesc' ng-if="description">
+            <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)"
+               data-tooltip-trigger="customShow"
+               data-tooltip-html-unsafe="$scope.description"></i>
+        </span>
     </div>
     <div ng-class="{disabled:isDisabled}" collapse="isCollapsed">
         <div ng-transclude></div>
