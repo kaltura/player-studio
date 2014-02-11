@@ -27,6 +27,10 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     angular.forEach($scope.userEntries.objects, function (value) {
                         $scope.userEntriesList.push({'id': value.id, 'text': value.name});
                     });
+                    // get the preview entry
+                    $scope.settings.previewEntry = ( PlayerService.getPreviewEntry()) ? PlayerService.getPreviewEntry() : $scope.userEntriesList[0]; //default entry
+                    PlayerService.setPreviewEntry($scope.settings.previewEntry);
+                    PlayerService.playerRefresh();
                 });
             }, 200);
             $scope.settings = {};
@@ -69,17 +73,15 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     PlayerService.playerUpdate($scope.data);
                 });
             }
-            $scope.settings.previewEntry = ( PlayerService.getPreviewEntry()) ? PlayerService.getPreviewEntry() : $scope.userEntriesList[0]; //default entry
+
             $scope.$watch('settings.previewEntry.id', function (newVal, oldVal) {
-                if (newVal != oldVal) {
+                if (newVal != oldVal && typeof oldVal != "undefined") {
                     PlayerService.setPreviewEntry($scope.settings.previewEntry);
-                    PlayerService.renderPlayer();
+                    PlayerService.playerRefresh();
                 }
             });
             $(document).ready(function () {
                 $scope.masterData = angular.copy($scope.data);
-                // get the preview entry
-                PlayerService.setPreviewEntry($scope.settings.previewEntry);
             });
         }
     ]);
@@ -108,7 +110,8 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
         });
     };
     $scope.checkPlayerRefresh = function () {
-        return playerService.refreshNeeded;
+        if (menuSvc.menuScope.$parent.menuInitDone)
+         return playerService.refreshNeeded;
     };
     $scope.save = function () {
         playerService.savePlayer($scope.data).then(function (value) {

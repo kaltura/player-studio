@@ -565,7 +565,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                                 if (!$scope.$parent.newPlayer) {
                                     $scope.playerEdit.$setPristine();
                                 }
-                                PlayerService.playerRefresh();
                             }, 500);
                         });
                 };
