@@ -177,6 +177,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     }]).run(function($rootScope, $rootElement, $location) {
     var appLoad = new Date();
     var debug = false;
+    $rootScope.routeName = '';
     var logTime = function(eventName) {
         if ($location.search()['debug']) {
             var now = new Date();
@@ -186,13 +187,12 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     };
     window.logTime = logTime;
     logTime('AppJsLoad');
-
-    $rootScope.$safeApply = function(scope, fn) {
-        var phase = scope.$root.$$phase;
+    $rootScope.constructor.prototype.$safeApply = function(fn) {
+        var phase = this.$root.$$phase;
         if (phase == '$apply' || phase == '$digest')
-            scope.$eval(fn);
+            this.$eval(fn);
         else
-            scope.$apply(fn);
+            this.$apply(fn);
     };
     $rootScope.$on('$routeChangeSuccess', function() {
         appLoad = new Date();
