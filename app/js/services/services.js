@@ -116,6 +116,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     var data2Save = angular.copy(currentPlayer.config);
                     data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
                     var flashvars = {'jsonConfig': angular.toJson(data2Save)}; // update the player with the new configuration
+                    angular.extend(flashvars, data2Save.uiVars);
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
                         angular.extend(flashvars, {'wmode': 'transparent'});
                     }
