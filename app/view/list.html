@@ -69,11 +69,9 @@
                             </div>
                         </td>
                         <td class="idCol text-center">{{item.id}}</td>
-                        <td class="col-xs-2 text-center"><span class="timeago"Ø
-                                                               timestamp="{{item.updatedAt}}"></span>
+                            <td class="col-xs-2 text-center"><span>{{item.updatedAt | timeago}}</span>
                         </td>
-                        <td class="visible-lg text-center col-lg-1"><span class="timeago"
-                                                                          timestamp="{{item.createdAt}}"></span>
+                        <td class="visible-lg text-center col-lg-1"><span>{{item.createdAt | timeago }}</span>
                         </td>
                         <td class="actionBtns   ">
                             <div class="inner">
