@@ -25,7 +25,9 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 apiService.listMedia().then(function(data) {
                     $scope.userEntries = data;
                     angular.forEach($scope.userEntries.objects, function(value) {
-                        $scope.userEntriesList.push({'id': value.id, 'text': value.name});
+                        // currently filter out playlist entries
+                        if (typeof value.playlistType == "undefined")
+                            $scope.userEntriesList.push({'id': value.id, 'text': value.name});
                     });
                     // get the preview entry
                     $scope.settings.previewEntry = ( PlayerService.getPreviewEntry()) ? PlayerService.getPreviewEntry() : $scope.userEntriesList[0]; //default entry
