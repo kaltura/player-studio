@@ -54,7 +54,7 @@ body a {
 
 #pageHeader {
   margin-top: 5px;
-  font-size:28px;
+  font-size: 28px;
 }
 
 .absolute {
@@ -108,20 +108,21 @@ body a {
   background-color: #FFFFFF;
 }
 
-.btn-primary {  background-color: #27b5f0;
+.btn-primary {
+  background-color: #27b5f0;
   border-color: #27b5f0;
   color: #fff;
-  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #1dabe5;
-  background-image: -moz-linear-gradient(top,#27b5f0,#0f9bd5);
-  background-image: -webkit-gradient(linear,0 0,0 100%,from(#27b5f0),to(#0f9bd5));
-  background-image: -webkit-linear-gradient(top,#27b5f0,#0f9bd5);
-  background-image: -o-linear-gradient(top,#27b5f0,#0f9bd5);
-  background-image: linear-gradient(to bottom,#27b5f0,#0f9bd5);
+  background-image: -moz-linear-gradient(top, #27b5f0, #0f9bd5);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#27b5f0), to(#0f9bd5));
+  background-image: -webkit-linear-gradient(top, #27b5f0, #0f9bd5);
+  background-image: -o-linear-gradient(top, #27b5f0, #0f9bd5);
+  background-image: linear-gradient(to bottom, #27b5f0, #0f9bd5);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff27b5f0', endColorstr='#ff0e9ad5', GradientType=0);
   border-color: #0f9bd5 #0f9bd5 #0a678e;
-  border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
 .btn-primary:hover,
@@ -136,7 +137,7 @@ body a {
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color:  #0f9bd5;
+  background-color: #0f9bd5;
 }
 
 .btn-primary:active,
@@ -209,20 +210,32 @@ h1, h2, h3 {
 
 }
 
-html.IE8 {
-  div.modal-dialog {
-    max-width: 600px;
-    margin: auto;
+html {
+  &.ie10, &lt-ie9 {
+    .form-control{
+      padding-bottom: 0px;
+    }
+  }
+  &.ie8 {
+    div.modal-dialog {
+      max-width: 600px;
+      margin: auto;
+    }
   }
 }
+
 :focus,
 .form-control,
 input:focus,
 select:focus,
 textarea:focus,
 button:focus {
-  outline: none!important;
+  outline: none !important;
   box-shadow: none;
-  -webkit-box-shadow:none;
-  -webkit-transition: none;-moz-transition: none;-ms-transition: none;-o-transition: none;transition: none;
+  -webkit-box-shadow: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
 }
