@@ -505,7 +505,7 @@ KMCServices.factory('editableProperties', ['$q', 'api', '$http', function ($q, a
 
         var method = 'get';
         var url = window.kWidget.getPath() + 'services.php?service=studioService';
-        if (window.IE > 10){
+        if (window.IE < 10){
             url += '&callback=JSON_CALLBACK';
             method = 'jsonp';
         }
