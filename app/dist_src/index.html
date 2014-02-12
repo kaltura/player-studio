@@ -3,10 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type="text/javascript">
+        var IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
+        if (IE < 10) {
+            document.documentElement.className += ' lt-ie9' + ' ie' + IE;
+        }
+    </script>
     <!--[if lt IE 9]>
     <script type="text/javascript">
-	    document.location = "ie8.html";
-	    //document.documentElement.className += " IE8";
+        document.location = "ie8.html";
     </script>
     <script type="text/javascript" src="vendor/vendorOld.min.js"></script>
     <![endif]-->
@@ -22,7 +27,7 @@
         }
     </style>
     <![endif]-->
-    
+
     <!--  app stylesheet-->
     <link rel="stylesheet" href="css/studio.css"/>
     <link rel="stylesheet" href="css/vendor.css"/>

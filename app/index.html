@@ -5,10 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script type="text/javascript" src="lib/modernizer.min.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <script type="text/javascript">
+        var IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
+        if (IE < 10) {
+            document.documentElement.className += ' lt-ie9' + ' ie' + IE;
+        }
+    </script>
     <!--[if lt IE 9]>
-    <script>
-	    document.location = "ie8.html";
-        //document.documentElement.className += " IE8";
+    <script type="text/javascript">
+        document.location = "ie8.html";
     </script>
     <script type="text/javascript" src="lib/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="lib/html5shiv.js"></script>

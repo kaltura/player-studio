@@ -502,7 +502,7 @@ KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, ap
 //           deferred.resolve(result.data);
 //        });
 //
-        $http.get(window.kWidget.getPath() + 'services.php?service=studioService').then(function(result) {
+        $http.jsonp(window.kWidget.getPath() + 'services.php?callback=JSON_CALLBACK&service=studioService').then(function(result) {
             var data = result.data;
             if (typeof data == 'object') // json is OK
                 deferred.resolve(result.data);
