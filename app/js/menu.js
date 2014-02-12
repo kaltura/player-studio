@@ -450,7 +450,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     });
                     scope.$watch('isCollapsed', function (newVal, oldVal) {
                         if (newVal != oldVal) {
-                            scope.$emit('layoutChange');
+                            scope.$root.$broadcast('layoutChange');
                         }
                     });
                     var initDone = menuSvc.menuScope.$on('menuInitDone', function () {
