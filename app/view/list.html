@@ -42,12 +42,11 @@
                     <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='updatedAt' && sort.reverse==false),
                 'glyphicon-chevron-up':(sort.sortCol=='updatedAt' && sort.reverse == true)}"></i>
                 </a></div>
-                <div class="col-lg-1 text-center visible-lg"><a data-ng-click="sortBy('createdAt')">{{ 'Creation Date' |
-                    i18n }}
+                <div class="col-lg-2 text-center visible-lg"><a data-ng-click="sortBy('createdAt')">{{ 'Creation Date' | i18n }}
                     <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='createdAt' && sort.reverse==false),
                 'glyphicon-chevron-up':(sort.sortCol=='createdAt' && sort.reverse == true)}"></i>
                 </a></div>
-                <div class="text-center ">{{ 'Actions' | i18n }}
+                <div class="pull-left ">{{ 'Actions' | i18n }}
                 </div>
             </div>
             <div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
@@ -68,12 +67,10 @@
                             </span>
                             </div>
                         </td>
-                        <td class="idCol text-center">{{item.id}}</td>
-                            <td class="col-xs-2 text-center"><span>{{item.updatedAt | timeago}}</span>
-                        </td>
-                        <td class="visible-lg text-center col-lg-1"><span>{{item.createdAt | timeago }}</span>
-                        </td>
-                        <td class="actionBtns   ">
+                        <td class="idCol">{{item.id}}</td>
+                        <td class="col-xs-2 text-center"><span>{{item.updatedAt | timeago}}</span></td>
+                        <td class="visible-lg col-lg-2 text-center"><span>{{item.createdAt | timeago }}</span></td>
+                        <td class="actionBtns ">
                             <div class="inner">
                                 <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
                                         class="icon-copy"></span> {{'Duplicate'| i18n}}

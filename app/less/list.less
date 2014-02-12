@@ -57,6 +57,8 @@ html {
   }
   .playerThumbWrapper {
     padding: 0;
+    margin: auto;
+    text-align: center;
   }
   .playerThumb {
     width: 100%;
@@ -84,12 +86,12 @@ html {
       border-top: 1px solid #dddddd;
     }
     #tableHead {
-      .idCol{
-        margin-left: 2px;
-      }
-      .idCol+div{
-        margin-left: 0;
-      }
+//      .idCol{
+//        margin-left: 2px;
+//      }
+//      .idCol+div{
+//        margin-left: 0;
+//      }
       background: #F4F4F4;
       background-image: -ms-linear-gradient(bottom, #F4F4F4 0%, #FAFAFA 100%);
       background-image: -moz-linear-gradient(bottom, #F4F4F4 0%, #FAFAFA 100%);
@@ -105,11 +107,16 @@ html {
         }
          //border-right:1px solid #ccc;
         padding: 4px;
+        padding-left: 7px;
         white-space: nowrap;
         font-weight: bold;
         margin-left: 1px;
         &:last-child{
           border-right:none;
+          padding-left: 10px;
+        }
+        &.text-center{
+          padding-left: 0;
         }
       }
     }
@@ -144,7 +151,7 @@ html {
       .actionBtns {
         > .inner {
           max-width: 300px;
-          margin: auto;
+         // margin: auto;
         }
         button {
           width: 96px;
