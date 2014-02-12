@@ -373,9 +373,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     if ($scope.featureCheckbox) {
                         if (!$scope.featureModelCon) {
                             if ($scope.parentModel)
-                                $scope.featureModelCon = $scope.parentModel[$scope.FeatureModel] = {};
+                                $scope.featureModelCon = $scope.parentModel[$scope.FeatureModel] = {_featureEnabled:false};
                             else
-                                $scope.featureModelCon = {};
+                                $scope.featureModelCon = {_featureEnabled:false};
                         }
                         $scope.isDisabled = ($scope.featureModelCon._featureEnabled) ? false : true;
                     }
@@ -383,7 +383,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
             },
             linkFn4FeatureCheckbox: function (scope) {
                 if (scope.featureCheckbox) {
-                    scope.$watch('featureModelCon._featureEnabled', function (newval, oldVal) {
+                    scope.$watch(function(){
+                        return scope.featureModelCon._featureEnabled;
+                    }, function (newval, oldVal) {
                         if (newval != oldVal) {
                             if (!newval) {// feature disabled  - delete control data
                                 //scope.$parent.$broadcast('disableControls');
@@ -424,7 +426,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                 menuSvc.makeFeatureCheckbox($scope, $attrs);
                 $scope.isCollapsed = true;
                 // feature made enabled - open the settings
-                $scope.openFeature = function () {
+                $scope.openFeature = function (force) {
+                    if (!force && window.IE <11){ // pointer-events:none do not work in IE 8-10 we don't let users see disabled items at all
+                        if (!$scope.featureModelCon._featureEnabled){
+                            return false
+                        }
+                    }
                     if ($scope.isCollapsed) {
                         $scope.isCollapsed = false;
                     }
@@ -453,10 +460,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                             scope.$root.$broadcast('layoutChange');
                         }
                     });
-                    var initDone = menuSvc.menuScope.$on('menuInitDone', function () {
+                  //  var initDone = menuSvc.menuScope.$on('menuInitDone', function () {
                         menuSvc.linkFn4FeatureCheckbox(scope);
-                        initDone(); //remove the $on listener
-                    });
+                       // initDone(); //remove the $on listener
+                  //  });
                     scope.$on('openFeature', function (e, args) {
                         if (args == attributes['model']) {
                             scope.isCollapsed = false;
