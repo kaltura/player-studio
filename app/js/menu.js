@@ -207,16 +207,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                 }
             },
             buildMenu: function (baseData) {
-                if (!menuSvc.menuCache) {
                     var menuJsonObj = menuSvc.get(); // gets the  editableProperties manifest json
                     var menuElm = angular.element('<ul></ul>');
+	                var menuItems = [];
                     angular.forEach(menuJsonObj, function (value) {
-                        menuElm.append(menuSvc.buildMenuItem(value, menuElm, baseData));
-                    });
-                    menuSvc.menuCache = menuElm; //TODO: we should have a hash table set by player version ?
-                    return menuElm;
-                }
-                else return menuSvc.menuCache;
+	                    menuItems.push(menuSvc.buildMenuItem(value, menuElm, baseData));
+                    }            );
+                    return menuItems;
             },
             buildMenuItem: function (item, targetMenu, BaseData, parentModel) {
                 var elm = '';
@@ -499,27 +496,33 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                 $scope.menuInitDone = false;
             },
             compile: function (tElement, tAttrs, transclude) {
+	            debugger;
                 var menuElem = tElement.find('#mp-base >  ul');
-                var menuHtml = menuSvc.getPutCompliedMenu2Cache();
-                if (!menuHtml) {
-                    var menuData = menuSvc.buildMenu('data');
-                    menuHtml = $compile(menuData.contents());
-                    menuSvc.getPutCompliedMenu2Cache(menuHtml);
-                }
+                var menuData = menuSvc.buildMenu('data');
+	            var menuHTML = [];
+	            angular.forEach(menuData,function(value){
+		            menuHTML.push($compile(value.contents()));
+	            }) ;
                 return function ($scope, $element) {
-                    transclude($scope, function (clone) {
+	                debugger;
+	                var ulElement = angular.element('<ul></ul>');
+	                menuElem.prepend(  ulElement);
+	                transclude($scope, function (clone) {
                         angular.forEach(clone, function (elem) {
                             if ($(elem).is('li')) {
-                                menuElem.append(elem);
+	                            ulElement.append(elem);
                             }
                             else {
                                 $(elem).prependTo(tElement);
                             }
                         });
                     });
-                    menuHtml($scope, function (clone) { // here the menu is invoked aginst the scope and so populated with data
-                        menuElem.prepend(clone);
-                    });
+                    angular.forEach(menuHTML,function(value){
+	                    value($scope, function (clone) { // here the menu is invoked aginst the scope and so populated with data
+		                    ulElement.append(clone);
+	                    });
+                    })
+
                     var timeVar = null;
                     var timeVar1 = null;
                     $scope.menuInitDone = false;
