@@ -169,9 +169,26 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $location.path('/new');
             };
             $scope.duplicate = function(item) {
-                PlayerService.clonePlayer(item).then(function(data) {
-                    $location.url('edit/' + data[1].id);
-                });
+                if ($scope.checkVersionNeedsUpgrade(item)){
+                    $modal.open({ templateUrl: 'template/dialog/message.html',
+                        controller: 'ModalInstanceCtrl',
+                        resolve: {
+                            settings: function() {
+                                return {
+                                    'title': 'Duplicate player',
+                                    'message': 'Outdated players cannot be duplicated.<br>Please update the player before duplicating.',
+                                    buttons: [
+                                        {result: true, label: 'OK', cssClass: 'btn-primary'}
+                                    ]
+                                };
+                            }
+                        }
+                    });
+                }else{
+                    PlayerService.clonePlayer(item).then(function(data) {
+                        $location.url('edit/' + data[1].id);
+                    });
+                }
             };
             $scope.deletePlayer = function(item) {
                 var modal = $modal.open({
