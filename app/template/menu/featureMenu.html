@@ -1,10 +1,10 @@
 <div class="form-element">
      <span class="pull-right" ng-if="featureCheckbox">
-            <div class="prettycheckbox" player-refresh="true" ng-click="openFeature(true)"
+            <div class="prettycheckbox" player-refresh="true" ng-click="openFeature()"
                  ng-model="featureModelCon._featureEnabled"></div>
      </span>
 
-    <div class="header"  ng-click="openFeature()">
+    <div class="header"  ng-click="toggleFeature()">
         <span class="featureLabel"   data-tooltip-html-unsafe="$scope.description" ng-bind-html="label"></span>
         <i ng-class="{rotate90:!isCollapsed}" class="glyphicon glyphicon-play"></i>
          <span class='featureDesc' ng-if="description">
