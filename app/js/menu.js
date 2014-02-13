@@ -546,7 +546,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                                 }
                                 $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
                                 if (!$scope.scroller) {
-                                    $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
+                                    $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '99%'});
                                 }
                                 timeVar = null;
                             }, 200);
