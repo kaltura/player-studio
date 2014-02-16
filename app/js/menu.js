@@ -432,11 +432,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     }
                 };
                 $scope.toggleFeature = function () {
-                    if ($scope.isCollapsed && window.IE < 11) { // pointer-events:none do not work in IE 8-10 we don't let users see disabled items at all
-                        if (!$scope.featureModelCon._featureEnabled) {
-                            return false;
-                        }
-                    }
                     $scope.isCollapsed = !$scope.isCollapsed;
                 };
                 $scope.openTooltip = function ($event) {
