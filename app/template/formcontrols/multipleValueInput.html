@@ -1,0 +1,7 @@
+<label>
+    <span class="control-label">{{label}}</span><i ng-if='icon' class='icon {{icon}}'></i>
+        <span class='inputHolder'>
+            <span class="pull-right" data-ng-click="add()">+Add</span>
+            <input type="text" ng-repeat="single in splitModel" ng-mode="single"/>
+        </span>
+</label>

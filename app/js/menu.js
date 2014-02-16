@@ -90,6 +90,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                 case  'text':
                 case   'number':
                 case  'radio':
+                case  'multiinput':
                     return true;
                 default:
                     return false;
@@ -133,6 +134,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     return '<div info-action/>';
                 case "sortOrder":
                     return '<div sort-order/>';
+                case "multiinput":
+                    return '<div multiple-value-input>';
             }
         };
         var searchGet = function (obj, target) { // get object by exact path
