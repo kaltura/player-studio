@@ -128,8 +128,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     $("#Companion_300x250").empty();
                     $("#Companion_728x90").empty();
                     window.mw.setConfig('Kaltura.LeadWithHTML5', true);
-                    window.jsCallbackReady = function(playerId) {
-                        document.getElementById(playerId).kBind("layoutBuildDone", function() {
+                    window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
+                    window.jsCallbackReady = function (playerId) {
+                        document.getElementById(playerId).kBind("layoutBuildDone", function () {
                             if (typeof callback == 'function') {
                                 callback();
                             }
