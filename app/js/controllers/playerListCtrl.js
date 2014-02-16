@@ -10,9 +10,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.search = '';
             $scope.searchSelect2Options = {};
             $scope.currentPage = 1;
-            $scope.maxSize = 10;
+            $scope.maxSize =  parseInt(localStorageService.get('listSize')) || 10;
             $scope.$watch('maxSize', function(newval, oldval) {
                 if (newval != oldval)
+                    localStorageService.set('listSize',newval);
                     $scope.$broadcast('layoutChange');
             });
             $scope.triggerLayoutChange = function(){
