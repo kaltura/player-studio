@@ -26,6 +26,11 @@ DirectivesModule.directive('hiddenValue', [function() {
         scope: {
             model: '='
         },
+        controller:function($scope,$element,$attrs){
+            if ($attrs['initvalue']){
+                $scope.model = $attrs['initvalue'];
+            }
+        },
         restrict: 'EA'
     };
 }]);
