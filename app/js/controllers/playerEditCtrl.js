@@ -158,18 +158,18 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
             );
     };
     $scope.formValidation = function() {
-        if (typeof  menuSvc.menuScope.playerEdit != 'undefined' && menuSvc.menuScope.playerEdit.$error)
+        if (typeof  menuSvc.menuScope.playerEdit != 'undefined' && menuSvc.menuScope.playerEdit.$error){
             var obj = menuSvc.menuScope.playerEdit.$error;
-        var empty = true;
-        angular.forEach(obj, function(value, key) {
-            if (value != false) {
-                empty = false;
-            }
-        });
-        if (!empty)
-            return obj;
-        return null;
-
+            var empty = true;
+            angular.forEach(obj, function(value, key) {
+                if (value !== false) {
+                    empty = false;
+                }
+            });
+            if (!empty)
+                return obj;
+            return null;
+        }
     };
     $scope.cancel = function() {
         if (menuSvc.menuScope.playerEdit.$pristine) {

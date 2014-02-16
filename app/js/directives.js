@@ -27,7 +27,7 @@ DirectivesModule.directive('hiddenValue', [function() {
             model: '='
         },
         restrict: 'EA'
-    }
+    };
 }]);
 DirectivesModule.directive('modelRadio', ['menuSvc', function(menuSvc) {
     return {
