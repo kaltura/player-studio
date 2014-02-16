@@ -186,6 +186,8 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     });
                 }else{
                     PlayerService.clonePlayer(item).then(function(data) {
+                        $scope.data.unshift(data[1]);
+                        PlayerService.cachePlayers($scope.data);
                         $location.url('edit/' + data[1].id);
                     });
                 }
