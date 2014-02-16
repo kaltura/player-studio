@@ -354,7 +354,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 
                 var method = 'get';
                 var url = window.kWidget.getPath() + 'services.php';
-                var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")}
+                var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")};
                 if (window.IE < 10){
                     params["callback"] = 'JSON_CALLBACK';
                     method = 'jsonp';

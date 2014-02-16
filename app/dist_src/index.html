@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script type="text/javascript">
-        var IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
-        if (IE < 10) {
+        window.IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
+        if (IE < 11) {
             document.documentElement.className += ' lt-ie9' + ' ie' + IE;
         }
     </script>
