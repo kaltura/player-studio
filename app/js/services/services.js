@@ -351,10 +351,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
                 var rejectText = $filter('i18n')('Update player action was rejected: ');
+
+                var method = 'get';
+                var url = window.kWidget.getPath() + 'services.php';
+                var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")}
+                if (window.IE < 10){
+                    params["callback"] = 'JSON_CALLBACK';
+                    method = 'jsonp';
+                }
                 $http({
-                    url: window.kWidget.getPath() + 'services.php',
-                    method: "GET",
-                    params: {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")}
+                    url: url,
+                    method: method,
+                    params: params
                 }).success(function (data, status, headers, config) {
 // clean some redundant data from received object
                     if (data['uiConfId']) {
