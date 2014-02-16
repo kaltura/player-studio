@@ -53,7 +53,13 @@
 						{{title}}
 					</h2-->
 				</div>
-				<div class="container" ng-show="debug">
+				<div class="container" ng-if="debug">
+                    <div ng-show="formValidation()" class="container"><p>these property values are not valid:</p>
+                        <div ng-repeat="obj in formValidation()">
+                            <p ng-repeat="objSub in obj">
+                                {{objSub.$name}}:{{objSub.$error | json}}</p>
+                        </div>
+                    </div>
 					<pre style="width: 100%;height:300px;overflow-x: scroll"> {{getDebugInfo() | json}}"</pre>
 				</div>
 				<!-- Companion placeholders for VAST -->
@@ -67,16 +73,6 @@
 						     itemtype="http://schema.org/VideoObject"></div>
 					</div>
 				</div>
-				<div class="container">
-					<div ng-if="validationObject.length>0" class="container"><p>these property values are not valid:</p>
-
-						<div ng-repeat="obj in validationObject">
-							<p ng-repeat="objSub in obj">
-								{{objSub.$name}}:{{objSub.$error | json}}</p>
-						</div>
-					</div>
-				</div>
-
 			</div>
 		</div>
 	</div>

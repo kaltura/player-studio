@@ -155,24 +155,22 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                     }
                 });
             }
-
-        )
-        ;
+            );
+    };
+    $scope.formValidation = function() {
+        if (typeof  menuSvc.menuScope.playerEdit != 'undefined' && menuSvc.menuScope.playerEdit.$error)
+            var obj = menuSvc.menuScope.playerEdit.$error;
+        var empty = true;
+        angular.forEach(obj, function(value, key) {
+            if (value != false) {
+                empty = false;
+            }
+        });
+        if (!empty)
+            return obj;
+        return null;
 
     };
-    $scope.$watch(function() {
-        if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
-            if (menuSvc.menuScope.playerEdit.$error) {
-                return menuSvc.menuScope.playerEdit.$error;
-
-            }
-        }
-    }, function(obj, oldVal) {
-        if (obj != oldVal) {
-            $scope.validationObject = obj;
-        }
-
-    });
     $scope.cancel = function() {
         if (menuSvc.menuScope.playerEdit.$pristine) {
             $location.url('/list');
