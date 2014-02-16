@@ -174,7 +174,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 }
             }]}
         });
-    }]).run(function($rootScope, $rootElement, $location) {
+    }]).run(function($rootScope, $rootElement, $location,menuSvc) {
     var appLoad = new Date();
     var debug = false;
     $rootScope.routeName = '';
@@ -193,6 +193,13 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             this.$eval(fn);
         else
             this.$apply(fn);
+    };
+    $rootScope.constructor.prototype.openTooltip = function ($event) {
+        menuSvc.currentTooltip = $event.target;
+        $($event.target).trigger('customShow');
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
     };
     $rootScope.$on('$routeChangeSuccess', function() {
         appLoad = new Date();

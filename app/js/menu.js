@@ -434,11 +434,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                 $scope.toggleFeature = function () {
                     $scope.isCollapsed = !$scope.isCollapsed;
                 };
-                $scope.openTooltip = function ($event) {
-                    menuSvc.currentTooltip = $event.target;
-                    $($event.target).trigger('customShow');
-                };
-
             }
             ],
             scope: {
