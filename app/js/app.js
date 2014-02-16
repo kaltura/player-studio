@@ -197,8 +197,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     $rootScope.constructor.prototype.openTooltip = function ($event) {
         menuSvc.currentTooltip = $event.target;
         $($event.target).trigger('customShow');
-        event.preventDefault();
-        event.stopPropagation();
+        $event.preventDefault();
+        $event.stopPropagation();
         return false;
     };
     $rootScope.$on('$routeChangeSuccess', function() {

@@ -133,6 +133,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function (editable
                     return '<div info-action/>';
                 case "sortOrder":
                     return '<div sort-order/>';
+                case "hidden":
+                    return '<span hidden-value/>';
             }
         };
         var searchGet = function (obj, target) { // get object by exact path
