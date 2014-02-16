@@ -63,7 +63,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $routeProvider.when('/login', {
                 templateUrl: 'view/login.html',
                 controller: 'LoginCtrl',
-                resolve: {'apiService': ['apiService', function(apiService) {
+                resolve: {'apiService': ['api','apiService', function(api,apiService) {
                     return apiService;
                 }], 'localize': 'localize'
                 }
