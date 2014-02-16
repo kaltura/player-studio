@@ -32,13 +32,16 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     // get the preview entry
                     $scope.settings.previewEntry = ( PlayerService.getPreviewEntry()) ? PlayerService.getPreviewEntry() : $scope.userEntriesList[0]; //default entry
                     PlayerService.setPreviewEntry($scope.settings.previewEntry);
-                    PlayerService.playerRefresh();
+                    // render the player for the first time
+                    PlayerService.playerRefresh().then(function(){
+                        menuSvc.menuScope.playerInitDone = true;
+                    });
                 });
             }, 200);
             $scope.settings = {};
 
 // set tags
-//            $scope.tags = [];
+//   $scope.tags = [];
 //// all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
 //// the model tags of the player are actually set properly from the ng-model of the tags directive and are not needed here
 //            if (typeof $scope.data.tags != "undefined" && $scope.data.tags) { //can also be null
@@ -112,8 +115,9 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
         });
     };
     $scope.checkPlayerRefresh = function() {
-        if (menuSvc.menuScope && menuSvc.menuScope.menuInitDone)
+        if (menuSvc.menuScope && menuSvc.menuScope.menuInitDone && menuSvc.menuScope.playerInitDone)
             return playerService.refreshNeeded;
+        return false;
     };
     $scope.save = function() {
         playerService.savePlayer($scope.data).then(function(value) {
