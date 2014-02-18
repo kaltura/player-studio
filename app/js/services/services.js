@@ -128,19 +128,19 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     $("#Companion_728x90").empty();
                     window.mw.setConfig('Kaltura.LeadWithHTML5', true);
                     window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
-                    window.jsCallbackReady = function (playerId) {
-                        document.getElementById(playerId).kBind("layoutBuildDone", function () {
-                            if (typeof callback == 'function') {
-                                callback();
-                            }
-                        });
-                    };
                     kWidget.embed({
                         "targetId": playerId, // hard coded for now?
                         "wid": "_" + currentPlayer.partnerId, //$scope.data.partnerId,
                         "uiconf_id": currentPlayer.id,// $scope.data.id,
                         "flashvars": flashvars,
-                        "entry_id": previewEntry //$scope.previewEntry
+                        "entry_id": previewEntry, //$scope.previewEntry
+                        "readyCallback": function ( playerId ) {
+                            document.getElementById(playerId).kBind("layoutBuildDone", function () {
+	                            if (typeof callback == 'function') {
+	                                callback();
+	                            }
+	                        });
+                        }
                     });
 
                 }
