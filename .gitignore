@@ -5,3 +5,7 @@ logs/*
 node_modules/*
 npm-debug.log
 _dist/*
+app/bower_components/angular-ui-select2/src/select2.min.js
+app/bower_components/angular-ui-sortable/src/sortable.min.js
+app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js
+app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js
