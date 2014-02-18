@@ -59,7 +59,9 @@ angular.module('localization', [])
                         // set language
                         localize.language = lang;
                     }
-                    return 'i18n/resources-locale_' + localize.language + '.json';
+                    var langArr  = localize.language.split('-');
+                    langArr[1] =  langArr[1].toUpperCase(); // explorer 9 returns lowercase - just make sure.
+                    return 'i18n/resources-locale_' +  langArr.join('-')+ '.json';
                 },
 
                 // loads the language resource file from the server
@@ -70,10 +72,11 @@ angular.module('localization', [])
                     return $http({
                         method: "GET",
                         url: url,
-                        cache: false
+                        cache: false,
+                        responseType:'application/json'
                     }).success(localize.successCallback).error(function() {
                         // the request failed set the url to the default resource file
-                        var url = '/i18n/resources-locale_en_US.json';
+                        var url = '/i18n/resources-locale_en-US.json';
                         // request the default resource file
                         $http({
                             method: "GET",

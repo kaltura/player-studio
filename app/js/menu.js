@@ -483,9 +483,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                 });
             }
         };
-    }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout', '$routeParams', 'PlayerService' , '$q', function(menuSvc, $compile, $timeout, $routeParams, PlayerService, $q) {
-        var menuHTML = [];
-        var menuData = menuSvc.buildMenu('data');
+    }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout', '$routeParams', 'PlayerService' , '$q', '$templateCache', function(menuSvc, $compile, $timeout, $routeParams, PlayerService, $q, $templateCache) {
+        var menuFN = {}
+        var menuData;
         return  {
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
@@ -498,34 +498,47 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                 $scope.menuInitDone = false;
             },
             compile: function(tElement, tAttrs, transclude) {
+                if (!menuData) {
+                    menuData = menuSvc.buildMenu('data');
+                }
                 var menuElem = tElement.find('#mp-base >  ul');
-                if (menuHTML !== []) {
+                if ($.isEmptyObject(menuFN)) {
                     angular.forEach(menuData, function(value) {
-                        menuHTML.push($compile(value));
-                    });
+                            menuFN[value.attr('pagename')] = $compile(value);
+                        }
+                    );
                 }
                 return function($scope, $element) {
-                    var ulElement = angular.element('<ul></ul>');
-                    menuElem.prepend(ulElement);
+                    menuFN['basicDisplay']($scope, function(htmlCompiled) { // here the 1st menu is invoked against the scope and so populated with data
+                        menuElem.append(htmlCompiled);
+                    });
                     transclude($scope, function(clone) {
                         angular.forEach(clone, function(elem) {
                             if ($(elem).is('li')) {
-                                ulElement.append(elem);
+                                menuElem.append(elem);
                             }
                             else {
                                 $(elem).prependTo(tElement);
                             }
                         });
                     });
-                    menuHTML[0]($scope, function(clone) { // here the 1st menu is invoked against the scope and so populated with data
-                        ulElement.append(clone);
-                    });
+
                     var timeVar = null;
                     var timeVar1 = null;
                     $scope.menuInitDone = false;
                     $scope.$on('menuChange', function(e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
                         // instate a scroller on the selected menupage withut using the css selector
                         if (page != 'search') {
+                            var cachedPage = $templateCache.get(page);
+                            if (!cachedPage) {
+                                menuFN[page]($scope, function(htmlData) { // here the 1st menu is invoked against the scope and so populated with data
+                                    cachedPage = htmlData;
+                                    $templateCache.put(page, htmlData);
+                                });
+                            }
+                            if (cachedPage && menuElem.children('[pagename="' + page + '"]').length === 0) {
+                                $scope.$apply(cachedPage.appendTo(menuElem));
+                            }
                             if (timeVar) {
                                 $timeout.cancel(timeVar);
                             }
@@ -559,21 +572,30 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                             $('div.section[ng-view]').on('click', menuSvc.closeTooltips);
                             $scope.menuInitDone = true;
                             $scope.$root.$broadcast('menuInitDone');
-                            var i = 1;
-                            var addMenuPage = function() {
-                                var queue = $q.defer();
-                                menuHTML[i]($scope, function(clone) { // here the 1st menu is invoked against the scope and so populated with data
-                                    i++;
-                                    ulElement.append(clone);
-                                    queue.resolve();
-                                });
-                                return queue.promise;
-                            }
-                            while (i < menuHTML.length-2) {
-                                addMenuPage().then(function() {
-                                    addMenuPage();
-                                });
-                            }
+//                            var i = 1;
+//                            var menuQue = [];
+//                            var addMenuPage = function() {
+//                                var queue = $q.defer();
+//                                var pageData = menuData[i].data($scope, function(htmlData) { // here the 1st menu is invoked against the scope and so populated with data
+//                                    menuHTML[i] = htmlData;
+//                                    queue.resolve();
+//                                });
+//                                $templateCache.put(menuData[i].key, pageData);
+//                                i++;
+//                                return queue.promise;
+//                            };
+//                            if (menuHTML.length === 0) {
+//                                while (i < menuData.length - 2) {
+//                                    menuQue[i] = addMenuPage().then(function() {
+//                                        addMenuPage();
+//                                    });
+//                                }
+//                            }
+//                            $q.all(menuQue).then(function() {
+//                                logTime('allMenuPagesRendered');
+//                                //   window.tc = $templateCache;
+//                                //cl(menuHTML);
+//                            });
                         }, 200
                     ).then(function() {
                             $timeout(function() {
@@ -582,7 +604,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                                 }
                             }, 500);
                         });
-                };
+                }
+                    ;
             }
         }
             ;
