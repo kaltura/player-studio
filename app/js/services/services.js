@@ -486,7 +486,7 @@ KMCServices.directive('canSpin', [function () {
                     controller.spinnerScope = $scope;
             });
         }
-    }
+    };
 }]);
 KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (requestNotificationChannel) {
     return {

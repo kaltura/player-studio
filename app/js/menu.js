@@ -193,6 +193,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
             currentPage: '',
             setMenu: function (setTo) {
                 menuSvc.currentPage = setTo;
+                if (typeof  menuSvc.spinnerScope != 'undefined') {
+                    menuSvc.spinnerScope.spin();
+                }
                 menuSvc.menuScope.$broadcast('menuChange', setTo);
             },
             menuCache: null,
@@ -496,12 +499,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                 $scope.menuInitDone = false;
                 $scope.data = $scope.$parent.data;
                 $scope.settings = $scope.$parent.settings;
-                return {spinnerScope: null}
+                return {spinnerScope: null};
             },
             compile: function (tElement) {
                 var menuData = menuSvc.buildMenu('data'); // is cached internally in menuSVC.
                 var menuElem = tElement.find('#mp-base >  ul');
                 return function ($scope, $element, $attrs, controller, transclude) {
+                    menuSvc.spinnerScope = controller.spinnerScope;
                     transclude($scope, function (clone) {
                         angular.forEach(clone, function (elem) {
                             if ($(elem).is('li')) {
@@ -515,26 +519,22 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                     var timeVar = null;
                     var timeVar1 = null;
                     $scope.menuInitDone = false;
+
                     $scope.$on('menuChange', function (e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
                         // instate a scroller on the selected menupage withut using the css selector
                         if (page != 'search') {
                             if (page.indexOf('.') === -1 && menuElem.children('[pagename="' + page + '"]').length === 0) { // check its not a subpage and doesn't exist already
-                                if (controller.spinnerScope) {
-                                    controller.spinnerScope.spin();
-                                }
                                 menuData[page]($scope, function (htmlData) { // here the menu is invoked against the scope and so populated with data
                                     htmlData.appendTo(menuElem);
-                                    if (controller.spinnerScope) {
-                                        controller.spinnerScope.endSpin();
-                                    }
                                 });
                             }
-
                             if (timeVar) {
                                 $timeout.cancel(timeVar);
                             }
                             timeVar = $timeout(function () {
-
+                                if (menuSvc.spinnerScope) {
+                                    menuSvc.spinnerScope.endSpin();
+                                }
                                 if ($scope.scroller) {
                                     $scope.scroller.mCustomScrollbar('destroy');
                                     $scope.scroller = null;
@@ -544,7 +544,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                                     $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '99%'});
                                 }
                                 timeVar = null;
-                            }, 200);
+                            });
                         }
                     });
                     $scope.$on('layoutChange', function () {
