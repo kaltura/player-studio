@@ -13,7 +13,6 @@
                data-tooltip-html-unsafe="$scope.description"></i>
         </span>
     </div>
-    <div ng-class="{disabled:isDisabled}" collapse="isCollapsed">
-        <div ng-transclude></div>
+    <div ng-transclude ng-class="{disabled:isDisabled}" collapse="isCollapsed">
     </div>
 </div>

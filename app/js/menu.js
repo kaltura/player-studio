@@ -247,7 +247,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                     angular.forEach(item.children, function (subitem) {
                         switch (subitem.type) {
                             case 'menu':
-                                parent.append(menuSvc.buildMenuItem(subitem, parent, item.model, item));
+                                parent.append(menuSvc.buildMenuItem(subitem, item.model, item));
                                 break;
                             case 'featuremenu':
                                 parent.append(writeChildren(subitem, writeFormElement(subitem, 'featuremenu')));
@@ -440,14 +440,11 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                 label: '@',
                 description: '@'
             },
-            compile: function (tElement, tAttr, transclude) {
+            compile: function (tElement, tAttr) {
                 if (tAttr['endline'] != 'false') {
                     tElement.append('<hr/>');
                 }
                 return  function (scope, element, attributes) {
-                    transclude(scope, function (clone) {
-                        element.find('ng-transclude').replaceWith(clone);
-                    });
                     scope.$watch('isCollapsed', function (newVal, oldVal) {
                         if (newVal != oldVal) {
                             scope.$root.$broadcast('layoutChange');
@@ -520,8 +517,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                     $scope.$on('menuChange', function (e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
                         // instate a scroller on the selected menupage withut using the css selector
                         if (page != 'search') {
-                            if (menuElem.children('[pagename="' + page + '"]').length === 0) {
-                                menuData[page]($scope, function (htmlData) { // here the 1st menu is invoked against the scope and so populated with data
+                            if ( page.indexOf('.')===-1 && menuElem.children('[pagename="' + page + '"]').length === 0 ) { // check its not a subpage and doesn't exist already
+                                menuData[page]($scope, function (htmlData) { // here the menu is invoked against the scope and so populated with data
                                     htmlData.appendTo(menuElem);
                                 });
                             }
@@ -668,12 +665,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
     directive('menuHead', ['menuSvc', function (menuSvc) {
         return {
             restrict: 'EA',
-            template: "<div id='mp-mainlevel'><ul>" +
+            template: "<div id='mp-mainlevel'><ul ng-transclude>" +
                 "</ul></div>",
             replace: true,
             transclude: true,
             scope: {},
-            controller: ['$scope', '$element', function ($scope, $element) {
+            controller: ['$scope', '$element', function ($scope) {
                 $scope.changeActiveItem = function (element) {
                     var menuitem = $(element);
                     if (menuitem.length && menuitem.is('a') && menuitem.parent('li')) {
@@ -682,17 +679,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                     }
                 };
             }],
-            compile: function (tElement, attr, transclude) {
+            compile: function (tElement) {
                 var ul = tElement.find('ul');
                 var elements = menuSvc.get();
-                angular.forEach(elements, function (value, key) {
-                    var elm = angular.element('<li></li>');
-                    elm.html('<a menupage="' + value.model + '" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
-                    elm.appendTo(ul);
-                });
-                return  function ($scope, $element) {
-                    transclude($scope, function (transItem) {
-                        ul.prepend(transItem);
+                return  function ($scope, $element,$attrs) {
+                    angular.forEach(elements, function (value, key) {
+                        var elm = angular.element('<li></li>');
+                        elm.html('<a menupage="' + value.model + '" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
+                        elm.appendTo(ul);
                     });
                     $element.find('a[menupage]').each(function () {
                         $(this).click(function () {
