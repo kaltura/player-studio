@@ -193,7 +193,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
             currentPage: '',
             setMenu: function (setTo) {
                 menuSvc.currentPage = setTo;
-                if (typeof  menuSvc.spinnerScope != 'undefined') {
+                if (typeof  menuSvc.spinnerScope != 'undefined' && setTo != 'search') {
                     menuSvc.spinnerScope.spin();
                 }
                 menuSvc.menuScope.$broadcast('menuChange', setTo);
@@ -321,8 +321,17 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                                 lastMenu = foundLabel.substr(0, lastChild);
                             }
                         }
+                        else if (menuPage.type == 'menu' && menuPage.model.indexOf('.') !== -1) {
+                            var previousMenu = eval(lastMenu.substr(0, lastMenu.lastIndexOf("['children']"))); // same as before but all together now...
+                            menuSvc.setMenu(previousMenu.model);
+                            $timeout(function () {
+                                menuSvc.setMenu(menuPage.model);
+                            })
+                        }
+                        else {
+                            menuSvc.setMenu(menuPage.model);
+                        }
                         menuSvc.menuScope.$broadcast('highlight', 'data.' + foundModel);
-                        menuSvc.setMenu(menuPage.model);
                         if (featureMenu.length) {
                             angular.forEach(featureMenu, function (value) {
                                 menuSvc.menuScope.$broadcast('openFeature', 'data.' + value.model);
