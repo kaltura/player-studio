@@ -331,12 +331,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                         else {
                             menuSvc.setMenu(menuPage.model);
                         }
-                        menuSvc.menuScope.$broadcast('highlight', 'data.' + foundModel);
                         if (featureMenu.length) {
                             angular.forEach(featureMenu, function (value) {
                                 menuSvc.menuScope.$broadcast('openFeature', 'data.' + value.model);
                             });
                         }
+                        $timeout(function(){
+                            menuSvc.menuScope.$broadcast('highlight', 'data.' + foundModel);
+                        });
                         return true;
                     }
                 }
