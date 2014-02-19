@@ -513,9 +513,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                 return {spinnerScope: null};
             },
             compile: function (tElement) {
-                var menuData = menuSvc.buildMenu('data'); // is cached internally in menuSVC.
                 var menuElem = tElement.find('#mp-base >  ul');
                 return function ($scope, $element, $attrs, controller, transclude) {
+                    var menuData = menuSvc.buildMenu('data'); // is cached internally in menuSVC.
                     menuSvc.spinnerScope = controller.spinnerScope;
                     transclude($scope, function (clone) {
                         angular.forEach(clone, function (elem) {
