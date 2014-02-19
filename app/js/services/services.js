@@ -136,10 +136,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         "entry_id": previewEntry, //$scope.previewEntry
                         "readyCallback": function ( playerId ) {
                             document.getElementById(playerId).kBind("layoutBuildDone", function () {
-	                            if (typeof callback == 'function') {
-	                                callback();
-	                            }
-	                        });
+                                if (typeof callback == 'function') {
+                                    callback();
+                                }
+                            });
                         }
                     });
 

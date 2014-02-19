@@ -133,6 +133,7 @@ module.exports = function(grunt) {
             },
             libs:{
                 files:{
+                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js',
                     'app/bower_components/angular-ui-select2/src/select2.min.js':'app/bower_components/angular-ui-select2/src/select2.js',
                     'app/bower_components/angular-ui-sortable/src/sortable.min.js':'app/bower_components/angular-ui-sortable/src/sortable.js'
                 }
