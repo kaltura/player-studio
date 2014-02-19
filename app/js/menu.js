@@ -321,7 +321,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                                 lastMenu = foundLabel.substr(0, lastChild);
                             }
                         }
-                        else if (menuPage.type == 'menu' && menuPage.model.indexOf('.') !== -1) {
+                        if (menuPage.type == 'menu' && menuPage.model.indexOf('.') !== -1) {
                             var previousMenu = eval(lastMenu.substr(0, lastMenu.lastIndexOf("['children']"))); // same as before but all together now...
                             menuSvc.setMenu(previousMenu.model);
                             $timeout(function () {
