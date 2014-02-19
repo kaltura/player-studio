@@ -488,7 +488,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
             restrict: 'EA',
-            priority: 10000,
+            priority: 100,
             transclude: true,
             controller: function ($scope) {
                 $scope.scroller = null;
@@ -496,6 +496,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                 $scope.menuInitDone = false;
                 $scope.data = $scope.$parent.data;
                 $scope.settings = $scope.$parent.settings;
+                return {spinnerScope: null}
             },
             compile: function (tElement) {
                 var menuData = menuSvc.buildMenu('data'); // is cached internally in menuSVC.
@@ -517,15 +518,23 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                     $scope.$on('menuChange', function (e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
                         // instate a scroller on the selected menupage withut using the css selector
                         if (page != 'search') {
-                            if ( page.indexOf('.')===-1 && menuElem.children('[pagename="' + page + '"]').length === 0 ) { // check its not a subpage and doesn't exist already
+                            if (page.indexOf('.') === -1 && menuElem.children('[pagename="' + page + '"]').length === 0) { // check its not a subpage and doesn't exist already
+                                if (controller.spinnerScope) {
+                                    controller.spinnerScope.spin();
+                                }
                                 menuData[page]($scope, function (htmlData) { // here the menu is invoked against the scope and so populated with data
                                     htmlData.appendTo(menuElem);
+                                    if (controller.spinnerScope) {
+                                        controller.spinnerScope.endSpin();
+                                    }
                                 });
                             }
+
                             if (timeVar) {
                                 $timeout.cancel(timeVar);
                             }
                             timeVar = $timeout(function () {
+
                                 if ($scope.scroller) {
                                     $scope.scroller.mCustomScrollbar('destroy');
                                     $scope.scroller = null;
@@ -682,7 +691,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
             compile: function (tElement) {
                 var ul = tElement.find('ul');
                 var elements = menuSvc.get();
-                return  function ($scope, $element,$attrs) {
+                return  function ($scope, $element, $attrs) {
                     angular.forEach(elements, function (value, key) {
                         var elm = angular.element('<li></li>');
                         elm.html('<a menupage="' + value.model + '" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
