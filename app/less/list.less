@@ -18,6 +18,12 @@ html {
 }
 
 #list {
+  .playerThumbWrapper {
+    width:160px;
+    @media(min-width:1200px){
+      width:200px;
+    }
+  }
   background: #f4f4f4;
   > #header {
     position: absolute;
@@ -35,6 +41,7 @@ html {
   }
   #listsearch {
     .input-group-addon {
+      height:34px;
       background: none;
       i {
         font-size: 19px;
@@ -44,6 +51,18 @@ html {
     input {
       border-radius: 0 5px 5px 0;
       border-left: none;
+     &:focus,&:active
+       {
+       border-color:#CCC;
+        outline: none !important;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        -webkit-transition: none;
+        -moz-transition: none;
+        -ms-transition: none;
+        -o-transition: none;
+        transition: none;
+      }
     }
     ul.typeahead.dropdown-menu {
       max-width: 360px;
@@ -55,12 +74,8 @@ html {
   #kplayer {
     margin: auto;
   }
-  .playerThumbWrapper {
-    padding: 0;
-  }
   .playerThumb {
     width: 100%;
-    max-width: 160px;
   }
   #playerList {
     background: white;
@@ -76,7 +91,7 @@ html {
       padding-bottom: 105px;
     }
     .idCol {
-      width: 70px;
+      width: 81px;
     }
     > tr.row:last-child {
       margin: 0;
@@ -84,12 +99,12 @@ html {
       border-top: 1px solid #dddddd;
     }
     #tableHead {
-      .idCol{
-        margin-left: 2px;
-      }
-      .idCol+div{
-        margin-left: 0;
-      }
+//      .idCol{
+//        margin-left: 2px;
+//      }
+//      .idCol+div{
+//        margin-left: 0;
+//      }
       background: #F4F4F4;
       background-image: -ms-linear-gradient(bottom, #F4F4F4 0%, #FAFAFA 100%);
       background-image: -moz-linear-gradient(bottom, #F4F4F4 0%, #FAFAFA 100%);
@@ -104,12 +119,15 @@ html {
           color: #333;
         }
          //border-right:1px solid #ccc;
-        padding: 4px;
+        padding: 10px;
         white-space: nowrap;
         font-weight: bold;
         margin-left: 1px;
         &:last-child{
           border-right:none;
+        }
+        &.text-center{
+          padding-left: 0;
         }
       }
     }
@@ -119,7 +137,7 @@ html {
       }
       td {
         border: 1px solid #ddd;
-        padding: 4px;
+        padding: 10px;
         &:first-child {
           border-left:none;
         }
@@ -142,9 +160,9 @@ html {
         }
       }
       .actionBtns {
+        padding-left:0;
         > .inner {
           max-width: 300px;
-          margin: auto;
         }
         button {
           width: 96px;

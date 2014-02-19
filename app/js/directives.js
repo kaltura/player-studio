@@ -20,6 +20,20 @@ DirectivesModule.directive('timeago', [function() {
         }
     };
 }]);
+DirectivesModule.directive('hiddenValue', [function() {
+    return {
+        template: '<input type="hidden" value="{{model}}"/>',
+        scope: {
+            model: '='
+        },
+        controller:function($scope,$element,$attrs){
+            if ($attrs['initvalue']){
+                $scope.model = $attrs['initvalue'];
+            }
+        },
+        restrict: 'EA'
+    };
+}]);
 DirectivesModule.directive('modelRadio', ['menuSvc', function(menuSvc) {
     return {
         restrict: 'EA',

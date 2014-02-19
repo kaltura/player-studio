@@ -72,8 +72,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var previewEntryObj;
         var playerId = 'kVideoTarget';
         var currentRefresh = null;
-
-        var callback = function() {
+        var defaultCallback = function() {
             currentRefresh.resolve(true);
             playersService.refreshNeeded = false;
             currentRefresh = null;
@@ -83,7 +82,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             if (!currentRefresh) {
                 currentRefresh = $q.defer();
                 try {
-                    playersService.renderPlayer(callback);
+                    playersService.renderPlayer(defaultCallback);
                 }
                 catch (e) {
                     currentRefresh.reject(e);
@@ -92,11 +91,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             return currentRefresh.promise;
         };
         var playersService = {
-            clearCurrentRefresh:function(){
+            clearCurrentRefresh: function() {
                 currentRefresh = null;
             },
             'refreshNeeded': false,
-            getCurrentRefresh:function(){
+            getCurrentRefresh: function() {
                 return currentRefresh;
             },
             'clearCurrentPlayer': function() {
@@ -121,7 +120,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     var data2Save = angular.copy(currentPlayer.config);
                     data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
                     var flashvars = {'jsonConfig': angular.toJson(data2Save)}; // update the player with the new configuration
-                    angular.extend(flashvars, data2Save.uiVars);
                     if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
                         angular.extend(flashvars, {'wmode': 'transparent'});
                     }
@@ -129,19 +127,20 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     $("#Companion_300x250").empty();
                     $("#Companion_728x90").empty();
                     window.mw.setConfig('Kaltura.LeadWithHTML5', true);
-                    window.jsCallbackReady = function(playerId) {
-                        document.getElementById(playerId).kBind("layoutBuildDone", function() {
-                            if (typeof callback == 'function') {
-                                callback();
-                            }
-                        });
-                    };
+                    window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
                     kWidget.embed({
                         "targetId": playerId, // hard coded for now?
                         "wid": "_" + currentPlayer.partnerId, //$scope.data.partnerId,
                         "uiconf_id": currentPlayer.id,// $scope.data.id,
                         "flashvars": flashvars,
-                        "entry_id": previewEntry //$scope.previewEntry
+                        "entry_id": previewEntry, //$scope.previewEntry
+                        "readyCallback": function ( playerId ) {
+                            document.getElementById(playerId).kBind("layoutBuildDone", function () {
+	                            if (typeof callback == 'function') {
+	                                callback();
+	                            }
+	                        });
+                        }
                     });
 
                 }
@@ -352,10 +351,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
                 var rejectText = $filter('i18n')('Update player action was rejected: ');
+
+                var method = 'get';
+                var url = window.kWidget.getPath() + 'services.php';
+                var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")};
+                if (window.IE < 10) {
+                    params["callback"] = 'JSON_CALLBACK';
+                    method = 'jsonp';
+                }
                 $http({
-                    url: window.kWidget.getPath() + 'services.php',
-                    method: "GET",
-                    params: {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")}
+                    url: url,
+                    method: method,
+                    params: params
                 }).success(function(data, status, headers, config) {
 // clean some redundant data from received object
                     if (data['uiConfId']) {
@@ -502,7 +509,14 @@ KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, ap
 //           deferred.resolve(result.data);
 //        });
 //
-        $http.get(window.kWidget.getPath() + 'services.php?service=studioService').then(function(result) {
+
+        var method = 'get';
+        var url = window.kWidget.getPath() + 'services.php?service=studioService';
+        if (window.IE < 10) {
+            url += '&callback=JSON_CALLBACK';
+            method = 'jsonp';
+        }
+        $http[method](url).then(function(result) {
             var data = result.data;
             if (typeof data == 'object') // json is OK
                 deferred.resolve(result.data);
@@ -522,11 +536,15 @@ KMCServices.factory('loadINI', ['$http', function($http) {
     return {
         'getINIConfig': function() {
             if (!iniConfig) {
-                iniConfig = $http.get('studio.ini', {transformResponse: function(data, headers) {
-                    var config = data.match(/widgets\.studio\.config \= \'(.*)\'/)[1];
-                    data = angular.fromJson(config);
-                    return data;
-                }});
+                iniConfig = $http.get('studio.ini', {
+                        responseType: 'text',
+                        headers: {'Content-type': 'text/plain'},
+                        transformResponse: function(data, headers) {
+                            var config = data.match(/widgets\.studio\.config \= \'(.*)\'/)[1];
+                            data = angular.fromJson(config);
+                            return data;
+                        }}
+                );
             }
             return iniConfig;
         }
@@ -651,19 +669,19 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
                     api.doRequest(params, function(data) {
                         //timeout will trigger another $digest cycle that will trigger the "then" function
 //                        $timeout(function() {
-                            if (data.code) {
-                                if (data.code == "INVALID_KS") {
-                                    localStorageService.remove('ks');
-                                    $location.path("/login");
-                                }
-                                requestNotificationChannel.requestEnded('api');
-                                deferred.reject(data.code);
-                            } else {
-                                apiCache.put(params_key, data);
-                                apiService.useCache = true;
-                                requestNotificationChannel.requestEnded('api');
-                                deferred.resolve(data);
+                        if (data.code) {
+                            if (data.code == "INVALID_KS") {
+                                localStorageService.remove('ks');
+                                $location.path("/login");
                             }
+                            requestNotificationChannel.requestEnded('api');
+                            deferred.reject(data.code);
+                        } else {
+                            apiCache.put(params_key, data);
+                            apiService.useCache = true;
+                            requestNotificationChannel.requestEnded('api');
+                            deferred.resolve(data);
+                        }
 //                        });
                     });
                 });

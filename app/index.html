@@ -5,11 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script type="text/javascript" src="lib/modernizer.min.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script>
-	    document.location = "ie8.html";
-        //document.documentElement.className += " IE8";
+    <script type="text/javascript">
+        window.IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
+        if (IE < 11) {
+            document.documentElement.className += ' lt-ie9' + ' ie' + IE;
+        }
     </script>
+    <!--[if lt IE 9]>
     <script type="text/javascript" src="lib/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="lib/html5shiv.js"></script>
     <script type="text/javascript" src="lib/respond.min.js"></script>
@@ -18,6 +20,7 @@
     <![endif]-->
     <!--[if gte IE 9]><!-->
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
+	<script type='text/javascript' src='lib/jquery.xdomainrequest.min.js'></script>
     <!--<![endif]-->
     <title>Player Studio - JS Version</title>
     <!-- bootstrap compiled and minified CSS -->

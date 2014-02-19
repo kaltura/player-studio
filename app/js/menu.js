@@ -133,6 +133,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                     return '<div info-action/>';
                 case "sortOrder":
                     return '<div sort-order/>';
+                case "hidden":
+                    return '<span hidden-value/>';
             }
         };
         var searchGet = function(obj, target) { // get object by exact path
@@ -370,9 +372,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                     if ($scope.featureCheckbox) {
                         if (!$scope.featureModelCon) {
                             if ($scope.parentModel)
-                                $scope.featureModelCon = $scope.parentModel[$scope.FeatureModel] = {};
+                                $scope.featureModelCon = $scope.parentModel[$scope.FeatureModel] = {_featureEnabled: false};
                             else
-                                $scope.featureModelCon = {};
+                                $scope.featureModelCon = {_featureEnabled: false};
                         }
                         $scope.isDisabled = ($scope.featureModelCon._featureEnabled) ? false : true;
                     }
@@ -426,11 +428,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                         $scope.isCollapsed = false;
                     }
                 };
-                $scope.openTooltip = function($event) {
-                    menuSvc.currentTooltip = $event.target;
-                    $($event.target).trigger('customShow');
+                $scope.toggleFeature = function () {
+                    $scope.isCollapsed = !$scope.isCollapsed;
                 };
-
             }
             ],
             scope: {
@@ -447,16 +447,16 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                     });
                     scope.$watch('isCollapsed', function(newVal, oldVal) {
                         if (newVal != oldVal) {
-                            scope.$emit('layoutChange');
+                            scope.$root.$broadcast('layoutChange');
                         }
                     });
-                    var initDone = menuSvc.menuScope.$on('menuInitDone', function() {
-                        menuSvc.linkFn4FeatureCheckbox(scope);
-                        initDone(); //remove the $on listener
-                    });
-                    scope.$on('openFeature', function(e, args) {
+                    //  var initDone = menuSvc.menuScope.$on('menuInitDone', function () {
+                    menuSvc.linkFn4FeatureCheckbox(scope);
+                    // initDone(); //remove the $on listener
+                    //  });
+                    scope.$on('openFeature', function (e, args) {
                         if (args == attributes['model']) {
-                            scope.isCollapsed = false;
+                            scope.openFeature();
                         }
                     });
                 };
@@ -549,7 +549,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                                 }
                                 $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
                                 if (!$scope.scroller) {
-                                    $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '100%'});
+                                    $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '99%'});
                                 }
                                 timeVar = null;
                             }, 200);
@@ -565,47 +565,21 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', function(editableP
                             timeVar1 = null;
                         }, 200);
                     });
-                    $timeout(function() {
-                            // var page = $routeParams['menuPage'] | 'basicDisplay';
-                            menuSvc.setMenu('basicDisplay');
-                            logTime('menuInitDone');
-                            $('div.section[ng-view]').on('click', menuSvc.closeTooltips);
-                            $scope.menuInitDone = true;
-                            $scope.$root.$broadcast('menuInitDone');
-//                            var i = 1;
-//                            var menuQue = [];
-//                            var addMenuPage = function() {
-//                                var queue = $q.defer();
-//                                var pageData = menuData[i].data($scope, function(htmlData) { // here the 1st menu is invoked against the scope and so populated with data
-//                                    menuHTML[i] = htmlData;
-//                                    queue.resolve();
-//                                });
-//                                $templateCache.put(menuData[i].key, pageData);
-//                                i++;
-//                                return queue.promise;
-//                            };
-//                            if (menuHTML.length === 0) {
-//                                while (i < menuData.length - 2) {
-//                                    menuQue[i] = addMenuPage().then(function() {
-//                                        addMenuPage();
-//                                    });
-//                                }
-//                            }
-//                            $q.all(menuQue).then(function() {
-//                                logTime('allMenuPagesRendered');
-//                                //   window.tc = $templateCache;
-//                                //cl(menuHTML);
-//                            });
-                        }, 200
-                    ).then(function() {
-                            $timeout(function() {
-                                if (!$scope.newPlayer) {
-                                    $scope.playerEdit.$setPristine();
-                                }
-                            }, 500);
-                        });
-                }
-                    ;
+                    $timeout(function () {
+                        // var page = $routeParams['menuPage'] | 'basicDisplay';
+                        menuSvc.setMenu('basicDisplay');
+                        logTime('menuInitDone');
+                        $('div.section[ng-view]').on('click', menuSvc.closeTooltips);
+                        $scope.menuInitDone = true;
+                        $scope.$root.$broadcast('menuInitDone');
+                    }, 200).then(function () {
+                        $timeout(function () {
+                            if (!$scope.newPlayer) {
+                                $scope.playerEdit.$setPristine();
+                            }
+                        }, 500);
+                    });
+                };
             }
         }
             ;

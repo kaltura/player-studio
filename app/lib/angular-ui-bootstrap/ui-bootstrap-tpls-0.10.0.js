@@ -2198,7 +2198,8 @@ angular.module('ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap.
                             }
 
                             function hideTooltipBind() {
-                                scope.$apply(function() {
+                                /////CHANGED CODE BY NADAV // PLAYER-STUDIO RELATED
+                                scope.$safeApply(function() {
                                     hide();
                                 });
                             }
@@ -2211,7 +2212,7 @@ angular.module('ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap.
                                 if (!scope.tt_content) {
                                     return angular.noop;
                                 }
-
+                                scope.$root.$broadcast('closeTooltips');
                                 createTooltip();
 
                                 // If there is a pending remove transition, we must cancel it, lest the
@@ -2283,6 +2284,7 @@ angular.module('ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap.
                              * Observe the relevant attributes.
                              */
                             attrs.$observe(type, function(val) {
+                                /////CHANGED CODE BY NADAV // PLAYER-STUDIO RELATED
                                 if (val.indexOf('$scope') >= 0) {
                                     var model = scope.$parent.$eval(val.substr(val.indexOf('.') + 1));
                                     if (typeof model == 'string') {
@@ -2343,12 +2345,16 @@ angular.module('ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap.
                             // if a tooltip is attached to <body> we need to remove it on
                             // location change as its parent scope will probably not be destroyed
                             // by the change.
+                /////CHANGED CODE BY NADAV // PLAYER-STUDIO RELATED
+                            var  closeTooltipOnLocationChangeSuccess = function() {
+                                if (scope.tt_isOpen) {
+                                    hide();
+                                }
+                            };
+
+                            scope.$on('closeTooltips', closeTooltipOnLocationChangeSuccess);
                             if (appendToBody) {
-                                scope.$on('$locationChangeSuccess', function closeTooltipOnLocationChangeSuccess() {
-                                    if (scope.tt_isOpen) {
-                                        hide();
-                                    }
-                                });
+                                scope.$on('$locationChangeSuccess', closeTooltipOnLocationChangeSuccess);
                             }
 
                             // Make sure tooltip is destroyed and removed.

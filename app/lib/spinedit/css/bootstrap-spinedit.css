@@ -66,12 +66,17 @@ div.spinedit .glyphicon-chevron-down {
 div.spinedit .glyphicon-chevron-up {
     top: -2px;
     left: 0px;
+    width: 14px;
 }
 
 div.spinedit .glyphicon-chevron-down {
     top: 0px;
     left: -1px;
+    margin-top: 0px;
+    padding-top: 1px;
     border-top: 1px solid black;
+    width: 15px;
+
 }
 
 
