@@ -326,7 +326,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', functi
                             menuSvc.setMenu(previousMenu.model);
                             $timeout(function () {
                                 menuSvc.setMenu(menuPage.model);
-                            })
+                            });
                         }
                         else {
                             menuSvc.setMenu(menuPage.model);
