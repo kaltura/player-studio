@@ -19,7 +19,7 @@ DirectivesModule.directive('multipleValueInput', function() {
             $scope.splitChar = $attrs['splitChar'] || ';';
             if ($scope.model) {
                 $scope.splitModel = $scope.model.split($scope.splitChar);
-                if ($scope.splitModel[$scope.splitModel.length-1] == '') {
+                if ($scope.splitModel[$scope.splitModel.length-1] === '') {
                     $scope.splitModel.splice($scope.splitModel.length-1, 1);
                 }
             }
@@ -44,7 +44,7 @@ DirectivesModule.directive('multipleValueInput', function() {
                         $scope.model = str;
                     }
                 });
-            }
+            };
         }
-    }
+    };
 });
