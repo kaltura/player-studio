@@ -105,6 +105,7 @@ module.exports = function(grunt) {
                     'app/lib/es5-shim.min.js',
                     'bower_components/selectivizr/selectivizr.js',
                     'app/lib/jquery-1.10.2.min.js',
+                    'app/lib/jquery.xdomainrequest.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.mouse.min.js',
@@ -132,6 +133,7 @@ module.exports = function(grunt) {
             },
             libs:{
                 files:{
+                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js',
                     'app/bower_components/angular-ui-select2/src/select2.min.js':'app/bower_components/angular-ui-select2/src/select2.js',
                     'app/bower_components/angular-ui-sortable/src/sortable.min.js':'app/bower_components/angular-ui-sortable/src/sortable.js'
                 }

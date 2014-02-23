@@ -72,8 +72,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var previewEntryObj;
         var playerId = 'kVideoTarget';
         var currentRefresh = null;
-
-        var callback = function () {
+        var defaultCallback = function () {
             currentRefresh.resolve(true);
             playersService.refreshNeeded = false;
             currentRefresh = null;
@@ -83,7 +82,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             if (!currentRefresh) {
                 currentRefresh = $q.defer();
                 try {
-                    playersService.renderPlayer(callback);
+                    playersService.renderPlayer(defaultCallback);
                 }
                 catch (e) {
                     currentRefresh.reject(e);
@@ -128,19 +127,20 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     $("#Companion_300x250").empty();
                     $("#Companion_728x90").empty();
                     window.mw.setConfig('Kaltura.LeadWithHTML5', true);
-                    window.jsCallbackReady = function (playerId) {
-                        document.getElementById(playerId).kBind("layoutBuildDone", function () {
-                            if (typeof callback == 'function') {
-                                callback();
-                            }
-                        });
-                    };
+                    window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
                     kWidget.embed({
                         "targetId": playerId, // hard coded for now?
                         "wid": "_" + currentPlayer.partnerId, //$scope.data.partnerId,
                         "uiconf_id": currentPlayer.id,// $scope.data.id,
                         "flashvars": flashvars,
-                        "entry_id": previewEntry //$scope.previewEntry
+                        "entry_id": previewEntry, //$scope.previewEntry
+                        "readyCallback": function (playerId) {
+                            document.getElementById(playerId).kBind("layoutBuildDone", function () {
+                                if (typeof callback == 'function') {
+                                    callback();
+                                }
+                            });
+                        }
                     });
 
                 }
@@ -351,10 +351,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
                 var rejectText = $filter('i18n')('Update player action was rejected: ');
+
+                var method = 'get';
+                var url = window.kWidget.getPath() + 'services.php';
+                var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")};
+                if (window.IE < 10) {
+                    params["callback"] = 'JSON_CALLBACK';
+                    method = 'jsonp';
+                }
                 $http({
-                    url: window.kWidget.getPath() + 'services.php',
-                    method: "GET",
-                    params: {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")}
+                    url: url,
+                    method: method,
+                    params: params
                 }).success(function (data, status, headers, config) {
 // clean some redundant data from received object
                     if (data['uiConfId']) {
@@ -430,13 +438,12 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($root
 
 }]);
 
-KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (requestNotificationChannel) {
+KMCServices.directive('canSpin', [function () {
     return {
-        restrict: 'EA',
-        scope: {},
-        replace: true,
-        template: '<div class=\'loadingOverlay\'><a><div id=\'spinWrapper\'></div></a></div>',
-        controller: ['$scope', '$element', function ($scope, $element) {
+        require: ['?^loadingWidget', '?^navmenu'],
+        priority: 1000,
+        link: function ($scope, $element, $attrs, controllers) {
+            $scope.target = $('<div class="spinWrapper"></div>').prependTo($element);
             $scope.spinner = null;
             $scope.spinRunning = false;
             $scope.opts = {
@@ -468,22 +475,36 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
             $scope.spin = function () {
                 if ($scope.spinRunning)
                     return;
-                var target = $element.find('#spinWrapper');
+
                 if ($scope.spinner === null)
                     initSpin();
-                $scope.spinner.spin(target[0]);
+                $scope.spinner.spin($scope.target[0]);
                 $scope.spinRunning = true;
             };
-        }],
-        link: function (scope, element) {
+            angular.forEach(controllers, function (controller) {
+                if (typeof controller != 'undefined')
+                    controller.spinnerScope = $scope;
+            });
+        }
+    };
+}]);
+KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (requestNotificationChannel) {
+    return {
+        restrict: 'EA',
+        scope: {},
+        replace: true,
+        controller: function () {
+        },
+        template: '<div class=\'loadingOverlay\'><a can-spin></a></div>',
+        link: function (scope, element, attrs, controller) {
             element.hide();
             var startRequestHandler = function () {
                 element.show();
-                scope.spin();
+                controller.spinnerScope.spin();
             };
             var endRequestHandler = function () {
                 element.hide();
-                scope.endSpin();
+                controller.spinnerScope.endSpin();
             };
             requestNotificationChannel.onRequestStarted(scope, startRequestHandler);
             requestNotificationChannel.onRequestEnded(scope, endRequestHandler);
@@ -504,7 +525,7 @@ KMCServices.factory('editableProperties', ['$q', 'api', '$http', function ($q, a
 
         var method = 'get';
         var url = window.kWidget.getPath() + 'services.php?service=studioService';
-        if (window.IE < 10){
+        if (window.IE < 10) {
             url += '&callback=JSON_CALLBACK';
             method = 'jsonp';
         }
@@ -528,11 +549,15 @@ KMCServices.factory('loadINI', ['$http', function ($http) {
     return {
         'getINIConfig': function () {
             if (!iniConfig) {
-                iniConfig = $http.get('studio.ini', {transformResponse: function (data, headers) {
-                    var config = data.match(/widgets\.studio\.config \= \'(.*)\'/)[1];
-                    data = angular.fromJson(config);
-                    return data;
-                }});
+                iniConfig = $http.get('studio.ini', {
+                        responseType: 'text',
+                        headers: {'Content-type': 'text/plain'},
+                        transformResponse: function (data, headers) {
+                            var config = data.match(/widgets\.studio\.config \= \'(.*)\'/)[1];
+                            data = angular.fromJson(config);
+                            return data;
+                        }}
+                );
             }
             return iniConfig;
         }

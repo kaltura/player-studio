@@ -210,7 +210,6 @@ angular.module('colorpicker.module', [])
             require: '?ngModel',
             restrict: 'A',
             link: function($scope, elem, attrs, ngModel) {
-
                 var
                     template = '<div class="colorpicker dropdown-menu">' +
                         '<div class="clickarea">' +
@@ -259,7 +258,7 @@ angular.module('colorpicker.module', [])
                     });
                 }
 
-                elem.bind('$destroy', function() {
+                $scope.$on('$destroy', function() {
                     colorpickerTemplate.remove();
                 });
 
