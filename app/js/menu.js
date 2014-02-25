@@ -73,12 +73,14 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
         }
     });
 }]);
-KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootScope', function(editableProperties, $timeout, $compile,$rootScope) {
+KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$rootScope', function(editableProperties, $timeout, $compile, $rootScope) {
         var menudata = null;
         var promise = editableProperties
             .then(function(data) {
                 menudata = data;
             });
+        var menuItems = [];
+        var menuFn = {};
         var refreshableDirectives = function(jsonName) {
             switch (jsonName) {
                 case 'modaledit':
@@ -134,6 +136,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
                     return '<div info-action/>';
                 case "sortOrder":
                     return '<div sort-order/>';
+                case "hidden":
+                    return '<span hidden-value/>';
                 case "multiinput":
                     return '<div multiple-value-input>';
             }
@@ -192,6 +196,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
             currentPage: '',
             setMenu: function(setTo) {
                 menuSvc.currentPage = setTo;
+                if (typeof  menuSvc.spinnerScope != 'undefined' && setTo != 'search') {
+                    menuSvc.spinnerScope.spin();
+                }
                 menuSvc.menuScope.$broadcast('menuChange', setTo);
             },
             menuCache: null,
@@ -210,19 +217,16 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
                 }
             },
             buildMenu: function(baseData) {
-                if (!menuSvc.menuCache) {
+                if (menuItems.length === 0) {
                     var menuJsonObj = menuSvc.get(); // gets the  editableProperties manifest json
-                    var menuElm = angular.element('<ul></ul>');
                     angular.forEach(menuJsonObj, function(value) {
-                        menuElm.append(menuSvc.buildMenuItem(value, menuElm, baseData));
+                        var menuItem = menuSvc.buildMenuItem(value, baseData);
+                        menuFn[menuItem.attr('pagename')] = $compile(menuItem);
                     });
-                    menuSvc.menuCache = menuElm; //TODO: we should have a hash table set by player version ?
-                    return menuElm;
                 }
-                else return menuSvc.menuCache;
+                return menuFn;
             },
-
-            buildMenuItem: function(item, targetMenu, BaseData, parentModel) {
+            buildMenuItem: function(item, BaseData, parentModel) {
                 var elm = '';
                 switch (item.type) {
                     case  'menu':
@@ -251,7 +255,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
                     angular.forEach(item.children, function(subitem) {
                         switch (subitem.type) {
                             case 'menu':
-                                parent.append(menuSvc.buildMenuItem(subitem, parent, item.model, item));
+                                parent.append(menuSvc.buildMenuItem(subitem, item.model, item));
                                 break;
                             case 'featuremenu':
                                 parent.append(writeChildren(subitem, writeFormElement(subitem, 'featuremenu')));
@@ -317,10 +321,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
                                 break;
                         }
                         sectionsDir = angular.element(sectionsDir);
-                         sectionsDir.attr('heading', item.sections.title);
-                        //var tabsetScope = $rootScope.$new();
-                       // tabsetScope.heading = item.sections.title;
-                        //sectionsDir = $compile(sectionsDir)(tabsetScope);
+                        sectionsDir.attr('heading', item.sections.title);
+                        // var tabsetScope = $rootScope.$new();
+                        // tabsetScope.heading = item.sections.title;
+                        // sectionsDir = $compile(sectionsDir)(tabsetScope);
                         if (item.sections.type == 'tabs') {
                             var tabs = [];
                             var tabsSetDir = angular.element('<div tabset></div>').appendTo(sectionsDir);
@@ -358,13 +362,24 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
                                 lastMenu = foundLabel.substr(0, lastChild);
                             }
                         }
-                        menuSvc.menuScope.$broadcast('highlight', 'data.' + foundModel);
-                        menuSvc.setMenu(menuPage.model);
+                        if (menuPage.type == 'menu' && menuPage.model.indexOf('.') !== -1) {
+                            var previousMenu = eval(lastMenu.substr(0, lastMenu.lastIndexOf("['children']"))); // same as before but all together now...
+                            menuSvc.setMenu(previousMenu.model);
+                            $timeout(function() {
+                                menuSvc.setMenu(menuPage.model);
+                            });
+                        }
+                        else {
+                            menuSvc.setMenu(menuPage.model);
+                        }
                         if (featureMenu.length) {
                             angular.forEach(featureMenu, function(value) {
                                 menuSvc.menuScope.$broadcast('openFeature', 'data.' + value.model);
                             });
                         }
+                        $timeout(function() {
+                            menuSvc.menuScope.$broadcast('highlight', 'data.' + foundModel);
+                        });
                         return true;
                     }
                 }
@@ -425,9 +440,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
             },
             linkFn4FeatureCheckbox: function(scope) {
                 if (scope.featureCheckbox) {
-                    scope.$watch(function() {
-                        return scope.featureModelCon._featureEnabled;
-                    }, function(newval, oldVal) {
+                    scope.$watch('featureModelCon._featureEnabled', function(newval, oldVal) {
                         if (newval != oldVal) {
                             if (!newval) {// feature disabled  - delete control data
                                 //scope.$parent.$broadcast('disableControls');
@@ -476,25 +489,17 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
                 $scope.toggleFeature = function() {
                     $scope.isCollapsed = !$scope.isCollapsed;
                 };
-                $scope.openTooltip = function($event) {
-                    menuSvc.currentTooltip = $event.target;
-                    $($event.target).trigger('customShow');
-                };
-
             }
             ],
             scope: {
                 label: '@',
                 description: '@'
             },
-            compile: function(tElement, tAttr, transclude) {
+            compile: function(tElement, tAttr) {
                 if (tAttr['endline'] != 'false') {
                     tElement.append('<hr/>');
                 }
                 return  function(scope, element, attributes) {
-                    transclude(scope, function(clone) {
-                        element.find('ng-transclude').replaceWith(clone);
-                    });
                     scope.$watch('isCollapsed', function(newVal, oldVal) {
                         if (newVal != oldVal) {
                             scope.$root.$broadcast('layoutChange');
@@ -538,22 +543,21 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
             templateUrl: 'template/menu/navmenu.html',
             replace: true,
             restrict: 'EA',
-            priority: 10000,
+            priority: 100,
             transclude: true,
             controller: function($scope) {
                 $scope.scroller = null;
                 menuSvc.menuScope = $scope;
                 $scope.menuInitDone = false;
+                $scope.data = $scope.$parent.data;
+                $scope.settings = $scope.$parent.settings;
+                return {spinnerScope: null};
             },
-            compile: function(tElement, tAttrs, transclude) {
+            compile: function(tElement) {
                 var menuElem = tElement.find('#mp-base >  ul');
-                var menuHtml = menuSvc.getPutCompliedMenu2Cache();
-                if (!menuHtml) {
-                    var menuData = menuSvc.buildMenu('data');
-                    menuHtml = $compile(menuData.contents());
-                    menuSvc.getPutCompliedMenu2Cache(menuHtml);
-                }
-                return function($scope, $element) {
+                return function($scope, $element, $attrs, controller, transclude) {
+                    var menuData = menuSvc.buildMenu('data'); // is cached internally in menuSVC.
+                    menuSvc.spinnerScope = controller.spinnerScope;
                     transclude($scope, function(clone) {
                         angular.forEach(clone, function(elem) {
                             if ($(elem).is('li')) {
@@ -564,19 +568,24 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
                             }
                         });
                     });
-                    menuHtml($scope, function(clone) { // here the menu is invoked aginst the scope and so populated with data
-                        menuElem.prepend(clone);
-                    });
                     var timeVar = null;
                     var timeVar1 = null;
                     $scope.menuInitDone = false;
                     $scope.$on('menuChange', function(e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
                         // instate a scroller on the selected menupage withut using the css selector
                         if (page != 'search') {
+                            if (page.indexOf('.') === -1 && menuElem.children('[pagename="' + page + '"]').length === 0) { // check its not a subpage and doesn't exist already
+                                menuData[page]($scope, function(htmlData) { // here the menu is invoked against the scope and so populated with data
+                                    htmlData.appendTo(menuElem);
+                                });
+                            }
                             if (timeVar) {
                                 $timeout.cancel(timeVar);
                             }
                             timeVar = $timeout(function() {
+                                if (menuSvc.spinnerScope) {
+                                    menuSvc.spinnerScope.endSpin();
+                                }
                                 if ($scope.scroller) {
                                     $scope.scroller.mCustomScrollbar('destroy');
                                     $scope.scroller = null;
@@ -586,7 +595,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
                                     $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '99%'});
                                 }
                                 timeVar = null;
-                            }, 200);
+                            });
                         }
                     });
                     $scope.$on('layoutChange', function() {
@@ -713,41 +722,32 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile','$rootS
             }
         };
     }]).
-    directive('menuHead', ['menuSvc', function(menuSvc) {
+    directive('menuHead', ['menuSvc','$compile', function(menuSvc,$compile) {
         return {
             restrict: 'EA',
-            template: "<div id='mp-mainlevel'><ul>" +
+            template: "<div id='mp-mainlevel'><ul ng-transclude>" +
                 "</ul></div>",
             replace: true,
             transclude: true,
             scope: {},
-            controller: ['$scope', '$element', function($scope, $element) {
-                $scope.changeActiveItem = function(element) {
-                    var menuitem = $(element);
+            controller: ['$scope', '$element', function($scope) {
+                $scope.changeActiveItem = function(menupage, $event) {
+                    menuSvc.setMenu(menupage);
+                    var menuitem = $($event.target);
                     if (menuitem.length && menuitem.is('a') && menuitem.parent('li')) {
                         $(menuitem).addClass('active');
                         $(menuitem).parent('li').siblings('li').find('a').removeClass('active');
                     }
                 };
             }],
-            compile: function(tElement, attr, transclude) {
+            compile: function(tElement) {
                 var ul = tElement.find('ul');
                 var elements = menuSvc.get();
-                angular.forEach(elements, function(value, key) {
-                    var elm = angular.element('<li></li>');
-                    elm.html('<a menupage="' + value.model + '" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
-                    elm.appendTo(ul);
-                });
-                return  function($scope, $element) {
-                    transclude($scope, function(transItem) {
-                        ul.prepend(transItem);
-                    });
-                    $element.find('a[menupage]').each(function() {
-                        $(this).click(function() {
-                            var model = $(this).attr('menupage');
-                            menuSvc.setMenu(model);
-                            $scope.changeActiveItem(this);
-                        });
+                return  function($scope, $element, $attrs) {
+                    angular.forEach(elements, function(value, key) {
+                        var elm = angular.element('<li></li>');
+                        elm.html('<a ng-click="changeActiveItem(\'' + value.model + '\',$event)" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
+                        $compile(elm)($scope).appendTo(ul);
                     });
                     $element.find('li:eq(1) a').addClass('active');// set first icon active TODO:relate to the deeplinking feature
                 };
