@@ -118,9 +118,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 resolve: {
                     'PlayerData': ['PlayerService', '$route', 'api', 'apiService', 'localStorageService', '$location', function(PlayerService, $route, api, apiService, localStorageService, $location) {
                         var apiLoaded = ksCheck(api, apiService, localStorageService, $location);
-                        return apiLoaded.then(function(api) {
-                            return PlayerService.getPlayer($route.current.params.id);
-                        });
+                        if (apiLoaded){
+                            return apiLoaded.then(function(api) {
+                                return PlayerService.getPlayer($route.current.params.id);
+                            });
+                        }
                     }],
 //                    'defaultPage': ['$location', '$route', function($location, $route) {
 //                        if (typeof $route.current.params['menuPage'] == 'undefined') {
