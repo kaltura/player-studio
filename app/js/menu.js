@@ -725,12 +725,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$root
     directive('menuHead', ['menuSvc','$compile', function(menuSvc,$compile) {
         return {
             restrict: 'EA',
-            template: "<div id='mp-mainlevel'><ul ng-transclude>" +
+            template: "<div id='mp-mainlevel'><ul>" + "<li><a data-ng-click=\"changeActiveItem('search',$event)\"  " +
+                "class='icon icon-TabSearch' tooltip-placement='right'  tooltip='Search for menu properties'></a> </li>" +
                 "</ul></div>",
             replace: true,
-            transclude: true,
             scope: {},
             controller: ['$scope', '$element', function($scope) {
+                // set menu category selection
                 $scope.changeActiveItem = function(menupage, $event) {
                     menuSvc.setMenu(menupage);
                     var menuitem = $($event.target);
@@ -741,6 +742,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$root
                 };
             }],
             compile: function(tElement) {
+                // tElement is the directive template
                 var ul = tElement.find('ul');
                 var elements = menuSvc.get();
                 return  function($scope, $element, $attrs) {
