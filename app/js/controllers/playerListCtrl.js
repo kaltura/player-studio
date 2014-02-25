@@ -5,6 +5,7 @@
 angular.module('KMCModule').controller('PlayerListCtrl',
     ['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q','menuSvc',
         function(apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, menuSvc) {
+            // start request to show the spinner. When data is rendered, the onFinishRender directive will hide the spinner
             requestNotificationChannel.requestStarted('list');
             $rootScope.lang = 'en-US';
             $scope.search = '';
