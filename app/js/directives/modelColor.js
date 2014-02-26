@@ -13,6 +13,7 @@ DirectivesModule.directive('modelColor', [function () {
                 else
                     $scope.model = '#ffffff';
             }
+            $scope.initValue = $scope.model.toString();
         }],
         link: function ($scope, $elemennt, $attrs, prController) {
             if (prController) {
