@@ -22,32 +22,32 @@ angular.module('colorpicker.module', [])
       }
     }
   })
+//  .directive('colorpicker', ['colorpicker.helpers', function(helper) {
+//    return {
+//      require: '?ngModel',
+//      restrict: 'A',
+//      link: function(scope, element, attrs, ngModel) {
+//
+//        var thisFormat = helper.prepareValues(attrs.colorpicker);
+//
+//        element.colorpicker({format: thisFormat.name});
+//        if(!ngModel) return;
+//
+//        element.colorpicker().on('changeColor', function(event) {
+//          element.val(element.data('colorpicker').format(event.color[thisFormat.transform]()));
+//          scope.$apply(ngModel.$setViewValue(element.data('colorpicker').format(event.color[thisFormat.transform]())));
+//        });
+//
+//        ngModel.$render = function() {
+//          helper.updateView(element, ngModel.$viewValue) ;
+//        }
+//      }
+//    };
+//  }])
   .directive('colorpicker', ['colorpicker.helpers', function(helper) {
     return {
       require: '?ngModel',
-      restrict: 'A',
-      link: function(scope, element, attrs, ngModel) {
-
-        var thisFormat = helper.prepareValues(attrs.colorpicker);
-
-        element.colorpicker({format: thisFormat.name});
-        if(!ngModel) return;
-
-        element.colorpicker().on('changeColor', function(event) {
-          element.val(element.data('colorpicker').format(event.color[thisFormat.transform]()));
-          scope.$apply(ngModel.$setViewValue(element.data('colorpicker').format(event.color[thisFormat.transform]())));
-        });
-
-        ngModel.$render = function() {
-          helper.updateView(element, ngModel.$viewValue) ;
-        }
-      }
-    };
-  }])
-  .directive('colorpicker', ['colorpicker.helpers', function(helper) {
-    return {
-      require: '?ngModel',
-      restrict: 'E',
+      restrict: 'EA',
       replace: true,
       transclude: false,
       scope: {

@@ -13,6 +13,9 @@ DirectivesModule.directive('modelColor', [function () {
                 else
                     $scope.model = '#ffffff';
             }
+            $scope.showColorBox = function(){
+                $element.find('input').click();
+            }
         }],
         link: function ($scope, $elemennt, $attrs, prController) {
             if (prController) {

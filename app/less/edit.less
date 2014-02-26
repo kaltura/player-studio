@@ -428,20 +428,18 @@ body#edit, body#new {
             width: 100%;
             height: 30px;
           }
-          .colorinput, input[type="text"].colorinput {
-            width: 50px;
-            float: right;
-          }
 
           .colorExample {
             display: block;
             width: 25px;
             height: 25px;
             float: right;
-            border: grey;
+            border: 1px solid #808080;
             margin-right: 4px;
             background-color: azure;
-            outline: 3px double black;
+            html.ie8 &{
+              width: 150px;
+            }
           }
           .sortContainer {
             margin-bottom: 20px;

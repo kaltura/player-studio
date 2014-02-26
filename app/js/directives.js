@@ -112,7 +112,7 @@ DirectivesModule.directive('valType', function() {
     return {
         restrict: "A",
         link: function($scope, $element, $attrs) {
-            if (($attrs['valType'] == 'url' || $attrs['valType'] == 'email') && $('html').hasClass('IE8') === false) {
+            if (($attrs['valType'] == 'url' || $attrs['valType'] == 'email') && !(window.IE <= 10)) {
                 $element.attr('type', $attrs['valType']);
             }
         }

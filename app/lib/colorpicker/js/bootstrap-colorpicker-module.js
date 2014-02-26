@@ -379,8 +379,8 @@ angular.module('colorpicker.module', [])
                     colorpickerTemplate
                         .addClass('colorpicker-visible')
                         .css({
-                            'top': helper.getOffset($(elem).next()[0]).top + $(elem).next()[0].offsetHeight - document.body.scrollTop + 'px', // here are breaking changes that are only true for our custom directive (using the next to elem)
-                            'left': helper.getOffset($(elem).next()[0]).left - document.body.scrollLeft + 'px'
+                            'top': helper.getOffset($(elem)[0]).top + $(elem)[0].offsetHeight - document.body.scrollTop + 'px',
+                            'left': helper.getOffset($(elem)[0]).left - document.body.scrollLeft + 'px'
                         });
                 });
 
