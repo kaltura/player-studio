@@ -12,13 +12,15 @@ var KMCModule = angular.module('KMCModule',
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
 
         $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
+        // set event name for opening and closing the tooltips
         $tooltipProvider.setTriggers({
             'customShow': 'customShow'
         });
 
-        $httpProvider.defaults.useXDomain = true;
-        delete $httpProvider.defaults.headers.common['X-Requested-With'];
-        //request load158ing indication//
+        $httpProvider.defaults.useXDomain = true; // cors support (TODO - check if we can remove, should be true by default in this angular version)
+        delete $httpProvider.defaults.headers.common['X-Requested-With']; // IE8 cors support
+
+        //request loading indication
         var $http, interceptor = ['$q', '$injector',
             function($q, $injector) {
                 var notificationChannel;
@@ -58,12 +60,15 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     return promise.then(success, error);
                 };
             }];
-
+        // add the interceptor to the httpProvider
         $httpProvider.responseInterceptors.push(interceptor);
+
+        // routing section
         $routeProvider.when('/login', {
                 templateUrl: 'view/login.html',
                 controller: 'LoginCtrl',
                 resolve: {'apiService': ['api','apiService', function(api,apiService) {
+                    // make sure apiService is available upon invalid KS redirect
                     return apiService;
                 }], 'localize': 'localize'
                 }
@@ -74,6 +79,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 controller: 'PlayerListCtrl',
                 resolve: {
                     'apiService': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+                        // make sure we load the list only if we have valid KS
                         return ksCheck(api, apiService, localStorageService, $location).then(function() {
                             return apiService;
                         });
@@ -104,6 +110,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }
             return api; // changed to return the promise of the API
         };
+
+        // deep linking to plugin setup
         $routeProvider.when('/edit/:id/:menuPage?/:plugin?',
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
@@ -125,6 +133,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 }
             }
         );
+
+        // open template screen
         $routeProvider.when('/newByTemplate',
             {templateUrl: 'view/new-template.html',
                 controller: 'PlayerCreateCtrl',
@@ -143,15 +153,14 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
                 resolve: {
-                    'Api': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+                    'apiService': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
                         return ksCheck(api, apiService, localStorageService, $location);
                     }],
-                    'PlayerData': function($q, api, PlayerService) {
+                    'PlayerData': function(api, PlayerService) {
                         return api.then(function() {
                             return PlayerService.newPlayer();
                         });
                     },
-                    'editProperties': 'editableProperties',
                     'menuSvc': 'menuSvc',
                     'localize': 'localize'
                 }
@@ -177,7 +186,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     }]).run(function($rootScope, $rootElement, $location,menuSvc) {
     var appLoad = new Date();
     var debug = false;
-    $rootScope.routeName = '';
+
+    // set the logTime function used in debug mode
     var logTime = function(eventName) {
         if ($location.search()['debug']) {
             var now = new Date();
@@ -187,6 +197,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     };
     window.logTime = logTime;
     logTime('AppJsLoad');
+
+    // add functions to $rootScope constructor. $safeApply to prevent apply when digest is already in progress
     $rootScope.constructor.prototype.$safeApply = function(fn) {
         var phase = this.$root.$$phase;
         if (phase == '$apply' || phase == '$digest')
@@ -194,6 +206,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         else
             this.$apply(fn);
     };
+
+    // custom show for tooltips
     $rootScope.constructor.prototype.openTooltip = function ($event) {
         menuSvc.currentTooltip = $event.target;
         $($event.target).trigger('customShow');
@@ -201,6 +215,9 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $event.stopPropagation();
         return false;
     };
+
+    // for css - define the body ID according to route
+    $rootScope.routeName = '';
     $rootScope.$on('$routeChangeSuccess', function() {
         appLoad = new Date();
         var url = $location.url().split('/');
@@ -209,6 +226,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         }
         $rootScope.routeName = url[1];
     });
+
+    // set debug flag across route changes
     $rootScope.$on('$routeChangeStart', function() {
         if ($location.search()['debug']) {
             debug = true;

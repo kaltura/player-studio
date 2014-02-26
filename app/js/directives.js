@@ -453,6 +453,7 @@ DirectivesModule.directive('onFinishRender', [
         return {
             restrict: 'A',
             link: function(scope, element, attr) {
+                // got last object - finish render and hide the spinner
                 if (scope.$last === true) {
                     var timeVar;
                     if (timeVar) {
