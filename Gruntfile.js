@@ -77,7 +77,6 @@ module.exports = function(grunt) {
                     'app/lib/spin.min.js',
                     'app/lib/jquery.timeago.js',
                     'app/ib/jquery.animate-colors-min.js',
-                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js'
                 ],
                 dest: '_dist/lib/libs.js'
             },
@@ -94,7 +93,8 @@ module.exports = function(grunt) {
                     'app/bower_components/angular-sanitize/angular-sanitize.min.js',
                     'app/bower_components/angular-animate/angular-animate.min.js',
                     'app/bower_components/angular-ui-sortable/src/sortable.min.js',
-                    'app/bower_components/angular-ui-select2/src/select2.min.js'
+                    'app/bower_components/angular-ui-select2/src/select2.min.js',
+                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js'
                 ],
                 dest: '_dist/vendor/vendor.min.js'
             },
@@ -116,15 +116,13 @@ module.exports = function(grunt) {
                     'app/bower_components/angular-sanitize/angular-sanitize.min.js',
                     'app/bower_components/angular-animate/angular-animate.min.js',
                     'app/bower_components/angular-ui-sortable/src/sortable.min.js',
-                    'app/bower_components/angular-ui-select2/src/select2.min.js'
+                    'app/bower_components/angular-ui-select2/src/select2.min.js',
+                    'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js'
                 ],
                 dest: '_dist/vendor/vendorOld.min.js'
             }
         },
         uglify: {
-            options: {
-                banner: '<%= meta.banner %>'
-            },
             dist: {
                 files: {
                     '_dist/main.min.js': '_dist/main.js',
@@ -135,7 +133,9 @@ module.exports = function(grunt) {
                 files:{
                     'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js',
                     'app/bower_components/angular-ui-select2/src/select2.min.js':'app/bower_components/angular-ui-select2/src/select2.js',
-                    'app/bower_components/angular-ui-sortable/src/sortable.min.js':'app/bower_components/angular-ui-sortable/src/sortable.js'
+                    'app/bower_components/angular-ui-sortable/src/sortable.min.js':'app/bower_components/angular-ui-sortable/src/sortable.js',
+                    'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.js',
+                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js'
                 }
 
             }
@@ -238,7 +238,10 @@ module.exports = function(grunt) {
                 }
             },
             development: {
-                files: {'app/css/studio.css': 'app/less/*.less'},
+                files: {
+                    'app/css/studio.css': 'app/less/*.less',
+                    'app/lib/colorpicker/css/colorpicker.css' : 'app/lib/colorpicker/less/colorpicker.less'
+                },
                 options: {
                     compress: true,
                     cleancss: true,
