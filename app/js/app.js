@@ -155,7 +155,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
                 resolve: {
-                    'apiService': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+                    'api': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
                         return ksCheck(api, apiService, localStorageService, $location);
                     }],
                     'PlayerData': function(api, PlayerService) {
