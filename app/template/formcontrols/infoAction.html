@@ -1,10 +1,15 @@
 <label>
-        <span  data-tooltip-html-unsafe="$scope.helpnote"  class="control-label">
+        <span class="control-label">
             <span ng-bind-html="label"></span></span><i ng-if="icon" class="icon {{icon}}"></i>
+        <span class='featureDesc' ng-if="helpnote">
+            <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)" ng-mouseover="openTooltip($event)"
+               data-tooltip-trigger="customShow"
+               data-tooltip-html-unsafe="$scope.helpnote"></i>
+        </span>
         <span class="button-wrapper">
-            <button  type="button" ng-if="check(action)" ng-click="btnAction(action)"
+            <button type="button" ng-if="check(action)" ng-click="btnAction(action)"
                     class="btn btn-default {{btnClass}}">{{ btnLabel }}
             </button>
         </span>
-        <span   data-tooltip-html-unsafe="$scope.helpnote" class="infodata control-data">{{ model }}</span>
+    <span class="infodata control-data">{{ model }}</span>
 </label>

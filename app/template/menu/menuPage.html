@@ -5,18 +5,16 @@
                   ng-model="featureModelCon._featureEnabled"></span>
     </span>
         <a class='menu-level-trigger'>{{(parentPage) ? label : ''}}</a>
-        <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)"
-           data-tooltip-trigger="customShow"
-           data-tooltip-html-unsafe="$scope.description"></i>
     </div>
     <div class='mp-level'>
         <a class='mp-back' ng-click='goBack()' ng-show='parentPage'>Back to {{parentLabel}}</a>
 
-        <h2 class="subMenuHeader">{{label}}</h2>
-        <span ng-if="parentPage" class="pull-right">
-            <span class="prettycheckbox" player-refresh="true" ng-model="featureModelCon._featureEnabled">
-        </span>
-        </span>
+        <div class="subPageHeaderWrapper">
+                <h2 class="subMenuHeader">{{label}}</h2>
+            <span ng-if="parentPage" class="pull-right prettycheckbox" player-refresh="true"
+                  ng-model="featureModelCon._featureEnabled">Check to enable
+            </span>
+        </div>
         <span class='levelDesc' ng-bind-html='description'></span>
         <ul ng-class="{disabled:isDisabled}" class='menuList' ng-transclude></ul>
     </div>

@@ -1,6 +1,9 @@
 <label>
-    <span class="tooltipWrap" data-tooltip-html-unsafe="$scope.helpnote">
         <span class="control-label" ng-bind-html="label"></span>
-        <span  data-color="{{initValue}}" ng-model="$parent.model" colorpicker  class="colorExample"  ng-style="{'background-color': model}"></span>
-    </span>
+        <span class='featureDesc' ng-if="helpnote">
+            <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)" ng-mouseover="openTooltip($event)"
+               data-tooltip-trigger="customShow"
+               data-tooltip-html-unsafe="$scope.helpnote"></i>
+        </span>
+        <span  data-color="{{initValue}}" ng-model="model" colorpicker  class="colorExample"  ng-style="{'background-color': model}"></span>
 </label>

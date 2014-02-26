@@ -730,11 +730,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
     directive('menuHead', ['menuSvc', '$compile', function (menuSvc, $compile) {
         return {
             restrict: 'EA',
-            template: "<div id='mp-mainlevel'><ul>" + "<li><a data-ng-click=\"changeActiveItem('search',$event)\"  " +
-                "class='icon icon-TabSearch' tooltip-placement='right'  tooltip='Search for menu properties'></a> </li>" +
-                "</ul></div>",
+            template: "<div id='mp-mainlevel'><ul></ul></div>",
             replace: true,
             scope: {},
+            transclude:true,
             controller: ['$scope', '$element', function ($scope) {
                 // set menu category selection
                 $scope.changeActiveItem = function (menupage, $event) {
@@ -750,12 +749,18 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 // tElement is the directive template
                 var ul = tElement.find('ul');
                 var elements = menuSvc.get();
-                return  function ($scope, $element, $attrs) {
+                return  function ($scope, $element, $attrs,contorller,transcludeFn) {
+                    transcludeFn($scope,function(clone){
+                       ul.prepend(clone);
+                    });
                     angular.forEach(elements, function (value, key) {
                         var elm = angular.element('<li></li>');
                         elm.html('<a ng-click="changeActiveItem(\'' + value.model + '\',$event)" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
                         $compile(elm)($scope).appendTo(ul);
                     });
+//                    menuSvc.menuScope.$on('menuchange',function(e,page){
+//                        $scope.changeActiveItem(page);
+//                    });
                     $element.find('li:eq(1) a').addClass('active');// set first icon active TODO:relate to the deeplinking feature
                 };
             }

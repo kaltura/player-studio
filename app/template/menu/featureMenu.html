@@ -5,13 +5,8 @@
      </span>
 
     <div class="header" ng-click="toggleFeature()">
-        <span class="featureLabel" data-tooltip-html-unsafe="$scope.description" ng-bind-html="label"></span>
+        <span class="featureLabel" ng-bind-html="label"></span>
         <i ng-class="{rotate90:!isCollapsed}" class="glyphicon glyphicon-play"></i>
-         <span class='featureDesc' ng-if="description">
-            <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)"
-               data-tooltip-trigger="customShow"
-               data-tooltip-html-unsafe="$scope.description"></i>
-        </span>
     </div>
     <span ng-hide="isCollapsed" class="description" ng-bind-html="description"></span>
 

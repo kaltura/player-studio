@@ -1,15 +1,21 @@
-<div class="spinEdit clearfix">
-    <label data-tooltip-html-unsafe="$scope.helpnote"><span class="control-label" ng-bind-html="label"></span>
-        <div class="col-xs-4 pull-right">
-            <div number-input dname='strModel' ng-form='$parent.inputForm' ng-disabled="$parent.isDisabled" defaults="defaults" ng-model="$parent.model"
-                 class="input-group">
-            </div>
+<label class="spinEdit">
+    <span class="control-label" ng-bind-html="label"></span>
+        <span class='featureDesc' ng-if="helpnote">
+            <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)" ng-mouseover="openTooltip($event)"
+               data-tooltip-trigger="customShow"
+               data-tooltip-html-unsafe="$scope.helpnote"></i>
+        </span>
+
+    <div class="pull-right ">
+        <div number-input dname='strModel' ng-form='inputForm' ng-disabled="isDisabled"
+             defaults="defaults" ng-model="model"
+             class="input-group">
         </div>
-        <div ng-show="inputForm.$invalid">
-            <span class="help-inline alert-danger" ng-show="inputForm.$error['max']">{{'The maximum value is'|i18n}} {{defaults.to}}</span>
-            <span class="help-inline alert-danger" ng-show="inputForm.$error['min']">{{'The minimum value is' |i18n}} {{defaults.from}}</span>
+    </div>
+    <div ng-show="inputForm.$invalid">
+        <span class="help-inline alert-danger" ng-show="inputForm.$error['max']">{{'The maximum value is'|i18n}} {{defaults.to}}</span>
+        <span class="help-inline alert-danger" ng-show="inputForm.$error['min']">{{'The minimum value is' |i18n}} {{defaults.from}}</span>
     <span class="help-inline alert-danger"
           ng-show="inputForm.$error['pattern']">{{'Only numbers are accepted' |i18n}}</span>
-        </div>
-    </label>
-</div>
+    </div>
+</label>

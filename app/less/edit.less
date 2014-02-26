@@ -46,7 +46,7 @@ body#edit, body#new {
     }
     .wrapper {
       width: 70%;
-	  overflow-y: auto;
+      overflow-y: auto;
       #headerRow {
         margin-bottom: 20px;
       }
@@ -210,33 +210,34 @@ body#edit, body#new {
             margin-top: 36px;
           }
         }
-        &[type="text"], &[type="select2data"] {
-          hr {
-            margin-top: 42px !important;
-          }
-        }
         &[type="dropdown"] {
           hr {
             margin-top: 20px;
           }
         }
       }
-      h2.subMenuHeader {
-        margin: 0;
-        display: inline-block;
-        padding: 0.7em;
-        padding-top: 24px;
-        padding-bottom: 11px;
-        color: #272727;
-        text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
-        font-weight: bold;
-        font-family: arial, sans-serif;
-        font-size: 18px;
+      div.subPageHeaderWrapper {
+        > * {
+          padding-top: 20px;
+          position: relative;
+        }
+        h2.subMenuHeader {
+          margin: 0;
+          display: inline-block;
+          padding: 0.7em;
+          padding-top: 24px;
+          padding-bottom: 11px;
+          color: #272727;
+          text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+          font-weight: bold;
+          font-family: arial, sans-serif;
+          font-size: 18px;
+        }
       }
-      span[ng-if="parentPage"] {
-        position: relative;
+      .tab-content {
+        margin-left: -0.6em;
+        margin-right: -0.6em;
       }
-
       .levelDesc {
         margin: 0 13px;
         display: block;
@@ -265,7 +266,6 @@ body#edit, body#new {
           margin-bottom: 0px;
           color: #555555;
           .inputHolder {
-            float: left;
             width: 100%;
           }
           span.control-label, span.featureLabel {
@@ -287,7 +287,7 @@ body#edit, body#new {
               a.menu-level-trigger {
                 &:after {
                   .booticon;
-                  display:inline;
+                  display: inline;
                   content: "\e080";
                 }
               }
@@ -366,14 +366,9 @@ body#edit, body#new {
             margin-left: 10px;
           }
           input[type="text"] {
-            float: left;
             font-size: 13px;
             width: 100%;
             height: 28px;
-          }
-          input[type="checkbox"], div.input-group, div.select2-container, .prettycheckbox, .spinEdit input.small {
-            float: right;
-            z-index: 10;
           }
           div.fullwidth > .select2-container {
             float: none;
@@ -435,7 +430,6 @@ body#edit, body#new {
             height: 25px;
             float: right;
             border: 1px solid #808080;
-            margin-right: 4px;
             background-color: azure;
           }
           .sortContainer {
@@ -534,41 +528,7 @@ body#edit, body#new {
       color: #000;
     }
 
-    .select2-container {
-      min-width: 100px;
-    }
-
-    .select2-container .select2-choice, .select2-drop-mask, .select2-result-label {
-      color: #555555;
-    }
-
-    .select2-results {
-      background-color: #fff;
-      .select2-highlighted {
-        background-color: #eee;
-      }
-    }
-
-    .select2-drop-active, .select2-container-active .select2-choice, .select2-container-active .select2-choices {
-      border-color: rgb(170, 170, 170);
-    }
-
-    .select2-results {
-      padding: 0;
-      margin-right: 0px;
-    }
-
-    .select2-results .select2-result-label {
-      border-top: 1px solid #ddd;
-    }
-
-    .select2-results .select2-no-results {
-      background: #fff;
-      padding-left: 7px;
-      color: #555;
-    }
-
-    //    .form-control, .input-group-addon {
+    //    .form-control, .insput-group-addon {
     //      font-size: 13px;
     //      height: 30px;
     //    }
@@ -578,8 +538,41 @@ body#edit, body#new {
     }
 
   }
-  #menuSearch .form-group{
+  #menuSearch .form-group {
     width: 100%; // to prevent firefox bug
   }
+}
 
+.select2-container {
+  min-width: 100px;
+}
+
+.select2-container .select2-choice, .select2-drop-mask, .select2-result-label {
+  color: #555555;
+}
+
+.select2-results {
+  background-color: #fff;
+  .select2-highlighted {
+    background-color: #eee;
+  }
+}
+
+.select2-drop-active, .select2-container-active .select2-choice, .select2-container-active .select2-choices {
+  border-color: rgb(170, 170, 170);
+}
+
+.select2-results {
+  padding: 0;
+  margin-right: 0px;
+}
+
+.select2-results .select2-result-label {
+  border-top: 1px solid #ddd;
+}
+
+.select2-results .select2-no-results {
+  background: #fff;
+  padding-left: 7px;
+  color: #555;
 }

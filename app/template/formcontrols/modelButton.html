@@ -1,4 +1,11 @@
 <label ng-if="check(action)">
     <i class="icon {{icon}}"></i>
-    <button data-tooltip-html-unsafe="$scope.helpnote" type="button" ng-click="btnAction(action)" class="btn btn-default {{btnClass}}">{{ label }}</button>
+    <span class='featureDesc' ng-if="helpnote">
+            <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)" ng-mouseover="openTooltip($event)"
+               data-tooltip-trigger="customShow"
+               data-tooltip-html-unsafe="$scope.helpnote"></i>
+        </span>
+    <button type="button" ng-click="btnAction(action)"
+            class="btn btn-default {{btnClass}}">{{ label }}
+    </button>
 </label>

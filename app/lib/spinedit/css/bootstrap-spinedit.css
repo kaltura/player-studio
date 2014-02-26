@@ -3,7 +3,7 @@
     padding: 2px 10px;
     margin-right: 20px;
     display: block;
-    height: 31px;
+    height: 27px;
     overflow: hidden;
     position: relative;
     border: 1px solid #aaa;
@@ -42,11 +42,11 @@
     padding-top: 2px;
     top: 0px;
     right: 2px;
-    height:31px;
+    height:27px;
 }
 
 .spinEdit input.small {
-    line-height: 26px;
+    line-height: 20px;
 }
 
 div.spinedit {
@@ -57,7 +57,7 @@ div.spinedit {
 
 div.spinedit .glyphicon-chevron-up,
 div.spinedit .glyphicon-chevron-down {
-    line-height: 13px;
+    line-height: 10px;
     cursor: pointer;
     float: left;
     position: relative;

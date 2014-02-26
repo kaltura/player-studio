@@ -1,9 +1,15 @@
 <div class="form-element">
-    <div class="radioLabel"><span class="control-label" ng-bind-html="label"></span></div>
-    <div class="form-group" data-tooltip-html-unsafe="$scope.helpnote">
+    <div class="radioLabel"><span class="control-label" ng-bind-html="label"></span>
+    <span class='featureDesc' ng-if="helpnote">
+            <i class="glyphicon glyphicon-question-sign" ng-click="openTooltip($event)" ng-mouseover="openTooltip($event)"
+               data-tooltip-trigger="customShow"
+               data-tooltip-html-unsafe="$scope.helpnote"></i>
+        </span>
+    </div>
+    <div class="form-group">
         <label ng-repeat="option in options">
-            <input dname='$parent.$parent.strModel' value="{{ option.value }}" type="radio"
-                   ng-required="!$parent.$parent.model && require" ng-model="$parent.$parent.model"
+            <input dname='$parent.strModel' value="{{ option.value }}" type="radio"
+                   ng-required="!$parent.model && require" ng-model="$parent.model"
                    pretty-radio/><span
                 class="optionLabel"> {{ option.label }}</span></label>
     </div>
