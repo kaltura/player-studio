@@ -91,6 +91,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             return currentRefresh.promise;
         };
         var playersService = {
+            autoRefreshEnabled: false,
             clearCurrentRefresh: function () {
                 currentRefresh = null;
             },

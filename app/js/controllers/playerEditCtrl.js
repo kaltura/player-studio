@@ -3,17 +3,17 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', '$timeout','requestNotificationChannel',
-        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, $timeout,requestNotificationChannel) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', '$timeout', 'requestNotificationChannel',
+        function ($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, $timeout, requestNotificationChannel) {
             logTime('editCntrlLoad');
             $scope.playerId = PlayerData.id;
             $scope.newPlayer = !$routeParams.id;
             $scope.data = PlayerData;
             $scope.debug = $routeParams.debug;
-            $scope.$on('$destory', function() {
+            $scope.$on('$destory', function () {
                 PlayerService.clearCurrentRefresh();
             });
-            $scope.getDebugInfo = function(partial) {
+            $scope.getDebugInfo = function (partial) {
                 if (!partial)
                     return $scope.data;
                 else
@@ -21,10 +21,10 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             };
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
-            $timeout(function() {
-                apiService.listMedia().then(function(data) {
+            $timeout(function () {
+                apiService.listMedia().then(function (data) {
                     $scope.userEntries = data;
-                    angular.forEach($scope.userEntries.objects, function(value) {
+                    angular.forEach($scope.userEntries.objects, function (value) {
                         // currently filter out playlist entries
                         if (typeof value.playlistType == "undefined")
                             $scope.userEntriesList.push({'id': value.id, 'text': value.name});
@@ -33,35 +33,36 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     $scope.settings.previewEntry = ( PlayerService.getPreviewEntry()) ? PlayerService.getPreviewEntry() : $scope.userEntriesList[0]; //default entry
                     PlayerService.setPreviewEntry($scope.settings.previewEntry);
                     // render the player for the first time
-                    PlayerService.playerRefresh().then(function(){
+                    PlayerService.playerRefresh().then(function () {
                         menuSvc.menuScope.playerInitDone = true;
                     });
                 });
             }, 200);
             $scope.settings = {};
 
-// set tags
-//   $scope.tags = [];
-//// all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
-//// the model tags of the player are actually set properly from the ng-model of the tags directive and are not needed here
-//            if (typeof $scope.data.tags != "undefined" && $scope.data.tags) { //can also be null
-//                var tags = typeof $scope.data.tags == "string" ? $scope.data.tags.split(",") : $scope.data.tags;
-//                for (var i = 0; i < tags.length; i++)
-//                    $scope.tags.push({id: tags[i], text: tags[i]});
-//            }
-//registers the tags to be available to the directive
+            /* set tags
+               $scope.tags = [];
+            // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
+            // the model tags of the player are actually set properly from the ng-model of the tags directive and are not needed here
+            if (typeof $scope.data.tags != "undefined" && $scope.data.tags) { //can also be null
+                var tags = typeof $scope.data.tags == "string" ? $scope.data.tags.split(",") : $scope.data.tags;
+                for (var i = 0; i < tags.length; i++)
+                    $scope.tags.push({id: tags[i], text: tags[i]});
+            }
+            //registers the tags to be available to the directive
             menuSvc.registerAction('getTags', function() {
                 return $scope.tags;
             });
-            menuSvc.registerAction('listEntries', function() { // those should be the first 20...
+           //tags END */
+            menuSvc.registerAction('listEntries', function () { // those should be the first 20...
                 return $scope.userEntriesList;
             });
-            menuSvc.registerAction('queryEntries', function(query) {
+            menuSvc.registerAction('queryEntries', function (query) {
                 var data = {results: []};
                 console.log(query.term);
                 if (query.term) {
-// here you should do some AJAX API call with the query term and then()...
-                    angular.forEach($scope.userEntriesList, function(item, key) {
+          // here you should do some AJAX API call with the query term and then()...
+                    angular.forEach($scope.userEntriesList, function (item, key) {
                         if (query.term.toUpperCase() === item.text.substring(0, query.term.length).toUpperCase()) {
                             data.results.push(item);
                         }
@@ -74,12 +75,12 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             });
 
             if (parseFloat($scope.data.version) < PlayerService.getRequiredVersion()) {
-                menuSvc.registerAction('update', function() {
+                menuSvc.registerAction('update', function () {
                     PlayerService.playerUpdate($scope.data);
                 });
             }
 
-            $scope.$watch('settings.previewEntry.id', function(newVal, oldVal) {
+            $scope.$watch('settings.previewEntry.id', function (newVal, oldVal) {
                 if (newVal != oldVal && typeof oldVal != "undefined") {
                     PlayerService.setPreviewEntry($scope.settings.previewEntry);
                     PlayerService.playerRefresh(); // initial load
@@ -89,9 +90,9 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
         }
     ]);
 
-angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerService', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', function($scope, playerService, apiService, $modal, $location, menuSvc, localStorageService) {
-    var filterData = function(copyobj) {
-        angular.forEach(copyobj, function(value, key) {
+angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerService', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', function ($scope, playerService, apiService, $modal, $location, menuSvc, localStorageService) {
+    var filterData = function (copyobj) {
+        angular.forEach(copyobj, function (value, key) {
             if (angular.isObject(value)) {
                 if (typeof value._featureEnabled == 'undefined' || value._featureEnabled === false) {
                     delete copyobj[key];
@@ -107,18 +108,24 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
         });
         return copyobj;
     };
-    $scope.refreshPlayer = function() {
-        playerService.playerRefresh().then(function() {
+    $scope.autoRefreshEnabled = playerService.autoRefreshEnabled;
+    $scope.$watch('autoRefreshEnabled',function(newVal,oldVal){
+        if (newVal != oldVal){
+            playerService.autoRefreshEnabled = newVal;
+        }
+    });
+    $scope.refreshPlayer = function () {
+        playerService.playerRefresh().then(function () {
             playerService.refreshNeeded = false;
         });
     };
-    $scope.checkPlayerRefresh = function() {
+    $scope.checkPlayerRefresh = function () {
         if (menuSvc.menuScope && menuSvc.menuScope.menuInitDone && menuSvc.menuScope.playerInitDone)
             return playerService.refreshNeeded;
         return false;
     };
-    $scope.save = function() {
-        playerService.savePlayer($scope.data).then(function(value) {
+    $scope.save = function () {
+        playerService.savePlayer($scope.data).then(function (value) {
                 // cleanup
                 menuSvc.menuScope.playerEdit.$setPristine();
                 $scope.masterData = value;
@@ -132,7 +139,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                 $modal.open({ templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
-                        settings: function() {
+                        settings: function () {
                             return {
                                 'title': 'Save Player Settings',
                                 'message': 'Player Saved Successfully',
@@ -144,11 +151,11 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                     }
                 });
             },
-            function(msg) {
+            function (msg) {
                 $modal.open({ templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
-                        settings: function() {
+                        settings: function () {
                             return {
                                 'title': 'Player save failure',
                                 'message': msg
@@ -157,13 +164,13 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                     }
                 });
             }
-            );
+        );
     };
-    $scope.formValidation = function() {
-        if (typeof  menuSvc.menuScope.playerEdit != 'undefined' && menuSvc.menuScope.playerEdit.$error){
+    $scope.formValidation = function () {
+        if (typeof  menuSvc.menuScope.playerEdit != 'undefined' && menuSvc.menuScope.playerEdit.$error) {
             var obj = menuSvc.menuScope.playerEdit.$error;
             var empty = true;
-            angular.forEach(obj, function(value, key) {
+            angular.forEach(obj, function (value, key) {
                 if (value !== false) {
                     empty = false;
                 }
@@ -173,7 +180,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
             return null;
         }
     };
-    $scope.cancel = function() {
+    $scope.cancel = function () {
         if (menuSvc.menuScope.playerEdit.$pristine) {
             $location.url('/list');
         }
@@ -182,7 +189,7 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                 { templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
-                        settings: function() {
+                        settings: function () {
                             return {
                                 'title': 'Navigation confirmation',
                                 message: 'You are about to leave this page without saving, are you sure you want to discard the changes?'
@@ -190,14 +197,14 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                         }
 
                     }});
-            modal.result.then(function(result) {
+            modal.result.then(function (result) {
                 if (result) {
                     $location.url('/list');
                 }
             });
         }
     };
-    $scope.saveEnabled = function() {
+    $scope.saveEnabled = function () {
 //instead of using the form dirty state we compare to the master copy.
         if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
             if (menuSvc.menuScope.playerEdit.$valid)
