@@ -66,57 +66,50 @@ module.exports = function(grunt) {
             },
             libs: {
                 src: [
-                    'app/lib/modernizer.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mousewheel.min.js',
                     'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.min.js',
                     'app/lib/spinedit/js/bootstrap-spinedit.min.js',
                     'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.10.0.js',
                     'app/lib/localStorage/angular-local-storage.min.js',
                     'app/lib/sprintf.js',
-                    'app/lib/localize.js',
                     'app/lib/spin.min.js',
                     'app/lib/jquery.timeago.js',
                     'app/ib/jquery.animate-colors-min.js',
-                ],
-                dest: '_dist/lib/libs.js'
-            },
-            vendorModern: {
-                src: [
-                    'app/bower_components/jquery/jquery.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.mouse.min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.sortable.min.js',
                     'app/bower_components/select2/select2.min.js',
-                    'app/bower_components/angular/angular.min.js',
+                    'app/bower_components/angular-translate/angular-translate.js',
+                    'app/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+                    'app/bower_components/angular-translate-handler-log/angular-translate-handler-log.js',
                     'app/bower_components/angular-route/angular-route.min.js',
                     'app/bower_components/angular-sanitize/angular-sanitize.min.js',
                     'app/bower_components/angular-animate/angular-animate.min.js',
                     'app/bower_components/angular-ui-sortable/src/sortable.min.js',
-                    'app/bower_components/angular-ui-select2/src/select2.min.js',
+                    'app/bower_components/angular-ui-select2/src/select2.min.js'
+                ],
+                dest: '_dist/lib/libs.js'
+            },
+            vendorModern: {
+                src: [
+                    'app/lib/modernizer.min.js',
+                    'app/bower_components/jquery/jquery.min.js',
+                    'app/bower_components/angular/angular.min.js',
                     'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js'
                 ],
                 dest: '_dist/vendor/vendor.min.js'
             },
             vendorOld: {
                 src: [
+                    'app/lib/modernizer.min.js',
                     'app/lib/html5shiv.js',
                     'app/lib/respond.min.js',
                     'app/lib/es5-shim.min.js',
                     'bower_components/selectivizr/selectivizr.js',
                     'app/lib/jquery-1.10.2.min.js',
                     'app/lib/jquery.xdomainrequest.min.js',
-                    'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
-                    'app/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js',
-                    'app/bower_components/jquery-ui/ui/minified/jquery.ui.mouse.min.js',
-                    'app/bower_components/jquery-ui/ui/minified/jquery.ui.sortable.min.js',
-                    'app/bower_components/select2/select2.min.js',
                     'app/bower_components/angular/angular.min.js',
-                    'app/bower_components/angular-route/angular-route.min.js',
-                    'app/bower_components/angular-sanitize/angular-sanitize.min.js',
-                    'app/bower_components/angular-animate/angular-animate.min.js',
-                    'app/bower_components/angular-ui-sortable/src/sortable.min.js',
-                    'app/bower_components/angular-ui-select2/src/select2.min.js',
                     'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js'
                 ],
                 dest: '_dist/vendor/vendorOld.min.js'
@@ -133,7 +126,7 @@ module.exports = function(grunt) {
                 files:{
                     'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js',
                     'app/bower_components/angular-ui-select2/src/select2.min.js':'app/bower_components/angular-ui-select2/src/select2.js',
-                    'app/bower_components/angular-ui-sortable/src/sortable.min.js':'app/bower_components/angular-ui-sortable/src/sortable.js',
+                    'app/bower_components/angular-ui-sortable/sortable.min.js':'app/bower_components/angular-ui-sortable/sortable.js',
                     'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.js',
                     'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js'
                 }

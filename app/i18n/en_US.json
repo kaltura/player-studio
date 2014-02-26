@@ -1,5 +1,5 @@
 {
-    "copy": "Copy",
+    "Duplicate": "Duplicate",
     "delete": "Delete",
     "preview": "Preview",
     "name": "Name",
@@ -12,5 +12,6 @@
     "search for": "Search for",
     "upgradeMsg": "Do you want to update this player?",
     "upgradeFromVersion": "Current version: ",
-    "upgradeToVersion": "Update to version: "
+    "upgradeToVersion": "Update to version: ",
+    "LIST_BACK_BTN": "Back To Players List"
 }

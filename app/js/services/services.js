@@ -282,7 +282,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             },
             'deletePlayer': function (id) {
                 var deferred = $q.defer();
-                var rejectText = $filter('i18n')('Delete action was rejected: ');
+                var rejectText = $filter('translate')('Delete action was rejected: ');
                 if (typeof id == 'undefined' && currentPlayer)
                     id = currentPlayer.id;
                 if (id) {
@@ -351,7 +351,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'playerUpdate': function (playerObj, html5lib) {
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
-                var rejectText = $filter('i18n')('Update player action was rejected: ');
+                var rejectText = $filter('translate')('Update player action was rejected: ');
 
                 var method = 'get';
                 var url = window.kWidget.getPath() + 'services.php';

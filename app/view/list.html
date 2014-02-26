@@ -5,12 +5,12 @@
                 {{(title) ? title : "Players list"}}
             </h2>
             <small ng-hide="showSubTitle">
-                {{'In this page you can customize the look and the functionality of your players'|i18n}}
+                {{'In this page you can customize the look and the functionality of your players'| translate}}
             </small>
             <div class="padTop clearfix">
                 <div class="pull-right">
                     <button type="button" class="btn btn-primary" data-ng-click="newPlayer()"><i
-                            class="glyphicon glyphicon-plus">&nbsp;</i>{{'Add New player'| i18n}}
+                            class="glyphicon glyphicon-plus">&nbsp;</i>{{'Add New player'| translate}}
                     </button>
                 </div>
                 <div class="noPadding col-md-7 col-sm-7 col-xs-5">
@@ -21,7 +21,7 @@
                             </span>
                             <input type="text"
                                    typeahead="player.name for player in data | filter:$viewValue | limitTo:8"
-                                   class="form-control" placeholder="{{'Search by name or id'| i18n}}"
+                                   class="form-control" placeholder="{{'Search by name or id'| translate}}"
                                    ng-model="search">
                         </div>
 
@@ -31,22 +31,22 @@
         </div>
         <div id='playerList' class="scrollerWrap maxViewPort">
             <div class="row" id="tableHead" >
-                <div class="pull-left playerThumbWrapper">{{'Preview'| i18n }}</div>
-                <div class="col-xs-3"><a data-ng-click="sortBy('name')"> {{ 'Name' | i18n }}
+                <div class="pull-left playerThumbWrapper">{{'Preview'| translate }}</div>
+                <div class="col-xs-3"><a data-ng-click="sortBy('name')"> {{ 'Name' | translate }}
                     <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='name' && sort.reverse==false),
                 'glyphicon-chevron-up':(sort.sortCol=='name' && sort.reverse == true)}"></i>
                 </a>
                 </div>
-                <div class="idCol pull-left text-center">{{ 'ID' | i18n }}</div>
-                <div class="col-xs-2 text-center "><a data-ng-click="sortBy('updatedAt')"> {{ 'Save Date' | i18n }}
+                <div class="idCol pull-left text-center">{{ 'ID' | translate }}</div>
+                <div class="col-xs-2 text-center "><a data-ng-click="sortBy('updatedAt')"> {{ 'Save Date' | translate }}
                     <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='updatedAt' && sort.reverse==false),
                 'glyphicon-chevron-up':(sort.sortCol=='updatedAt' && sort.reverse == true)}"></i>
                 </a></div>
-                <div class="col-lg-2 text-center visible-lg"><a data-ng-click="sortBy('createdAt')">{{ 'Creation Date' | i18n }}
+                <div class="col-lg-2 text-center visible-lg"><a data-ng-click="sortBy('createdAt')">{{ 'Creation Date' | translate }}
                     <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='createdAt' && sort.reverse==false),
                 'glyphicon-chevron-up':(sort.sortCol=='createdAt' && sort.reverse == true)}"></i>
                 </a></div>
-                <div class="pull-left ">{{ 'Actions' | i18n }}
+                <div class="pull-left ">{{ 'Actions' | translate }}
                 </div>
             </div>
             <div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
@@ -62,7 +62,7 @@
 
                             <div class="alertsWrapper">
                             <span class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item)">
-                                <small>{{' This player requires updating'| i18n}}
+                                <small>{{' This player requires updating'| translate}}
                                 </small>
                             </span>
                             </div>
@@ -73,16 +73,16 @@
                         <td class="actionBtns ">
                             <div class="inner">
                                 <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
-                                        class="icon-copy"></span> {{'Duplicate'| i18n}}
+                                        class="icon-copy"></span> {{'Duplicate'| translate}}
                                 </button>
                                 <button type="button" class="btn btn-link" ng-click="deletePlayer(item)"><span
-                                        class="glyphicon glyphicon-remove"></span> {{'Delete'| i18n}}
+                                        class="glyphicon glyphicon-remove"></span> {{'Delete'| translate}}
                                 </button>
                                 <button type="button" class="btn btn-link"
                                         ng-show="checkVersionNeedsUpgrade(item)"
                                         ng-click="update(item)"><span class="glyphicon glyphicon-refresh"></span>
                                     {{'Update'|
-                                    i18n}}
+                                    translate}}
                                 </button>
                             </div>
                         </td>

@@ -5,7 +5,7 @@
 angular.module('KMCModule').controller('PlayerCreateCtrl',
     ['$scope', '$filter', 'templates', 'userId', 'playerTemplates',
         function($scope, $filter, templates, userId, playerTemplates) {
-            $scope.title = $filter('i18n')('New player - from template');
+            $scope.title = $filter('translate')('New player - from template');
             $scope.templates = templates.data;
             $scope.templateType = 'system';
             $scope.userId = userId;

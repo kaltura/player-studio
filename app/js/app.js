@@ -6,11 +6,20 @@ var cl = function (val) {
 window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
-    ['localization', 'ngRoute', 'KMC.controllers', 'KMC.filters',
+    ['pascalprecht.translate', 'ngRoute', 'KMC.controllers', 'KMC.filters',
         'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu']);
 
-KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
-
+KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', '$translateProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider, $translateProvider) {
+        $translateProvider.useStaticFilesLoader({
+            prefix: 'i18n/',
+            suffix: '.json'
+        });
+        $translateProvider.preferredLanguage('he_IL');
+        $translateProvider.fallbackLanguage('en_US');
+        if (window.location.href.indexOf('debug') != -1) {
+            $translateProvider.useMissingTranslationHandlerLog();
+        }
+        $translateProvider.useStorage('localStorageService');
         $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
         // set event name for opening and closing the tooltips
         $tooltipProvider.setTriggers({
@@ -69,7 +78,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 resolve: {'apiService': ['api', 'apiService', function (api, apiService) {
                     // make sure apiService is available upon invalid KS redirect
                     return apiService;
-                }], 'localize': 'localize'
+                }]
                 }
             }
         );
@@ -125,8 +134,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                         }
                     }],
                     'editProperties': 'editableProperties',
-                    'menuSvc': 'menuSvc',
-                    'localize': 'localize'
+                    'menuSvc': 'menuSvc'
                 }
             }
         );
@@ -158,8 +166,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                             return PlayerService.newPlayer();
                         });
                     },
-                    'menuSvc': 'menuSvc',
-                    'localize': 'localize'
+                    'menuSvc': 'menuSvc'
                 }
             }
         );
@@ -220,6 +227,9 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         var url = $location.url().split('/');
         if (debug) {
             $location.search({debug: true});
+        }
+        if (url[1].indexOf('?') != -1) {
+            url[1] = url[1].substr(0, url[1].indexOf('?'));
         }
         $rootScope.routeName = url[1];
     });

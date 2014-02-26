@@ -18,11 +18,11 @@
                                        typeahead="item for item in menuData | filter:$viewValue "
                                        data-typeaheadOnSelect="checkSearch()"
                                        class="form-control forceRightRadius"
-                                       placeholder="{{'Search for menu property'| i18n}}"
+                                       placeholder="{{'Search for menu property'| translate}}"
                                        ng-model='menuSearch'/>
                             </div>
                         <span class="help-block"
-                              ng-show="notFound">{{ 'The property was not found '| i18n}}</span>
+                              ng-show="notFound">{{ 'The property was not found '| translate}}</span>
                         </div>
                     </form>
                 </li>
@@ -34,20 +34,20 @@
                 <div id="menuTriggerWrap" ng-show="$parent.menuInitDone">
                     <a class="menu-trigger" data-ng-click="togglemenu($event)">
                         <i class="icon-Close"></i>
-                        <span class="sr-only">{{'Toggle navigation'| i18n}}</span>
+                        <span class="sr-only">{{'Toggle navigation'| translate}}</span>
                     </a>
                 </div>
                 <div id='headerRow' class="container padTop">
                     <span class="pull-right">
                          <button ng-click="cancel()"
-                                 class="btn btn-default">{{'Back To Players List'|| i18n}}
+                                 class="btn btn-default">{{'LIST_BACK_BTN'| translate}}
                          </button>
                         <button ng-disabled="!saveEnabled()" ng-click="save()"
-                                class="btn btn-primary">{{'Save Player Settings'| i18n}}
+                                class="btn btn-primary">{{'Save Player Settings'| translate}}
                         </button>
                     </span>
                     <span class="control-group pull-left">
-                        <label dname="strModel" require="require" class="prettycheckbox"
+                        <label require="require" class="prettycheckbox"
                                ng-model="autoRefreshEnabled">
                         </label>
                         <span id="autoPreviewLabel">
@@ -55,7 +55,7 @@
                         </span>
                     <button class="btn btn-default" ng-hide="autoRefreshEnabled" ng-disabled="!checkPlayerRefresh()"
                             ng-class="{'btn-success':checkPlayerRefresh()}" ng-click="refreshPlayer()"><i
-                            class="glyphicon glyphicon-refresh">&nbsp;</i>{{'Preview Changes'|i18n}}
+                            class="glyphicon glyphicon-refresh">&nbsp;</i>{{'Preview Changes'|translate}}
                     </button>
                     <!--h2 class=" inline text-muted" id="pageHeader">
                         {{title}}

@@ -14,7 +14,7 @@
                ng-required="{{require}}"
                class='form-control' type='text' val-type="{{type}}" ng-model='model'/>
         <span class="help-inline alert-danger"
-              ng-show="require && reqState">{{"This field is required." | i18n }}</span>
-        <span class="help-inline alert-danger" ng-show="validation && valState">{{"This field doesn't have the right format of value." | i18n}}</span>
+              ng-show="require && reqState">{{"This field is required." | translate }}</span>
+        <span class="help-inline alert-danger" ng-show="validation && valState">{{"This field doesn't have the right format of value." | translate}}</span>
     </span>
 </div>

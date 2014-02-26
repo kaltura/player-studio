@@ -9,7 +9,6 @@
     "commit": "994f65755ac4e7ead1d14534f6eeb90cda21e909"
   },
   "_source": "git://github.com/keithclark/selectivizr.git",
-  "_target": "~1.0.2",
-  "_originalSource": "selectivizr",
-  "_direct": true
+  "_target": ">= 0",
+  "_originalSource": "selectivizr"
 }

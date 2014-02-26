@@ -13,9 +13,9 @@
         </div>
     </div>
     <div ng-show="inputForm.$invalid">
-        <span class="help-inline alert-danger" ng-show="inputForm.$error['max']">{{'The maximum value is'|i18n}} {{defaults.to}}</span>
-        <span class="help-inline alert-danger" ng-show="inputForm.$error['min']">{{'The minimum value is' |i18n}} {{defaults.from}}</span>
+        <span class="help-inline alert-danger" ng-show="inputForm.$error['max']">{{'The maximum value is'|translate}} {{defaults.to}}</span>
+        <span class="help-inline alert-danger" ng-show="inputForm.$error['min']">{{'The minimum value is' |translate}} {{defaults.from}}</span>
     <span class="help-inline alert-danger"
-          ng-show="inputForm.$error['pattern']">{{'Only numbers are accepted' |i18n}}</span>
+          ng-show="inputForm.$error['pattern']">{{'Only numbers are accepted' |translate}}</span>
     </div>
 </label>
