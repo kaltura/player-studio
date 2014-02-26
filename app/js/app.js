@@ -1,5 +1,5 @@
 'use strict';
-var cl = function(val) {
+var cl = function (val) {
     return console.log(val);
 };
 
@@ -9,7 +9,7 @@ var KMCModule = angular.module('KMCModule',
     ['localization', 'ngRoute', 'KMC.controllers', 'KMC.filters',
         'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu']);
 
-KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
+KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider) {
 
         $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
         // set event name for opening and closing the tooltips
@@ -22,7 +22,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
         //request loading indication
         var $http, interceptor = ['$q', '$injector',
-            function($q, $injector) {
+            function ($q, $injector) {
                 var notificationChannel;
 
                 function success(response) {
@@ -52,7 +52,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     return $q.reject(response);
                 }
 
-                return function(promise) {
+                return function (promise) {
                     // get requestNotificationChannel via $injector because of circular dependency problem
                     notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
                     // send a notification requests are complete
@@ -62,12 +62,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }];
         // add the interceptor to the httpProvider
         $httpProvider.responseInterceptors.push(interceptor);
-
         // routing section
         $routeProvider.when('/login', {
                 templateUrl: 'view/login.html',
                 controller: 'LoginCtrl',
-                resolve: {'apiService': ['api','apiService', function(api,apiService) {
+                resolve: {'apiService': ['api', 'apiService', function (api, apiService) {
                     // make sure apiService is available upon invalid KS redirect
                     return apiService;
                 }], 'localize': 'localize'
@@ -78,16 +77,16 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 templateUrl: 'view/list.html',
                 controller: 'PlayerListCtrl',
                 resolve: {
-                    'apiService': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+                    'apiService': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
                         // make sure we load the list only if we have valid KS
-                        return ksCheck(api, apiService, localStorageService, $location).then(function() {
+                        return ksCheck(api, apiService, localStorageService, $location).then(function () {
                             return apiService;
                         });
                     }]
                 }
             }
         );
-        var ksCheck = function(api, apiService, localStorageService, $location) {
+        var ksCheck = function (api, apiService, localStorageService, $location) {
             // Check if we have ks in locaclstorage
             try {
                 var kmc = window.parent.kmc;
@@ -104,7 +103,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 $location.path("/login");
                 return false;
             } else {
-                api.then(function() {
+                api.then(function () {
                     apiService.setKs(ks);
                 });
             }
@@ -112,23 +111,19 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         };
 
         // deep linking to plugin setup
-        $routeProvider.when('/edit/:id/:menuPage?/:plugin?',
+        $routeProvider.when('/edit/:id',
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
+                reloadOnSearch: false,
                 resolve: {
-                    'PlayerData': ['PlayerService', '$route', 'api', 'apiService', 'localStorageService', '$location', function(PlayerService, $route, api, apiService, localStorageService, $location) {
+                    'PlayerData': ['PlayerService', '$route', 'api', 'apiService', 'localStorageService', '$location', function (PlayerService, $route, api, apiService, localStorageService, $location) {
                         var apiLoaded = ksCheck(api, apiService, localStorageService, $location);
-                        if (apiLoaded){
-                            return apiLoaded.then(function(api) {
+                        if (apiLoaded) {
+                            return apiLoaded.then(function (api) {
                                 return PlayerService.getPlayer($route.current.params.id);
                             });
                         }
                     }],
-//                    'defaultPage': ['$location', '$route', function($location, $route) {
-//                        if (typeof $route.current.params['menuPage'] == 'undefined') {
-//                            $location.path($location.search() + '/' + 'basicDisplay');
-//                        }
-//                    }],
                     'editProperties': 'editableProperties',
                     'menuSvc': 'menuSvc',
                     'localize': 'localize'
@@ -141,10 +136,10 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             {templateUrl: 'view/new-template.html',
                 controller: 'PlayerCreateCtrl',
                 resolve: {
-                    'templates': ['playerTemplates', function(playerTemplates) {
+                    'templates': ['playerTemplates', function (playerTemplates) {
                         return  playerTemplates.listSystem();
                     }],
-                    'userId': function() {
+                    'userId': function () {
                         return '1'; //  KMC would need to give us the userID ?
                     }
 
@@ -155,11 +150,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
                 resolve: {
-                    'api': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+                    'api': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
                         return ksCheck(api, apiService, localStorageService, $location);
                     }],
-                    'PlayerData': function(api, PlayerService) {
-                        return api.then(function() {
+                    'PlayerData': function (api, PlayerService) {
+                        return api.then(function () {
                             return PlayerService.newPlayer();
                         });
                     },
@@ -169,7 +164,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }
         );
         $routeProvider.when('/logout', {
-            resolve: {'logout': ['localStorageService', 'apiService', '$location', function(localStorageService, apiService, $location) {
+            resolve: {'logout': ['localStorageService', 'apiService', '$location', function (localStorageService, apiService, $location) {
                 if (localStorageService.isSupported()) {
                     localStorageService.clearAll();
                 }
@@ -179,18 +174,18 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
         });
         $routeProvider.otherwise({
-            resolve: {'res': ['api', 'apiService', 'localStorageService', '$location', function(api, apiService, localStorageService, $location) {
+            resolve: {'res': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
                 if (ksCheck(api, apiService, localStorageService, $location)) {
                     return $location.path('/list');
                 }
             }]}
         });
-    }]).run(function($rootScope, $rootElement, $location,menuSvc) {
+    }]).run(function ($rootScope, $rootElement, $location, menuSvc) {
     var appLoad = new Date();
     var debug = false;
 
     // set the logTime function used in debug mode
-    var logTime = function(eventName) {
+    var logTime = function (eventName) {
         if ($location.search()['debug']) {
             var now = new Date();
             var diff = Math.abs(appLoad.getTime() - now.getTime());
@@ -201,7 +196,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     logTime('AppJsLoad');
 
     // add functions to $rootScope constructor. $safeApply to prevent apply when digest is already in progress
-    $rootScope.constructor.prototype.$safeApply = function(fn) {
+    $rootScope.constructor.prototype.$safeApply = function (fn) {
         var phase = this.$root.$$phase;
         if (phase == '$apply' || phase == '$digest')
             this.$eval(fn);
@@ -220,7 +215,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
     // for css - define the body ID according to route
     $rootScope.routeName = '';
-    $rootScope.$on('$routeChangeSuccess', function() {
+    $rootScope.$on('$routeChangeSuccess', function () {
         appLoad = new Date();
         var url = $location.url().split('/');
         if (debug) {
@@ -230,7 +225,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     });
 
     // set debug flag across route changes
-    $rootScope.$on('$routeChangeStart', function() {
+    $rootScope.$on('$routeChangeStart', function () {
         if ($location.search()['debug']) {
             debug = true;
         }
