@@ -59,7 +59,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             });
             menuSvc.registerAction('queryEntries', function (query) {
                 var data = {results: []};
-                console.log(query.term);
+               // console.log(query.term);
                 if (query.term) {
           // here you should do some AJAX API call with the query term and then()...
                     angular.forEach($scope.userEntriesList, function (item, key) {
