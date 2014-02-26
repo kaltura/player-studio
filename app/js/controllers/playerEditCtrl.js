@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerEditCtrl',
-    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', '$timeout',
-        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, $timeout) {
+    ['$scope', 'PlayerData', '$routeParams', '$filter', 'menuSvc', 'PlayerService', 'apiService', '$timeout','requestNotificationChannel',
+        function($scope, PlayerData, $routeParams, $filter, menuSvc, PlayerService, apiService, $timeout,requestNotificationChannel) {
             logTime('editCntrlLoad');
             $scope.playerId = PlayerData.id;
             $scope.newPlayer = !$routeParams.id;
@@ -85,9 +85,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     PlayerService.playerRefresh(); // initial load
                 }
             });
-            $(document).ready(function() {
-                $scope.masterData = angular.copy($scope.data);
-            });
+            requestNotificationChannel.requestEnded('edit');
         }
     ]);
 
@@ -208,8 +206,6 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                 return false;
         }
     };
-
-
 }
 ])
 ;

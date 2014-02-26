@@ -156,10 +156,14 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.oldVersionEditText = $filter('i18n')(
                 'This player must be updated before editing. <br/>' +
                 'Some features and design may be lost.');
+            var goToEditPage = function(id){
+                requestNotificationChannel.requestStarted('edit');
+                $location.path('/edit/' + id);
+            };
             $scope.goToEditPage = function (item, $event) {
                 $event.preventDefault();
                 if (!$scope.checkVersionNeedsUpgrade(item)) {
-                    $location.path('/edit/' + item.id);
+                    goToEditPage(item.id);
                     return false;
                 } else {
                     var msgText = $scope.oldVersionEditText;
@@ -183,7 +187,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                         if (result) {
                             // update the player and when its done - go to the edit page
                             $scope.update(item).then(function() {
-                                $location.url('edit/' + item.id); // player finished updating - go to the edit page
+                                goToEditPage(item.id); // player finished updating - go to the edit page
                             });
                         }
                     }, function() {
