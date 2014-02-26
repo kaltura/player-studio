@@ -240,7 +240,7 @@ module.exports = function(grunt) {
             development: {
                 files: {
                     'app/css/studio.css': 'app/less/*.less',
-                    'app/lib/colorpicker/css/colorpicker.css' : 'app/lib/colorpicker/css/colorpicker.less'
+                    'app/lib/colorpicker/css/colorpicker.css' : 'app/lib/colorpicker/less/colorpicker.less'
                 },
                 options: {
                     compress: true,
