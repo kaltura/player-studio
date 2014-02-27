@@ -343,7 +343,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'uiConf:config': angular.toJson(data2Save)
                 };
                 apiService.doRequest(request).then(function (result) {
-                    playersCache[data.id] = data;
+                    playersCache[data.id] = data; // update player data in players cache
+                    // refresh KMC players list so that the new player will appear in the "Preview and Embed" screen
+                    var kmc = window.parent.kmc;
+                    if (kmc && kmc.preview_embed) {
+                        kmc.preview_embed.updateList(false);
+                    }
                     deferred.resolve(result);
                 });
                 return deferred.promise;
