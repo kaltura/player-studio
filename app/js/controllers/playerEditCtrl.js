@@ -21,6 +21,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             };
             $scope.masterData = angular.copy($scope.data);
             $scope.userEntriesList = [];
+            $scope.settings = {};
             $timeout(function () {
                 apiService.listMedia().then(function (data) {
                     $scope.userEntries = data;
@@ -38,7 +39,7 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                     });
                 });
             }, 200);
-            $scope.settings = {};
+
 
             /* set tags
                $scope.tags = [];
@@ -80,10 +81,10 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 });
             }
 
-            $scope.$watch('settings.previewEntry.id', function (newVal, oldVal) {
+            $scope.$watch('settings.previewEntry', function (newVal, oldVal) {
                 if (newVal != oldVal && typeof oldVal != "undefined") {
                     PlayerService.setPreviewEntry($scope.settings.previewEntry);
-                    PlayerService.playerRefresh(); // initial load
+                    PlayerService.playerRefresh();
                 }
             });
             requestNotificationChannel.requestEnded('edit');
