@@ -570,8 +570,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     var timeVar = null;
                     var timeVar1 = null;
                     $scope.menuInitDone = false;
-                    $scope.$on('menuChange', function (e, page) { //TODO: move the scroller into the menuSVC and this $on into the menuLevel already existing event listener,
-                        // instate a scroller on the selected menupage withut using the css selector
+                    $scope.$on('menuChange', function (e, page) {
                         if (page != 'search') {
                             if (page.indexOf('.') === -1 && menuElem.children('[pagename="' + page + '"]').length === 0) { // check its not a subpage and doesn't exist already
                                 menuData[page]($scope, function (htmlData) { // here the menu is invoked against the scope and so populated with data
@@ -585,27 +584,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                                 if (menuSvc.spinnerScope) {
                                     menuSvc.spinnerScope.endSpin();
                                 }
-                                if ($scope.scroller) {
-                                    $scope.scroller.mCustomScrollbar('destroy');
-                                    $scope.scroller = null;
-                                }
-                                $element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
-                                if (!$scope.scroller) {
-                                    $scope.scroller = $element.find('.mp-level-open:last').mCustomScrollbar({set_height: '99%'});
-                                }
                                 timeVar = null;
                             });
                         }
-                    });
-                    $scope.$on('layoutChange', function () {
-                        if (timeVar1) {
-                            $timeout.cancel(timeVar1);
-                        }
-                        timeVar1 = $timeout(function () {
-                            if ($scope.scroller)
-                                $scope.scroller.mCustomScrollbar('update');
-                            timeVar1 = null;
-                        }, 200);
                     });
                     $timeout(function () {
                         var page = $routeParams['menuPage'] || 'basicDisplay';

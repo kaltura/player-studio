@@ -2,19 +2,19 @@
 var DirectivesModule = angular.module('KMC.directives');
 DirectivesModule.directive('mcustomScrollbar', [
     '$timeout',
-    function($timeout) {
+    function ($timeout) {
         return {
             priority: 0,
             restrict: 'AC',
-            link: function(scope, element, attr) {
+            link: function (scope, element, attr) {
                 scope.scroller = null;
                 var options = scope.$eval(attr['mcustomScrollbar']);
                 var timeVar = null;
-                scope.$on('layoutChange', function() {
+                scope.$on('layoutChange', function () {
                     if (timeVar) {
                         $timeout.cancel(timeVar);
                     }
-                    timeVar = $timeout(function() {
+                    timeVar = $timeout(function () {
                         if (scope.scroller)
                             scope.scroller.mCustomScrollbar('update');
                         timeVar = null;
@@ -26,6 +26,7 @@ DirectivesModule.directive('mcustomScrollbar', [
                     autoHideScrollbar: true,
                     contentTouchScroll: true,
                     theme: 'dark',
+                    set_height: '99%',
                     advanced: {
                         autoScrollOnFocus: false,
                         updateOnBrowserResize: true,
@@ -33,12 +34,21 @@ DirectivesModule.directive('mcustomScrollbar', [
                     }
                 };
                 angular.extend(opts, options);
-                var afterScroll = $timeout(function() {
-                    if (typeof $().mCustomScrollbar == 'function') {
+                //in the past we used to run the scroller only on '.mp-level-open:last' now it exists on all pages
+                // instate a scroller on the selected menupage withut using the css selector
+//                if (scope.scroller) {
+//                    scope.scroller.mCustomScrollbar('destroy');
+//                    scope.scroller = null;
+//                }
+//             //   element.find('.mCustomScrollbar').mCustomScrollbar('destroy'); // clear all scrollbars (nested won't work well)
+                var afterScroll = $timeout(function () {
+                    if (typeof $().mCustomScrollbar == 'function' && !scope.scroller) {
                         scope.scroller = element.mCustomScrollbar(opts);
                     }
                 }, 1000);
-                var checkScroll = function(value) {
+
+                /// everything below is only relevant to the list screen
+                var checkScroll = function (value) {
                     if (value == 'block') {
                         $('#tableHead').css('padding-right', '18px');
                     }
@@ -47,23 +57,23 @@ DirectivesModule.directive('mcustomScrollbar', [
                     }
                 };
                 if ($('#tableHead').length) {
-                    afterScroll.then(function() {
+                    afterScroll.then(function () {
                         var scrollTools = $(element).find('.mCSB_scrollTools');
                         scope.scrollerCss = scrollTools.css('display');
-                        $timeout(function() {
+                        $timeout(function () {
                             checkScroll(scope.scrollerCss);
                         }, 200);
-                        scope.$watch(function() {
+                        scope.$watch(function () {
                             return  scope.scrollerCss = scrollTools.css('display');
-                        }, function(value) {
+                        }, function (value) {
                             checkScroll(value);
                         });
                         var timeVar;
-                        $(window).resize(function() { //TODO: wrap in single timeout check
+                        $(window).resize(function () { //TODO: wrap in single timeout check
                             if (timeVar) {
                                 $timeout.cancel(timeVar);
                             }
-                            timeVar = $timeout(function() {
+                            timeVar = $timeout(function () {
                                 checkScroll(scrollTools.css('display'));
                                 timeVar = null;
                             }, 200);
