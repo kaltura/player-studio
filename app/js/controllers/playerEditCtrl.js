@@ -42,33 +42,38 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
 
 
             /* set tags
-               $scope.tags = [];
-            // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
-            // the model tags of the player are actually set properly from the ng-model of the tags directive and are not needed here
-            if (typeof $scope.data.tags != "undefined" && $scope.data.tags) { //can also be null
-                var tags = typeof $scope.data.tags == "string" ? $scope.data.tags.split(",") : $scope.data.tags;
-                for (var i = 0; i < tags.length; i++)
-                    $scope.tags.push({id: tags[i], text: tags[i]});
-            }
-            //registers the tags to be available to the directive
-            menuSvc.registerAction('getTags', function() {
-                return $scope.tags;
-            });
-           //tags END */
+             $scope.tags = [];
+             // all of the next block is just to show how to push into the tags autocomplete/dropdown the list of available tags should be loaded this way instead,
+             // the model tags of the player are actually set properly from the ng-model of the tags directive and are not needed here
+             if (typeof $scope.data.tags != "undefined" && $scope.data.tags) { //can also be null
+             var tags = typeof $scope.data.tags == "string" ? $scope.data.tags.split(",") : $scope.data.tags;
+             for (var i = 0; i < tags.length; i++)
+             $scope.tags.push({id: tags[i], text: tags[i]});
+             }
+             //registers the tags to be available to the directive
+             menuSvc.registerAction('getTags', function() {
+             return $scope.tags;
+             });
+             //tags END */
             menuSvc.registerAction('listEntries', function () { // those should be the first 20...
                 return $scope.userEntriesList;
             });
+            var timeVar = null;
             menuSvc.registerAction('queryEntries', function (query) {
-                var data = {results: []};
-               // console.log(query.term);
                 if (query.term) {
-          // here you should do some AJAX API call with the query term and then()...
-                    angular.forEach($scope.userEntriesList, function (item, key) {
-                        if (query.term.toUpperCase() === item.text.substring(0, query.term.length).toUpperCase()) {
-                            data.results.push(item);
-                        }
-                    });
-                    return query.callback(data);
+                    var data = {results: []};
+                    if (timeVar) {
+                        $timeout.cancel(timeVar);
+                    }
+                    timeVar = $timeout(function () {
+                        apiService.searchMedia(query.term).then(function (results) {
+                            angular.forEach(results.objects, function (entry) {
+                                data.results.push({id: entry.id, text: entry.name});
+                            });
+                            timeVar = null;
+                            return query.callback(data);
+                        });
+                    },200);
                 }
                 else
                     return query.callback({results: $scope.userEntriesList});
@@ -110,8 +115,8 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
         return copyobj;
     };
     $scope.autoRefreshEnabled = playerService.autoRefreshEnabled;
-    $scope.$watch('autoRefreshEnabled',function(newVal,oldVal){
-        if (newVal != oldVal){
+    $scope.$watch('autoRefreshEnabled', function (newVal, oldVal) {
+        if (newVal != oldVal) {
             playerService.autoRefreshEnabled = newVal;
         }
     });

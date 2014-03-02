@@ -409,7 +409,7 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($root
     var obj = {'customStart': null};
 // publish start request notification
     obj.requestStarted = function (customStart) {
-        $rootScope.$broadcast(_START_REQUEST_);
+        $rootScope.$broadcast(_START_REQUEST_, customStart);
         if (customStart) {
             obj.customStart = customStart;
         }
@@ -418,7 +418,7 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($root
     obj.requestEnded = function (customStart) {
         if (obj.customStart) {
             if (customStart == obj.customStart) {
-                $rootScope.$broadcast(_END_REQUEST_);
+                $rootScope.$broadcast(_END_REQUEST_, customStart);
                 obj.customStart = null;
             }
             else return;
@@ -428,14 +428,16 @@ KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($root
     };
 // subscribe to start request notification
     obj.onRequestStarted = function ($scope, handler) {
-        $scope.$on(_START_REQUEST_, function (event) {
-            handler();
+        $scope.$on(_START_REQUEST_, function (event, evdata) {
+            if (evdata != 'ignore')
+                handler();
         });
     };
 // subscribe to end request notification
     obj.onRequestEnded = function ($scope, handler) {
-        $scope.$on(_END_REQUEST_, function (event) {
-            handler();
+        $scope.$on(_END_REQUEST_, function (event, evdata) {
+            if (evdata != 'ignore')
+                handler();
         });
     };
 
@@ -672,36 +674,50 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
             };
             return apiService.doRequest(request);
         },
+        searchMedia: function (term) {
+            var request = {
+                'service': 'baseentry',
+                'action': 'list',
+                'filter:freeText': term,
+                'filter:mediaTypeIn': '1,2,5,6,201', // copied from KMC search
+                'filter:objectType': 'KalturaMediaEntryFilter',
+                ignoreNull: '1'
+            }
+            return apiService.doRequest(request, true);
+        },
         useCache: true,
         setCache: function (useCache) {
             apiService.useCache = useCache;
         },
-        doRequest: function (params) {
+        doRequest: function (params, ignoreSpinner) {
             //Creating a deferred object
             var deferred = $q.defer();
             var params_key = apiService.getKey(params);
             if (apiCache.get(params_key) && apiService.useCache) {
                 deferred.resolve(apiCache.get(params_key));
             } else {
-                requestNotificationChannel.requestStarted('api');
+                if (!ignoreSpinner) {
+                    requestNotificationChannel.requestStarted('api');
+                }
                 apiService.apiObj.then(function (api) {
                     api.doRequest(params, function (data) {
-                        //timeout will trigger another $digest cycle that will trigger the "then" function
-//                        $timeout(function() {
                         if (data.code) {
                             if (data.code == "INVALID_KS") {
                                 localStorageService.remove('ks');
                                 $location.path("/login");
                             }
-                            requestNotificationChannel.requestEnded('api');
+                            if (!ignoreSpinner) {
+                                requestNotificationChannel.requestEnded('api');
+                            }
                             deferred.reject(data.code);
                         } else {
                             apiCache.put(params_key, data);
                             apiService.useCache = true;
-                            requestNotificationChannel.requestEnded('api');
+                            if (!ignoreSpinner) {
+                                requestNotificationChannel.requestEnded('api');
+                            }
                             deferred.resolve(data);
                         }
-//                        });
                     });
                 });
             }
