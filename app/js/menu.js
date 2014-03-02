@@ -714,15 +714,15 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             scope: {},
             transclude: true,
             controller: ['$scope', '$element', function ($scope) {
+                $scope.activeItem = menuSvc.currentPage;
                 // set menu category selection
-                $scope.changeActiveItem = function (menupage, $event) {
-                    menuSvc.setMenu(menupage);
-                    var menuitem = $($event.target);
-                    if (menuitem.length && menuitem.is('a') && menuitem.parent('li')) {
-                        $(menuitem).addClass('active');
-                        $(menuitem).parent('li').siblings('li').find('a').removeClass('active');
+                $scope.changeActiveItem = function (menupage) {
+                    if ($scope.activeItem != menupage) {
+                        $scope.activeItem = menupage;
+                        menuSvc.setMenu(menupage);
                     }
                 };
+
             }],
             compile: function (tElement) {
                 // tElement is the directive template
@@ -734,13 +734,15 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     });
                     angular.forEach(elements, function (value, key) {
                         var elm = angular.element('<li></li>');
-                        elm.html('<a ng-click="changeActiveItem(\'' + value.model + '\',$event)" class="icon icon-' + value.icon + '" tooltip-placement="right" tooltip="' + value.label + '"></a>');
+                        elm.html('<a ng-click="changeActiveItem(\'' + value.model + '\')" class="icon icon-' + value.icon + '"  ng-class="{active: activeItem == \'' + value.model + '\'}" tooltip-placement="right" tooltip="' + value.label + '"></a>');
                         $compile(elm)($scope).appendTo(ul);
                     });
-//                    menuSvc.menuScope.$on('menuchange',function(e,page){
-//                        $scope.changeActiveItem(page);
-//                    });
-                    $element.find('li:eq(1) a').addClass('active');// set first icon active TODO:relate to the deeplinking feature
+                    $scope.$watch(function () {
+                        return menuSvc.currentPage;
+                    }, function (newVal, oldVal) {
+                        if (newVal != oldVal && (newVal != $scope.activeItem))
+                            $scope.changeActiveItem(newVal);
+                    });
                 };
             }
         };
