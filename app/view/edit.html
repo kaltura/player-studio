@@ -7,9 +7,9 @@
     <div id="mp-pusher" ng-controller="menuCntrl">
         <!--mp-menu-->
         <form navmenu novalidate name='playerEdit' onbeforeunload id='mp-menu' ng-show="menuInitDone">
-            <li class="nohover " menu-level pagename='search' label='Menu Search'>
-                <form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
-                      ng-submit="searchMenuFn(value)" role="search">
+            <div class="nohover " menu-level pagename='search' label='Menu Search'>
+                <li ng-form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
+                     ng-submit="searchMenuFn(value)" role="search">
                     <div class="form-group ">
                         <div class="input-group merged">
                             <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
@@ -23,8 +23,8 @@
                         <span class="help-block"
                               ng-show="notFound">{{ 'The property was not found '| translate}}</span>
                     </div>
-                </form>
-            </li>
+                </li>
+            </div>
             <!--</menu-level>-->
         </form>
         <!--</navmenu>-->

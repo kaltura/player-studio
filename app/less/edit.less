@@ -32,7 +32,7 @@ body#edit, body#new {
         position: absolute;
         color: #272727;
         cursor: pointer;
-        font-size: 17px;
+        font-size: 14px;
         z-index: 1000;
         -webkit-transition: all 0.5s;
         -moz-transition: all 0.5s;
@@ -229,7 +229,7 @@ body#edit, body#new {
         h2.subMenuHeader {
           margin: 0;
           display: inline-block;
-          padding: 0.7em;
+          padding: 14px;
           padding-top: 24px;
           padding-bottom: 11px;
           color: #272727;
@@ -244,7 +244,7 @@ body#edit, body#new {
         margin-right: -0.6em;
       }
       .levelDesc {
-        margin: 0 13px;
+        margin: 0 14px;
         display: block;
         font-size: 13px;
         margin-bottom: 10px;
@@ -256,13 +256,13 @@ body#edit, body#new {
       .mp-level ul.menuList > li {
         clear: both;
         label, .form-element {
+          padding: 0.6em 1em;
           .ng-invalid {
             outline: 1px solid red;
           }
           .placeholder {
             color: #999999;
           }
-          padding: 0.6em 1em;
           display: block;
           text-align: left;
           clear: both;
@@ -544,40 +544,7 @@ body#edit, body#new {
 
   }
   #menuSearch .form-group {
+    padding: 0.6em 1em;
     width: 100%; // to prevent firefox bug
   }
-}
-
-.select2-container {
-  min-width: 100px;
-}
-
-.select2-container .select2-choice, .select2-drop-mask, .select2-result-label {
-  color: #555555;
-}
-
-.select2-results {
-  background-color: #fff;
-  .select2-highlighted {
-    background-color: #eee;
-  }
-}
-
-.select2-drop-active, .select2-container-active .select2-choice, .select2-container-active .select2-choices {
-  border-color: rgb(170, 170, 170);
-}
-
-.select2-results {
-  padding: 0;
-  margin-right: 0px;
-}
-
-.select2-results .select2-result-label {
-  border-top: 1px solid #ddd;
-}
-
-.select2-results .select2-no-results {
-  background: #fff;
-  padding-left: 7px;
-  color: #555;
 }

@@ -322,9 +322,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                         }
                         sectionsDir = angular.element(sectionsDir);
                         sectionsDir.attr('heading', item.sections.title);
-                        // var tabsetScope = $rootScope.$new();
-                        // tabsetScope.heading = item.sections.title;
-                        // sectionsDir = $compile(sectionsDir)(tabsetScope);
                         if (item.sections.type == 'tabs') {
                             var tabs = [];
                             var tabsSetDir = angular.element('<div tabset></div>').appendTo(sectionsDir);
@@ -348,7 +345,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             menuSearch: function (searchValue) {
                 var foundLabel = search('menudata', menudata, searchValue);
                 if (foundLabel) {
-                    var foundModel = eval(foundLabel.substr(0, foundLabel.lastIndexOf("['label']"))).model;
+                    var foundModelObj = eval(foundLabel.substr(0, foundLabel.lastIndexOf("['label']")));
+                    var foundModel = foundModelObj.model;
                     var lastChild = foundLabel.lastIndexOf("['children']");
                     var lastMenu = foundLabel.substr(0, lastChild);
                     var menuPage = eval(lastMenu);
@@ -379,6 +377,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                         }
                         $timeout(function () {
                             menuSvc.menuScope.$broadcast('highlight', 'data.' + foundModel);
+                            if (foundModelObj.type == 'featuremenu') {
+                                menuSvc.menuScope.$broadcast('openFeature', 'data.' + foundModel);
+                            }
                         });
                         return true;
                     }
@@ -632,7 +633,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
         };
         var getLabels = function (obj) { // for autocomplete
             angular.forEach(obj, function (value, key) {
-                $scope.menuData.push(value.label);
+                if (value != menuObj[key]) // we dont want first level menu pages.
+                    $scope.menuData.push(value.label);
                 if (value.children) {
                     getLabels(value.children);
                 }
@@ -677,15 +679,13 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     var content = tElement.html();
                     tElement.replaceWith(angular.element('<div type="menupage" class="form-element"></div>').append(content));
                 }
-                return  function ($scope, $element, $attrs) {
+                return  function ($scope, $element) {
                     $scope.$on('menuChange', function (event, arg) {
                         $scope.openLevel(arg);
                     });
                     menuSvc.linkFn4FeatureCheckbox($scope);
                     $scope.$watch('isOnTop', function (newVal) {
                         if (newVal) { // open
-//                            if (!$routeParams['menuPage'])
-//                                $window.location('/edit/' + $routeParams['id'] + '/' + $attrs.pagename);
                             $element.parents('.mp-level:not("#mp-base")').addClass('mp-level-in-stack');
                             $element.children('.mp-level:first').addClass('mp-level-open').removeClass('mp-level-in-stack');
                         }
@@ -712,7 +712,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             template: "<div id='mp-mainlevel'><ul></ul></div>",
             replace: true,
             scope: {},
-            transclude:true,
+            transclude: true,
             controller: ['$scope', '$element', function ($scope) {
                 // set menu category selection
                 $scope.changeActiveItem = function (menupage, $event) {
@@ -728,9 +728,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 // tElement is the directive template
                 var ul = tElement.find('ul');
                 var elements = menuSvc.get();
-                return  function ($scope, $element, $attrs,contorller,transcludeFn) {
-                    transcludeFn($scope,function(clone){
-                       ul.prepend(clone);
+                return  function ($scope, $element, $attrs, contorller, transcludeFn) {
+                    transcludeFn($scope, function (clone) {
+                        ul.prepend(clone);
                     });
                     angular.forEach(elements, function (value, key) {
                         var elm = angular.element('<li></li>');

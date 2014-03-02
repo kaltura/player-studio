@@ -105,6 +105,8 @@ body a {
 }
 
 .merged input {
+  -webkit-box-shadow: none;
+  box-shadow: none;
   border-left: 0px;
   background-color: #FFFFFF;
 }
@@ -213,7 +215,7 @@ h1, h2, h3 {
 
 html {
   &.ie10, &.lt-ie9 {
-    .form-control{
+    .form-control {
       padding-bottom: 0px;
     }
   }
@@ -225,13 +227,13 @@ html {
   }
 }
 
-:focus,
-.form-control,
+.form-control:focus, .form-group:focus,
 input:focus,
 select:focus,
 textarea:focus,
 button:focus {
   outline: none !important;
+  border-color:#ccc;
   box-shadow: none;
   -webkit-box-shadow: none;
   -webkit-transition: none;
@@ -239,4 +241,38 @@ button:focus {
   -ms-transition: none;
   -o-transition: none;
   transition: none;
+}
+
+.select2-container {
+  min-width: 100px;
+}
+
+.select2-container .select2-choice, .select2-drop-mask, .select2-result-label {
+  color: #555555;
+}
+
+.select2-results {
+  background-color: #fff;
+  .select2-highlighted {
+    background-color: #eee;
+  }
+}
+
+.select2-drop-active, .select2-container-active .select2-choice, .select2-container-active .select2-choices {
+  border-color: rgb(170, 170, 170);
+}
+
+.select2-results {
+  padding: 0;
+  margin-right: 0px;
+}
+
+.select2-results .select2-result-label {
+  border-top: 1px solid #ddd;
+}
+
+.select2-results .select2-no-results {
+  background: #fff;
+  padding-left: 7px;
+  color: #555;
 }

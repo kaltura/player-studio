@@ -7,6 +7,7 @@ DirectivesModule.directive('mcustomScrollbar', [
             priority: 0,
             restrict: 'AC',
             link: function (scope, element, attr) {
+                if (scope['pagename'] == 'search') return;
                 scope.scroller = null;
                 var options = scope.$eval(attr['mcustomScrollbar']);
                 var timeVar = null;
