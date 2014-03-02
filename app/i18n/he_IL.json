@@ -1,4 +1,5 @@
 {
     "Duplicate": "שכפל",
-    "LIST_BACK_BTN": "חזרה לרשימת הנגנים"
+    "LIST_BACK_BTN": "חזרה לרשימת הנגנים",
+    "onbeforeunload" :"Player Data has been changed and not saved, navigating away will discard changes"
 }

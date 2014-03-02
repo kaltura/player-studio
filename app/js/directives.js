@@ -425,3 +425,48 @@ DirectivesModule.directive('onFinishRender', [
         };
     }
 ]);
+DirectivesModule.directive("onbeforeunload", ["$window", "$filter", function ($window, $filter) {
+    var unloadtext, forms = [];
+
+    function handleOnbeforeUnload() {
+        var i, form, isDirty = false;
+
+        for (i = 0; i < forms.length; i++) {
+            form = forms[i];
+
+            if (form.scope[form.name].$dirty) {
+                isDirty = true;
+                break;
+            }
+        }
+
+        if (isDirty) {
+            return unloadtext;
+        } else {
+            return undefined;
+        }
+    }
+
+    return function ($scope, $element) {
+        if ($element[0].localName !== 'form') {
+            throw new Error("onbeforeunload directive must only be set on a angularjs form!");
+        }
+
+        forms.push({
+            "name": $element[0].name,
+            "scope": $scope
+        });
+        try {
+            unloadtext = $filter("translate")("onbeforeunload");
+        } catch (err) {
+            unloadtext = "";
+        }
+        var formName = $element[0].name;
+        $scope.$watch(formName+'.$dirty', function (newVal, oldVal) {
+            if (newVal && newVal != oldVal) {
+                $window.onbeforeunload = handleOnbeforeUnload;
+            }
+        });
+
+    };
+}]);

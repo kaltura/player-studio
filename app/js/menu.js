@@ -30,7 +30,6 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope)
     };
     $scope.menuShown = true; //initial value
     $scope.menuInitDone = false;
-    resetMenu();
     $(window).resize(function () {
         if ($scope.menuShown === true)
             resetMenu();
@@ -542,7 +541,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
     }]).directive('navmenu', ['menuSvc' , '$compile', '$timeout', '$routeParams', 'PlayerService' , function (menuSvc, $compile, $timeout, $routeParams, PlayerService) {
         return  {
             templateUrl: 'template/menu/navmenu.html',
-            replace: true,
             restrict: 'EA',
             priority: 100,
             transclude: true,
