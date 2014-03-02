@@ -559,14 +559,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     var menuData = menuSvc.buildMenu('data'); // is cached internally in menuSVC.
                     menuSvc.spinnerScope = controller.spinnerScope;
                     transclude($scope, function (clone) {
-                        angular.forEach(clone, function (elem) {
-                            if ($(elem).is('li')) {
-                                menuElem.append(elem);
-                            }
-                            else {
-                                $(elem).prependTo(tElement);
-                            }
-                        });
+                        menuElem.append(clone);
                     });
                     var timeVar = null;
                     var timeVar1 = null;

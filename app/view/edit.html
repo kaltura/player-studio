@@ -5,7 +5,6 @@
 <!-- </menu-head>-->
 <div id="outerWrap">
     <div id="mp-pusher" ng-controller="menuCntrl">
-        <!--mp-menu-->
         <form navmenu novalidate name='playerEdit' onbeforeunload id='mp-menu' ng-show="menuInitDone">
             <div class="nohover " menu-level pagename='search' label='Menu Search'>
                 <li ng-form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
@@ -25,10 +24,7 @@
                     </div>
                 </li>
             </div>
-            <!--</menu-level>-->
         </form>
-        <!--</navmenu>-->
-        <!-- /mp-menu -->
         <div class="wrapper" ng-controller="editPageDataCntrl">
             <div id="menuTriggerWrap" ng-show="$parent.menuInitDone">
                 <a class="menu-trigger" data-ng-click="togglemenu($event)">
@@ -56,9 +52,6 @@
                         ng-class="{'btn-success':checkPlayerRefresh()}" ng-click="refreshPlayer()"><i
                         class="glyphicon glyphicon-refresh">&nbsp;</i>{{'Preview Changes'|translate}}
                 </button>
-                <!--h2 class=" inline text-muted" id="pageHeader">
-                    {{title}}
-                </h2-->
             </div>
             <div class="container" ng-if="debug">
                 <div ng-show="formValidation()" class="container"><p>these property values are not valid:</p>
