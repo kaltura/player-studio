@@ -682,7 +682,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
                 'filter:mediaTypeIn': '1,2,5,6,201', // copied from KMC search
                 'filter:objectType': 'KalturaMediaEntryFilter',
                 ignoreNull: '1'
-            }
+            };
             return apiService.doRequest(request, true);
         },
         useCache: true,
