@@ -30,7 +30,7 @@
             </div>
         </div>
         <div id='playerList' class="scrollerWrap maxViewPort">
-            <div class="row" id="tableHead" >
+            <div class="row" id="tableHead" notselectable="true" >
                 <div class="pull-left playerThumbWrapper">{{'Preview'| translate }}</div>
                 <div class="col-xs-3"><a data-ng-click="sortBy('name')"> {{ 'Name' | translate }}
                     <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='name' && sort.reverse==false),
