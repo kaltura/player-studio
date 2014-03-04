@@ -726,7 +726,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
         }
     };
     return apiService;
-}])
+}]);
 KMCServices.factory('playerTemplates', ['$http', function($http) {
     return {
         'listSystem': function() {
