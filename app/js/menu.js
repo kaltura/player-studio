@@ -1,7 +1,8 @@
 'use strict';
 /* Menu */
-
+// create menu module
 var KMCMenu = angular.module('KMC.menu', []);
+
 KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope) {
     logTime('menuCntrl');
     var getWidth = function () {
@@ -30,6 +31,8 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope)
     };
     $scope.menuShown = true; //initial value
     $scope.menuInitDone = false;
+
+    // set menu width according to 70% / 30%
     $(window).resize(function () {
         if ($scope.menuShown === true)
             resetMenu();
@@ -37,20 +40,16 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope)
             closeMenu();
         }
     });
+
+    // open the menu if user clicked on a menu category when the menu is closed
     $scope.$on('menuChange', function () {
         $scope.menuShown = true;
     });
-    $scope.$watch(function () {
-        return menuSvc.currentPage;
-    }, function (newVal, oldVal) {
-        if (newVal != oldVal) {
-            if (!$scope.menuShown) {
-                $scope.menuShown = true;
-            }
-        }
-    });
+
+    // open / close menu
     $scope.togglemenu = function (e) {
         $scope.menuShown = !$scope.menuShown;
+        // rotate the arrow
         var disTarget = $(e.target);
         if (disTarget.is('i')) {
             disTarget = disTarget.parent('a');
@@ -72,32 +71,38 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function (menuSvc, $scope)
         }
     });
 }]);
+
+// service to build the menu
 KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', function (editableProperties, $timeout, $compile, $location) {
         var menudata = null;
-        var promise = editableProperties
-            .then(function (data) {
+        // use the editableProperties service to retrieve the menu data from the manifest files
+        editableProperties.then(function (data) {
                 menudata = data;
             });
         var menuItems = [];
         var menuFn = {};
+
+        // add the playerRefrsh directive to the following directives:
         var refreshableDirectives = function (jsonName) {
             switch (jsonName) {
                 case 'modaledit':
-                case  'select2data':
+                case 'select2data':
                 case 'dropdown':
-                case  'checkbox':
-                case  'color':
-                case  'url':
-                case  'text':
-                case   'number':
-                case  'radio':
-                case  'multiinput':
+                case 'checkbox':
+                case 'color':
+                case 'url':
+                case 'text':
+                case 'number':
+                case 'radio':
+                case 'multiinput':
                     return true;
                 default:
                     return false;
 
             }
         };
+
+        // get the correct directive according to the type from the manifest
         var JSON2directiveDictionary = function (jsonName) {
             //this is now the single place one need to edit in order to add a directive to the menu generator
             switch (jsonName) {
@@ -141,6 +146,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     return '<div multiple-value-input>';
             }
         };
+
+        // following 3 functions allow directived to get their model data through menuSvc
+
         var searchGet = function (obj, target) { // get object by exact path
             if (typeof obj[target] != 'undefined') {
                 return obj[target];
@@ -172,13 +180,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             }
             return false;
         };
+
+
         var menuSvc = {
-            promise: promise,
             menuScope: {},
             currentTooltip: null,
             closeTooltips: function (e) {
                 if (menuSvc.currentTooltip && e.target != menuSvc.currentTooltip) {
-                    $(menuSvc.currentTooltip).trigger('customShow');
+                    $(menuSvc.currentTooltip).trigger('customShow'); // hide all tooltips
                     menuSvc.currentTooltip = null;
                 }
             },
@@ -186,42 +195,31 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 return menudata;
             },
             getModalData: function (model) {
+                // retrieve the model raw data
                 return searchGet(menuSvc.menuScope, model);
             },
             getControlData: function (model) {
-                var modelStr = model.substr(model.indexOf(".") + 1); //remove the data.
+                // retrieve the manifest data of a model
+                var modelStr = model.substr(model.indexOf(".") + 1); //remove the "data."
                 return  Search4ControlModelData('', menudata, modelStr);
             },
             currentPage: '',
             setMenu: function (setTo) {
+                // go to men u category
                 menuSvc.currentPage = setTo;
-                $location.search('menuPage', setTo);
+                $location.search('menuPage', setTo); // update queryString using angular search method
                 if (typeof  menuSvc.spinnerScope != 'undefined' && setTo != 'search') {
+                    // start the spinner when switching category
                     menuSvc.spinnerScope.spin();
                 }
                 menuSvc.menuScope.$broadcast('menuChange', setTo);
-            },
-            menuCache: null,
-            compliedMenuCache: null,
-            getPutCompliedMenu2Cache: function (menuFn) {
-                if (!menuFn) {
-                    if (menuSvc.compliedMenuCache) {
-                        return menuSvc.compliedMenuCache;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-                else {
-                    return menuSvc.compliedMenuCache = menuFn;
-                }
             },
             buildMenu: function (baseData) {
                 if (menuItems.length === 0) {
                     var menuJsonObj = menuSvc.get(); // gets the  editableProperties manifest json
                     angular.forEach(menuJsonObj, function (value) {
-                        var menuItem = menuSvc.buildMenuItem(value, baseData);
-                        menuFn[menuItem.attr('pagename')] = $compile(menuItem);
+                        var menuItem = menuSvc.buildMenuItem(value, baseData);  // create the top level menu items
+                        menuFn[menuItem.attr('pagename')] = $compile(menuItem); // compile the entire category children and save it to the menu cache hash table
                     });
                 }
                 return menuFn;
@@ -237,7 +235,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                         }
                         var parentMenu = writeFormElement(item, menuLevelObj);
                         elm = writeChildren(item, parentMenu, true);
-                        checkItemSections(item, elm);
+                        checkItemSections(item, elm); // when all children are ready - check if we need to move them to seperate tabs
                         break;
                     case
                     'featuremenu' :
@@ -282,12 +280,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                         if (!directive) return;
                     }
                     var elm = angular.element(directive);
+                    // if the manifest has ~ at the begining we use the model full path from the maifest instead of the "data." base path
                     if (typeof item.model != 'undefined' && item.model[0] == '~') {
                         elm.attr('model', item.model.substr(1));
                     }
                     else {
                         elm.attr('model', 'data.' + item.model);
                     }
+                    // add playerRefresh directive if the directive is in the refreshableDirectives list
                     if (strDirective) {
                         if (item['player-refresh'] !== false) { // undefined is also triggering player-refresh
                             if (refreshableDirectives(strDirective)) {
@@ -295,6 +295,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                             }
                         }
                     }
+                    // copy attributes from the manifest to the directive html
                     angular.forEach(item, function (value, key) {
                         if (key != 'model' && key != 'player-refresh' &&
                             (typeof value == 'string' ||
@@ -309,6 +310,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     return elm;
                 }
 
+                // support dynamic section (like tabs) directive
                 function checkItemSections(item, elm) {
                     if (item.sections) {
                         var sectionsDir = '';
@@ -320,8 +322,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                                 sectionsDir = '<li ka-dynamic-section></li>';
                                 break;
                         }
-                        sectionsDir = angular.element(sectionsDir);
-                        sectionsDir.attr('heading', item.sections.title);
+                        sectionsDir = angular.element(sectionsDir); // crate HTML from string
+                        sectionsDir.attr('heading', item.sections.title); // tab label
                         if (item.sections.type == 'tabs') {
                             var tabs = [];
                             var tabsSetDir = angular.element('<div tabset></div>').appendTo(sectionsDir);
@@ -333,6 +335,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                             $(elm).find('li>div[section]').each(function (index, child) { // add children
                                 var childTab = $(child).attr('section');
                                 if (tabs.indexOf(childTab) > -1) {
+                                    // move children to correct tabs
                                     var targetTab = tabsSetDir.find('div[section="' + childTab + '"]');
                                     $(child).parents('li').remove().appendTo(targetTab);
                                 }
@@ -342,10 +345,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     }
                 }
             },
+            // search for control by name
             menuSearch: function (searchValue) {
                 var foundLabel = search('menudata', menudata, searchValue);
                 if (foundLabel) {
-                    var foundModelObj = eval(foundLabel.substr(0, foundLabel.lastIndexOf("['label']")));
+                    // find which menu and sub menu to open
+                    var foundModelObj = eval(foundLabel.substr(0, foundLabel.lastIndexOf("['label']"))); // get the object of the search result
                     var foundModel = foundModelObj.model;
                     var lastChild = foundLabel.lastIndexOf("['children']");
                     var lastMenu = foundLabel.substr(0, lastChild);
@@ -421,13 +426,14 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 return false;
             },
             makeFeatureCheckbox: function ($scope, $attrs) {
+                // used by feature menu and menu page to create the checkbox
                 if ($attrs['model']) {
                     var ModelArr = $attrs['model'].split('.');
                     $scope.FeatureModel = ModelArr.pop();
                     var parentStr = ModelArr.join('.');
-                    $scope.parentModel = menuSvc.menuScope.$eval(parentStr);
-                    $scope.featureModelCon = menuSvc.menuScope.$eval($attrs['model']);
-                    $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true;//undefined is ok - notice the string type
+                    $scope.parentModel = menuSvc.menuScope.$eval(parentStr);           // get parent model
+                    $scope.featureModelCon = menuSvc.menuScope.$eval($attrs['model']); // model data
+                    $scope.featureCheckbox = ($attrs.featureCheckbox == 'false') ? false : true; //undefined is ok - notice the string type
                     if ($scope.featureCheckbox) {
                         if (!$scope.featureModelCon) {
                             if ($scope.parentModel)
@@ -555,12 +561,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             },
             compile: function (tElement) {
                 var menuElem = tElement.find('#mp-base >  ul');
-                return function ($scope, $element, $attrs, controller, transclude) {
+                return function ($scope, $element, $attrs, controller) {
                     var menuData = menuSvc.buildMenu('data'); // is cached internally in menuSVC.
                     menuSvc.spinnerScope = controller.spinnerScope;
-                    transclude($scope, function (clone) {
-                        menuElem.append(clone);
-                    });
                     var timeVar = null;
                     var timeVar1 = null;
                     $scope.menuInitDone = false;
