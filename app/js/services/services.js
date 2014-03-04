@@ -311,6 +311,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 return $http.get('js/services/defaultPlayer.json');
             },
             "preparePluginsDataForRender": function(data) {
+                // clean data before save (remove _featureEnabled and objects that contain _featureEnabled recursively)
                 var copyobj = data.plugins || data;
                 angular.forEach(copyobj, function(value, key) {
                     if (angular.isObject(value)) {

@@ -3,7 +3,6 @@ var cl = function (val) {
     return console.log(val);
 };
 
-window.lang = 'en-US';
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
     ['pascalprecht.translate', 'ngRoute', 'KMC.controllers', 'KMC.filters',
@@ -14,7 +13,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             prefix: 'i18n/',
             suffix: '.json'
         });
-        $translateProvider.preferredLanguage('he_IL');
+        $translateProvider.preferredLanguage('en_US');
         $translateProvider.fallbackLanguage('en_US');
         if (window.location.href.indexOf('debug') != -1) {
             $translateProvider.useMissingTranslationHandlerLog();

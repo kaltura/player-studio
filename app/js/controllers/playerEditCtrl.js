@@ -10,18 +10,24 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
             $scope.newPlayer = !$routeParams.id;
             $scope.data = PlayerData;
             $scope.debug = $routeParams.debug;
+
+            // clear the current refresh if the user navigates away from the edit screen during refresh
             $scope.$on('$destory', function () {
                 PlayerService.clearCurrentRefresh();
             });
+
+            // set debug info on screen when debug is set on the querystring
             $scope.getDebugInfo = function (partial) {
                 if (!partial)
                     return $scope.data;
                 else
                     return $scope.data[partial];
             };
-            $scope.masterData = angular.copy($scope.data);
+
+            $scope.masterData = angular.copy($scope.data); // enable revert
             $scope.userEntriesList = [];
-            $scope.settings = {};
+            $scope.settings = {}; // data like aspect ratio that is not part of the player data
+
             $timeout(function () {
                 apiService.listMedia().then(function (data) {
                     $scope.userEntries = data;
@@ -55,9 +61,13 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
              return $scope.tags;
              });
              //tags END */
-            menuSvc.registerAction('listEntries', function () { // those should be the first 20...
+
+            // register functions to be used by directives that need to call these function for data retrivial after linkage (select2data, infoaction)
+            menuSvc.registerAction('listEntries', function () { // those should be the first 30
                 return $scope.userEntriesList;
             });
+
+            // search in media entries
             var timeVar = null;
             menuSvc.registerAction('queryEntries', function (query) {
                 if (query.term) {
@@ -77,71 +87,63 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                 }
                 else
                     return query.callback({results: $scope.userEntriesList});
-
             });
 
+            /*
             if (parseFloat($scope.data.version) < PlayerService.getRequiredVersion()) {
                 menuSvc.registerAction('update', function () {
                     PlayerService.playerUpdate($scope.data);
                 });
-            }
+            }*/
 
+            // changing the entry should refresh the player
             $scope.$watch('settings.previewEntry', function (newVal, oldVal) {
                 if (newVal != oldVal && typeof oldVal != "undefined") {
                     PlayerService.setPreviewEntry($scope.settings.previewEntry);
                     PlayerService.playerRefresh();
                 }
             });
-            requestNotificationChannel.requestEnded('edit');
+
+            requestNotificationChannel.requestEnded('edit'); // hide spinner
         }
     ]);
 
+// controller to handle Save, return to list, menu collapse etc.
 angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerService', 'apiService', '$modal', '$location', 'menuSvc', 'localStorageService', function ($scope, playerService, apiService, $modal, $location, menuSvc, localStorageService) {
-    var filterData = function (copyobj) {
-        angular.forEach(copyobj, function (value, key) {
-            if (angular.isObject(value)) {
-                if (typeof value._featureEnabled == 'undefined' || value._featureEnabled === false) {
-                    delete copyobj[key];
-                }
-                else {
-                    filterData(value);
-                }
-            } else {
-                if (key == "_featureEnabled") {
-                    delete copyobj[key];
-                }
-            }
-        });
-        return copyobj;
-    };
+
     $scope.autoRefreshEnabled = playerService.autoRefreshEnabled;
+    // binded to checkbox
     $scope.$watch('autoRefreshEnabled', function (newVal, oldVal) {
         if (newVal != oldVal) {
             playerService.autoRefreshEnabled = newVal;
         }
     });
+
+    // refresh button click function
     $scope.refreshPlayer = function () {
         playerService.playerRefresh().then(function () {
             playerService.refreshNeeded = false;
         });
     };
+
+    // refresh button class selection
     $scope.checkPlayerRefresh = function () {
         if (menuSvc.menuScope && menuSvc.menuScope.menuInitDone && menuSvc.menuScope.playerInitDone)
             return playerService.refreshNeeded;
         return false;
     };
+
     $scope.save = function () {
         playerService.savePlayer($scope.data).then(function (value) {
-                // cleanup
+                // cleanup form and master data
                 menuSvc.menuScope.playerEdit.$setPristine();
                 $scope.masterData = value;
-                localStorageService.remove('tempPlayerID');
+                localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
                 // if this is a new player - add it to the players list
                 if ($scope.newPlayer) {
-//                            prevent the list controller from using the cache the next time the list loads
+                    // prevent the list controller from using the cache the next time the list loads
                     apiService.setCache(false);
                 }
-                // TODO: replace with floating success message that will disappear after few seconds
                 $modal.open({ templateUrl: 'template/dialog/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
@@ -172,6 +174,8 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
             }
         );
     };
+
+    // used by the debug info: go over all forms in playerEdit (recursively) and look for errors
     $scope.formValidation = function () {
         if (typeof  menuSvc.menuScope.playerEdit != 'undefined' && menuSvc.menuScope.playerEdit.$error) {
             var obj = menuSvc.menuScope.playerEdit.$error;
@@ -186,6 +190,8 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
             return null;
         }
     };
+
+    // return to list if the data is clean. issue a message if need to be saved
     $scope.cancel = function () {
         if (menuSvc.menuScope.playerEdit.$pristine) {
             $location.url('/list');
@@ -210,8 +216,11 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
             });
         }
     };
+
+    // enable save button when the player data is not equal to the master data
+    // TODO: check form $dirty instead of comapring to master data. in that case, we can remove master data unless we want to implement revert function
     $scope.saveEnabled = function () {
-//instead of using the form dirty state we compare to the master copy.
+        //instead of using the form dirty state we compare to the master copy.
         if (typeof menuSvc.menuScope.playerEdit != 'undefined') {
             if (menuSvc.menuScope.playerEdit.$valid)
                 return !angular.equals($scope.data, $scope.masterData);
@@ -219,6 +228,4 @@ angular.module('KMCModule').controller('editPageDataCntrl', ['$scope', 'PlayerSe
                 return false;
         }
     };
-}
-])
-;
+}]);
