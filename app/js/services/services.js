@@ -127,7 +127,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     // clear companion divs
                     $("#Companion_300x250").empty();
                     $("#Companion_728x90").empty();
-                    window.mw.setConfig('Kaltura.LeadWithHTML5', true);
+                    window.mw.setConfig( 'forceMobileHTML5' , true );
                     window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
                     kWidget.embed({
                         "targetId": playerId, // hard coded for now?
