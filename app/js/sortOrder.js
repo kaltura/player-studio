@@ -170,12 +170,13 @@ KMCSort.directive('parentContainer', ['sortSvc', 'menuSvc', function(sortSvc, me
     return {
         restrict: 'A',
         link: function($scope, $element, $attrs) {
-            var model = $attrs.model.substr(0, $attrs.model.lastIndexOf('.'));// plugin model
+            var model = $attrs.model;
+            var parentModel = model.substr(0, model.lastIndexOf('.'));
             $scope.$watch(function() {
                 return menuSvc.getModelData(model);
             }, function(newVal, oldVal) {
                 if (newVal != oldVal) {
-                    sortSvc.updateContainer(model, newVal, oldVal);
+                    sortSvc.updateContainer(parentModel, newVal, oldVal);
                 }
             });
         }
