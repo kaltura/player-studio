@@ -73,7 +73,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
 }]);
 
 // service to build the menu
-KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', 'sortSvc',function(editableProperties, $timeout, $compile, $location,sortSvc) {
+KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', function(editableProperties, $timeout, $compile, $location) {
         var menudata = null;
         // use the editableProperties service to retrieve the menu data from the manifest files
         editableProperties.then(function(data) {
@@ -151,13 +151,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             }
         };
 
-        // following 3 functions allow directived to get their model data through menuSvc
+        // following 2 functions allow directives to get their manifest data through menuSvc
 
-        var searchGet = function(obj, target) { // get object by exact path
-            if (typeof obj[target] != 'undefined') {
-                return obj[target];
-            }
-        };
         var search = function(path, obj, target) {
             for (var k in obj) {
                 if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
@@ -189,6 +184,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
         var menuSvc = {
             menuScope: {},
             currentTooltip: null,
+            sortObj2register: [],
             closeTooltips: function(e) {
                 if (menuSvc.currentTooltip && e.target != menuSvc.currentTooltip) {
                     $(menuSvc.currentTooltip).trigger('customShow'); // hide all tooltips
@@ -198,9 +194,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             get: function() {
                 return menudata;
             },
-            getModalData: function(model) {
+            getModelData: function(model) {
                 // retrieve the model raw data
-                return searchGet(menuSvc.menuScope, model);
+                return menuSvc.menuScope.$eval(model);
             },
             getControlData: function(model) {
                 // retrieve the manifest data of a model
@@ -299,9 +295,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                             }
                         }
                     }
+
                     if (item.type == 'container') {
-                        var parent = item.model.substr(0, item.model.lastIndexOf('.'));
-                        sortSvc.register(parent, menuSvc.menuScope.$eval(item.model));
+                        menuSvc.sortObj2register.push(BaseData + '.' + item.model);
                     }
                     // copy attributes from the manifest to the directive html
                     angular.forEach(item, function(value, key) {
