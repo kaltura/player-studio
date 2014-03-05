@@ -120,6 +120,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     return  '<div model-select parent-container=""/>';
                 case 'alignment' :
                     return  '<div model-select sort-alignment=""/>';
+                case 'sortVal' :
+                    return  '<div hidden-value sort-value=""/>';
                 case 'checkbox' :
                     return '<div model-checkbox/>';
                 case 'color' :

@@ -2,7 +2,8 @@
 var DirectivesModule = angular.module('KMC.directives', [
     'colorpicker.module',
     'ui.bootstrap',
-    'ui.select2'
+    'ui.select2',
+    'ui.sortable'
 ]);
 DirectivesModule.directive('timeago', [function () {
     return {
@@ -221,7 +222,6 @@ DirectivesModule.directive('listEntriesThumbs', function () {
         }]
     };
 });
-
 DirectivesModule.directive('infoAction', ['menuSvc', function (menuSvc) {
     return {
         restrict: 'EA',

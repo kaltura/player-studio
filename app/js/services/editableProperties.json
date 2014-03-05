@@ -161,7 +161,6 @@
                 "type": "featuremenu",
                 "model": "lookAndFeel.components.controlBar",
                 "label": "Control Bar",
-                "order": 0,
                 "children": [
                     {
                         "label": "Control Bar Size (%)",
@@ -174,10 +173,34 @@
                         "model": "lookAndFeel.components.controlBar.controlBarSize"
                     },
                     {
+                        "options": [
+                            {
+                                "label": "Right",
+                                "value": "right"
+                            },
+                            {
+                                "label": "Center",
+                                "value": "center"
+                            },
+                            {
+                                "label": "Left",
+                                "value": "left"
+                            }
+                        ],
+                        "initvalue": "right",
+                        "label": "align",
+                        "type": "alignment",
+                        "model": "lookAndFeel.components.controlBar.align"
+                    },
+                    {
                         "type": "checkbox",
                         "label": "Display On Hover",
                         "initvalue": "true",
                         "model": "lookAndFeel.components.controlBar.controlBarHover"
+                    },
+                    {
+                        "type": "sortVal",
+                        "model": "lookAndFeel.components.controlBar.order"
                     },
                     {
                         "initvalue": "videoHolder",
@@ -330,7 +353,6 @@
                         "type": "featuremenu",
                         "model": "lookAndFeel.components.logo",
                         "label": "Logo",
-                        "order": 0,
                         "children": [
                             {
                                 "options": [
@@ -399,7 +421,6 @@
                         "type": "featuremenu",
                         "model": "lookAndFeel.components.flavor",
                         "label": "Flavor Selector",
-                        "order": 0,
                         "children": [
                             {
                                 "options": [
@@ -468,7 +489,6 @@
                         "type": "featuremenu",
                         "model": "lookAndFeel.components.playbackRate",
                         "label": "Playback Rate Selector",
-                        "order": 0,
                         "children": [
                             {
                                 "options": [
@@ -537,7 +557,6 @@
                         "type": "featuremenu",
                         "model": "lookAndFeel.components.flagContent",
                         "label": "Flag Content",
-                        "order": 0,
                         "children": [
                             {
                                 "options": [
@@ -580,9 +599,12 @@
                                 "type": "dropdown"
                             },
                             {
+                                "type": "sortVal",
+                                "model": "lookAndFeel.components.flagContent.order"
+                            },
+                            {
                                 "initvalue": "videoHolder",
                                 "type": "container",
-
                                 "label": "Flag Content Selector Location",
                                 "model": "lookAndFeel.components.flagContent.flagContentContainer",
                                 "options": [
@@ -640,6 +662,10 @@
                         "player-refresh": true,
                         "initvalue": "topLeft",
                         "model": "config.plugins.watermark.cssClass"
+                    },
+                    {
+                        "type": "sortVal",
+                        "model": "config.plugins.watermark.order"
                     },
                     {
                         "initvalue": "videoHolder",
@@ -736,14 +762,12 @@
     {
         "type": "menu",
         "label": "Sort Order",
-        "model": "sortOrder",
-        "endline": "true",
         "icon": "TabBasicSettings",
         "children": [
             {
                 "type": "sortOrder",
                 "label": "Sort Order",
-                "model": "lookAndFeel.sortOrder.sortOrder"
+                "model": "sortOrder"
             }
         ]
     }

@@ -3,12 +3,12 @@
 ///* Filters */
 //
 angular.module('KMC.filters', ['ngSanitize' ])
-    .filter('HTMLunsafe',function($sce) {
-        return function(val) {
+    .filter('HTMLunsafe',function ($sce) {
+        return function (val) {
             return $sce.trustAsHtml(val);
         };
-    }).filter('timeago', function() {
-        return function(input) {
+    }).filter('timeago', function () {
+        return function (input) {
             if (typeof $.timeago == 'function' && !isNaN(input)) {
                 var date = input * 1000;
                 return $.timeago(date);
@@ -17,9 +17,16 @@ angular.module('KMC.filters', ['ngSanitize' ])
                 return input;
         };
     })
+    .filter('capitalize', function () {
+        return function (input, scope) {
+            if (input != null)
+                input = input.toLowerCase();
+            return input.substring(0, 1).toUpperCase() + input.substring(1);
+        }
+    })
     .
-    filter('range',function() {
-        return function(input) {
+    filter('range',function () {
+        return function (input) {
             var lowBound, highBound;
             switch (input.length) {
                 case 1:
@@ -38,8 +45,8 @@ angular.module('KMC.filters', ['ngSanitize' ])
                 result.push(i);
             return result;
         };
-    }).filter('startFrom', function() {
-        return function(input, start) {
+    }).filter('startFrom', function () {
+        return function (input, start) {
             if (input) {
                 start = +start; //parse to int
                 return input.slice(start);
