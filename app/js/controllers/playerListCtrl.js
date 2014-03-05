@@ -17,9 +17,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.currentPage = 1;
             $scope.maxSize =  parseInt(localStorageService.get('listSize')) || 10;
             $scope.$watch('maxSize', function(newval, oldval) {
-                if (newval != oldval)
-                    localStorageService.set('listSize',newval); // save list size for when we return to the list from the edit page or reload the list page
-                    $scope.$broadcast('layoutChange');          // update the scroller
+                if (newval != oldval){
+                    localStorageService.set('listSize', newval); // save list size for when we return to the list from the edit page or reload the list page
+                    $scope.$broadcast('layoutChange');// update the scroller
+                }
             });
             $scope.triggerLayoutChange = function(){
                 $scope.$broadcast('layoutChange');

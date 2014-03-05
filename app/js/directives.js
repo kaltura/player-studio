@@ -425,7 +425,7 @@ DirectivesModule.directive('onFinishRender', [
         };
     }
 ]);
-DirectivesModule.directive("onbeforeunload", ["$window", "$filter", function ($window, $filter) {
+DirectivesModule.directive("onbeforeunload", ["$window", "$filter", '$location',function ($window, $filter,$location) {
     var unloadtext, forms = [];
 
     function handleOnbeforeUnload() {
@@ -467,6 +467,12 @@ DirectivesModule.directive("onbeforeunload", ["$window", "$filter", function ($w
                 $window.onbeforeunload = handleOnbeforeUnload;
             }
         });
-
+        $scope.$on('$locationChangeSuccess',function(e,origin,dest){
+            if (origin.split('?')[0] != dest.split('?')[0]){
+                $window.ononbeforeunload = false;}
+        });
+        $scope.$on('$destory',function(){
+            $window.ononbeforeunload = false;
+        });
     };
 }]);
