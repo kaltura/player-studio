@@ -3,10 +3,6 @@ html, body, body > .section, .wrapper, .scroller {
   height: 100%;
 }
 
-body > .section {
-  padding-top: 26px;
-}
-
 body a {
   //default links color
   color: #009dff;
@@ -15,6 +11,26 @@ body a {
   }
 }
 
+.kmcSubNav{
+  display:none;
+  height:33px;
+  padding-left: 10px;
+  a {
+    font: bold 12px arial,sans-serif;
+    padding:3px 9px;
+    border-radius:20px;
+    margin: 7px;
+    color:#555555;
+    background: white;
+    &.active{
+      background: #222;
+      color:white;
+    }
+  }
+html.inKmc &{
+  display:block;
+}
+}
 .fluid-container {
   padding: 26px;
 }

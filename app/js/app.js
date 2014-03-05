@@ -190,6 +190,10 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     var appLoad = new Date();
     var debug = false;
 
+    if (1 == 1 || typeof window.parent.kmc != 'undefined') {
+        $('html').addClass('inKmc');
+    }
+
     // set the logTime function used in debug mode
     var logTime = function (eventName) {
         if ($location.search()['debug']) {
