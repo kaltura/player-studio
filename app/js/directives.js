@@ -448,7 +448,7 @@ DirectivesModule.directive("onbeforeunload", ["$window", "$filter", function ($w
     }
 
     return function ($scope, $element) {
-        if ($element[0].localName !== 'form') {
+        if ($element[0].nodeName.toLowerCase() !== 'form') {
             throw new Error("onbeforeunload directive must only be set on a angularjs form!");
         }
 
