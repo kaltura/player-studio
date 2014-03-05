@@ -190,7 +190,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     var appLoad = new Date();
     var debug = false;
 
-    if (1 == 1 || typeof window.parent.kmc != 'undefined') {
+    if (typeof window.parent.kmc != 'undefined') {
         $('html').addClass('inKmc');
     }
 
