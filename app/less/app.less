@@ -11,26 +11,31 @@ body a {
   }
 }
 
-.kmcSubNav{
-  display:none;
-  height:33px;
+.kmcSubNav {
+  display: none;
+  height: 33px;
   padding-left: 10px;
+  border-bottom: 2px solid #cccccc;
+  margin-bottom: 1px;
   a {
-    font: bold 12px arial,sans-serif;
-    padding:3px 9px;
-    border-radius:20px;
+    font: bold 12px arial, sans-serif;
+    padding: 3px 9px;
+    border-radius: 20px;
     margin: 7px;
-    color:#555555;
+    color: #555555;
     background: white;
-    &.active{
+    &.active {
       background: #222;
-      color:white;
+      color: white;
     }
   }
-html.inKmc &{
-  display:block;
+
+  html.inKmc & {
+    display: block;
+  }
+
 }
-}
+
 .fluid-container {
   padding: 26px;
 }
@@ -250,7 +255,7 @@ select:focus,
 textarea:focus,
 button:focus {
   outline: none !important;
-  border-color:#ccc;
+  border-color: #ccc;
   box-shadow: none;
   -webkit-box-shadow: none;
   -webkit-transition: none;
