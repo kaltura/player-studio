@@ -73,7 +73,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
 }]);
 
 // service to build the menu
-KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', function(editableProperties, $timeout, $compile, $location) {
+KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', 'sortSvc',function(editableProperties, $timeout, $compile, $location,sortSvc) {
         var menudata = null;
         // use the editableProperties service to retrieve the menu data from the manifest files
         editableProperties.then(function(data) {
@@ -298,6 +298,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                                 elm.attr('player-refresh', ( item['player-refresh'] || true));
                             }
                         }
+                    }
+                    if (item.type == 'container') {
+                        var parent = item.model.substr(0, item.model.lastIndexOf('.'));
+                        sortSvc.register(parent, menuSvc.menuScope.$eval(item.model));
                     }
                     // copy attributes from the manifest to the directive html
                     angular.forEach(item, function(value, key) {
