@@ -26,7 +26,9 @@ DirectivesModule.directive('select2Data', [
                 $scope.selectOpts['data'] = menuSvc.doAction($attrs.source);
                 if ($attrs.query) {
                     $scope.selectOpts['data'].results = [];
-                    $scope.selectOpts['minimumInputLength'] = $attrs.minimumInputLength || 3;
+                    if ($attrs.minimumInputLength){
+                        $scope.selectOpts['minimumInputLength'] = $attrs.minimumInputLength;
+                    }
                     $scope.selectOpts['query'] = menuSvc.getAction($attrs.query);
                 }
                 if ($attrs.placehold) {

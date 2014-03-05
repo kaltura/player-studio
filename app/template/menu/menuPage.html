@@ -6,7 +6,7 @@
     </span>
         <a class='menu-level-trigger'>{{(parentPage) ? label : ''}}</a>
     </div>
-    <div class='mp-level' mcustom-scrollbar="{autoHideScrollbar: false}">
+    <div class='mp-level' menuscroller="{{pagename}}" mcustom-scrollbar="{autoHideScrollbar: false}">
         <a class='mp-back' ng-click='goBack()' ng-show='parentPage'>Back to {{parentLabel}}</a>
 
         <div class="subPageHeaderWrapper">

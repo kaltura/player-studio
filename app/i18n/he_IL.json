@@ -1,5 +1,8 @@
 {
     "Duplicate": "שכפל",
     "LIST_BACK_BTN": "חזרה לרשימת הנגנים",
-    "onbeforeunload" :"Player Data has been changed and not saved, navigating away will discard changes"
+    "onbeforeunload" :"Player Data has been changed and not saved, navigating away will discard changes",
+    "USER_WRONG_PASSWORD":" טעות בסיסמא",
+    "USER_NOT_FOUND":"שם המשתמש לא נמצא",
+    "You must login to use this application":"כדי להכנס חייבים להזדהות - עצור סיסמא"
 }
