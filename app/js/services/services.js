@@ -12,6 +12,7 @@ KMCServices.factory('apiCache', function($cacheFactory) {
         capacity: 10
     });
 });
+
 KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', 'localStorageService',
     function($http, $modal, $log, $q, apiService, $filter, localStorageService) {
         var playersCache = {};
@@ -75,7 +76,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     // clear companion divs
                     $("#Companion_300x250").empty();
                     $("#Companion_728x90").empty();
-                    window.mw.setConfig('Kaltura.LeadWithHTML5', true);
+                    window.mw.setConfig( 'forceMobileHTML5' , true );
                     window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
                     kWidget.embed({
                         "targetId": playerId, // hard coded for now?
@@ -475,10 +476,10 @@ KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, ap
     var deferred = $q.defer();
     api.then(function() {
         //for debbuging
-       return $http.get('js/services/editableProperties.json').then(function(result){
-           deferred.resolve(result.data);
-        });
-
+//       return $http.get('js/services/editableProperties.json').then(function(result){
+//           deferred.resolve(result.data);
+//        });
+//
 
         var method = 'get';
         var url = window.kWidget.getPath() + 'services.php?service=studioService';
