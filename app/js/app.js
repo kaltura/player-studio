@@ -212,6 +212,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
     // custom show for tooltips
     $rootScope.constructor.prototype.openTooltip = function ($event) {
+        if (menuSvc.currentTooltip == $event.target) return;
         menuSvc.currentTooltip = $event.target;
         $($event.target).trigger('customShow');
         $event.preventDefault();
