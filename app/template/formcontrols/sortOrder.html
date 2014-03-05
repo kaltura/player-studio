@@ -2,11 +2,22 @@
     <ul>
         <li ng-repeat="container in containers">
             <div class="sortContainer"><h4>{{container.name}}</h4>
-                <ul ui-sortable="sortableOptions" ng-model="container.elements">
-                    <li class="sortObj" ng-repeat="obj in container.elements"><i
-                            class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
-                    </li>
-                </ul>
+                <div class="side" side="left">
+                    <h5>Left</h5>
+                    <ul ui-sortable="sortableOptions" ng-model="container.elements">
+                        <li class="sortObj" ng-repeat="obj in container.elements"><i
+                                class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="side" side="right">
+                    <h5>Right</h5>
+                    <ul ui-sortable="sortableOptions" ng-model="container.elements">
+                        <li class="sortObj" ng-repeat="obj in container.elements"><i
+                                class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
+                        </li>
+                    </ul>
+                </div>
             </div>
         </li>
     </ul>

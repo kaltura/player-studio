@@ -441,29 +441,39 @@ body#edit, body#new {
             margin-bottom: 20px;
             overflow: hidden;
             h4 {
-              padding-left: 0;
+              padding-left: 5px;
             }
             border: 1px solid #272727;
-            li.sortObj {
-              &:active, &:hover, &:focus {
-                background: #666666;
-                color: white;
-              }
-              &.ui-sortable-helper {
-                border: 1px solid darkred;
-              }
-              min-height: 28px;
-              border-bottom: 1px dashed #666;
-              &:last-child {
-                border-bottom: none;
-              }
-              &:first-child {
-                border-top: 1px dashed #666;
-              }
-              i {
-                padding-left: 10px;
-              }
 
+            div.side {
+              float: left;
+              width: 50%;
+              h5 {
+
+              }
+              ul {
+
+                li.sortObj {
+                  &:active, &:hover, &:focus {
+                    background: #666666;
+                    color: white;
+                  }
+                  &.ui-sortable-helper {
+                    border: 1px solid darkred;
+                  }
+                  min-height: 28px;
+                  border-bottom: 1px dashed #666;
+                  &:last-child {
+                    border-bottom: none;
+                  }
+                  &:first-child {
+                    border-top: 1px dashed #666;
+                  }
+                  i {
+                    padding-left: 10px;
+                  }
+                }
+              }
             }
           }
         }

@@ -5,7 +5,6 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
         replace: true,
         restrict: 'EA',
         priority: 1,
-        require: ['?parentContainer'],
         scope: {
             label: '@',
             model: '=',
@@ -19,20 +18,7 @@ DirectivesModule.directive('modelSelect', ['menuSvc', function (menuSvc) {
             if (tAttr['endline'] == 'true') {
                 tElement.append('<hr/>');
             }
-            return function ($scope, $element, $attrs, controllers) {
-                var parentCntrl = (controllers[0]) ? controllers[0] : null;
-                if (parentCntrl) {
-                    var pubObj = {
-                        model: $attrs.model,
-                        label: $attrs.label.replace('Location', ''),
-                        sortVal: menuSvc.getControlData($attrs.model).sortVal
-                    };
-                    parentCntrl.register($scope.model, pubObj);
-                    $scope.$watch('model', function (newVal, oldVal) {
-                        if (newVal != oldVal)
-                            parentCntrl.update(newVal, oldVal, pubObj);
-                    });
-                }
+            return function ($scope, $element, $attrs) {
                 var menuData = menuSvc.getControlData($attrs.model);
                 if (menuData) {
                     $scope.options = menuData.options;

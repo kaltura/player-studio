@@ -182,7 +182,6 @@
                     {
                         "initvalue": "videoHolder",
                         "type": "container",
-                        "sortVal": 0,
                         "label": "Control Bar Location",
                         "model": "lookAndFeel.components.controlBar.controlBarContainer",
                         "options": [
@@ -220,8 +219,8 @@
                             }
                         ],
                         "initvalue": "right",
-                        "require": true,
-                        "type": "radio",
+                        "label": "align",
+                        "type": "alignment",
                         "model": "lookAndFeel.title.align"
                     },
                     {
@@ -255,7 +254,7 @@
                         ],
                         "initvalue": "videoHolder",
                         "type": "container",
-                        "sortVal": 0,
+
                         "label": "Display Location",
                         "model": "lookAndFeel.title.titleContainer"
                     },
@@ -307,7 +306,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
-                                "sortVal": 0,
+
                                 "label": "Volume Bar Location",
                                 "model": "lookAndFeel.components.volume.volumeBarContainer",
                                 "options": [
@@ -349,7 +348,8 @@
                                     }
                                 ],
                                 "initvalue": "right",
-                                "type": "radio",
+                                "type": "alignment",
+                                "label": "align",
                                 "model": "lookAndFeel.components.logo.align"
                             },
                             {
@@ -375,7 +375,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
-                                "sortVal": 0,
+
                                 "label": "Logo Location",
                                 "model": "lookAndFeel.components.logoContainer",
                                 "options": [
@@ -417,7 +417,8 @@
                                     }
                                 ],
                                 "initvalue": "right",
-                                "type": "radio",
+                                "type": "alignment",
+                                "label": "align",
                                 "model": "lookAndFeel.components.flavor.align"
                             },
                             {
@@ -443,7 +444,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
-                                "sortVal": 0,
+
                                 "label": "Flavor Selector Location",
                                 "model": "lookAndFeel.components.flavor.flavorContainer",
                                 "options": [
@@ -485,7 +486,8 @@
                                     }
                                 ],
                                 "initvalue": "right",
-                                "type": "radio",
+                                "type": "alignment",
+                                "label": "align",
                                 "model": "lookAndFeel.components.playbackRate.align"
                             },
                             {
@@ -511,7 +513,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
-                                "sortVal": 0,
+
                                 "label": "Playback Rate Selector Location",
                                 "model": "lookAndFeel.components.playbackRate.playbackRateContainer",
                                 "options": [
@@ -553,7 +555,8 @@
                                     }
                                 ],
                                 "initvalue": "right",
-                                "type": "radio",
+                                "type": "alignment",
+                                "label": "align",
                                 "model": "lookAndFeel.components.flagContent.align"
                             },
                             {
@@ -579,7 +582,7 @@
                             {
                                 "initvalue": "videoHolder",
                                 "type": "container",
-                                "sortVal": 0,
+
                                 "label": "Flag Content Selector Location",
                                 "model": "lookAndFeel.components.flagContent.flagContentContainer",
                                 "options": [
@@ -641,7 +644,7 @@
                     {
                         "initvalue": "videoHolder",
                         "type": "container",
-                        "sortVal": 0,
+
                         "label": "Watermark Location",
                         "model": "lookAndFeel.watermark.watermarkContainer",
                         "options": [
@@ -727,19 +730,20 @@
                         ]
                     }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        "type": "menu",
+        "label": "Sort Order",
+        "model": "sortOrder",
+        "endline": "true",
+        "icon": "TabBasicSettings",
+        "children": [
             {
-                "type": "menu",
+                "type": "sortOrder",
                 "label": "Sort Order",
-                "model": "lookAndFeel.sortOrder",
-                "endline": "true",
-                "children": [
-                    {
-                        "type": "sortOrder",
-                        "label": "Sort Order",
-                        "model": "lookAndFeel.sortOrder.sortOrder"
-                    }
-                ]
+                "model": "lookAndFeel.sortOrder.sortOrder"
             }
         ]
     }

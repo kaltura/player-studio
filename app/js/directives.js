@@ -2,8 +2,7 @@
 var DirectivesModule = angular.module('KMC.directives', [
     'colorpicker.module',
     'ui.bootstrap',
-    'ui.select2',
-    'ui.sortable'
+    'ui.select2'
 ]);
 DirectivesModule.directive('timeago', [function () {
     return {
@@ -222,56 +221,7 @@ DirectivesModule.directive('listEntriesThumbs', function () {
         }]
     };
 });
-DirectivesModule.directive('parentContainer', ['sortSvc', function (sortSvc) {
-    return {
-        restrict: 'A',
-        controller: function () {
-            var cntrl = {
-                register: function (container, model) {
-                    sortSvc.register(container, model);
-                },
-                update: function (newVal, oldVal, model) {
-                    sortSvc.update(newVal, oldVal, model);
-                }
-            };
-            return cntrl;
-        }
-    };
-}]);
-DirectivesModule.directive('sortOrder', [
-    'sortSvc',
-    function (sortSvc) {
-        return {
-            restrict: 'EA',
-            replace: true,
-            scope: {},
-            templateUrl: 'template/formcontrols/sortOrder.html',
-            controller: ['$scope', function ($scope) {
-                $scope.getObjects = function () {
-                    $scope.containers = sortSvc.getObjects();
-                };
-                $scope.getObjects();
-                sortSvc.sortScope = $scope;
-                $scope.$on('sortContainersChanged', function () {
-                    $scope.getObjects();
-                });
-                $scope.$watchCollection('containers', function (newVal, oldVal) {
-                    if (newVal != oldVal) {
-                        sortSvc.saveOrder($scope.containers);
-                    }
-                });
-                $scope.sortableOptions = {
-                    update: function (e, ui) {
-                        cl($scope.containers);
-                    },
-                    axis: 'y'
-                };
-            }],
-            link: function (scope, element, attrs) {
-            }
-        };
-    }
-]);
+
 DirectivesModule.directive('infoAction', ['menuSvc', function (menuSvc) {
     return {
         restrict: 'EA',

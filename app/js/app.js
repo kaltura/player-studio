@@ -5,7 +5,7 @@ var cl = function (val) {
 
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
-    ['pascalprecht.translate', 'ngRoute', 'KMC.controllers', 'KMC.filters',
+    ['pascalprecht.translate', 'ngRoute', 'KMC.controllers', 'KMC.filters','KMC.sort',
         'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu']);
 
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', '$translateProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider, $translateProvider) {

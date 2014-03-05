@@ -12,58 +12,6 @@ KMCServices.factory('apiCache', function($cacheFactory) {
         capacity: 10
     });
 });
-
-KMCServices.factory('sortSvc', [function() {
-    var containers = {};
-    var sorter = {};
-
-    var Container = function Container(name) {
-        this.name = name;
-        this.elements = [];
-        containers[name] = this;
-    };
-    Container.prototype.addElement = function(model) {
-        this.elements.push(model);
-    };
-    Container.prototype.callObjectsUpdate = function() {
-        angular.forEach(this.elements, function(model) {
-            cl(model.sortVal + ' ' + model.model);
-        });
-    };
-    Container.prototype.removeElement = function(model) {
-        var index = this.elements.indexOf(model);
-        if (index != -1)
-            this.elements.splice(index, 1);
-    };
-    sorter.sortScope = '';
-    sorter.register = function(containerName, model) {
-        var container = (typeof  containers[containerName] == 'undefined') ? new Container(containerName) : containers[containerName];
-        container.addElement(model);
-    };
-    sorter.update = function(newVal, oldVal, model) {
-        var oldContainer = containers[oldVal];
-        var newContainer = (!containers[newVal]) ? new Container(newVal) : containers[newVal];
-        if (oldContainer) {
-            oldContainer.removeElement(model);
-        }
-        newContainer.addElement(model);
-        if (typeof  sorter.sortScope == 'object') {
-            sorter.sortScope.$broadcast('sortContainersChanged');
-        }
-    };
-    sorter.getObjects = function() {
-        return containers;
-    };
-    sorter.saveOrder = function(containersObj) {
-        containers = containersObj;
-        angular.forEach(containers, function(container) {
-            container.callObjectsUpdate();
-        });
-    };
-    return sorter;
-}]
-);
-
 KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', 'localStorageService',
     function($http, $modal, $log, $q, apiService, $filter, localStorageService) {
         var playersCache = {};
@@ -526,11 +474,11 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function(r
 KMCServices.factory('editableProperties', ['$q', 'api', '$http', function($q, api, $http) {
     var deferred = $q.defer();
     api.then(function() {
-        //for debbuging
+//        //for debbuging
 //       return $http.get('js/services/editableProperties.json').then(function(result){
 //           deferred.resolve(result.data);
 //        });
-//
+
 
         var method = 'get';
         var url = window.kWidget.getPath() + 'services.php?service=studioService';
