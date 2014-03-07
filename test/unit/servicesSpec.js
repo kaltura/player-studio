@@ -15,8 +15,8 @@ describe('SortService', function() {
     it('should keep a track of what we give it  ', function() {
         var model = {model: 'testModel', container: 'test', sortVal: 1};
         sortSvc.register('test', model);
-        expect(sortSvc.getObjects().test).toBeDefined();
-        expect(sortSvc.getObjects().test.elements[0]).toEqual(model);
+        expect(sortSvc.getContainers().test).toBeDefined();
+        expect(sortSvc.getContainers().test.elements[0]).toEqual(model);
     });
     it('should move an element from one container to a new one successfully ', function() {
         var model = {model: 'testModel', container: 'test', sortVal: 1};
@@ -24,7 +24,7 @@ describe('SortService', function() {
         sortSvc.register('testContainer', model);
         sortSvc.register('testContainer', model2);
         sortSvc.update('newContainer', 'testContainer', model);
-        var objects = sortSvc.getObjects();
+        var objects = sortSvc.getContainers();
         expect(objects.newContainer).toBeDefined();
         expect(objects.newContainer.elements[0]).toEqual(model);
         expect(objects.testContainer.elements[0]).not.toEqual(model);

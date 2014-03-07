@@ -1,77 +1,56 @@
 'use strict';
 var KMCSort = angular.module('KMC.sort', ['ui.sortable'])
 KMCSort.factory('SortObj', ['menuSvc', function(menuSvc) {
-    return function SortObj(modelStr) { // invoked with model of the parent container for the plugin
+    var SortObj = function SortObj(modelStr) { // invoked with model of the parent container for the plugin
         var modelValue = menuSvc.getModelData(modelStr); // which container
         var parent = modelStr.substr(0, modelStr.lastIndexOf('.'));
         var parentObj = menuSvc.getModelData(parent);// the object
         if (parentObj && parentObj._featureEnabled) {
-            return {
-                model: parent,
-                label: menuSvc.getControlData(parent).label,
-                sortVal: (typeof parentObj != 'undefined' && typeof parentObj.order == "number") ? parentObj.order : 0,
-                side: (typeof parentObj != 'undefined' && (parentObj.align == "left" || parentObj.align == "right" )) ? parentObj.align : 'left',
-                container: modelValue
-            };
-        }
-        return null;
+            this.model = parent;
+            this.label = menuSvc.getControlData(parent).label;
+            this.sortVal = (typeof parentObj != 'undefined' && typeof parentObj.order == "number") ? parentObj.order : 0;
+            this.side = (typeof parentObj != 'undefined' && (parentObj.align == "left" || parentObj.align == "right" )) ? parentObj.align : 'left';
+            this.container = modelValue;
+            return this;
+        } else
+            return null;
     }
-}]);
+    SortObj.prototype.setSides = function(targetSide) {
+        if (targetSide == 'left' || targetSide == 'right')
+            this.side = targetSide;
+    };
+
+    return SortObj;
+}])
+;
 KMCSort.factory('Container', [function() {
     function Container(name) {
         if (typeof name == 'string') {
             this.name = name;
-            this.sides = {right: [], left: []};
+            this.elements = [];
             return this;
         }
     };
-    Container.prototype.addElement = function(model, side) {
-        side = (side) ? side : 'left';
-        this.sides[side].push(model);
+    Container.prototype.addElement = function(model) {
+        this.elements.push(model);
     };
-    Container.prototype.callObjectsUpdate = function() {
-        angular.forEach(this.sides, function(side, sideKey) {
-            cl(sideKey + ': ');
-            angular.forEach(side, function(model) {
-                cl(model.sortVal + ' ' + model.model);
-            });
-        });
-    };
-    Container.prototype.hasElement = function(modelObj) {
-        var returnVal = false;
-        var _this = this;
-        angular.forEach(this.sides, function(side) {
-            if (side.indexOf(modelObj) != -1) {
-                returnVal = _this;
-            }
-        });
-        return returnVal;
-    }
     Container.prototype.removeElement = function(modelObj) {
-        angular.forEach(this.sides, function(side) {
-            var index = side.indexOf(modelObj);
-            if (index != -1)
-                side.splice(index, 1);
-        });
-    };
-    Container.prototype.setSides = function(modelObj, targetSide) {
-        var origin = (this.sides.left.indexOf(modelObj) != -1) ? "left" : null;
-        if (!origin)
-            origin = (this.sides.right.indexOf(modelObj) != -1) ? "right" : null;
-        if (!origin) return false; // model not found in container
-        var target = (origin == 'left') ? 'right' : 'left';
-        if (targetSide == origin) return true;
-        this.sides[origin].splice(origin, 1); // remove from origin
-        this.sides[target].push(modelObj); // add to target;
-        return true;
+        var index = this.elements.indexOf(modelObj);
+        if (index != -1)
+            this.elements.splice(index, 1);
     };
     return Container;
 }]);
-KMCSort.factory('sortSvc', ['menuSvc', 'SortObj', 'Container', function(menuSvc, SortObj, Container) {
+KMCSort.factory('sortSvc', ['menuSvc', 'SortObj', 'Container', '$rootScope', function(menuSvc, SortObj, Container, $rootScope) {
     var containers = {};
     var sorter = {};
-
-    sorter.sortScope = {}; // temporary
+    var asyncContainers = menuSvc.sortObj2register;
+    $rootScope.$on('menuInitDone', function() {
+        angular.forEach(asyncContainers, function(sortContainerModel) {
+            sorter.asyncRegister(sortContainerModel);
+        });
+    });
+    sorter.sortScope = {}; // temporary, later become the directive scope
     sorter.asyncRegister = function(containerModelStr) {
         var watchOnce = menuSvc.menuScope.$watch(function() {
             return menuSvc.getModelData(containerModelStr); // modelValue
@@ -82,73 +61,87 @@ KMCSort.factory('sortSvc', ['menuSvc', 'SortObj', 'Container', function(menuSvc,
             }
         });
     };
-    sorter.register = function(containerModelStr, containerName, side) {
-        var modelObj = SortObj(containerModelStr);
+    sorter.register = function(containerModelStr, containerName) {
+        var modelObj = new SortObj(containerModelStr);
         if (modelObj) {
             var container = (typeof  containers[containerName] == 'undefined') ? new Container(containerName) : containers[containerName];
             if (typeof containers[containerName] == 'undefined') {
                 containers[containerName] = container;
             }
-            container.addElement(modelObj, side);
+            container.addElement(modelObj);
         } else
             return false;
     };
 
-    sorter.findModelObjbyModelStr = function(modelStr) {
+    sorter.findModelObjByModelStr = function(modelStr) {
         var keepGoing = true;
         var returnVal = false;
         angular.forEach(containers, function(container) {
             if (keepGoing)
-                angular.forEach(container.sides, function(side) {
+                angular.forEach(container.elements, function(element) {
                     if (keepGoing)
-                        angular.forEach(side, function(object) {
-                            if (keepGoing)
-                                if (object.model == modelStr) {
-                                    returnVal = object;
-                                    keepGoing = false;
-                                }
-                        });
+                        if (element.model == modelStr) {
+                            returnVal = element;
+                            keepGoing = false;
+                        }
                 });
         });
         return returnVal;
     };
-
     sorter.setSortVal = function(modelStr, sortVal) {
-        var object = sorter.findModelObjbyModelStr(modelStr);
+        var object = sorter.findModelObjByModelStr(modelStr);
         if (object) {
             object.sortVal = sortVal;
         }
     };
     sorter.setSides = function(modelStr, sideStr) {
-        var modelObj = sorter.findModelObjbyModelStr(modelStr);
+        var modelObj = sorter.findModelObjByModelStr(modelStr);
         if (modelObj) {
-            containers[modelObj.container].setSides(modelObj, sideStr)
+            modelObj.setSides(sideStr)
         }
     };
     sorter.updateContainer = function(modelStr, newVal, oldVal) {
-        var modelObj = sorter.findModelObjbyModelStr(modelStr);
+        var modelObj = sorter.findModelObjByModelStr(modelStr);
         if (modelObj) { // already registered.
             var oldContainer = containers[oldVal];
-            var newContainer = (!containers[newVal]) ? new Container(newVal) : containers[newVal];
+            if (!containers[newVal]) {
+                var newContainer = new Container(newVal);
+                containers[newVal] = newContainer;
+            }
+            else {
+                var newContainer = containers[newVal];
+            }
             if (oldContainer) {
                 oldContainer.removeElement(modelObj);
             }
             modelObj.container = newVal;
             newContainer.addElement(modelObj);
-            if (typeof  sorter.sortScope == 'object') {
+            if (typeof  sorter.sortScope == 'object' && typeof sorter.sortScope.$broadcast == 'function') {
                 sorter.sortScope.$broadcast('sortContainersChanged');
             }
         } else {
             sorter.register(modelStr, newVal);
         }
     };
-    sorter.getObjects = function() {
+    sorter.getContainers = function() {
         return containers;
     };
+    sorter.saveOrder = function(saveContainers) {
+        angular.forEach(saveContainers, function(container, containerKey) {
+            angular.forEach(container.elements, function(object, index) {
+                var modelStr = object.model;
+                var modelObj = menuSvc.getModelData(modelStr);
+                if (modelObj) {
+                    modelObj.parent = containerKey; // or object.container;
+                    modelObj.order = index; //or object.sortVal
+                    modelObj.align = object.side;
+                }
+            });
+        });
+    }
     return sorter;
 }]
 );
-
 KMCSort.directive('sortAlignment', ['sortSvc', 'menuSvc', function(sortSvc, menuSvc) {
     return {
         restrict: 'A',
@@ -183,8 +176,8 @@ KMCSort.directive('parentContainer', ['sortSvc', 'menuSvc', function(sortSvc, me
     };
 }]);
 KMCSort.directive('sortOrder', ['menuSvc',
-    'sortSvc',
-    function(menuSvc, sortSvc) {
+    'sortSvc', '$timeout',
+    function(menuSvc, sortSvc, $timeout) {
         return {
             restrict: 'EA',
             replace: true,
@@ -192,49 +185,61 @@ KMCSort.directive('sortOrder', ['menuSvc',
             templateUrl: 'template/formcontrols/sortOrder.html',
             controller: ['$scope', function($scope) {
                 sortSvc.sortScope = $scope;
+                $scope.getContainers = function() {// prepares the different containers for left and right
+                    $scope.containers = sortSvc.getContainers();
+                    angular.forEach($scope.containers, function(container) {
+                        container.sides = {left: [], right: []};
+                        angular.forEach(container.elements, function(sortObj) {
+                            container.sides[sortObj.side].push(sortObj);
+                        });
+                    });
+                };
+                $scope.$watchCollection(function() {
+                    return sortSvc.getContainers();
+                }, function(newVal, oldVal) {
+                    if (newVal != oldVal) {
+                        $scope.containers = newVal;
+                    }
+                });
                 $scope.saveOrder = function() {
+                    var saveContainers = {};
                     angular.forEach($scope.containers, function(container, containerKey) {
                         angular.forEach(container.sides, function(side, sideKey) {
                             angular.forEach(side, function(object, index) {
-                                var modelStr = object.model;
-                                var modelObj = menuSvc.getModelData(modelStr);
-                                if (modelObj) {
-                                    modelObj.parent = containerKey;
-                                    modelObj.order = index;
-                                    modelObj.align = sideKey;
-                                }
+                                object.container = containerKey;
+                                object.sortVal = index;
+                                object.side = sideKey;
                             });
                         });
+                        saveContainers[containerKey] = {name: containerKey, elements: container.sides.left.concat(container.sides.right)};
                     });
+                    sortSvc.saveOrder(saveContainers);
                 }
-                $scope.getObjects = function() {
-                    $scope.containers = sortSvc.getObjects();
-                };
                 $scope.sortOpts = {options: {
                     "connectWith": '.sortableList',
                     "placeholder": 'sortObj',
                     "containment": '.sortOrder',
-                    "dropOnEmpty": true, update: function(e, ui) {
-                        cl($scope.containers);
-                    }
+//                    "over": function(e, ui) {
+                    //nice way to do it but there are weird bugs so reveted to make different arrays.
+                    //    ui.item.scope().obj.setSides($(e.target).attr('side'));
+                    //   ui.item.scope().obj.container = $(e.target).attr('container');
+//                    },
+                    "dropOnEmpty": true,
+                    update: function(e, ui) {
+                        $timeout(function() {// important!!
+                            $scope.saveOrder();
+                        }, 100);
 
+                    }
                 }
                 };
             }],
             link: function($scope) {
-                var asyncContainers = menuSvc.sortObj2register;
-                angular.forEach(asyncContainers, function(sortContainerModel) {
-                    sortSvc.asyncRegister(sortContainerModel);
-                });
-                $scope.getObjects();
+                $scope.getContainers();
                 $scope.$on('sortContainersChanged', function() {
-                    $scope.getObjects();
+                    $scope.getContainers();
                 });
-                $scope.$watch('containers', function(newVal, oldVal) {
-                    if (newVal != oldVal) {
-                        $scope.saveOrder();
-                    }
-                }, true);
+
             }
         };
     }

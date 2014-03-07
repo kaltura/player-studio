@@ -1,12 +1,26 @@
 <div class="form-element sortOrder">
     <ul>
         <li ng-repeat="container in containers">
-            <div class="sortContainer"><h4>{{container.name}}</h4>
-                <div  ng-repeat="(sideName,side) in container.sides" class="side">
-                    <h5>{{sideName |capitalize}}</h5>
-                    <ul class="sortableList" ui-sortable="sortOpts.options" ng-model="side">
-                        <li class="sortObj" ng-repeat="obj in side | orderBy: obj.sortVal"><i
-                                class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
+            <div class="sortContainer">
+                <h4>{{container.name}}</h4>
+
+                <div class="side">
+                    <h5>Left</h5>
+                    <ul class="sortableList" ui-sortable="sortOpts.options" container="{{container.name}}" side="left"
+                        ng-model="container.sides.left">
+                        <li class="sortObj"
+                            ng-repeat="obj in container.sides.left track by $id(obj.model) |orderBy: obj.sortVal">
+                            <i class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="side">
+                    <h5>Right</h5>
+                    <ul class="sortableList" ui-sortable="sortOpts.options" container="{{container.name}}" side='right'
+                        ng-model="container.sides.right">
+                        <li class="sortObj"
+                            ng-repeat="obj in container.sides.right track by $id(obj.model)| orderBy: obj.sortVal">
+                            <i class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
                         </li>
                     </ul>
                 </div>
