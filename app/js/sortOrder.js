@@ -194,13 +194,6 @@ KMCSort.directive('sortOrder', ['menuSvc',
                         });
                     });
                 };
-                $scope.$watchCollection(function() {
-                    return sortSvc.getContainers();
-                }, function(newVal, oldVal) {
-                    if (newVal != oldVal) {
-                        $scope.containers = newVal;
-                    }
-                });
                 $scope.saveOrder = function() {
                     var saveContainers = {};
                     angular.forEach($scope.containers, function(container, containerKey) {
@@ -235,7 +228,9 @@ KMCSort.directive('sortOrder', ['menuSvc',
                 };
             }],
             link: function($scope) {
-                $scope.getContainers();
+                $timeout(function(){
+                    $scope.getContainers();
+                },500);
                 $scope.$on('sortContainersChanged', function() {
                     $scope.getContainers();
                 });

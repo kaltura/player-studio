@@ -295,7 +295,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                             }
                         }
                     }
-
+                    // adds the model to the sorting array later to be evaluated by the sort directive.
                     if (item.type == 'container') {
                         menuSvc.sortObj2register.push(BaseData + '.' + item.model);
                     }
