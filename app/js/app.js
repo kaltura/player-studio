@@ -16,7 +16,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $translateProvider.preferredLanguage('en_US');
         $translateProvider.fallbackLanguage('en_US');
         if (window.location.href.indexOf('debug') != -1) {
-            $translateProvider.useMissingTranslationHandlerLog();
+            // add if you want to get all the missing translattions to the console when running in debug mode
+          //  $translateProvider.useMissingTranslationHandlerLog();
         }
         $translateProvider.useStorage('localStorageService');
         $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });

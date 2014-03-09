@@ -88,6 +88,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 case 'modaledit':
                 case 'select2data':
                 case 'dropdown':
+                case 'alignment':
+                case 'container':
                 case 'checkbox':
                 case 'color':
                 case 'url':
@@ -149,11 +151,6 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
 
         // following 3 functions allow directived to get their model data through menuSvc
 
-        var searchGet = function(obj, target) { // get object by exact path
-            if (typeof obj[target] != 'undefined') {
-                return obj[target];
-            }
-        };
         var search = function(path, obj, target) {
             for (var k in obj) {
                 if (obj.hasOwnProperty(k) && ( k == 'label' || k == 'children' || typeof obj[k] == 'object'))
@@ -196,7 +193,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             },
             getModalData: function(model) {
                 // retrieve the model raw data
-                return searchGet(menuSvc.menuScope, model);
+                return menuSvc.menuScope.$eval(model);
             },
             getControlData: function(model) {
                 // retrieve the manifest data of a model

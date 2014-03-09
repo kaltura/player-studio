@@ -72,13 +72,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var previewEntryObj;
         var playerId = 'kVideoTarget';
         var currentRefresh = null;
+        var nextRefresh = false;
         var defaultCallback = function() {
-            currentRefresh.resolve(true);
             playersService.refreshNeeded = false;
+            currentRefresh.resolve(true);
             currentRefresh = null;
+            if (nextRefresh) {
+                nextRefresh = false;
+                playerRefresh();
+            }
             logTime('renderPlayerDone');
         };
-        var playerRefresh = function(option) {
+        var playerRefresh = function() {
             if (!currentRefresh) {
                 currentRefresh = $q.defer();
                 try {
@@ -87,6 +92,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 catch (e) {
                     currentRefresh.reject(e);
                 }
+            }
+            else {
+                nextRefresh = true;
             }
             return currentRefresh.promise;
         };
@@ -127,7 +135,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     // clear companion divs
                     $("#Companion_300x250").empty();
                     $("#Companion_728x90").empty();
-                    window.mw.setConfig( 'forceMobileHTML5' , true );
+                    window.mw.setConfig('forceMobileHTML5', true);
                     window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
                     kWidget.embed({
                         "targetId": playerId, // hard coded for now?
@@ -643,7 +651,7 @@ KMCServices.provider('api', function() {
         }
     };
 });
-KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'apiCache', 'requestNotificationChannel', '$filter', function(api, $q, $timeout, $location, localStorageService, apiCache, requestNotificationChannel,$filter) {
+KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'apiCache', 'requestNotificationChannel', '$filter', function(api, $q, $timeout, $location, localStorageService, apiCache, requestNotificationChannel, $filter) {
     var apiService = {
         apiObj: api,
         unSetks: function() {
@@ -709,7 +717,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
                             if (!ignoreSpinner) {
                                 requestNotificationChannel.requestEnded('api');
                             }
-                            var message  = $filter('translate')(data.code);
+                            var message = $filter('translate')(data.code);
                             deferred.reject(message);
                         } else {
                             apiCache.put(params_key, data);
