@@ -191,6 +191,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     var appLoad = new Date();
     var debug = false;
 
+    localStorage.setItem('updateHash', true); // IE8 fix
+
     if (typeof window.parent.kmc != 'undefined') {
         $('html').addClass('inKmc');
     }
