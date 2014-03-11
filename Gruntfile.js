@@ -86,7 +86,7 @@ module.exports = function(grunt) {
                     'app/bower_components/angular-route/angular-route.min.js',
                     'app/bower_components/angular-sanitize/angular-sanitize.min.js',
                     'app/bower_components/angular-animate/angular-animate.min.js',
-                    'app/bower_components/angular-ui-sortable/src/sortable.min.js',
+                   ' app/bower_components/angular-ui-sortable/sortable.min.js',
                     'app/bower_components/angular-ui-select2/src/select2.min.js'
                 ],
                 dest: '_dist/lib/libs.js'
