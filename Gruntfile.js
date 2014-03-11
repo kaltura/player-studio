@@ -201,6 +201,12 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
+                        cwd: 'app/lib/colorpicker/img',
+                        src: '**/*',
+                        dest: '_dist/img'
+                    },
+                    {
+                        expand: true,
                         cwd: 'app/i18n',
                         src: '**/*.json',
                         dest: '_dist/i18n'
