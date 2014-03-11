@@ -143,6 +143,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $routeProvider.when('/newByTemplate',
             {templateUrl: 'view/new-template.html',
                 controller: 'PlayerCreateCtrl',
+                reloadOnSearch: false,
                 resolve: {
                     'templates': ['playerTemplates', function (playerTemplates) {
                         return  playerTemplates.listSystem();
@@ -157,6 +158,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $routeProvider.when('/new',
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
+                reloadOnSearch: false,
                 resolve: {
                     'api': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
                         return ksCheck(api, apiService, localStorageService, $location);
@@ -191,7 +193,10 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     var appLoad = new Date();
     var debug = false;
 
-    window.localStorage.setItem('updateHash', true); // IE8 fix
+    setTimeout(function(){
+        window.localStorage.setItem('updateHash', "true"); // IE8 fix
+    },1000);
+
 
     if (typeof window.parent.kmc != 'undefined') {
         $('html').addClass('inKmc');
