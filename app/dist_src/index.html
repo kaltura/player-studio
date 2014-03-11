@@ -6,7 +6,16 @@
     <script type="text/javascript">
         window.IE = (!!window.ActiveXObject && +(/msie\s(\d+)/i.exec(navigator.userAgent)[1])) || NaN;
         if (IE < 11) {
-            document.documentElement.className += ' lt-ie9' + ' ie' + IE;
+            if (IE < 9) {
+                document.documentElement.className += ' lt-ie9';
+            }
+            else {
+                document.documentElement.className += ' modrenBrowser';
+            }
+            document.documentElement.className += ' ie' + IE;
+        }
+        else {
+            document.documentElement.className += ' modrenBrowser';
         }
     </script>
     <!--[if lt IE 9]>
