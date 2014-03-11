@@ -1,9 +1,6 @@
 <li class="form-element dyanmicSections">
     <span class="control-label">{{configData.title}}</span>
     <a ng-click="addSection()" class="btn btn-primary">{{configData.addButtonTxt}}</a>
-    <div class='dynSection' ng-repeat="section in sections">
-        <div ng-repeat="control in section.template track by $index" ng-bind-html="control">
-        </div>
-
+    <div class='dynSection'>
     </div>
 </li>
