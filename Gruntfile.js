@@ -110,7 +110,8 @@ module.exports = function(grunt) {
                     'app/lib/jquery-1.10.2.min.js',
                     'app/lib/jquery.xdomainrequest.min.js',
                     'app/bower_components/angular/angular.min.js',
-                    'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js'
+                    'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js',
+                    'app/lib/colorpickerV1/lib/bootstrap-colorpicker.min.js'
                 ],
                 dest: '_dist/vendor/vendorOld.min.js'
             }
@@ -128,7 +129,8 @@ module.exports = function(grunt) {
                     'app/bower_components/angular-ui-select2/src/select2.min.js':'app/bower_components/angular-ui-select2/src/select2.js',
                     'app/bower_components/angular-ui-sortable/sortable.min.js':'app/bower_components/angular-ui-sortable/sortable.js',
                     'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.js',
-                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js'
+                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js',
+                    'app/lib/colorpickerV1/lib/bootstrap-colorpicker.min.js':'app/lib/colorpickerV1/lib/bootstrap-colorpicker.js'
                 }
 
             }
