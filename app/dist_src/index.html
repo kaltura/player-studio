@@ -11,9 +11,9 @@
     </script>
     <!--[if lt IE 9]>
 	<script type="text/javascript">
-		if (localStorage.getItem('updateHash')==null || localStorage.getItem('updateHash') == true){
+		if (window.localStorage.getItem('updateHash') == null || window.localStorage.getItem('updateHash') == "true"){
+			window.localStorage.setItem('updateHash', "false");
 			window.location.hash = window.location.hash;
-			localStorage.setItem('updateHash', false);
 		}
 	</script>
     <script type="text/javascript" src="vendor/vendorOld.min.js"></script>
