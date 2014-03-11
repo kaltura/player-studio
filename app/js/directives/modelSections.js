@@ -31,10 +31,8 @@ DirectivesModule.provider('sections', [ function () {
                         $scope.tabset = {heading: $attrs['heading']};
                     }
                     if (sectionType == 'dynamic') {
-                        transclude($scope, function (clone) {
-                            $scope.template = clone;
-                            $scope.sections.push({template:clone});
-                        });
+                        var html = $compile($scope.configData.template)(menuSvc.menuScope);
+                        $scope.sections.push({template:html});
                         window.dScope = $scope;
                     }
                 }
