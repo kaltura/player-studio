@@ -255,7 +255,7 @@ body#edit, body#new {
 
       .mp-level ul.menuList > li {
         clear: both;
-        label, .form-element {
+        label, .form-element, &.form-element {
           padding: 0.6em 1em;
           .ng-invalid {
             outline: 1px solid red;
@@ -288,8 +288,8 @@ body#edit, body#new {
             }
           }
           html.lt-ie9 &[type="featuremenu"] div.header {
-              width: 90%;
-            }
+            width: 90%;
+          }
           &[type="featuremenu"], &[type="menupage"], {
             div.header {
               a.menu-level-trigger {
@@ -426,13 +426,21 @@ body#edit, body#new {
               }
             }
           }
+
           .form-group {
             text-align: center;
             margin: auto;
             width: 100%;
             height: 30px;
           }
-
+          .dynSection {
+            margin-bottom: 10px;
+           > a{float:right;}
+            ul {
+              border: 1px solid #ccc;
+              border-radius: 5px;
+            }
+          }
           .colorExample {
             display: block;
             width: 25px;

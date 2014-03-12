@@ -214,7 +214,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 var checkObject = menuSvc.getModalData(model);
                 var getParent = function (value) {
                     return value.substr(0, value.lastIndexOf('.'));
-                }
+                };
                 while (model && typeof checkObject == 'undefined') {
                     model = getParent(model);
                     checkObject = menuSvc.getModalData(model);
@@ -224,8 +224,9 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             getControlData: function (model) {
                 if (typeof model == 'string') {
                     // retrieve the manifest data of a model
-                    var modelStr = model.substr(model.indexOf(".") + 1); //remove the "data."
-                    return  Search4ControlModelData('', menudata, modelStr);
+                    if (model.indexOf('data.') === 0)
+                        model = model.substr(model.indexOf(".") + 1); //remove the "data."
+                    return  Search4ControlModelData('', menudata, model);
                 }
             },
             currentPage: '',
@@ -353,8 +354,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                         }
                         else if (item.sections.type == 'kaDynamicSection') {
                             angular.forEach(item.sections.sectionsConfig, function (section, sectionKey) { // create sections
-                                    var sectionPart = angular.element('<li ka-dynamic-section model="' + item.model + '" section="' + sectionKey + '"></li>');
-                                    var templateControls = angular.element('<ul/>');
+                                    var sectionPart = angular.element('<li ka-dynamic-section model="data.' + section.model + '" section="' + sectionKey + '"></li>');
+                                    var templateControls = angular.element('<ul>');
                                     $(elm).find('li>div[section=' + sectionKey + ']').each(function (index, child) { // add children to template
                                         $(child).parents('li').remove().appendTo(templateControls);
                                     });
