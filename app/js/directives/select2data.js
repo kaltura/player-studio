@@ -17,6 +17,13 @@ DirectivesModule.directive('select2Data', [
             },
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
                 $scope.selectOpts = {};
+                if (typeof $attrs['flatmodel'] != 'undefined') {
+                    $scope.$watch('model', function (newVal, oldVal) {
+                        if (newVal != oldVal) {
+                            menuSvc.setModelData($attrs.flatmodel, newVal.id);
+                        }
+                    });
+                }
                 if (typeof $attrs['allowCustomValues'] != 'undefined') {
                     $scope.selectOpts.createSearchChoice = function (term) {
                         var translatedText = $filter('translate')($attrs['allowCustomValues']);
@@ -26,7 +33,7 @@ DirectivesModule.directive('select2Data', [
                 $scope.selectOpts['data'] = menuSvc.doAction($attrs.source);
                 if ($attrs.query) {
                     $scope.selectOpts['data'].results = [];
-                    if ($attrs.minimumInputLength){
+                    if ($attrs.minimumInputLength) {
                         $scope.selectOpts['minimumInputLength'] = $attrs.minimumInputLength;
                     }
                     $scope.selectOpts['query'] = menuSvc.getAction($attrs.query);
