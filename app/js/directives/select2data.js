@@ -18,11 +18,10 @@ DirectivesModule.directive('select2Data', [
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
                 $scope.selectOpts = {};
                 if (typeof $attrs['flatmodel'] != 'undefined') {
-                    $scope.$watch('model', function (newVal, oldVal) {
-                        if (newVal != oldVal) {
-                            menuSvc.setModelData($attrs.flatmodel, newVal.id);
-                        }
-                    });
+                    var modelData = menuSvc.getModalData('data.'+ $attrs['flatmodel']);
+                    if (modelData){
+                        $scope.model = {'id':modelData, 'text':modelData};// unfortunately we don't have the media name anymore...
+                    }
                 }
                 if (typeof $attrs['allowCustomValues'] != 'undefined') {
                     $scope.selectOpts.createSearchChoice = function (term) {
@@ -53,7 +52,14 @@ DirectivesModule.directive('select2Data', [
                 }
                 if (tAttr.placeholder)
                     tElement.find('input').attr('data-placeholder', tAttr.placeholder);
-                return function (scope, element) {
+                return function ($scope, $element,$attrs) {
+                    if (typeof $attrs['flatmodel'] != 'undefined') {
+                        $scope.$watch('model', function (newVal, oldVal) {
+                            if (newVal != oldVal) {
+                                menuSvc.setModelData($attrs.flatmodel, newVal.id);
+                            }
+                        });
+                    }
                 };
             }
         };
