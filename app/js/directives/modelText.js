@@ -45,15 +45,18 @@ DirectivesModule.directive('modelText', function(menuSvc) {
                     $scope.validation = regex;
                     makeWatch('pattern', 'valState');
                 }
+                else {
+                    $scope.validation = {
+                        test: function() { // mock the RegExp object
+                            return true;
+                        }, match: function() { // mock the RegExp object
+                            return true;
+                        }
+                    };
+                }
             }
             $scope.isDisabled = false;
-            $scope.validation = {
-                test: function() { // mock the RegExp object
-                    return true;
-                }, match: function() { // mock the RegExp object
-                    return true;
-                }
-            };
+
         },
         scope: {
             'label': '@',
