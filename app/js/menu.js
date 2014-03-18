@@ -73,7 +73,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
 }]);
 
 // service to build the menu
-KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', function(editableProperties, $timeout, $compile, $location) {
+KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', '$templateCache',function(editableProperties, $timeout, $compile, $location,$templateCache) {
         var menudata = null;
         // use the editableProperties service to retrieve the menu data from the manifest files
         editableProperties.then(function(data) {
