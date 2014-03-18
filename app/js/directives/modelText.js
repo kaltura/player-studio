@@ -24,37 +24,36 @@ DirectivesModule.directive('modelText', function (menuSvc) {
             if ($scope.require) {
                 makeWatch('required', 'reqState');
             }
-            if ($attrs['validation'] == 'url' || $attrs['validation'] == 'email') {
-                makeWatch($attrs['validation'], 'valState');
-                $scope.type = $attrs['validation'];
-            }
             if ($attrs["initvalue"] && (typeof $scope.model == 'undefined' || $scope.model === '' )) {
                 $scope.model = $attrs["initvalue"];
             }
-
-            var pattern = $attrs['validation'];
-            var isValid, regex;
-            try {
-                regex = new RegExp(pattern, 'i');
-                isValid = true;
+            if ($attrs['validation'] == 'url' || $attrs['validation'] == 'email') {
+                makeWatch($attrs['validation'], 'valState');
+                $scope.type = $attrs['validation'];
+            } else {
+                var pattern = $attrs['validation'];
+                var isValid, regex;
+                try {
+                    regex = new RegExp(pattern, 'i');
+                    isValid = true;
+                }
+                catch (e) {
+                    isValid = false;
+                }
+                if (isValid) {
+                    $scope.validation = regex;
+                    makeWatch('pattern', 'valState');
+                }
+                else {
+                    $scope.validation = {
+                        test: function () { // mock the RegExp object
+                            return true;
+                        }, match: function () { // mock the RegExp object
+                            return true;
+                        }
+                    };
+                }
             }
-            catch (e) {
-                isValid = false;
-            }
-            if (isValid) {
-                $scope.validation = regex;
-                makeWatch('pattern', 'valState');
-            }
-            else {
-                $scope.validation = {
-                    test: function () { // mock the RegExp object
-                        return true;
-                    }, match: function () { // mock the RegExp object
-                        return true;
-                    }
-                };
-            }
-
             $scope.isDisabled = false;
 
         },
