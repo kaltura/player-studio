@@ -252,6 +252,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             },
             buildMenu: function(baseData) {
                 if (menuItems.length === 0) {
+                    // fix for IE8 - remove the menuPage from the templates cache and load it using AJAX (FEC-1111)
+                    if (window.IE==8) {
+                        $templateCache.remove('template/menu/menuPage.html');
+                    }
                     var menuJsonObj = menuSvc.get(); // gets the  editableProperties manifest json
                     angular.forEach(menuJsonObj, function(value) {
                         var menuItem = menuSvc.buildMenuItem(value, baseData);  // create the top level menu items
