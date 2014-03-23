@@ -389,8 +389,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     var request = {
                         'service': 'uiConf',
                         'action': 'update',
-                        'id': playerObj.id,                   // the id of the player to update
-                        'uiConf:tags': 'html5studio,player',  // update tags to prevent breaking the old studio which looks for the tag kdp3
+                        'id': playerObj.id,                    // the id of the player to update
+                        'uiConf:confFile': playerObj.confFile, // save old XML conf data
+                        'uiConf:confFileFeatures': playerObj.confFileFeatures,
+                        'uiConf:tags': 'html5studio,player',   // update tags to prevent breaking the old studio which looks for the tag kdp3
                         'uiConf:html5Url': html5lib,           // update the html5 lib to the new version
                         'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
                     };
