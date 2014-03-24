@@ -210,11 +210,12 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 return menuSvc.getModalData(model);
             },
             getKnownParent: function (model) {
-
                 var checkObject = menuSvc.getModalData(model);
+
                 var getParent = function (value) {
                     return value.substr(0, value.lastIndexOf('.'));
                 };
+                model = getParent(model);
                 while (model && typeof checkObject == 'undefined') {
                     model = getParent(model);
                     checkObject = menuSvc.getModalData(model);
