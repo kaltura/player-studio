@@ -21,13 +21,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var previewEntryObj;
         var playerId = 'kVideoTarget';
         var currentRefresh = null;
+        var nextRefresh = false;
         var defaultCallback = function() {
-            currentRefresh.resolve(true);
             playersService.refreshNeeded = false;
+            currentRefresh.resolve(true);
             currentRefresh = null;
+            if (nextRefresh) {
+                nextRefresh = false;
+                playerRefresh();
+            }
             logTime('renderPlayerDone');
         };
-        var playerRefresh = function(option) {
+        var playerRefresh = function() {
             if (!currentRefresh) {
                 currentRefresh = $q.defer();
                 try {
@@ -36,6 +41,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 catch (e) {
                     currentRefresh.reject(e);
                 }
+            }
+            else {
+                nextRefresh = true;
             }
             return currentRefresh.promise;
         };
@@ -76,7 +84,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     // clear companion divs
                     $("#Companion_300x250").empty();
                     $("#Companion_728x90").empty();
-                    window.mw.setConfig( 'forceMobileHTML5' , true );
+                    window.mw.setConfig('forceMobileHTML5', true);
                     window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
                     kWidget.embed({
                         "targetId": playerId, // hard coded for now?
@@ -330,8 +338,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     var request = {
                         'service': 'uiConf',
                         'action': 'update',
-                        'id': playerObj.id,                   // the id of the player to update
-                        'uiConf:tags': 'html5studio,player',  // update tags to prevent breaking the old studio which looks for the tag kdp3
+                        'id': playerObj.id,                    // the id of the player to update
+                        'uiConf:confFile': playerObj.confFile, // save old XML conf data
+                        'uiConf:confFileFeatures': playerObj.confFileFeatures,
+                        'uiConf:tags': 'html5studio,player',   // update tags to prevent breaking the old studio which looks for the tag kdp3
                         'uiConf:html5Url': html5lib,           // update the html5 lib to the new version
                         'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
                     };
@@ -592,7 +602,7 @@ KMCServices.provider('api', function() {
         }
     };
 });
-KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'apiCache', 'requestNotificationChannel', '$filter', function(api, $q, $timeout, $location, localStorageService, apiCache, requestNotificationChannel,$filter) {
+KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'localStorageService', 'apiCache', 'requestNotificationChannel', '$filter', function(api, $q, $timeout, $location, localStorageService, apiCache, requestNotificationChannel, $filter) {
     var apiService = {
         apiObj: api,
         unSetks: function() {
@@ -658,7 +668,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
                             if (!ignoreSpinner) {
                                 requestNotificationChannel.requestEnded('api');
                             }
-                            var message  = $filter('translate')(data.code);
+                            var message = $filter('translate')(data.code);
                             deferred.reject(message);
                         } else {
                             apiCache.put(params_key, data);

@@ -1,12 +1,12 @@
 'use strict';
 var DirectivesModule = angular.module('KMC.directives');
-DirectivesModule.directive('modelColor', [function () {
+DirectivesModule.directive('modelColor', [function() {
     return {
         restrict: 'EA',
-        priority:10,
+        priority: 10,
         require: '?playerRefresh',
         replace: true,
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             if (typeof $scope.model == 'undefined') {
                 if ($attrs.initvalue)
                     $scope.model = $attrs.initvalue;
@@ -15,19 +15,16 @@ DirectivesModule.directive('modelColor', [function () {
             }
             $scope.initValue = $scope.model.toString();
         }],
-        link: function ($scope, $elemennt, $attrs, prController) {
+        link: function($scope, $elemennt, $attrs, prController) {
             if (prController) {
                 prController.setValueBased();
             }
         },
         scope: {
-            'class': '@',
             'label': '@',
-            'kdpattr': '@',
             'strModel': '@model',
             'helpnote': '@',
-            'model': '=',
-            require: '@'
+            'model': '='
         },
         templateUrl: 'template/formcontrols/modelColor.html'
     };

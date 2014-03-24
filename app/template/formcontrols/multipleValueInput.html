@@ -7,10 +7,10 @@
         </span>
     <span class="pull-right" data-ng-click="add()">+Add</span>
     <i ng-if='icon' class='icon {{icon}}'></i>
-        <span class='inputHolder'>
-            <span class="input-group" ng-repeat="single in splitModel track by $index">
-                <input class="form-control" type="text" ng-model="splitModel[$index]"/>
-                <span class="input-group-addon" data-ng-click="remove($index)">X</span>
-                </span>
-        </span>
+    <span class='inputHolder'>
+        <span class="input-group" ng-repeat="single in splitModel track by $index">
+            <input class="form-control" type="text" ng-model="splitModel[$index]"/>
+            <span class="input-group-addon" data-ng-click="remove($index)">X</span>
+            </span>
+    </span>
 </label>

@@ -16,7 +16,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $translateProvider.preferredLanguage('en_US');
         $translateProvider.fallbackLanguage('en_US');
         if (window.location.href.indexOf('debug') != -1) {
-            $translateProvider.useMissingTranslationHandlerLog();
+            // add if you want to get all the missing translattions to the console when running in debug mode
+          //  $translateProvider.useMissingTranslationHandlerLog();
         }
         $translateProvider.useStorage('localStorageService');
         $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
@@ -142,6 +143,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $routeProvider.when('/newByTemplate',
             {templateUrl: 'view/new-template.html',
                 controller: 'PlayerCreateCtrl',
+                reloadOnSearch: false,
                 resolve: {
                     'templates': ['playerTemplates', function (playerTemplates) {
                         return  playerTemplates.listSystem();
@@ -156,6 +158,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $routeProvider.when('/new',
             {templateUrl: 'view/edit.html',
                 controller: 'PlayerEditCtrl',
+                reloadOnSearch: false,
                 resolve: {
                     'api': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
                         return ksCheck(api, apiService, localStorageService, $location);
@@ -189,6 +192,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     }]).run(function ($rootScope, $rootElement, $location, menuSvc) {
     var appLoad = new Date();
     var debug = false;
+
+    setTimeout(function(){
+        window.localStorage.setItem('updateHash', "true"); // IE8 fix
+    },1000);
+
 
     if (typeof window.parent.kmc != 'undefined') {
         $('html').addClass('inKmc');

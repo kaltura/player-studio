@@ -1,14 +1,14 @@
 'use strict';
 var DirectivesModule = angular.module('KMC.directives');
-DirectivesModule.directive('modelText', function(menuSvc) {
+DirectivesModule.directive('modelText', function (menuSvc) {
     return {
         replace: true,
         restrict: 'EA',
-        controller: function($scope, $element, $attrs) {
+        controller: function ($scope, $element, $attrs) {
             $scope.type = 'text';
             var form = menuSvc.menuScope.playerEdit;
-            var makeWatch = function(value, retProp) {
-                $scope.$watch(function() {
+            var makeWatch = function (value, retProp) {
+                $scope.$watch(function () {
                         if (form[$attrs['model']]) {
                             var inputCntrl = form[$attrs['model']];
                             if (typeof inputCntrl.$error[value] != 'undefined');
@@ -16,7 +16,7 @@ DirectivesModule.directive('modelText', function(menuSvc) {
                         }
                         return false;
                     },
-                    function(newVal) {
+                    function (newVal) {
                         $scope[retProp] = newVal;
                     }
                 );
@@ -24,14 +24,13 @@ DirectivesModule.directive('modelText', function(menuSvc) {
             if ($scope.require) {
                 makeWatch('required', 'reqState');
             }
-            if ($attrs['validation'] == 'url' || $attrs['validation'] == 'email') {
-                makeWatch($attrs['validation'], 'valState');
-                $scope.type = $attrs['validation'];
-            }
             if ($attrs["initvalue"] && (typeof $scope.model == 'undefined' || $scope.model === '' )) {
                 $scope.model = $attrs["initvalue"];
             }
-            else if ($attrs['validation']) {
+            if ($attrs['validation'] == 'url' || $attrs['validation'] == 'email') {
+                makeWatch($attrs['validation'], 'valState');
+                $scope.type = $attrs['validation'];
+            } else {
                 var pattern = $attrs['validation'];
                 var isValid, regex;
                 try {
@@ -45,15 +44,19 @@ DirectivesModule.directive('modelText', function(menuSvc) {
                     $scope.validation = regex;
                     makeWatch('pattern', 'valState');
                 }
+
+            }
+            if (typeof $scope.validation == 'undefined'){
+                $scope.validation = {
+                    test: function () { // mock the RegExp object
+                        return true;
+                    }, match: function () { // mock the RegExp object
+                        return true;
+                    }
+                };
             }
             $scope.isDisabled = false;
-            $scope.validation = {
-                test: function() { // mock the RegExp object
-                    return true;
-                }, match: function() { // mock the RegExp object
-                    return true;
-                }
-            };
+
         },
         scope: {
             'label': '@',
@@ -64,11 +67,11 @@ DirectivesModule.directive('modelText', function(menuSvc) {
             'helpnote': '@',
             'require': '@'
         },
-        compile: function(tElement, tAttr) {
+        compile: function (tElement, tAttr) {
             if (tAttr['endline'] == 'true') {
                 tElement.append('<hr/>');
             }
-            return function($scope, $element, $attrs) {
+            return function ($scope, $element, $attrs) {
                 var inputElm = $($element).find('input');
 //                $scope.$on('disableControls', function () {
 //                    $scope.isDisabled = true;
@@ -79,7 +82,7 @@ DirectivesModule.directive('modelText', function(menuSvc) {
 ////                    inputElm.removeAttr('disabled','disabled');
 //                });
                 if ($attrs.initvalue) {
-                    inputElm.on('click', function(e) {
+                    inputElm.on('click', function (e) {
                         if (inputElm.val() == $attrs.initvalue) {
                             e.preventDefault();
                             inputElm.select();
@@ -94,26 +97,26 @@ DirectivesModule.directive('modelText', function(menuSvc) {
 })
 ;
 
-DirectivesModule.directive('ngPlaceholder', function() {
+DirectivesModule.directive('ngPlaceholder', function () {
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function(scope, element, attr, ctrl) {
+        link: function (scope, element, attr, ctrl) {
             var placeholder = ((attr['type'] == 'url' || attr['valType'] == 'url' ) && attr['ngPlaceholder'].length <= 0) ? 'http://' : attr['ngPlaceholder'];
-            var placehold = function() {
+            var placehold = function () {
                 element.val(placeholder);
                 if (attr['require']) {
                     ctrl.$setValidity('required', false);
                 }
                 element.addClass('placeholder');
             };
-            var unplacehold = function() {
+            var unplacehold = function () {
                 if (placeholder != 'http://')
                     element.val('');
                 element.removeClass('placeholder');
             };
             var value = ctrl.$viewValue;
-            var makePlace = function(val) {
+            var makePlace = function (val) {
                 value = val;
                 if (!val && placeholder.length > 0) {
                     placehold();
@@ -123,10 +126,10 @@ DirectivesModule.directive('ngPlaceholder', function() {
             };
             ctrl.$parsers.unshift(makePlace);
             ctrl.$formatters.unshift(makePlace);
-            element.bind('focus', function() {
+            element.bind('focus', function () {
                 if (value === '' || value == placeholder) unplacehold();
             });
-            element.bind('blur', function() {
+            element.bind('blur', function () {
                 if (element.val() === '' || value == placeholder) placehold();
             });
         }

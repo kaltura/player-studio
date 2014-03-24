@@ -5,12 +5,12 @@ var DirectivesModule = angular.module('KMC.directives', [
     'ui.select2',
     'ui.sortable'
 ]);
-DirectivesModule.directive('timeago', [function () {
+DirectivesModule.directive('timeago', [function() {
     return {
         restrict: 'CA',
-        link: function (scope, iElement, iAttrs) {
+        link: function(scope, iElement, iAttrs) {
             if (typeof $.timeago == 'function') {
-                scope.$observe('timeago', function (newVal) {
+                scope.$observe('timeago', function(newVal) {
                     if (newVal && !isNaN(newVal)) {
                         var date = scope.timestamp * 1000;
                         iElement.text($.timeago(date));
@@ -20,13 +20,13 @@ DirectivesModule.directive('timeago', [function () {
         }
     };
 }]);
-DirectivesModule.directive('hiddenValue', [function () {
+DirectivesModule.directive('hiddenValue', [function() {
     return {
         template: '<input type="hidden" value="{{model}}"/>',
         scope: {
             model: '='
         },
-        controller: function ($scope, $element, $attrs) {
+        controller: function($scope, $element, $attrs) {
             if ($attrs['initvalue']) {
                 $scope.model = $attrs['initvalue'];
             }
@@ -34,7 +34,7 @@ DirectivesModule.directive('hiddenValue', [function () {
         restrict: 'EA'
     };
 }]);
-DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
+DirectivesModule.directive('modelRadio', ['menuSvc', function(menuSvc) {
     return {
         restrict: 'EA',
         replace: true,
@@ -47,24 +47,24 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
             'helpnote': '@',
             'require': '@'
         },
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             var menuData = menuSvc.getControlData($attrs.model);
             $scope.options = menuData.options;
             var ngModelCntrl;
             var controls = [];
             return {
-                setChoice: function (value) {
-                    angular.forEach(controls, function (control) {
+                setChoice: function(value) {
+                    angular.forEach(controls, function(control) {
                         control.setValue(value);
                     });
                 },
-                registerControl: function (cntrl) {
+                registerControl: function(cntrl) {
                     controls.push(cntrl);
                 },
-                getValue: function () {
+                getValue: function() {
                     return $scope.model;
                 },
-                regContoller: function (cntrl) {
+                regContoller: function(cntrl) {
                     if (!ngModelCntrl)
                         menuSvc.menuScope.playerEdit.$addControl(cntrl);
                     ngModelCntrl = cntrl;
@@ -73,12 +73,12 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
             };
         }
         ],
-        link: function (scope, element, attributes, prController) {
+        link: function(scope, element, attributes, prController) {
             if (prController) {
                 prController.setValueBased();
             }
             if (scope.require) {
-                scope.$watch('model', function (newval) { //TODO: change to ngmodel + $setValidity
+                scope.$watch('model', function(newval) { //TODO: change to ngmodel + $setValidity
                     if (!newval)
                         $(element).find('.form-group').addClass('ng-invalid');
                     else {
@@ -92,26 +92,26 @@ DirectivesModule.directive('modelRadio', ['menuSvc', function (menuSvc) {
 }])
 ;
 
-DirectivesModule.directive('dname', function (menuSvc) { // made to help with validation registers dynamic directives with form controller
+DirectivesModule.directive('dname', function(menuSvc) { // made to help with validation registers dynamic directives with form controller
     return {
         require: '?ngModel',
         priority: 100,
-        compile: function (tElement, tAttrs) {
-            return function ($scope, $element, $attrs, $ngModelCntrl) {
+        link: function($scope, $element, $attrs, $ngModelCntrl) {
+            if ($ngModelCntrl) {
+                var dname = $scope.$eval($attrs['dname']);
+                $element.attr('name', dname);
                 if ($ngModelCntrl) {
-                    var dname = $scope.$eval($attrs['dname']);
-                    $element.attr('name', dname);
                     $ngModelCntrl.$name = dname;
                     menuSvc.menuScope.playerEdit.$addControl($ngModelCntrl);
                 }
-            };
+            }
         }
     };
 });
-DirectivesModule.directive('valType', function () {
+DirectivesModule.directive('valType', function() {
     return {
         restrict: "A",
-        link: function ($scope, $element, $attrs) {
+        link: function($scope, $element, $attrs) {
             if (($attrs['valType'] == 'url' || $attrs['valType'] == 'email') && window.IE != 8) {
                 $element.attr('type', $attrs['valType']);
             }
@@ -119,8 +119,8 @@ DirectivesModule.directive('valType', function () {
     };
 });
 DirectivesModule.directive('modelEdit', ['$modal',
-    function ($modal) {
-        var modalEditCntrl = ['$scope' , function ($scope) {
+    function($modal) {
+        var modalEditCntrl = ['$scope' , function($scope) {
             if (typeof $scope.model == 'undefined')
                 $scope.model = '';
             $scope.modelValue = $scope.model;
@@ -138,19 +138,19 @@ DirectivesModule.directive('modelEdit', ['$modal',
             },
             controller: modalEditCntrl,
             templateUrl: 'template/formcontrols/modelEdit.html',
-            compile: function (tElement, tAttr) {
+            compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
-                return function (scope, element, attrs) {
-                    scope.doModal = function () {
+                return function(scope, element, attrs) {
+                    scope.doModal = function() {
                         var modal = $modal.open({
                             templateUrl: 'template/dialog/textarea.html',
                             controller: 'ModalInstanceCtrl',
                             resolve: {
-                                settings: function () {
+                                settings: function() {
                                     return {
-                                        'close': function (result, value) {
+                                        'close': function(result, value) {
                                             scope.model = value;
                                             modal.close(result);
                                         },
@@ -168,7 +168,7 @@ DirectivesModule.directive('modelEdit', ['$modal',
 ]);
 DirectivesModule.directive('modelTags', [
     'menuSvc',
-    function (menuSvc) {
+    function(menuSvc) {
         return {
             replace: true,
             restrict: 'EA',
@@ -179,7 +179,7 @@ DirectivesModule.directive('modelTags', [
                 'icon': '@',
                 'strModel': '=model'
             },
-            controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+            controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
                 $scope.selectOpts = {
                     simple_tags: true,
                     'multiple': true,
@@ -191,22 +191,22 @@ DirectivesModule.directive('modelTags', [
                 $scope.selectOpts['tags'] = menuSvc.doAction($attrs.source);
             }],
             templateUrl: 'template/formcontrols/modelTags.html',
-            compile: function (tElement, tAttr) {
+            compile: function(tElement, tAttr) {
                 if (tAttr['endline'] == 'true') {
                     tElement.append('<hr/>');
                 }
-                return function (scope, element, attr) {
+                return function(scope, element, attr) {
                 };
             }
         };
     }
 ]);
-DirectivesModule.directive('listEntriesThumbs', function () {
+DirectivesModule.directive('listEntriesThumbs', function() {
     return {
         restrict: 'A',
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             if ($attrs.listEntriesThumbs == 'true') {
-                var format = function (player) {
+                var format = function(player) {
                     if (!player.thumbnailUrl)
                         return player.name;
                     return '<img class=\'thumb\' src=\'' + player.thumbnailUrl + '\'/>' + player.name;
@@ -214,7 +214,7 @@ DirectivesModule.directive('listEntriesThumbs', function () {
                 $scope.addOption({
                     formatResult: format,
                     formatSelection: format,
-                    escapeMarkup: function (m) {
+                    escapeMarkup: function(m) {
                         return m;
                     }
                 });
@@ -226,11 +226,11 @@ DirectivesModule.directive('infoAction', ['menuSvc', function (menuSvc) {
     return {
         restrict: 'EA',
         replace: 'true',
-        controller: ['$scope', function ($scope) {
-            $scope.check = function (action) {
+        controller: ['$scope', function($scope) {
+            $scope.check = function(action) {
                 return menuSvc.checkAction(action);
             };
-            $scope.btnAction = function (action) {
+            $scope.btnAction = function(action) {
                 menuSvc.doAction(action);
             };
         }],
@@ -245,14 +245,14 @@ DirectivesModule.directive('infoAction', ['menuSvc', function (menuSvc) {
         templateUrl: 'template/formcontrols/infoAction.html'
     };
 }]);
-DirectivesModule.directive('prettyRadio', ['$rootScope', function ($rootScope) {
+DirectivesModule.directive('prettyRadio', ['$rootScope', function($rootScope) {
     return {
         restrict: 'AC',
         require: ['ngModel', '^modelRadio'],
         transclude: 'element',
-        controller: function ($scope, $element, $attrs) {
+        controller: function($scope, $element, $attrs) {
             $scope.checked = false;
-            $scope.setValue = function (value) {
+            $scope.setValue = function(value) {
                 if (value == $attrs.value) {
                     $scope.checked = true;
                 } else
@@ -262,8 +262,8 @@ DirectivesModule.directive('prettyRadio', ['$rootScope', function ($rootScope) {
                 $scope.checked = true;
             }
         },
-        compile: function (tElement, tAttrs, transclude) {
-            return function (scope, iElement, iAttr, cntrls) {
+        compile: function(tElement, tAttrs, transclude) {
+            return function(scope, iElement, iAttr, cntrls) {
                 var ngController = cntrls[0];
                 var modelRadioCntrl = cntrls[1];
                 var wrapper = $('<span class="clearfix prettyradio"></span>');
@@ -275,24 +275,24 @@ DirectivesModule.directive('prettyRadio', ['$rootScope', function ($rootScope) {
                 if (typeof iAttr['model'] != 'undefined') {
                     watchProp = iAttr['model'];
                 }
-                transclude(scope, function (clone) {
+                transclude(scope, function(clone) {
                     return iElement.replaceWith(wrapper).append(clone);
                 });
-                clickHandler.on('click', function (e) {
+                clickHandler.on('click', function(e) {
                     e.preventDefault();
                     ngController.$setViewValue(inputVal);
 
-                    $rootScope.$safeApply(scope, function () {
+                    $rootScope.$safeApply(scope, function() {
                             modelRadioCntrl.setChoice(inputVal);
                         }
                     );
                     return false;
                 });
-                var formatter = function () {
+                var formatter = function() {
                     modelRadioCntrl.setChoice(inputVal);
                 };
                 ngController.$viewChangeListeners.push(formatter);
-                scope.$watch('checked', function (newVal) {
+                scope.$watch('checked', function(newVal) {
                     if (newVal) {
                         clickHandler.addClass('checked');
                     }
@@ -303,14 +303,14 @@ DirectivesModule.directive('prettyRadio', ['$rootScope', function ($rootScope) {
         }
     };
 }]);
-DirectivesModule.directive('divider', [function () {
+DirectivesModule.directive('divider', [function() {
     return {
         replace: true,
         restrict: 'EA',
         template: '<hr class="divider"/>'
     };
 }]);
-DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
+DirectivesModule.directive('readOnly', ['$filter', function($filter) {
     return {
         restrict: 'EA',
         replace: 'true',
@@ -318,7 +318,7 @@ DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
             model: '=',
             helpnote: '@'
         },
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             if ($attrs['filter']) {
                 if (typeof $filter($attrs['filter']) == 'function')
                     $scope.model = $filter($attrs['filter'])($scope.model);
@@ -332,15 +332,15 @@ DirectivesModule.directive('readOnly', ['$filter', function ($filter) {
         templateUrl: 'template/formcontrols/readOnly.html'
     };
 }]);
-DirectivesModule.directive('modelButton', ['menuSvc', function (menuSvc) {
+DirectivesModule.directive('modelButton', ['menuSvc', function(menuSvc) {
     return {
         restrict: 'EA',
         replace: 'true',
-        controller: ['$scope', function ($scope) {
-            $scope.check = function (action) {
+        controller: ['$scope', function($scope) {
+            $scope.check = function(action) {
                 return menuSvc.checkAction(action);
             };
-            $scope.btnAction = function (action) {
+            $scope.btnAction = function(action) {
                 menuSvc.doAction(action);
             };
         }],
@@ -356,17 +356,17 @@ DirectivesModule.directive('modelButton', ['menuSvc', function (menuSvc) {
 DirectivesModule.directive('onFinishRender', [
     '$timeout',
     'requestNotificationChannel',
-    function ($timeout, requestNotificationChannel) {
+    function($timeout, requestNotificationChannel) {
         return {
             restrict: 'A',
-            link: function (scope, element, attr) {
+            link: function(scope, element, attr) {
                 // got last object - finish render and hide the spinner
                 if (scope.$last === true) {
                     var timeVar;
                     if (timeVar) {
                         $timeout.cancel(timeVar);
                     }
-                    timeVar = $timeout(function () {
+                    timeVar = $timeout(function() {
                         requestNotificationChannel.requestEnded('list');
                         timeVar = null;
                     });
@@ -375,7 +375,7 @@ DirectivesModule.directive('onFinishRender', [
         };
     }
 ]);
-DirectivesModule.directive("onbeforeunload", ["$window", "$filter", function ($window, $filter) {
+DirectivesModule.directive("onbeforeunload", ["$window", "$filter", '$location',function ($window, $filter,$location) {
     var unloadtext, forms = [];
 
     function handleOnbeforeUnload() {
@@ -398,7 +398,7 @@ DirectivesModule.directive("onbeforeunload", ["$window", "$filter", function ($w
     }
 
     return function ($scope, $element) {
-        if ($element[0].localName !== 'form') {
+        if ($element[0].nodeName.toLowerCase() !== 'form') {
             throw new Error("onbeforeunload directive must only be set on a angularjs form!");
         }
 
@@ -412,11 +412,17 @@ DirectivesModule.directive("onbeforeunload", ["$window", "$filter", function ($w
             unloadtext = "";
         }
         var formName = $element[0].name;
-        $scope.$watch(formName+'.$dirty', function (newVal, oldVal) {
+        $scope.$watch(formName + '.$dirty', function(newVal, oldVal) {
             if (newVal && newVal != oldVal) {
                 $window.onbeforeunload = handleOnbeforeUnload;
             }
         });
-
+        $scope.$on('$locationChangeSuccess',function(e,origin,dest){
+            if (origin.split('?')[0] != dest.split('?')[0]){
+                $window.ononbeforeunload = false;}
+        });
+        $scope.$on('$destory',function(){
+            $window.ononbeforeunload = false;
+        });
     };
 }]);

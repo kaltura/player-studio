@@ -73,7 +73,7 @@ KMCMenu.controller('menuCntrl', ['menuSvc', '$scope', function(menuSvc, $scope) 
 }]);
 
 // service to build the menu
-KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', function(editableProperties, $timeout, $compile, $location) {
+KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$location', '$templateCache',function(editableProperties, $timeout, $compile, $location,$templateCache) {
         var menudata = null;
         // use the editableProperties service to retrieve the menu data from the manifest files
         editableProperties.then(function(data) {
@@ -88,6 +88,8 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 case 'modaledit':
                 case 'select2data':
                 case 'dropdown':
+                case 'alignment':
+                case 'container':
                 case 'checkbox':
                 case 'color':
                 case 'url':
@@ -198,10 +200,48 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 // retrieve the model raw data
                 return menuSvc.menuScope.$eval(model);
             },
-            getControlData: function(model) {
-                // retrieve the manifest data of a model
-                var modelStr = model.substr(model.indexOf(".") + 1); //remove the "data."
-                return  Search4ControlModelData('', menudata, modelStr);
+            setModelData: function (model, value) {
+                if (model.indexOf('data.') !== 0)
+                    model = 'data.' + model;
+                var parent = model.substr(0, model.lastIndexOf('.'));
+                var last = model.substr(model.lastIndexOf('.')+1);
+                var parentObj = menuSvc.getModalData(parent);
+                parentObj[last] = value;
+            },
+            getOrMakeModelData: function (model, makeEnabled) {
+                var knownParent = menuSvc.getKnownParent(model);
+                var missing = model.replace(knownParent, '').split('.');
+                angular.forEach(missing, function (misObhName) {
+                    if (misObhName) {
+                        var knwonObject = menuSvc.getModalData(knownParent)[misObhName] = {};
+                        if (makeEnabled) {
+                            knwonObject['_featureEnabled'] = true;
+                        }
+                        knownParent += '.' + misObhName;
+                    }
+                });
+                return menuSvc.getModalData(model);
+            },
+            getKnownParent: function (model) {
+                var checkObject = menuSvc.getModalData(model);
+
+                var getParent = function (value) {
+                    return value.substr(0, value.lastIndexOf('.'));
+                };
+                model = getParent(model);
+                while (model && typeof checkObject == 'undefined') {
+                    model = getParent(model);
+                    checkObject = menuSvc.getModalData(model);
+                }
+                return model;
+            },
+            getControlData: function (model) {
+                if (typeof model == 'string') {
+                    // retrieve the manifest data of a model
+                    if (model.indexOf('data.') === 0)
+                        model = model.substr(model.indexOf(".") + 1); //remove the "data."
+                    return  Search4ControlModelData('', menudata, model);
+                }
             },
             currentPage: '',
             setMenu: function(setTo) {
@@ -216,6 +256,10 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
             },
             buildMenu: function(baseData) {
                 if (menuItems.length === 0) {
+                    // fix for IE8 - remove the menuPage from the templates cache and load it using AJAX (FEC-1111)
+                    if (window.IE==8) {
+                        $templateCache.remove('template/menu/menuPage.html');
+                    }
                     var menuJsonObj = menuSvc.get(); // gets the  editableProperties manifest json
                     angular.forEach(menuJsonObj, function(value) {
                         var menuItem = menuSvc.buildMenuItem(value, baseData);  // create the top level menu items
@@ -317,35 +361,31 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 // support dynamic section (like tabs) directive
                 function checkItemSections(item, elm) {
                     if (item.sections) {
-                        var sectionsDir = '';
-                        switch (item.sections.type) {
-                            case "tabs":
-                                sectionsDir = '<li ka-tabs></li>';
-                                break;
-                            case "kaDynamicSection":
-                                sectionsDir = '<li ka-dynamic-section></li>';
-                                break;
-                        }
-                        sectionsDir = angular.element(sectionsDir); // crate HTML from string
-                        sectionsDir.attr('heading', item.sections.title); // tab label
                         if (item.sections.type == 'tabs') {
-                            var tabs = [];
+                            var sectionsDir = angular.element('<li ka-tabs></li>'); // crate HTML from string
+                            sectionsDir.attr('heading', item.sections.title); // tab label
                             var tabsSetDir = angular.element('<div tabset></div>').appendTo(sectionsDir);
-                            angular.forEach(item.sections.tabset, function(value) { // create tabs
+                            angular.forEach(item.sections.tabset, function (value) { // create tabs
                                 var tabDir = angular.element('<div tab section="' + value.key + '" heading="' + value.title + '"></div>');
+                                $(elm).find('li>div[section=' + value.key + ']').each(function (index, child) { // add children
+                                    $(child).parents('li').remove().appendTo(tabDir);
+                                });
                                 tabDir.appendTo(tabsSetDir);
-                                tabs.push(value.key);
                             });
-                            $(elm).find('li>div[section]').each(function(index, child) { // add children
-                                var childTab = $(child).attr('section');
-                                if (tabs.indexOf(childTab) > -1) {
-                                    // move children to correct tabs
-                                    var targetTab = tabsSetDir.find('div[section="' + childTab + '"]');
-                                    $(child).parents('li').remove().appendTo(targetTab);
-                                }
-                            });
+                            elm.prepend(sectionsDir);
                         }
-                        elm.prepend(sectionsDir);
+                        else if (item.sections.type == 'kaDynamicSection') {
+                            angular.forEach(item.sections.sectionsConfig, function (section, sectionKey) { // create sections
+                                    var sectionPart = angular.element('<li ka-dynamic-section model="data.' + section.model + '" section="' + sectionKey + '"></li>');
+                                    var templateControls = angular.element('<ul>');
+                                    $(elm).find('li>div[section=' + sectionKey + ']').each(function (index, child) { // add children to template
+                                        $(child).parents('li').remove().appendTo(templateControls);
+                                    });
+                                    $templateCache.put('dynamicSections/' + sectionKey, templateControls);
+                                    elm.prepend(sectionPart);
+                                }
+                            );
+                        }
                     }
                 }
             },
