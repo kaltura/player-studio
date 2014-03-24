@@ -27,17 +27,20 @@ DirectivesModule.provider('sections', [ function () {
                     else if (sectionType == 'dynamic') {
                         $scope.configData = menuSvc.getControlData($attrs.model);
                         $scope.configData.sectionName = $attrs.section;
-
-
                         var sections = [1];
-                        if (typeof $scope.modelData == 'number') {
-                            while (sections.length < $scope.modelData) {
-                                sections.push(sections.length + 1);
+                        if (typeof $scope.modelData.sections != 'undefined') {
+                            sections = $scope.modelData.sections.split(',');
+                            if (sections.length <= 0) { //error checking
+                                cl('section' + $attrs.section + ' has been reset because of bad data');
+                                sections = [1];
+                                $scope.modelData.sections = 1;
                             }
                         }
                         else {
-                            $scope.modelData = 1;
+                            $scope.modelData = menuSvc.getOrMakeModelData($attrs.model, true);
+                            $scope.modelData.sections = 1;
                         }
+                        $scope.modelData["_featureEnabled"] = true; // make this enabled for saving
                         //get template
 
                         var removeHandel = angular.element('<a class="btn btn-xs" ng-click="removeSection($event)">X</a>');
@@ -51,7 +54,7 @@ DirectivesModule.provider('sections', [ function () {
                             var html = $compile(Controls)(menuSvc.menuScope);
                             $element.find('div.dynSections').append(newSection.append(html));
                         };
-                        var modifyModel = function (template, index) {
+                        var getModelByIndex = function (orginalModel, index) {
                             if (typeof index == 'undefined') index = '';
                             var modelPre = $scope.configData.modelPre;
                             var modelPost = $scope.configData.modelPost;
@@ -59,9 +62,24 @@ DirectivesModule.provider('sections', [ function () {
                             // index seems useful but perhaps you need to name sections? this would allow it, just add the relevant HTML to make sections have titles
                             if (modelPre.indexOf('#') != -1) modelPre = modelPre.replace('#', index);
                             if (modelPost.indexOf('#') != -1) modelPost = modelPost.replace('#', index);
+                            return  modelPre + orginalModel + modelPost;
+
+                        };
+                        var modifyModel = function (template, modelindex) {
                             template.find('[model]').each(function (index, control) {
-                                var original = $(control).attr('model');
-                                $(control).attr('model', modelPre + original + modelPost);
+                                $(control).attr('model', getModelByIndex($(control).attr('model'), modelindex));
+                            });
+                        };
+                        var removeSectionData = function (inputHolder) {
+                            inputHolder.find('[model]').each(function (index, obj) {
+                                var model = $(obj).attr('model');
+                                var parent = menuSvc.getModalData(menuSvc.getKnownParent(model));
+                                if (parent) {
+                                    var child = model.substr(model.lastIndexOf('.') + 1);
+                                    if (typeof parent[child] != 'undefined') {
+                                        delete (parent[child]);
+                                    }
+                                }
                             });
                         };
                         //add initial template
@@ -76,24 +94,23 @@ DirectivesModule.provider('sections', [ function () {
                         $scope.addSection = function () {
                             createSection(sections.length + 1);
                             sections.push(sections.length + 1);
-                            $scope.modelData++;
+                            $scope.modelData.sections += ',' + sections.length;
                         };
                         $scope.removeSection = function (e) {
                             var dynbox = $(e.target).parent();
                             var index = $(dynbox).attr('index');
-                            if (index === true)  index = 1;// non number in
+                            if (index === true || index === '')  index = 0;// non number in
+                            removeSectionData(dynbox);
                             dynbox.remove();
-                            sections.splice(index - 1, 1);
-                            $scope.modelData--;
+                            sections.splice(index - 1, 1);// we start from 0 in array 1 in sections
+                            $scope.modelData.sections = sections.join(',');
                         };
                     }
 
                 },
                 link: function ($scope, $element, $attrs, controller, transclude) {
                     if (sectionType == 'dynamic') {
-//                        $scope.model = menuSvc.getOrMakeModelData('data.' + $scope.configData.model, true);
-//                        $scope.model["_featureEnabled"] = true;
-                        window.dScope = $scope;
+                        //window.dScope = $scope; //debug
                     }
                 }
             };
