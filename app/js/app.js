@@ -5,7 +5,7 @@ var cl = function (val) {
 
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
-    ['pascalprecht.translate', 'ngRoute', 'KMC.controllers', 'KMC.filters','KMC.sort',
+    ['pascalprecht.translate', 'ngRoute', 'KMC.controllers', 'KMC.filters', 'KMC.sort',
         'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu']);
 
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', '$translateProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider, $translateProvider) {
@@ -17,7 +17,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $translateProvider.fallbackLanguage('en_US');
         if (window.location.href.indexOf('debug') != -1) {
             // add if you want to get all the missing translattions to the console when running in debug mode
-          //  $translateProvider.useMissingTranslationHandlerLog();
+            //  $translateProvider.useMissingTranslationHandlerLog();
         }
         $translateProvider.useStorage('localStorageService');
         $tooltipProvider.options({ placement: 'right', 'appendToBody': true, 'popupDelay': 800 });
@@ -193,9 +193,9 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     var appLoad = new Date();
     var debug = false;
 
-    setTimeout(function(){
+    setTimeout(function () {
         window.localStorage.setItem('updateHash', "true"); // IE8 fix
-    },1000);
+    }, 1000);
 
 
     if (typeof window.parent.kmc != 'undefined') {
@@ -255,14 +255,4 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             debug = false;
         }
     });
-    if (Function.prototype.name === undefined && Object.defineProperty !== undefined) { // patch IE9's function prototype
-        Object.defineProperty(Function.prototype, 'name', {
-            get: function() {
-                var funcNameRegex = /function\s([^(]{1,})\(/;
-                var results = (funcNameRegex).exec((this).toString());
-                return (results && results.length > 1) ? results[1].trim() : "";
-            },
-            set: function(value) {}
-        });
-    }
 });

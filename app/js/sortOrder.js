@@ -23,7 +23,7 @@ KMCSort.factory('SortObj', ['menuSvc', function (menuSvc) {
     return SortObj;
 }])
 ;
-KMCSort.factory('Container', [function () {
+KMCSort.factory('Container', ['SortObj', function (SortObj) {// get the sortObj constuctor just for the verification that the added Element is indeed a SortObj
     function Container(name) {
         if (typeof name == 'string') {
             this.name = name;
@@ -33,7 +33,7 @@ KMCSort.factory('Container', [function () {
     }
 
     Container.prototype.addElement = function (sortObj) {
-        if (sortObj.constructor.name === 'SortObj' && sortObj.model && this.elements.indexOf(sortObj) === -1) {
+        if (sortObj instanceof SortObj && sortObj.model && this.elements.indexOf(sortObj) === -1) {
             this.elements.push(sortObj);
         }
     };
