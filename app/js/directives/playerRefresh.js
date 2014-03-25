@@ -110,9 +110,9 @@ DirectivesModule.directive('playerRefresh', ['PlayerService', 'menuSvc', '$timeo
                     }
                 };
                 if (!ngController) {
-                    scope.prModel.value = menuSvc.getModalData(iAttrs['model']); //initial value;
+                    scope.prModel.value = menuSvc.getModelData(iAttrs['model']); //initial value;
                     scope.$watch(function() {
-                            return  scope.prModel.value = menuSvc.getModalData(iAttrs['model']);
+                            return  scope.prModel.value = menuSvc.getModelData(iAttrs['model']);
                         },
                         function(newVal, oldVal) {
                             if (newVal != oldVal) {

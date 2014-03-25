@@ -123,7 +123,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 case 'alignment' :
                     return  '<div model-select sort-alignment=""/>';
                 case 'sortVal' :
-                    return  '<div hidden-value sort-value=""/>';
+                    return  '<div hidden-value player-refresh="true" sort-value=""/>';
                 case 'checkbox' :
                     return '<div model-checkbox/>';
                 case 'color' :
@@ -205,7 +205,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                     model = 'data.' + model;
                 var parent = model.substr(0, model.lastIndexOf('.'));
                 var last = model.substr(model.lastIndexOf('.')+1);
-                var parentObj = menuSvc.getModalData(parent);
+                var parentObj = menuSvc.getModelData(parent);
                 parentObj[last] = value;
             },
             getOrMakeModelData: function (model, makeEnabled) {
@@ -213,17 +213,17 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 var missing = model.replace(knownParent, '').split('.');
                 angular.forEach(missing, function (misObhName) {
                     if (misObhName) {
-                        var knwonObject = menuSvc.getModalData(knownParent)[misObhName] = {};
+                        var knwonObject = menuSvc.getModelData(knownParent)[misObhName] = {};
                         if (makeEnabled) {
                             knwonObject['_featureEnabled'] = true;
                         }
                         knownParent += '.' + misObhName;
                     }
                 });
-                return menuSvc.getModalData(model);
+                return menuSvc.getModelData(model);
             },
             getKnownParent: function (model) {
-                var checkObject = menuSvc.getModalData(model);
+                var checkObject = menuSvc.getModelData(model);
 
                 var getParent = function (value) {
                     return value.substr(0, value.lastIndexOf('.'));
@@ -231,7 +231,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 model = getParent(model);
                 while (model && typeof checkObject == 'undefined') {
                     model = getParent(model);
-                    checkObject = menuSvc.getModalData(model);
+                    checkObject = menuSvc.getModelData(model);
                 }
                 return model;
             },
@@ -255,6 +255,7 @@ KMCMenu.factory('menuSvc', ['editableProperties', '$timeout', '$compile', '$loca
                 menuSvc.menuScope.$broadcast('menuChange', setTo);
             },
             buildMenu: function(baseData) {
+                menuSvc.sortObj2register = []; // reset the aync sort array
                 if (menuItems.length === 0) {
                     // fix for IE8 - remove the menuPage from the templates cache and load it using AJAX (FEC-1111)
                     if (window.IE==8) {

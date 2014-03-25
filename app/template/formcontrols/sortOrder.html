@@ -9,7 +9,7 @@
                     <ul class="sortableList" ui-sortable="sortOpts.options" container="{{container.name}}" side="left"
                         ng-model="container.sides.left">
                         <li class="sortObj"
-                            ng-repeat="obj in container.sides.left track by $id(obj.model) |orderBy: obj.sortVal">
+                            ng-repeat="obj in container.sides.left track by obj.model |orderBy: obj.sortVal">
                             <i class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
                         </li>
                     </ul>
@@ -19,7 +19,7 @@
                     <ul class="sortableList" ui-sortable="sortOpts.options" container="{{container.name}}" side='right'
                         ng-model="container.sides.right">
                         <li class="sortObj"
-                            ng-repeat="obj in container.sides.right track by $id(obj.model)| orderBy: obj.sortVal">
+                            ng-repeat="obj in container.sides.right track by obj.model| orderBy: obj.sortVal">
                             <i class="glyphicon glyphicon-chevron-right"></i>{{ obj.label }}
                         </li>
                     </ul>

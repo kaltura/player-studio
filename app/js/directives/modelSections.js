@@ -73,7 +73,7 @@ DirectivesModule.provider('sections', [ function () {
                         var removeSectionData = function (inputHolder) {
                             inputHolder.find('[model]').each(function (index, obj) {
                                 var model = $(obj).attr('model');
-                                var parent = menuSvc.getModalData(menuSvc.getKnownParent(model));
+                                var parent = menuSvc.getModelData(menuSvc.getKnownParent(model));
                                 if (parent) {
                                     var child = model.substr(model.lastIndexOf('.') + 1);
                                     if (typeof parent[child] != 'undefined') {

@@ -18,7 +18,7 @@ DirectivesModule.directive('select2Data', [
             controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
                 $scope.selectOpts = {};
                 if (typeof $attrs['flatmodel'] != 'undefined') {
-                    var modelData = menuSvc.getModalData('data.'+ $attrs['flatmodel']);
+                    var modelData = menuSvc.getModelData('data.'+ $attrs['flatmodel']);
                     if (modelData){
                         $scope.model = {'id':modelData, 'text':modelData};// unfortunately we don't have the media name anymore...
                     }
