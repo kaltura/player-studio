@@ -235,7 +235,7 @@ KMCSort.directive('sortOrder', ['menuSvc',
                 $scope.sortOpts = {options: {
                     "connectWith": '.sortableList',
                     "placeholder": 'sortObj',
-                    "containment
+                    "containment": '.sortOrder',
 //                    "over": function(e, ui) {
                     //nice way to do it but there are weird bugs so reveted to make different arrays.
                     //    ui.item.scope().obj.setSides($(e.target).attr('side'));
