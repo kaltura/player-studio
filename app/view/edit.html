@@ -9,11 +9,11 @@
             <div class="nohover " menu-level pagename='search' label='Menu Search'>
                 <li ng-form ng-controller='menuSearchCtl' class="form-inline" id="menuSearch"
                      ng-submit="searchMenuFn(value)" role="search">
-                    <div class="form-group ">
+                    <div class="form-group " style="height: 360px">
                         <div class="input-group merged">
                             <span class="input-group-addon"><i class="icon icon-TabSearch"></i></span>
                             <input typeahead-on-select="checkSearch()" ng-change="checkSearch()" type="text"
-                                   typeahead="item for item in menuData | filter:$viewValue "
+                                   typeahead="item for item in menuData | filter:$viewValue | limitTo:12"
                                    data-typeaheadOnSelect="checkSearch()"
                                    class="form-control forceRightRadius"
                                    placeholder="{{'Search for menu property'| translate}}"
