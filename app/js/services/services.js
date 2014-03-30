@@ -185,7 +185,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                             'uiConf:version': '161',
                             'uiConf:name': 'New Player',
                             'uiConf:tags': 'html5studio,player',
-                            'uiConf:html5Url': window.kWidget.getPath() + 'mwEmbedLoader.php',
+                            'uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
                             'uiConf:creationMode': 2,
                             'uiConf:config': angular.toJson(data)
                         };
