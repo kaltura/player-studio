@@ -89,6 +89,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $scope.data = data.objects;   // players list
                 $scope.calculateTotalItems(); // calculate the total items including search filters to display in the pager
                 PlayerService.cachePlayers(data.objects); // save players list data to memory cache
+                setTimeout(function(){
+                    $scope.triggerLayoutChange(); // update scroller;
+                },300);
+
             });
 
             // set a filtered data array of the players after search criteria
