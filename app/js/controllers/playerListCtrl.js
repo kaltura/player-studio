@@ -162,7 +162,8 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $location.path('/edit/' + id);
             };
             $scope.goToEditPage = function (item, $event) {
-                $event.preventDefault();
+                if ($event)
+                    $event.preventDefault();
                 if (!$scope.checkVersionNeedsUpgrade(item)) {
                     goToEditPage(item.id);
                     return false;
@@ -203,31 +204,14 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $location.path('/new');
             };
 
-            // duplicating a player - check if the player is outdated. If so - issue a message. If not - duplicate the player
+            // duplicating a player
             $scope.duplicate = function(item) {
-                if ($scope.checkVersionNeedsUpgrade(item)){
-                    $modal.open({ templateUrl: 'template/dialog/message.html',
-                        controller: 'ModalInstanceCtrl',
-                        resolve: {
-                            settings: function() {
-                                return {
-                                    'title': 'Duplicate player',
-                                    'message': 'Outdated players cannot be duplicated.<br>Please update the player before duplicating.',
-                                    buttons: [
-                                        {result: true, label: 'OK', cssClass: 'btn-primary'}
-                                    ]
-                                };
-                            }
-                        }
-                    });
-                }else{
-                    PlayerService.clonePlayer(item).then(function(data) {
-                        // player finished duplicating - add it to the players list in memory in the first place (unshift the array)
-                        $scope.data.unshift(data[1]);
-                        PlayerService.cachePlayers($scope.data); // update memory cache with the new player
-                        $location.url('edit/' + data[1].id);     // go to edit page with the duplicated player ID
-                    });
-                }
+                PlayerService.clonePlayer(item).then(function(data) {
+                    // player finished duplicating - add it to the players list in memory in the first place (unshift the array)
+                    $scope.data.unshift(data[1]);
+                    PlayerService.cachePlayers($scope.data); // update memory cache with the new player
+                    $scope.goToEditPage(data[1]);
+                });
             };
 
             // delete a player (after user confirmation)
