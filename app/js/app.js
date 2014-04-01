@@ -255,10 +255,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             debug = false;
         }
     });
-    if (window.kmc && window.kmc.vars.studio.showFlashStudio === false){
+	var kmc = window.parent.kmc;
+    if (kmc && kmc.vars.studio.showFlashStudio === false){
         $("#flashStudioBtn").hide();
     }
-    if (window.kmc && window.kmc.vars.studio.showHTMLStudio === false){
+    if (kmc && kmc.vars.studio.showHTMLStudio === false){
         $("#htmlStudioBtn").hide();
     }
 
