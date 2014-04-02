@@ -2,11 +2,10 @@
 var cl = function (val) {
     return console.log(val);
 };
-
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
     ['pascalprecht.translate', 'ngRoute', 'KMC.controllers', 'KMC.filters',
-        'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu']);
+        'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu', 'KMCmenu']);
 
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', '$translateProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider, $translateProvider) {
         $translateProvider.useStaticFilesLoader({
@@ -156,8 +155,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }
         );
         $routeProvider.when('/new',
-            {templateUrl: 'view/edit.html',
-                controller: 'PlayerEditCtrl',
+            {templateUrl: 'view/edit2.html',
+                controller: 'EditCtrl',
                 reloadOnSearch: false,
                 resolve: {
                     'api': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
@@ -168,7 +167,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                             return PlayerService.newPlayer();
                         });
                     },
-                    'menuSvc': 'menuSvc'
+	                'menuSvc': 'menuSvc'
                 }
             }
         );

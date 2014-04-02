@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'icomoon';
+  font-family: 'icomoon1';
   src: url('fonts/icomoon.eot');
   src: url('fonts/icomoon.eot?#iefix') format('embedded-opentype'), url('fonts/icomoon.ttf') format('truetype'), url('fonts/icomoon.woff') format('woff'), url('fonts/icomoon.svg#icomoon') format('svg');
   font-weight: normal;
@@ -7,7 +7,7 @@
 }
 [class^="icon-"],
 [class*=" icon-"] {
-  font-family: 'icomoon';
+  font-family: 'icomoon1';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -59,4 +59,25 @@
 }
 .icon-close:before {
   content: "\e603";
+}
+.icon{
+	cursor: pointer;
+	color: #fff;
+	display: block;
+	padding: 8px;
+	width: 100%;
+	text-align: center;
+	height: 50px;
+	font-size: 180%;
+	opacity: 0.18;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=18)";
+}
+.icon:hover {
+	opacity: 0.5;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	text-decoration: none;
+}
+.icon.active {
+	opacity: 1;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 }

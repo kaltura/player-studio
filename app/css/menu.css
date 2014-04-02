@@ -1,0 +1,138 @@
+.menu{
+	width: 425px;
+	height: 100%;
+	position: fixed;
+	background-color: lightgrey;
+}
+
+.categories{
+	background-color: #333333;
+	width: 60px;
+	height: 100%;
+	padding-left: 5px;
+	padding-top: 20px;
+}
+
+.categoryIcon{
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	cursor: pointer;
+}
+
+.category{
+	position: absolute;
+	margin-left: 70px;
+	width: 350px;
+	padding-top: 5px;
+	height: 100%;
+	overflow-y: auto;
+}
+
+.plugin{
+	width: 120px;
+	height: 24px;
+	background-color: yellow;
+	margin-left: 80px;
+}
+
+.text{
+	padding-top: 5px;
+}
+
+.text input{
+	width: 100%;
+}
+
+.checkbox{
+	padding-top: 10px;
+	height: 40px;
+}
+
+.number{
+	padding-top: 10px;
+	height: 40px;
+}
+.number > input{
+	width: 80px;
+}
+.color{
+	padding-top: 10px;
+	height: 50px;
+}
+
+.dropdownContainer{
+	height: 40px;
+	padding-top: 5px;
+}
+
+.dropdown{
+	float: right;
+}
+
+.readonly{
+	color: #555555;
+	margin-left: 10px;
+}
+
+hr{
+	width: 100%;
+	height: 2px;
+	bottom: 0;
+}
+
+.spaceLeft{
+	margin-left: 5px;
+}
+
+.errorIcon{
+	margin-left: 3px;
+	color: red;
+}
+.rotate90 {
+	transform: rotate(90deg);
+	-ms-transform: rotate(90deg); /* IE 9 */
+	-webkit-transform: rotate(90deg); /* Safari and Chrome */
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1); /* IE 8 */
+}
+.invalid{
+	color: red;
+	border: 1px solid red;
+}
+/*
+input[type="checkbox"]
+{
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+input[type="checkbox"]::before
+{
+	content: "";
+	display: inline-block;
+	line-height: 18px;
+	margin: 0 8px 0 0;
+	vertical-align: middle;
+	background: url('checkbox/checkbox.png') no-repeat;
+}
+
+input[type="checkbox"]:disabled
+{
+	background: url('checkbox/checkbox_disabled.png') no-repeat;
+	cursor: default;
+}
+
+input[type="checkbox"]:not(:checked):hover::before
+{
+	background: url('checkbox/checkbox.png') no-repeat;
+	cursor: pointer;
+}
+
+input[type="checkbox"]:checked::before
+{
+	background: url('checkbox/checkbox_selected.png') no-repeat;
+}
+*/
+/* Bootstrap resets */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

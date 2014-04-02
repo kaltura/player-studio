@@ -1,0 +1,10 @@
+<div class="text">
+
+	<div tabset>
+		<div tab ng-repeat="tab in property.children" heading="{{tab.label}}" active="tab.active" disabled="tab.disabled">
+			<div ng-repeat="property in tab.children" ng-include="'templates/' + property.type +'.html'"></div>
+		</div>
+	</div>
+
+	<hr bind-once ng-if="property.endline">
+</div>

@@ -1,0 +1,3 @@
+<div ng-style="{'margin-top':60 * $index + 'px'}" class="categoryIcon">
+	<div class="icon icon-{{category.icon}}" ng-class="{active: selectedCategory == category.label}" ng-click="categorySelected(category.label)" tooltip="{{category.label}}" tooltip-placement="right"></div>
+</div>

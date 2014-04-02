@@ -1,0 +1,17 @@
+<div ng-show="selectedCategory==category.label" class="category">
+	<p bind-once><h4>{{category.label}}</h4></p>
+	<p bind-once>{{category.description}}</p>
+
+	<div ng-repeat="property in category.properties" ng-include="'templates/' + property.type +'.html'"></div>
+
+	<div accordion close-others="false">
+		<div accordion-group ng-repeat="plugin in category.plugins" is-open="plugin.isopen">
+			<div accordion-heading>
+				<span id="{{plugin.id}}" style="margin-right: 5px">{{plugin.label}}</span><input class="pull-right" type="checkbox" ng-model="plugin.enabled" ng-click="togglePlugin(plugin, $event)">
+				<i ng-class="{rotate90:plugin.isopen}" class="glyphicon glyphicon-play" style="font-size: 12px"></i>
+			</div>
+			<p bind-once ng-bind-html="plugin.description"></p>
+			<div ng-repeat="property in plugin.properties" ng-include="'templates/' + property.type +'.html'"></div>
+		</div>
+	</div>
+</div>
