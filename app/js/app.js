@@ -120,8 +120,8 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
         // deep linking to plugin setup
         $routeProvider.when('/edit/:id',
-            {templateUrl: 'view/edit.html',
-                controller: 'PlayerEditCtrl',
+            {templateUrl: 'view/edit2.html',
+                controller: 'EditCtrl',
                 reloadOnSearch: false,
                 resolve: {
                     'PlayerData': ['PlayerService', '$route', 'api', 'apiService', 'localStorageService', '$location', function (PlayerService, $route, api, apiService, localStorageService, $location) {

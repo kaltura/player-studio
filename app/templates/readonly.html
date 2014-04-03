@@ -1,6 +1,6 @@
 <div class="text">
 	<span bind-once id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
-	<span bind-once class="readonly">{{property.initvalue}}</span>
+	<span bind-once class="readonly">{{property.initvalue | timeago}}</span>
 	<hr bind-once ng-if="property.endline">
 </div>

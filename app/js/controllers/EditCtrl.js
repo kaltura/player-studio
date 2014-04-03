@@ -13,6 +13,8 @@ KMCMenu.directive('bindOnce', function() {
 
 KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties) {
 
+	// get the player data
+	$scope.playerData = PlayerData;
     // set IE8 flash for color picker
     $scope.isIE8 = window.ie8;
     // array of invalid properties
@@ -29,9 +31,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // load menu data and parse it
     editableProperties.then(function(data) {
 
-        // convert data to a menu array.
-        // TODO: change service to return data as expected
+	    // merge data with player data
+	    $scope.mergePlayerData(data);
 
+        // convert data to a menu array.
         $scope.templatesToLoad = 0;   // used to detect when all the menu was loaded
         $scope.propertiesSearch = []; // prepare an array for all properties to be used in search
 
@@ -60,7 +63,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                     pluginIndex++;
                     var p = plugs[plug];
                     $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-                    var plugin = {'enabled': false, 'label': p.label, 'description':p.description, 'isopen': false, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
+                    var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
                     plugin.properties = [];
                     // check for tabs
                     if (p.sections){ // tabs found - create tabs
@@ -93,6 +96,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             }
             $scope.menuData.push(category);
         }
+	    alert("done");
         $scope.selectedCategory = $scope.menuData[1].label;
     })
 
@@ -212,5 +216,50 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.dataChanged){
 			confirm("data changed. Are you sure?");
 		}
+	}
+
+	// merge the player data with the menu data
+	$scope.mergePlayerData = function(data){
+		for (var cat in data){
+			var properties = data[cat].children;
+			if ($.isArray(properties)){ // flat properties for basic display
+				$scope.getPlayerProperties(properties);
+			}else{ // plugin
+				for (var plug in properties){
+					// check plugin enabled
+					if ($scope.playerData.config.plugins[plug]){
+						properties[plug].enabled = true;
+					}else{
+						properties[plug].enabled = false;;
+					}
+					// get plugin properties from player data
+					$scope.getPlayerProperties(properties[plug].children);
+				}
+			}
+		}
+	}
+
+	$scope.getPlayerProperties = function(properties){
+		for (var i=0; i<properties.length; i++){
+			if (properties[i].model && properties[i].model.indexOf("~")==-1){
+				var dataForModel = $scope.getDataForModel($scope.playerData, properties[i].model);
+				if (dataForModel !== false){
+					properties[i].initvalue = dataForModel;
+				}
+			}
+		}
+	}
+
+	$scope.getDataForModel = function(data, model){
+		var val = angular.copy(data);
+		var modelArr = model.split(".");
+		for (var i=0; i < modelArr.length; i++){
+			if (val[modelArr[i]] != undefined){
+				val = val[modelArr[i]];
+			}else{
+				return false;
+			}
+		}
+		return val;
 	}
 }]);
