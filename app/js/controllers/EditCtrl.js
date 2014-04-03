@@ -11,7 +11,8 @@ KMCMenu.directive('bindOnce', function() {
     }
 });
 
-KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties) {
+KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService',
+	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService) {
 
 	// get the player data
 	$scope.playerData = PlayerData;
@@ -21,6 +22,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     $scope.invalidProps = [];
 	// flag if the player data was changed so we can issue an alert if returning to list without saving
 	$scope.dataChanged = false;
+	// set aspect ratio to wide screen
+	$scope.aspectRatio = 9/16;
 
     // load user entries data
     $scope.userEntries = [];
@@ -31,7 +34,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		// set default entry
 		$timeout(function(){
-			$scope.selectedEntry = $scope.userEntries[0].id;
+			$scope.selectedEntry = localStorageService.get('defaultEntry') ? localStorageService.get('defaultEntry') : $scope.userEntries[0].id;
 		},0,true)
 	});
 
@@ -119,7 +122,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             $(".numeric").numeric({'decimal': false, 'negative': false}); // set integer number fields to accept only numbers
             $(".float").numeric({'decimal': '.', 'negative': false}); // set float number fields to accept only floating numbers
             console.log("menu loaded");
-            $("#debugger").show();
+	        $scope.refreshPlayer();
+            //$("#debugger").show();
         }
     });
 
@@ -174,11 +178,21 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
     $scope.refreshNeeded = false;
     $scope.propertyChanged = function(property){
+	    if (property.selectedEntry){ // this is a preview entry change
+		    $scope.selectedEntry = property.selectedEntry;
+		    localStorageService.set('defaultEntry', property.selectedEntry);
+		    $scope.refreshPlayer();
+		    return;
+	    }
 	    $scope.dataChanged = true;
         $scope.validate(property);
         if (property['player-refresh'] != false){
             $scope.refreshNeeded = true;
         }
+	    if (property['player-refresh'] == 'aspectToggle'){ // handle aspect ratio change
+		    $scope.aspectRatio = property.initvalue == 'wide' ? 9/16 : 3/4;
+		    $scope.refreshPlayer();
+	    }
     }
 
     // validation
@@ -208,9 +222,54 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     $scope.checkPlayerRefresh = function(){
         return $scope.refreshNeeded;
     }
+
     $scope.refreshPlayer = function(){
         $scope.refreshNeeded = false;
+	    if ($scope.selectedEntry != ''){ // entries were already loaded - load the player
+		    $scope.renderPlayer();
+	    }else{ // wait for entries to load
+		    $scope.intervalID = setInterval(function(){
+			    if ($scope.selectedEntry != ''){
+				    clearInterval($scope.intervalID);
+				    $scope.renderPlayer(); // load the player and stop waiting...
+			    }
+		    },100);
+	    }
     }
+
+	$scope.renderPlayer = function(){
+		// calculate player size according to aspect ratio
+		var playerWidth = $scope.aspectRatio == 9/16 ? '100%' : '70%';
+		$("#kVideoTarget").width(playerWidth);
+		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40);
+		//var data2Save = angular.copy(currentPlayer.config);
+		//data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
+		var flashvars = {};//{'jsonConfig': angular.toJson(data2Save)}; // update the player with the new configuration
+		if ($scope.isIE8) {                      // for IE8 add transparent mode
+			angular.extend(flashvars, {'wmode': 'transparent'});
+		}
+		// clear companion divs
+		$("#Companion_300x250").empty();
+		$("#Companion_728x90").empty();
+		window.mw.setConfig('forceMobileHTML5', true);
+		window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
+		kWidget.embed({
+			"targetId": 'kVideoTarget',
+			"wid": "_" + $scope.playerData.partnerId, //$scope.data.partnerId,
+			"uiconf_id": $scope.playerData.id,// $scope.data.id,
+			"flashvars": flashvars,
+			"entry_id": $scope.selectedEntry,
+			"readyCallback": function(playerId) {
+				document.getElementById(playerId).kBind("layoutBuildDone", function() {
+					if (typeof callback == 'function') {
+						callback();
+					}
+				});
+			}
+		});
+
+	}
+
 	$scope.save = function(){
 		if ($scope.invalidProps.length > 0){
 			alert("Some properties are invalid");
