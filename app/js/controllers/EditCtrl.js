@@ -23,9 +23,16 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.dataChanged = false;
 
     // load user entries data
-    $scope.useEntries = [];
+    $scope.userEntries = [];
+	$scope.selectedEntry = '';
 	apiService.listMedia().then(function(data) {
-		$scope.userEntries = data;
+		for (var i=0; i < data.objects.length; i++){
+			$scope.userEntries.push({'id': data.objects[i].id, 'text': data.objects[i].name});
+		}
+		// set default entry
+		$timeout(function(){
+			$scope.selectedEntry = $scope.userEntries[0].id;
+		},0,true)
 	});
 
     // load menu data and parse it
@@ -96,7 +103,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             }
             $scope.menuData.push(category);
         }
-	    alert("done");
         $scope.selectedCategory = $scope.menuData[1].label;
     })
 
