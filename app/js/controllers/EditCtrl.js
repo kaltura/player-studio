@@ -73,7 +73,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                     pluginIndex++;
                     var p = plugs[plug];
                     $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-                    var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
+                    var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
                     plugin.properties = [];
                     // check for tabs
                     if (p.sections){ // tabs found - create tabs
@@ -133,10 +133,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (plugin.enabled){
 		    // since we are getting the event before the value is changed - enabled means that the plugin is going to be disabled - remove validation
 		    $scope.removeValidation(plugin);
+		    delete $scope.playerData.config.plugins[plugin.model]; // remove the plugin from the player data
 	    }else{
 		    $scope.addValidation(plugin);
 	    }
-        $scope.refreshPlayer();
+	    $timeout(function(){$scope.refreshPlayer();},0,true);
+
     }
 
 	// remove validation for disabled plugins
@@ -238,13 +240,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     }
 
 	$scope.renderPlayer = function(){
+		$scope.updatePlayerData(); // update the player data from the menu data
 		// calculate player size according to aspect ratio
 		var playerWidth = $scope.aspectRatio == 9/16 ? '100%' : '70%';
 		$("#kVideoTarget").width(playerWidth);
 		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40);
-		//var data2Save = angular.copy(currentPlayer.config);
-		//data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
-		var flashvars = {};//{'jsonConfig': angular.toJson(data2Save)}; // update the player with the new configuration
+		var flashvars = {'jsonConfig': angular.toJson($scope.playerData.config)}; // update the player with the new configuration
 		if ($scope.isIE8) {                      // for IE8 add transparent mode
 			angular.extend(flashvars, {'wmode': 'transparent'});
 		}
@@ -291,6 +292,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.getPlayerProperties(properties);
 			}else{ // plugin
 				for (var plug in properties){
+					// save plugin name in a model
+					properties[plug].model = plug;
 					// check plugin enabled
 					if ($scope.playerData.config.plugins[plug]){
 						properties[plug].enabled = true;
@@ -327,4 +330,37 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		return val;
 	}
+
+	$scope.updatePlayerData = function(){
+		for (var category=1; category < $scope.menuData.length; category++){ // we start at index=1 to skip the search category
+			if ($scope.menuData[category].properties != undefined){ // flat properties: basic properties
+				$scope.setPlayerProperties($scope.menuData[category].properties);
+			}else{ // plugins
+				for (var plug=0; plug < $scope.menuData[category]['plugins'].length; plug++)
+					if ($scope.menuData[category]['plugins'][plug].enabled === true) // get only enabled plugins
+						$scope.setPlayerProperties($scope.menuData[category]['plugins'][plug].properties);
+			}
+		}
+	}
+
+	$scope.setPlayerProperties = function(properties){
+		for (var i=0; i<properties.length; i++){
+			if (properties[i].model && properties[i].model.indexOf("~")==-1 && properties[i].type != 'readonly'){
+				var objArr = properties[i].model.split(".");  // break the model path to array
+				var pData = $scope.playerData;
+				for (var j=0; j<objArr.length; j++){          // go through the object names in the model path
+					var prop = objArr[j];
+					if (j == objArr.length-1 && properties[i].initvalue){  // last object in model path - this is the value property
+						pData[prop] = properties[i].initvalue; // set the data in this property
+					}else{
+						if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
+							pData[prop] = {'enabled':true};
+						}
+						pData = pData[prop];   // go to the next object in the object path
+					}
+				}
+			}
+		}
+	}
+
 }]);
