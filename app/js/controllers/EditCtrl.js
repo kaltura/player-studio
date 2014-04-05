@@ -186,6 +186,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    $scope.refreshPlayer();
 		    return;
 	    }
+	    if (property['player-refresh'] && property['player-refresh'].indexOf(".") != -1) { // handle setKDPAttribute values
+		    var obj = property['player-refresh'].split(".")[0];
+		    var prop = property['player-refresh'].split(".")[1];
+		    var kdp = document.getElementById('kVideoTarget');
+		    kdp.setKDPAttribute(obj, prop, property.initvalue);
+		    return;
+	    }
 	    $scope.dataChanged = true;
         $scope.validate(property);
         if (property['player-refresh'] != false){
@@ -310,7 +317,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.getPlayerProperties = function(properties){
 		for (var i=0; i<properties.length; i++){
 			if (properties[i].model && properties[i].model.indexOf("~")==-1){
-				var dataForModel = $scope.getDataForModel($scope.playerData, properties[i].model);
+				var dataForModel = $scope.getDataForModel($scope.playerData, properties[i].model, properties[i].filter);
 				if (dataForModel !== false){
 					properties[i].initvalue = dataForModel;
 				}
@@ -318,7 +325,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 	}
 
-	$scope.getDataForModel = function(data, model){
+	$scope.getDataForModel = function(data, model, filter){
 		var val = angular.copy(data);
 		var modelArr = model.split(".");
 		for (var i=0; i < modelArr.length; i++){
@@ -327,6 +334,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}else{
 				return false;
 			}
+		}
+		return filter ?  $scope.getFilter(val, filter) : val;
+	}
+
+	$scope.getFilter = function(val, filter){
+		if (filter == "companions"){
+			var companions = val.split(";");
+			val =[];
+			for (var i=0; i<companions.length; i++)
+				if (companions[i].indexOf(":") != -1)
+					val.push({"label": companions[i].substr(0,companions[i].indexOf(":"))});
 		}
 		return val;
 	}
@@ -337,29 +355,51 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.setPlayerProperties($scope.menuData[category].properties);
 			}else{ // plugins
 				for (var plug=0; plug < $scope.menuData[category]['plugins'].length; plug++)
-					if ($scope.menuData[category]['plugins'][plug].enabled === true) // get only enabled plugins
+					if ($scope.menuData[category]['plugins'][plug].enabled === true) {// get only enabled plugins
 						$scope.setPlayerProperties($scope.menuData[category]['plugins'][plug].properties);
+					}
 			}
 		}
 	}
 
 	$scope.setPlayerProperties = function(properties){
 		for (var i=0; i<properties.length; i++){
-			if (properties[i].model && properties[i].model.indexOf("~")==-1 && properties[i].type != 'readonly'){
-				var objArr = properties[i].model.split(".");  // break the model path to array
-				var pData = $scope.playerData;
-				for (var j=0; j<objArr.length; j++){          // go through the object names in the model path
-					var prop = objArr[j];
-					if (j == objArr.length-1 && properties[i].initvalue){  // last object in model path - this is the value property
-						pData[prop] = properties[i].initvalue; // set the data in this property
-					}else{
-						if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
-							pData[prop] = {'enabled':true};
-						}
-						pData = pData[prop];   // go to the next object in the object path
+			if (properties[i].type == "tabs"){ // support tabs
+				for (var tab = 0; tab < properties[i].children.length; tab++)
+					for (var prop = 0; prop < properties[i].children[tab].children.length; prop++)
+						$scope.setDataForModel(properties[i].children[tab].children[prop]);
+			}else{
+				$scope.setDataForModel(properties[i]);
+			}
+		}
+	}
+
+	$scope.setDataForModel = function(data){
+		if (data.model && data.model.indexOf("~")==-1 && data.type != 'readonly'){
+			var objArr = data.model.split(".");  // break the model path to array
+			var pData = $scope.playerData;
+			for (var j=0; j<objArr.length; j++){  // go through the object names in the model path
+				var prop = objArr[j];
+				if (j == objArr.length-1 && data.initvalue){  // last object in model path - this is the value property
+					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
+				}else{
+					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
+						pData[prop] = {'enabled':true};
 					}
+					pData = pData[prop];   // go to the next object in the object path
 				}
 			}
+		}
+	}
+
+	$scope.setFilter = function(data, filter){
+		var res = "";
+		if (filter == "companions"){
+			for (var i=0; i<data.length; i++){
+				var size = data[i].label.substr(data[i].label.lastIndexOf("_")+1).split("x");
+				res += data[i].label + ":" + size[0] + ":" + size[1] + ";";
+			}
+			return res.substr(0, res.length - 1);
 		}
 	}
 
