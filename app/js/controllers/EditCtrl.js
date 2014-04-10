@@ -11,6 +11,20 @@ KMCMenu.directive('bindOnce', function() {
     }
 });
 
+KMCMenu.directive('onFinishRender', function ($timeout) {
+	return {
+		restrict: 'A',
+		link: function (scope, element, attr) {
+			if (scope.$last === true) { // accordion section finished loading - init jQuery plugins after 3 seconds to allow menu items to render first
+				$timeout(function(){
+					$(".numeric").numeric({'decimal': false, 'negative': false}); // set integer number fields to accept only numbers
+					$(".float").numeric({'decimal': '.', 'negative': false});     // set float number fields to accept only floating numbers
+				},3000);
+			}
+		}
+	}
+});
+
 KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService',
 	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService) {
 
@@ -84,6 +98,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                         }
                     }
                     for (var i=0; i<p.children.length; i++){
+	                    if (p.children[i].filter != undefined) // apply filter if exists
+		                    p.children[i].initvalue = $scope.getFilter(p.children[i].initvalue, p.children[i].filter);
+
                         $scope.templatesToLoad++;
                         if (p.sections && p.children[i].section){ // property should be put in the correct tab
                             for (var tab=0; tab < tabObj.children.length; tab++){
@@ -106,23 +123,43 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             }
             $scope.menuData.push(category);
         }
+	    // to boost performances - don't render all categories now, only search and basic display
+	    for (var i=2; i<$scope.menuData.length; i++){
+		    $scope.menuData[i].pluginsNotLoaded = angular.copy($scope.menuData[i].plugins);
+		    delete $scope.menuData[i].plugins;
+	    }
         $scope.selectedCategory = $scope.menuData[1].label;
+	    $scope.refreshPlayer();
     })
 
     // set selected category when clicking on a category icon
     $scope.categorySelected = function(category){
         $scope.selectedCategory = category;
+	    // for search - load all categories so we can display search results. use timeout to display the search screen before loading the categories (blocking code)
+	    if (category == "Menu Search"){
+		    $timeout(function(){
+			    for (var i=2; i<$scope.menuData.length; i++)
+				    if ($scope.menuData[i].pluginsNotLoaded != undefined){
+					    $scope.menuData[i].plugins = angular.copy($scope.menuData[i].pluginsNotLoaded);
+					    delete $scope.menuData[i].pluginsNotLoaded;
+				    }
+		    },50,true);
+	    }
+	    // if this category menu wasn't rendered yet - render it now
+	    for (var i=2; i<$scope.menuData.length; i++)
+		    if ($scope.menuData[i].label == category && $scope.menuData[i].pluginsNotLoaded != undefined){
+			    $scope.menuData[i].plugins = angular.copy($scope.menuData[i].pluginsNotLoaded);
+			    delete $scope.menuData[i].pluginsNotLoaded;
+		    }
     }
 
     // detect when the menu finished loading
+	$scope.menuLoaded = false;
     $scope.templatesLoaded = 0;
     $scope.$on('$includeContentLoaded', function(event) {
         $scope.templatesLoaded++;
         if ($scope.templatesLoaded == $scope.templatesToLoad){
-            $(".numeric").numeric({'decimal': false, 'negative': false}); // set integer number fields to accept only numbers
-            $(".float").numeric({'decimal': '.', 'negative': false}); // set float number fields to accept only floating numbers
-            console.log("menu loaded");
-	        $scope.refreshPlayer();
+	        $scope.menuLoaded = true;
             //$("#debugger").show();
         }
     });
@@ -354,9 +391,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if ($scope.menuData[category].properties != undefined){ // flat properties: basic properties
 				$scope.setPlayerProperties($scope.menuData[category].properties);
 			}else{ // plugins
-				for (var plug=0; plug < $scope.menuData[category]['plugins'].length; plug++)
-					if ($scope.menuData[category]['plugins'][plug].enabled === true) {// get only enabled plugins
-						$scope.setPlayerProperties($scope.menuData[category]['plugins'][plug].properties);
+				var pluginsStr = $scope.menuData[category]['plugins'] != undefined ? 'plugins' : 'pluginsNotLoaded'; // support plugins that we didn't render the menu for yet
+				for (var plug=0; plug < $scope.menuData[category][pluginsStr].length; plug++)
+					if ($scope.menuData[category][pluginsStr][plug].enabled === true) {// get only enabled plugins
+						$scope.setPlayerProperties($scope.menuData[category][pluginsStr][plug].properties);
 					}
 			}
 		}
