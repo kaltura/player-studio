@@ -319,18 +319,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 return $http.get('js/services/defaultPlayer.json');
             },
             "preparePluginsDataForRender": function(data) {
-                // clean data before save (remove _featureEnabled and objects that contain _featureEnabled recursively)
+                // clean data before save (remove _featureEnabled and objects that contain enabled recursively)
                 var copyobj = data.plugins || data;
                 angular.forEach(copyobj, function(value, key) {
                     if (angular.isObject(value)) {
-                        if (typeof value._featureEnabled == 'undefined' || value._featureEnabled === false) {
+                        if (typeof value.enabled == 'undefined' || value.enabled === false) {
                             delete copyobj[key];
                         }
                         else {
                             playersService.preparePluginsDataForRender(value);
                         }
                     } else {
-                        if (key == "_featureEnabled") {
+                        if (key == "enabled") {
                             copyobj["plugin"] = true;
                             delete copyobj[key];
                         }

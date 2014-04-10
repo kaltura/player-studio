@@ -25,19 +25,16 @@ KMCMenu.directive('onFinishRender', function ($timeout) {
 	}
 });
 
-KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService',
-	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService) {
+KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', 'PlayerService','$location','requestNotificationChannel',
+	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, PlayerService, $location, requestNotificationChannel) {
 
-	// get the player data
-	$scope.playerData = PlayerData;
-    // set IE8 flash for color picker
-    $scope.isIE8 = window.ie8;
-    // array of invalid properties
-    $scope.invalidProps = [];
-	// flag if the player data was changed so we can issue an alert if returning to list without saving
-	$scope.dataChanged = false;
-	// set aspect ratio to wide screen
-	$scope.aspectRatio = 9/16;
+
+	$scope.playerData = PlayerData;      // get the player data
+    $scope.isIE8 = window.ie8;           // set IE8 flash for color picker
+    $scope.invalidProps = [];            // array of invalid properties
+	$scope.dataChanged = false;          // flag if the player data was changed so we can issue an alert if returning to list without saving
+	$scope.aspectRatio = 9/16;           // set aspect ratio to wide screen
+	$scope.newPlayer = !$routeParams.id; // New player flag
 
     // load user entries data
     $scope.userEntries = [];
@@ -129,6 +126,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    delete $scope.menuData[i].plugins;
 	    }
         $scope.selectedCategory = $scope.menuData[1].label;
+	    requestNotificationChannel.requestEnded('edit'); // hide spinner
 	    $scope.refreshPlayer();
     })
 
@@ -317,14 +315,82 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.save = function(){
 		if ($scope.invalidProps.length > 0){
-			alert("Some properties are invalid");
+			$modal.open({ templateUrl: 'template/dialog/message.html',
+				controller: 'ModalInstanceCtrl',
+				resolve: {
+					settings: function() {
+						return {
+							'title': 'Save Player Settings',
+							'message': 'Some plugin features values are invalid. The player cannot be saved.',
+							buttons: [
+								{result: true, label: 'OK', cssClass: 'btn-primary'}
+							]
+						};
+					}
+				}
+			});
 		}else{
+			$scope.updatePlayerData();
 			$scope.dataChanged = false;
+			PlayerService.savePlayer($scope.playerData).then(function(value) {
+					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
+					// if this is a new player - add it to the players list
+					if ($scope.newPlayer) {
+						apiService.setCache(false); // prevent the list controller from using the cache the next time the list loads
+					}
+					$modal.open({ templateUrl: 'template/dialog/message.html',
+						controller: 'ModalInstanceCtrl',
+						resolve: {
+							settings: function() {
+								return {
+									'title': 'Save Player Settings',
+									'message': 'Player Saved Successfully',
+									buttons: [
+										{result: true, label: 'OK', cssClass: 'btn-primary'}
+									]
+								};
+							}
+						}
+					});
+				},
+				function(msg) {
+					$modal.open({ templateUrl: 'template/dialog/message.html',
+						controller: 'ModalInstanceCtrl',
+						resolve: {
+							settings: function() {
+								return {
+									'title': 'Player save failure',
+									'message': msg
+								};
+							}
+						}
+					});
+				}
+			);
 		}
 	}
 	$scope.backToList = function(){
-		if ($scope.dataChanged){
-			confirm("data changed. Are you sure?");
+		if (!$scope.dataChanged) {
+			$location.url('/list');
+		}
+		else {
+			var modal = $modal.open(
+				{ templateUrl: 'template/dialog/message.html',
+					controller: 'ModalInstanceCtrl',
+					resolve: {
+						settings: function() {
+							return {
+								'title': 'Navigation confirmation',
+								message: 'You are about to leave this page without saving, are you sure you want to discard the changes?'
+							};
+						}
+
+					}});
+			modal.result.then(function(result) {
+				if (result) {
+					$location.url('/list');
+				}
+			});
 		}
 	}
 
@@ -376,7 +442,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	}
 
 	$scope.getFilter = function(val, filter){
-		if (filter == "companions"){
+		if (filter == "companions" && !$.isArray(val)){
 			var companions = val.split(";");
 			val =[];
 			for (var i=0; i<companions.length; i++)
@@ -418,7 +484,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			var pData = $scope.playerData;
 			for (var j=0; j<objArr.length; j++){  // go through the object names in the model path
 				var prop = objArr[j];
-				if (j == objArr.length-1 && data.initvalue){  // last object in model path - this is the value property
+				if (j == objArr.length-1 && data.initvalue != undefined){  // last object in model path - this is the value property
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
 				}else{
 					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
