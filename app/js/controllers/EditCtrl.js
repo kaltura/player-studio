@@ -322,8 +322,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			angular.extend(flashvars, {'wmode': 'transparent'});
 		}
 		// clear companion divs
-		$("#Companion_300x250").empty();
-		$("#Companion_728x90").empty();
+		$("#Comp_300x250").empty();
+		$("#Comp_728x90").empty();
 		window.mw.setConfig('forceMobileHTML5', true);
 		window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
 		kWidget.embed({
@@ -475,7 +475,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			val =[];
 			for (var i=0; i<companions.length; i++)
 				if (companions[i].indexOf(":") != -1)
-					val.push({"label": companions[i].substr(0,companions[i].indexOf(":"))});
+					val.push({"label": companions[i].substr(0,companions[i].indexOf(":")),"width": companions[i].split(":")[1],"height": companions[i].split(":")[2]});
 		}
 		return val;
 	}
@@ -529,8 +529,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		var res = "";
 		if (filter == "companions"){
 			for (var i=0; i<data.length; i++){
-				var size = data[i].label.substr(data[i].label.lastIndexOf("_")+1).split("x");
-				res += data[i].label + ":" + size[0] + ":" + size[1] + ";";
+				res += data[i].label + ":" + data[i].width + ":" + data[i].height + ";";
 			}
 			return res.substr(0, res.length - 1);
 		}
