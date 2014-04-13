@@ -28,13 +28,12 @@ KMCMenu.directive('onFinishRender', function ($timeout) {
 KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', 'PlayerService','$location','requestNotificationChannel',
 	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, PlayerService, $location, requestNotificationChannel) {
 
-
-	$scope.playerData = PlayerData;      // get the player data
-    $scope.isIE8 = window.ie8;           // set IE8 flash for color picker
-    $scope.invalidProps = [];            // array of invalid properties
-	$scope.dataChanged = false;          // flag if the player data was changed so we can issue an alert if returning to list without saving
-	$scope.aspectRatio = 9/16;           // set aspect ratio to wide screen
-	$scope.newPlayer = !$routeParams.id; // New player flag
+	$scope.playerData = angular.copy(PlayerData);   // get the player data
+    $scope.isIE8 = window.ie8;                      // set IE8 flash for color picker
+    $scope.invalidProps = [];                       // array of invalid properties
+	$scope.dataChanged = false;                     // flag if the player data was changed so we can issue an alert if returning to list without saving
+	$scope.aspectRatio = 9/16;                      // set aspect ratio to wide screen
+	$scope.newPlayer = !$routeParams.id;            // New player flag
 
     // load user entries data
     $scope.userEntries = [];
@@ -51,7 +50,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
     // load menu data and parse it
     editableProperties.then(function(data) {
-
+		data=angular.copy(data); // prevent changing original data
 	    // merge data with player data
 	    $scope.mergePlayerData(data);
 
@@ -100,7 +99,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
                         $scope.templatesToLoad++;
                         if (p.sections && p.children[i].section){ // property should be put in the correct tab
-                            for (var tab=0; tab < tabObj.children.length; tab++){
+	                        for (var tab=0; tab < tabObj.children.length; tab++){
                                 if (p.children[i].section == tabObj.children[tab].key){
                                     tabObj.children[tab].children.push($.extend(p.children[i],{'id':'prop'+$scope.templatesToLoad}));
                                     $scope.propertiesSearch.push({'label':p.children[i].label + ' ('+ p.label +')','categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'tabIndex': tab, 'id': 'prop'+$scope.templatesToLoad}); // add property to search indexing
@@ -120,6 +119,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             }
             $scope.menuData.push(category);
         }
+
 	    // to boost performances - don't render all categories now, only search and basic display
 	    for (var i=2; i<$scope.menuData.length; i++){
 		    $scope.menuData[i].pluginsNotLoaded = angular.copy($scope.menuData[i].plugins);
@@ -334,10 +334,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.dataChanged = false;
 			PlayerService.savePlayer($scope.playerData).then(function(value) {
 					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
-					// if this is a new player - add it to the players list
-					if ($scope.newPlayer) {
-						apiService.setCache(false); // prevent the list controller from using the cache the next time the list loads
-					}
+					apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
 					$modal.open({ templateUrl: 'template/dialog/message.html',
 						controller: 'ModalInstanceCtrl',
 						resolve: {
@@ -470,8 +467,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		for (var i=0; i<properties.length; i++){
 			if (properties[i].type == "tabs"){ // support tabs
 				for (var tab = 0; tab < properties[i].children.length; tab++)
-					for (var prop = 0; prop < properties[i].children[tab].children.length; prop++)
+					for (var prop = 0; prop < properties[i].children[tab].children.length; prop++){
 						$scope.setDataForModel(properties[i].children[tab].children[prop]);
+					}
 			}else{
 				$scope.setDataForModel(properties[i]);
 			}

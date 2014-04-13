@@ -353,6 +353,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 };
                 apiService.doRequest(request).then(function(result) {
                     playersCache[data.id] = data; // update player data in players cache
+	                currentPlayer = {};
                     // refresh KMC players list so that the new player will appear in the "Preview and Embed" screen
                     var kmc = window.parent.kmc;
                     if (kmc && kmc.preview_embed) {
