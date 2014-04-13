@@ -1,10 +1,12 @@
 <div class="text">
 	<span bind-once id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
-	<select id="entriesSelectBox" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged({'selectedEntry': selectedEntry})" ui-select2="{ allowClear: true, width: '100%'}" ng-model="selectedEntry" class="dropdown">
+	<!--select id="entriesSelectBox" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged({'selectedEntry': selectedEntry})" ui-select2="{ allowClear: true, width: '100%'}" ng-model="selectedEntry" class="dropdown">
 		<option value="{{item.id}}" ng-repeat="item in userEntries">
 			{{item.text}}
 		</option>
-	</select>
+	</select-->
+	<!--input ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged({'selectedEntry': selectedEntry})" type="hidden" ui-select2="{ allowClear: true, width: '100%',data.results: userEntries, query: queryEntries}" ng-model="selectedEntry" class="dropdown"-->
+	<input ui-select2="entriesSelectBox" ng-model="selectedEntry" class="dropdown" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged({'selectedEntry': selectedEntry})" type="hidden"/>
 	<hr bind-once ng-if="property.endline" style="margin-top: 40px">
 </div>
