@@ -44,9 +44,39 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		// set default entry
 		$timeout(function(){
-			$scope.selectedEntry = localStorageService.get('defaultEntry') ? localStorageService.get('defaultEntry') : $scope.userEntries[0].id;
+			$scope.selectedEntry = localStorageService.get('defaultEntry') ? localStorageService.get('defaultEntry') : $scope.userEntries[0];
 		},0,true)
 	});
+	// set user entries select2 options and query
+	$scope.entriesSelectBox = {
+		allowClear: true,
+		width: '100%',
+		initSelection : function (element, callback) {
+			callback($(element).data('$ngModelController').$modelValue);
+		},
+		query: function (query) {
+			var timeVar = null;
+			if (query.term) {
+				var data = {results: []};
+				if (timeVar) {
+					$timeout.cancel(timeVar);
+				}
+				timeVar = $timeout(function() {
+					apiService.searchMedia(query.term).then(function(results) {
+						angular.forEach(results.objects, function(entry) {
+							data.results.push({id: entry.id, text: entry.name});
+						});
+						timeVar = null;
+						return query.callback(data);
+					});
+				}, 200);
+			}
+			else{
+				return query.callback({results: $scope.userEntries});
+			}
+			query.callback(data);
+		}
+	};
 
     // load menu data and parse it
     editableProperties.then(function(data) {
@@ -215,8 +245,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
     $scope.refreshNeeded = false;
     $scope.propertyChanged = function(property){
-	    if (property.selectedEntry){ // this is a preview entry change
-		    $scope.selectedEntry = property.selectedEntry;
+	    if (property.selectedEntry && property.selectedEntry.id){ // this is a preview entry change
+		    $scope.selectedEntry = property.selectedEntry.id;
 		    localStorageService.set('defaultEntry', property.selectedEntry);
 		    $scope.refreshPlayer();
 		    return;
@@ -301,7 +331,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			"wid": "_" + $scope.playerData.partnerId, //$scope.data.partnerId,
 			"uiconf_id": $scope.playerData.id,// $scope.data.id,
 			"flashvars": flashvars,
-			"entry_id": $scope.selectedEntry,
+			"entry_id": $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry,
 			"readyCallback": function(playerId) {
 				document.getElementById(playerId).kBind("layoutBuildDone", function() {
 					if (typeof callback == 'function') {
@@ -366,6 +396,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			);
 		}
 	}
+
 	$scope.backToList = function(){
 		if (!$scope.dataChanged) {
 			$location.url('/list');
