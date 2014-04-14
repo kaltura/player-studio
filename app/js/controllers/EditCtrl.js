@@ -260,7 +260,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
     $scope.refreshNeeded = false;
     $scope.propertyChanged = function(property, checkAutoRefresh){
-	    if (property.selectedEntry && property.selectedEntry.id){ // this is a preview entry change
+	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~")==0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry.id;
 		    localStorageService.set('defaultEntry', property.selectedEntry);
 		    $scope.refreshPlayer();
@@ -335,6 +335,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		var playerWidth = $scope.aspectRatio == 9/16 ? '100%' : '70%';
 		$("#kVideoTarget").width(playerWidth);
 		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40);
+		for (var plug in $scope.playerData.config.plugins)
+			if ($scope.playerData.config.plugins[plug]['enabled'] == true)
+				$scope.playerData.config.plugins[plug]['plugin'] = true;
 		var flashvars = {'jsonConfig': angular.toJson($scope.playerData.config)}; // update the player with the new configuration
 		if ($scope.isIE8) {                      // for IE8 add transparent mode
 			angular.extend(flashvars, {'wmode': 'transparent'});
@@ -550,6 +553,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				res += data[i].label + ":" + data[i].width + ":" + data[i].height + ";";
 			}
 			return res.substr(0, res.length - 1);
+		}
+		if (filter == "entry"){
+			return data.id? data.id : data;
 		}
 	}
 
