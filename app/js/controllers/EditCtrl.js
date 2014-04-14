@@ -25,6 +25,20 @@ KMCMenu.directive('onFinishRender', function ($timeout) {
 	}
 });
 
+KMCMenu.directive('ngEnter', function () {
+	return function (scope, element, attrs) {
+		element.bind("keydown keypress", function (event) {
+			if(event.which === 13) {
+				scope.$apply(function (){
+					scope.$eval(attrs.ngEnter);
+				});
+
+				event.preventDefault();
+			}
+		});
+	};
+});
+
 KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', 'PlayerService','$location','requestNotificationChannel',
 	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, PlayerService, $location, requestNotificationChannel) {
 
@@ -34,6 +48,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.dataChanged = false;                     // flag if the player data was changed so we can issue an alert if returning to list without saving
 	$scope.aspectRatio = 9/16;                      // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
+	$scope.autoPreview = false;                     // auto preview flag
 
     // load user entries data
     $scope.userEntries = [];
@@ -244,7 +259,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
     // handle refresh
     $scope.refreshNeeded = false;
-    $scope.propertyChanged = function(property){
+    $scope.propertyChanged = function(property, checkAutoRefresh){
 	    if (property.selectedEntry && property.selectedEntry.id){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry.id;
 		    localStorageService.set('defaultEntry', property.selectedEntry);
@@ -263,6 +278,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         if (property['player-refresh'] != false){
             $scope.refreshNeeded = true;
         }
+	    if (checkAutoRefresh == true && $scope.refreshNeeded && $scope.autoPreview){
+		    $scope.refreshPlayer();
+	    }
 	    if (property['player-refresh'] == 'aspectToggle'){ // handle aspect ratio change
 		    $scope.aspectRatio = property.initvalue == 'wide' ? 9/16 : 3/4;
 		    $scope.refreshPlayer();

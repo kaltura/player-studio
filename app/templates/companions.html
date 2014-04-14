@@ -3,12 +3,12 @@
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i><br>
 	<ul style="padding-left: 15px">
 		<li ng-repeat="item in property.initvalue" style="padding-top: 5px">
-			Div ID: <input ng-model="item.label" style="width: 100px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property)"> W: <input ng-model="item.width" style="width: 35px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property)"> H: <input ng-model="item.height" style="width: 35px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property)">
-			<a ng-if="plugin!=null && plugin.enabled" href ng-click="property.initvalue.splice($index, 1);propertyChanged(property)" >[X]</a>
+			Div ID: <input ng-model="item.label" style="width: 100px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, true)" ng-blur="propertyChanged(property, true)"> W: <input ng-model="item.width" style="width: 35px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, true)" ng-blur="propertyChanged(property, true)"> H: <input ng-model="item.height" style="width: 35px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, false) ng-enter="propertyChanged(property, true)" ng-blur="propertyChanged(property, true)"">
+			<a ng-if="plugin!=null && plugin.enabled" href ng-click="property.initvalue.splice($index, 1);propertyChanged(property, true)" >[X]</a>
 			<span ng-if="plugin!=null && !plugin.enabled">[X]</span>
 		</li>
 		<li>
-			<a ng-if="plugin!=null && plugin.enabled" href ng-click="property.initvalue.push({'label':''});propertyChanged(property)">[add]</a>
+			<a ng-if="plugin!=null && plugin.enabled" href ng-click="property.initvalue.push({'label':''});propertyChanged(property, true)">[add]</a>
 			<span ng-if="plugin!=null && !plugin.enabled">[add]</span>
 		</li>
 	</ul>
