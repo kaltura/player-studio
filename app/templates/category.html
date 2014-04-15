@@ -1,7 +1,7 @@
 <div ng-show="selectedCategory==category.label" class="category">
 	<p bind-once><h4>{{category.label}}</h4></p>
 	<p bind-once>{{category.description}}</p>
-
+	<p class="loading" ng-if="category.pluginsNotLoaded">Loading, please wait...</p>
 	<div ng-repeat="property in category.properties" ng-include="'templates/' + property.type +'.html'"></div>
 
 	<div accordion close-others="false">

@@ -99,6 +99,10 @@ hr{
 	color: red;
 	border: 1px solid red;
 }
+.loading{
+	color: green;
+	font-weight: bold;
+}
 /*
 input[type="checkbox"]
 {

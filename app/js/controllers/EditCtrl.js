@@ -189,11 +189,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    },50,true);
 	    }
 	    // if this category menu wasn't rendered yet - render it now
+	    $timeout(function(){ // use a timeout to display the loading message
 	    for (var i=2; i<$scope.menuData.length; i++)
 		    if ($scope.menuData[i].label == category && $scope.menuData[i].pluginsNotLoaded != undefined){
 			    $scope.menuData[i].plugins = angular.copy($scope.menuData[i].pluginsNotLoaded);
 			    delete $scope.menuData[i].pluginsNotLoaded;
 		    }
+	    },50,true);
     }
 
     // detect when the menu finished loading
