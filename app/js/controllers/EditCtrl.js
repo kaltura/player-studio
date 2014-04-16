@@ -1,45 +1,5 @@
 var KMCMenu = angular.module('KMCmenu', ['ui.bootstrap', 'ngSanitize', 'ui.select2', 'angularSpectrumColorpicker']);
 
-KMCMenu.directive('bindOnce', function() {
-    return {
-        scope: true,
-        link: function( $scope ) {
-            setTimeout(function() {
-                $scope.$destroy();
-            }, 0);
-        }
-    }
-});
-
-KMCMenu.directive('onFinishRender', function ($timeout) {
-	return {
-		restrict: 'A',
-		link: function (scope, element, attr) {
-			if (scope.$last === true) { // accordion section finished loading - init jQuery plugins after 3 seconds to allow menu items to render first
-				$timeout(function(){
-					$(".numeric").numeric({allowMinus: false, allowDecSep: false}); // set integer number fields to accept only numbers
-					$(".float").numeric({allowMinus: false, allowDecSep: true});    // set float number fields to accept only floating numbers
-					$(".alpha").alphanum({allow:'-_=+,.!@#$%^&*(){}[]|?~\'',disallow: '"'});    // set float number fields to accept only floating numbers
-				},3000);
-			}
-		}
-	}
-});
-
-KMCMenu.directive('ngEnter', function () {
-	return function (scope, element, attrs) {
-		element.bind("keydown keypress", function (event) {
-			if(event.which === 13) {
-				scope.$apply(function (){
-					scope.$eval(attrs.ngEnter);
-				});
-
-				event.preventDefault();
-			}
-		});
-	};
-});
-
 KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', 'PlayerService','$location','requestNotificationChannel',
 	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, PlayerService, $location, requestNotificationChannel) {
 
@@ -349,26 +309,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.isIE8) {                      // for IE8 add transparent mode
 			angular.extend(flashvars, {'wmode': 'transparent'});
 		}
-		// clear companion divs
-		$("#Comp_300x250").empty();
-		$("#Comp_728x90").empty();
-		window.mw.setConfig('forceMobileHTML5', true);
-		window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
-		kWidget.embed({
-			"targetId": 'kVideoTarget',
-			"wid": "_" + $scope.playerData.partnerId, //$scope.data.partnerId,
-			"uiconf_id": $scope.playerData.id,// $scope.data.id,
-			"flashvars": flashvars,
-			"entry_id": $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry,
-			"readyCallback": function(playerId) {
-				document.getElementById(playerId).kBind("layoutBuildDone", function() {
-					if (typeof callback == 'function') {
-						callback();
-					}
-				});
-			}
-		});
-
+		var entryID = $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
+		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID);
 	}
 
 	$scope.save = function(){

@@ -123,41 +123,20 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     return previewEntryObj;
                 }
             },
-            'renderPlayer': function(callback) {
+            'renderPlayer': function(wid, uiconf_id, flashvars, entry_id) {
                 logTime('renderPlayer');
-                if (currentPlayer && typeof kWidget != "undefined") {
-                    var data2Save = angular.copy(currentPlayer.config);
-                    data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
-                    var flashvars = {'jsonConfig': angular.toJson(data2Save)}; // update the player with the new configuration
-                    if ($('html').hasClass('IE8')) {                      // for IE8 add transparent mode
-                        angular.extend(flashvars, {'wmode': 'transparent'});
-                    }
-                    // clear companion divs
-                    $("#Companion_300x250").empty();
-                    $("#Companion_728x90").empty();
-                    window.mw.setConfig('forceMobileHTML5', true);
-                    window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
-                    kWidget.embed({
-                        "targetId": playerId, // hard coded for now?
-                        "wid": "_" + currentPlayer.partnerId, //$scope.data.partnerId,
-                        "uiconf_id": currentPlayer.id,// $scope.data.id,
-                        "flashvars": flashvars,
-                        "entry_id": previewEntry, //$scope.previewEntry
-                        "readyCallback": function(playerId) {
-                            document.getElementById(playerId).kBind("layoutBuildDone", function() {
-                                if (typeof callback == 'function') {
-                                    callback();
-                                }
-                            });
-                        }
-                    });
-
-                }
-                else {
-                    throw function() {
-                        return "player could not be rendered";
-                    };
-                }
+	            // clear companion divs
+	            $("#Comp_300x250").empty();
+	            $("#Comp_728x90").empty();
+	            window.mw.setConfig('forceMobileHTML5', true);
+	            window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
+	            kWidget.embed({
+		            "targetId": 'kVideoTarget',
+		            "wid": "_" + wid,
+		            "uiconf_id": uiconf_id,
+		            "flashvars": flashvars,
+		            "entry_id": entry_id
+	            });
             },
             'setKDPAttribute': function(attrStr, value) {
                 var kdp = document.getElementById('kVideoTarget');

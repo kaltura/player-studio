@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerListCtrl',
-    ['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q','menuSvc',
-        function(apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, menuSvc) {
+    ['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q',
+        function(apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q) {
             // start request to show the spinner. When data is rendered, the onFinishRender directive will hide the spinner
             requestNotificationChannel.requestStarted('list');
             $rootScope.lang = 'en-US';
@@ -66,10 +66,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             }
 
             // clear cache if we came back from edit page and we have dirty data
-            if (menuSvc.menuScope.playerEdit && !menuSvc.menuScope.playerEdit.$pristine){
-                apiService.setCache(false);
-                PlayerService.clearCurrentPlayer();
-            }
+//            if (menuSvc.menuScope.playerEdit && !menuSvc.menuScope.playerEdit.$pristine){
+//                apiService.setCache(false);
+//                PlayerService.clearCurrentPlayer();
+//            }
 
             // get players list from KMC
             var playersRequest = {
@@ -89,6 +89,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $scope.data = data.objects;   // players list
                 $scope.calculateTotalItems(); // calculate the total items including search filters to display in the pager
                 PlayerService.cachePlayers(data.objects); // save players list data to memory cache
+	            requestNotificationChannel.requestEnded('list');
                 setTimeout(function(){
                     $scope.triggerLayoutChange(); // update scroller;
                 },300);

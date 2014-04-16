@@ -5,7 +5,7 @@ var cl = function (val) {
 // Declare app level module which depends on filters, and services
 var KMCModule = angular.module('KMCModule',
     ['pascalprecht.translate', 'ngRoute', 'KMC.controllers', 'KMC.filters',
-        'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMC.menu', 'KMCmenu']);
+        'KMC.services', 'KMC.directives', 'ngAnimate', 'LocalStorageModule', 'KMCmenu']);
 
 KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tooltipProvider', '$translateProvider', function ($routeProvider, $locationProvider, $httpProvider, $tooltipProvider, $translateProvider) {
         $translateProvider.useStaticFilesLoader({
@@ -120,7 +120,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
         // deep linking to plugin setup
         $routeProvider.when('/edit/:id',
-            {templateUrl: 'view/edit2.html',
+            {templateUrl: 'view/edit.html',
                 controller: 'EditCtrl',
                 reloadOnSearch: false,
                 resolve: {
@@ -132,8 +132,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                             });
                         }
                     }],
-                    'editProperties': 'editableProperties',
-                    'menuSvc': 'menuSvc'
+                    'editProperties': 'editableProperties'
                 }
             }
         );
@@ -155,7 +154,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }
         );
         $routeProvider.when('/new',
-            {templateUrl: 'view/edit2.html',
+            {templateUrl: 'view/edit.html',
                 controller: 'EditCtrl',
                 reloadOnSearch: false,
                 resolve: {
@@ -166,8 +165,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                         return api.then(function () {
                             return PlayerService.newPlayer();
                         });
-                    },
-	                'menuSvc': 'menuSvc'
+                    }
                 }
             }
         );
@@ -188,7 +186,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 }
             }]}
         });
-    }]).run(function ($rootScope, $rootElement, $location, menuSvc) {
+    }]).run(function ($rootScope, $rootElement, $location) {
     var appLoad = new Date();
     var debug = false;
 
@@ -223,8 +221,6 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
 
     // custom show for tooltips
     $rootScope.constructor.prototype.openTooltip = function ($event) {
-        if (menuSvc.currentTooltip == $event.target) return;
-        menuSvc.currentTooltip = $event.target;
         $($event.target).trigger('customShow');
         $event.preventDefault();
         $event.stopPropagation();
