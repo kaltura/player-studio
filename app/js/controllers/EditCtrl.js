@@ -48,7 +48,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.dataChanged = false;                     // flag if the player data was changed so we can issue an alert if returning to list without saving
 	$scope.aspectRatio = 9/16;                      // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
-	$scope.autoPreview = false;                     // auto preview flag
+	// auto preview flag
+	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
+	$scope.setAutoPreview = function(){
+		localStorageService.set('autoPreview', !$scope.autoPreview);
+	};
 
     // load user entries data
     $scope.userEntries = [];

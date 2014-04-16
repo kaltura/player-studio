@@ -103,6 +103,9 @@ hr{
 	color: green;
 	font-weight: bold;
 }
+input:disabled{
+	color: #cacaca;
+}
 /*
 input[type="checkbox"]
 {
