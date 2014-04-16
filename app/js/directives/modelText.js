@@ -89,6 +89,12 @@ DirectivesModule.directive('modelText', function (menuSvc) {
                         }
                     });
                 }
+	            inputElm.keypress(function(e){
+		            var charCode = !e.charCode ? e.which : e.charCode;
+		            if(charCode == 34){
+			            e.preventDefault();
+		            }
+	            })
             };
         },
         templateUrl: 'template/formcontrols/modelText.html'
