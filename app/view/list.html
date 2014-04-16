@@ -1,115 +1,115 @@
 <div class="fluid-container fullheight">
-    <div id="wrapper">
-        <div id="header">
-            <h2 id="pageHeader">
-                {{(title) ? title : "Players list"}}
-            </h2>
-            <small ng-hide="showSubTitle">
-                {{'In this page you can customize the look and the functionality of your players'| translate}}
-            </small>
-            <div class="padTop clearfix">
-                <div class="pull-right">
-                    <button type="button" class="btn btn-primary" data-ng-click="newPlayer()"><i
-                            class="glyphicon glyphicon-plus">&nbsp;</i>{{'Add New player'| translate}}
-                    </button>
-                </div>
-                <div class="noPadding col-xs-5">
-                    <form class="form-inline" id="listsearch" role="search">
-                        <div class="input-group merged">
+	<div id="wrapper">
+		<div id="header">
+			<h2 id="pageHeader">
+				{{(title) ? title : "Players list"}}
+			</h2>
+			<small ng-hide="showSubTitle">
+				{{'In this page you can customize the look and the functionality of your players'| translate}}
+			</small>
+			<div class="padTop clearfix">
+				<div class="pull-right">
+					<button type="button" class="btn btn-primary" data-ng-click="newPlayer()"><i
+							class="glyphicon glyphicon-plus">&nbsp;</i>{{'Add New player'| translate}}
+					</button>
+				</div>
+				<div class="noPadding col-xs-5">
+					<form class="form-inline" id="listsearch" role="search">
+						<div class="input-group merged">
                             <span class="input-group-addon">
                                  <i class="icon-TabSearch"></i>
                             </span>
-                            <input type="text"
-                                   typeahead="player.name for player in data | filter:$viewValue | limitTo:8"
-                                   class="form-control" placeholder="{{'Search by name or id'| translate}}"
-                                   ng-model="search">
-                        </div>
+							<input type="text"
+							       typeahead="player.name for player in data | filter:$viewValue | limitTo:8"
+							       class="form-control" placeholder="{{'Search by name or id'| translate}}"
+							       ng-model="search">
+						</div>
 
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div id='playerList' class="scrollerWrap maxViewPort">
-            <div class="row" id="tableHead" notselectable="true" >
-                <div class="pull-left playerThumbWrapper">{{'Preview'| translate }}</div>
-                <div class="col-xs-3"><a data-ng-click="sortBy('name')"> {{ 'Name' | translate }}
-                    <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='name' && sort.reverse==false),
+					</form>
+				</div>
+			</div>
+		</div>
+		<div id='playerList' class="scrollerWrap maxViewPort">
+			<div class="row" id="tableHead" notselectable="true" >
+				<!--div class="pull-left playerThumbWrapper">{{'Preview'| translate }}</div-->
+				<div class="col-xs-3"><a data-ng-click="sortBy('name')"> {{ 'Name' | translate }}
+					<i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='name' && sort.reverse==false),
                 'glyphicon-chevron-up':(sort.sortCol=='name' && sort.reverse == true)}"></i>
-                </a>
-                </div>
-                <div class="idCol pull-left text-center">{{ 'ID' | translate }}</div>
-                <div class="col-xs-2 text-center "><a data-ng-click="sortBy('updatedAt')"> {{ 'Save Date' | translate }}
-                    <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='updatedAt' && sort.reverse==false),
+				</a>
+				</div>
+				<div class="idCol pull-left text-center">{{ 'ID' | translate }}</div>
+				<div class="col-xs-2 text-center "><a data-ng-click="sortBy('updatedAt')"> {{ 'Save Date' | translate }}
+					<i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='updatedAt' && sort.reverse==false),
                 'glyphicon-chevron-up':(sort.sortCol=='updatedAt' && sort.reverse == true)}"></i>
-                </a></div>
-                <div class="col-lg-2 text-center visible-lg"><a data-ng-click="sortBy('createdAt')">{{ 'Creation Date' | translate }}
-                    <i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='createdAt' && sort.reverse==false),
+				</a></div>
+				<div class="col-lg-2 text-center visible-lg"><a data-ng-click="sortBy('createdAt')">{{ 'Creation Date' | translate }}
+					<i class="glyphicon" ng-class="{'glyphicon-chevron-down':(sort.sortCol=='createdAt' && sort.reverse==false),
                 'glyphicon-chevron-up':(sort.sortCol=='createdAt' && sort.reverse == true)}"></i>
-                </a></div>
-                <div class="pull-left ">{{ 'Actions' | translate }}
-                </div>
-            </div>
-            <div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
-                <table id="listTable">
-                    <tbody>
-                    <tr class="row repeat-animation" on-finish-render
-                        ng-repeat="item in filtered =  (data| filter:search) | startFrom:(currentPage - 1) * maxSize | limitTo:maxSize | orderBy:sort.sortCol:sort.reverse  track by item.id">
-                        <td class=" playerThumbWrapper">
-                            <img class="playerThumb" ng-src="{{getThumbnail(item)}}"/>
-                        </td>
-                        <td class="col-xs-3"><a data-ng-click="goToEditPage(item,$event)"
-                                                ng-href="edit/{{item.id}}">{{item.name}}</a>
+				</a></div>
+				<div class="pull-left ">{{ 'Actions' | translate }}
+				</div>
+			</div>
+			<div class="scroller" mcustom-scrollbar="{autoHideScrollbar:false}">
+				<table id="listTable">
+					<tbody>
+					<tr class="row repeat-animation" on-finish-render
+					    ng-repeat="item in filtered =  (data| filter:search) | startFrom:(currentPage - 1) * maxSize | limitTo:maxSize | orderBy:sort.sortCol:sort.reverse  track by item.id">
+						<!--td class=" playerThumbWrapper">
+							<img class="playerThumb" ng-src="{{getThumbnail(item)}}"/>
+						</td-->
+						<td class="col-xs-3"><a data-ng-click="goToEditPage(item,$event)"
+						                        ng-href="edit/{{item.id}}">{{item.name}}</a>
 
-                            <div class="alertsWrapper">
+							<div class="alertsWrapper">
                             <span class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item)">
                                 <small>{{' This player requires updating'| translate}}
                                 </small>
                             </span>
-                            </div>
-                        </td>
-                        <td class="idCol">{{item.id}}</td>
-                        <td class="col-xs-2 text-center"><span>{{item.updatedAt | timeago}}</span></td>
-                        <td class="visible-lg col-lg-2 text-center"><span>{{item.createdAt | timeago }}</span></td>
-                        <td class="actionBtns ">
-                            <div class="inner">
-                                <button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
-                                        class="icon-copy"></span> {{'Duplicate'| translate}}
-                                </button>
-                                <button type="button" class="btn btn-link" ng-click="deletePlayer(item)"><span
-                                        class="glyphicon glyphicon-remove"></span> {{'Delete'| translate}}
-                                </button>
-                                <button type="button" class="btn btn-link"
-                                        ng-show="checkVersionNeedsUpgrade(item)"
-                                        ng-click="update(item)"><span class="glyphicon glyphicon-refresh"></span>
-                                    {{'Update'|
-                                    translate}}
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div id="footer" class="text-center">
-                <div id="paginationWrap">
-                    <pagination ng-show='filtered.length > maxSize'  ng-click='triggerLayoutChange()' previous-text='&laquo;' next-text='&raquo;'
-                                page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
-                </div>
-                <div id="maxSizeSelect">
-                    <form class="form-inline" role="form">
-                        <div>
-                            <small> {{filtered.length}} Players in total, Show</small>
-                            <select  ui-select2="uiSelectOpts" ng-model="maxSize">
-                                <option value='5'>5</option>
-                                <option value='10'>10</option>
-                                <option value='15'>15</option>
-                                <option value='20'>20</option>
-                            </select>
-                            <small> per page</small>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+							</div>
+						</td>
+						<td class="idCol">{{item.id}}</td>
+						<td class="col-xs-2 text-center"><span>{{item.updatedAt | timeago}}</span></td>
+						<td class="visible-lg col-lg-2 text-center"><span>{{item.createdAt | timeago }}</span></td>
+						<td class="actionBtns ">
+							<div class="inner">
+								<button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
+										class="icon-copy"></span> {{'Duplicate'| translate}}
+								</button>
+								<button type="button" class="btn btn-link" ng-click="deletePlayer(item)"><span
+										class="glyphicon glyphicon-remove"></span> {{'Delete'| translate}}
+								</button>
+								<button type="button" class="btn btn-link"
+								        ng-show="checkVersionNeedsUpgrade(item)"
+								        ng-click="update(item)"><span class="glyphicon glyphicon-refresh"></span>
+									{{'Update'|
+									translate}}
+								</button>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="footer" class="text-center">
+				<div id="paginationWrap">
+					<pagination ng-show='filtered.length > maxSize'  ng-click='triggerLayoutChange()' previous-text='&laquo;' next-text='&raquo;'
+					            page="currentPage" total-items="filtered.length" items-per-page="maxSize"></pagination>
+				</div>
+				<div id="maxSizeSelect">
+					<form class="form-inline" role="form">
+						<div>
+							<small> {{filtered.length}} Players in total, Show</small>
+							<select  ui-select2="uiSelectOpts" ng-model="maxSize">
+								<option value='5'>5</option>
+								<option value='10'>10</option>
+								<option value='15'>15</option>
+								<option value='20'>20</option>
+							</select>
+							<small> per page</small>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
