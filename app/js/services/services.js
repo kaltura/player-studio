@@ -149,9 +149,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                                     callback();
                                 }
                             });
+	                        document.getElementById(playerId).kBind("NoSourcesCustomError", function() {
+		                        callback();
+	                        });
+
                         }
                     });
-
                 }
                 else {
                     throw function() {
