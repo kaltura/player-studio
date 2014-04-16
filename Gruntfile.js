@@ -22,6 +22,7 @@ module.exports = function(grunt) {
                 '-W093': true,
                 '-W064': true,
                 '-W083': true,
+	            "smarttabs": true,
                 "globals": {
                     "jQuery": true,
                     "cl": true,
@@ -67,8 +68,6 @@ module.exports = function(grunt) {
             libs: {
                 src: [
                     'app/lib/malihu_custon_scrollbar/jquery.mousewheel.min.js',
-                    'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.min.js',
-                    'app/lib/spinedit/js/bootstrap-spinedit.min.js',
                     'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.10.0.js',
                     'app/lib/localStorage/angular-local-storage.min.js',
                     'app/lib/sprintf.js',
@@ -96,7 +95,8 @@ module.exports = function(grunt) {
                     'app/lib/modernizer.min.js',
                     'app/bower_components/jquery/jquery.min.js',
                     'app/bower_components/angular/angular.min.js',
-                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js'
+                    'app/lib/angular-spectrum-colorpicker.min.js',
+                    'app/lib/jquery.alphanum.js'
                 ],
                 dest: '_dist/vendor/vendor.min.js'
             },
@@ -109,9 +109,7 @@ module.exports = function(grunt) {
                     'bower_components/selectivizr/selectivizr.js',
                     'app/lib/jquery-1.10.2.min.js',
                     'app/lib/jquery.xdomainrequest.min.js',
-                    'app/bower_components/angular/angular.min.js',
-                    'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js',
-                    'app/lib/colorpickerV1/lib/bootstrap-colorpicker.min.js'
+                    'app/bower_components/angular/angular.min.js'
                 ],
                 dest: '_dist/vendor/vendorOld.min.js'
             }
@@ -125,12 +123,8 @@ module.exports = function(grunt) {
             },
             libs:{
                 files:{
-                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js',
                     'app/bower_components/angular-ui-select2/src/select2.min.js':'app/bower_components/angular-ui-select2/src/select2.js',
-                    'app/bower_components/angular-ui-sortable/sortable.min.js':'app/bower_components/angular-ui-sortable/sortable.js',
-                    'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpickerV1/js/bootstrap-colorpicker-module.js',
-                    'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js':'app/lib/colorpicker/js/bootstrap-colorpicker-module.js',
-                    'app/lib/colorpickerV1/lib/bootstrap-colorpicker.min.js':'app/lib/colorpickerV1/lib/bootstrap-colorpicker.js'
+                    'app/bower_components/angular-ui-sortable/sortable.min.js':'app/bower_components/angular-ui-sortable/sortable.js'
                 }
 
             }
@@ -139,7 +133,7 @@ module.exports = function(grunt) {
             combine: {
                 files: {
                     //  '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
-                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css', 'app/bower_components/select2/select2.css', 'app/lib/prettycheckable/dist/prettyCheckable.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/spinedit/css/bootstrap-spinedit.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
+                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css', 'app/bower_components/select2/select2.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
                 }
 
             }
@@ -184,10 +178,6 @@ module.exports = function(grunt) {
                     {
                         src: 'app/bower_components/select2/select2-spinner.gif',
                         dest: '_dist/css/select2-spinner.gif'
-                    },
-                    {
-                        src: 'app/lib/prettycheckable/img/prettyCheckable.png',
-                        dest: '_dist/img/prettyCheckable.png'
                     },
                     { // dev only
                         src: 'app/js/services/defaultPlayer.json',
@@ -244,8 +234,7 @@ module.exports = function(grunt) {
             },
             development: {
                 files: {
-                    'app/css/studio.css': 'app/less/*.less',
-                    'app/lib/colorpicker/css/colorpicker.css' : 'app/lib/colorpicker/less/colorpicker.less'
+                    'app/css/studio.css': 'app/less/*.less'
                 },
                 options: {
                     compress: true,
@@ -262,7 +251,7 @@ module.exports = function(grunt) {
         ngtemplates: {
             KMCModule: {
                 cwd: 'app',
-                src: ['template/**/*.html', 'view/**/*.html'],
+                src: ['templates/**/*.html', 'view/**/*.html'],
                 dest: '_dist/templates.js',
                 options: {
                     htmlmin: { collapseWhitespace: true, collapseBooleanAttributes: true }

@@ -1,7 +1,7 @@
 var KMCMenu = angular.module('KMCmenu', ['ui.bootstrap', 'ngSanitize', 'ui.select2', 'angularSpectrumColorpicker']);
 
-KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', 'PlayerService','$location','requestNotificationChannel',
-	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, PlayerService, $location, requestNotificationChannel) {
+KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', '$location','requestNotificationChannel',
+	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, $location, requestNotificationChannel) {
 
 	$scope.playerData = angular.copy(PlayerData);   // get the player data
     $scope.isIE8 = window.ie8;                      // set IE8 flash for color picker
@@ -25,7 +25,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		// set default entry
 		$timeout(function(){
 			$scope.selectedEntry = localStorageService.get('defaultEntry') ? localStorageService.get('defaultEntry') : $scope.userEntries[0];
-		},0,true)
+		},0,true);
 	});
 	// set user entries select2 options and query
 	$scope.entriesSelectBox = {
@@ -36,8 +36,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		},
 		query: function (query) {
 			var timeVar = null;
+			var data = {results: []};
 			if (query.term) {
-				var data = {results: []};
 				if (timeVar) {
 					$timeout.cancel(timeVar);
 				}
@@ -77,13 +77,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             $scope.templatesToLoad += 2; // for each category we load 2 templates: one for the icon and one for the data
             var category = {'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon};
             var plugs = data[cat].children;
-            if (plugs.length != undefined){
+            if (plugs.length !== undefined){
                 // array means properties and not nested plugins - we can add the templates for the properties directly
                 category.properties = [];
-                for (var i=0; i<plugs.length; i++){
+                for (var pl=0; pl<plugs.length; pl++){
                     $scope.templatesToLoad++;
-                    $scope.propertiesSearch.push({'label':plugs[i].label,'categoryIndex':categoryIndex, 'accIndex': -1, 'id': 'prop'+$scope.templatesToLoad});  // search indexing
-                    category.properties.push($.extend(plugs[i],{'id':'prop'+$scope.templatesToLoad}));
+                    $scope.propertiesSearch.push({'label':plugs[pl].label,'categoryIndex':categoryIndex, 'accIndex': -1, 'id': 'prop'+$scope.templatesToLoad});  // search indexing
+                    category.properties.push($.extend(plugs[pl],{'id':'prop'+$scope.templatesToLoad}));
                 }
             }else{
                 // nested plugins - create an accordion for the plugins
@@ -96,23 +96,23 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                     var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
                     plugin.properties = [];
                     // check for tabs
+	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
                     if (p.sections){ // tabs found - create tabs
-                        var tabObj = {'type':'tabs', 'children':[]}; // create tab object
                         $scope.templatesToLoad++; // count tabs template
                         for (var tab=0; tab < p.sections.tabset.length; tab++){
                             tabObj.children.push(p.sections.tabset[tab]);
                         }
                     }
                     for (var i=0; i<p.children.length; i++){
-	                    if (p.children[i].filter != undefined) // apply filter if exists
+	                    if (p.children[i].filter !== undefined) // apply filter if exists
 		                    p.children[i].initvalue = $scope.getFilter(p.children[i].initvalue, p.children[i].filter);
 
                         $scope.templatesToLoad++;
                         if (p.sections && p.children[i].section){ // property should be put in the correct tab
-	                        for (var tab=0; tab < tabObj.children.length; tab++){
-                                if (p.children[i].section == tabObj.children[tab].key){
-                                    tabObj.children[tab].children.push($.extend(p.children[i],{'id':'prop'+$scope.templatesToLoad}));
-                                    $scope.propertiesSearch.push({'label':p.children[i].label + ' ('+ p.label +')','categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'tabIndex': tab, 'id': 'prop'+$scope.templatesToLoad}); // add property to search indexing
+	                        for (var t=0; t < tabObj.children.length; t++){
+                                if (p.children[i].section == tabObj.children[t].key){
+                                    tabObj.children[t].children.push($.extend(p.children[i],{'id':'prop'+$scope.templatesToLoad}));
+                                    $scope.propertiesSearch.push({'label':p.children[i].label + ' ('+ p.label +')','categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'tabIndex': t, 'id': 'prop'+$scope.templatesToLoad}); // add property to search indexing
                                 }
                             }
                         } else { // no tabs - add property to the plugin root
@@ -131,14 +131,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         }
 
 	    // to boost performances - don't render all categories now, only search and basic display
-	    for (var i=2; i<$scope.menuData.length; i++){
-		    $scope.menuData[i].pluginsNotLoaded = angular.copy($scope.menuData[i].plugins);
-		    delete $scope.menuData[i].plugins;
+	    for (var j=2; j<$scope.menuData.length; j++){
+		    $scope.menuData[j].pluginsNotLoaded = angular.copy($scope.menuData[j].plugins);
+		    delete $scope.menuData[j].plugins;
 	    }
         $scope.selectedCategory = $scope.menuData[1].label;
 	    requestNotificationChannel.requestEnded('edit'); // hide spinner
 	    $scope.refreshPlayer();
-    })
+    });
 
     // set selected category when clicking on a category icon
     $scope.categorySelected = function(category){
@@ -147,7 +147,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (category == "Menu Search"){
 		    $timeout(function(){
 			    for (var i=2; i<$scope.menuData.length; i++)
-				    if ($scope.menuData[i].pluginsNotLoaded != undefined){
+				    if ($scope.menuData[i].pluginsNotLoaded !== undefined){
 					    $scope.menuData[i].plugins = angular.copy($scope.menuData[i].pluginsNotLoaded);
 					    delete $scope.menuData[i].pluginsNotLoaded;
 				    }
@@ -156,12 +156,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    // if this category menu wasn't rendered yet - render it now
 	    $timeout(function(){ // use a timeout to display the loading message
 	    for (var i=2; i<$scope.menuData.length; i++)
-		    if ($scope.menuData[i].label == category && $scope.menuData[i].pluginsNotLoaded != undefined){
+		    if ($scope.menuData[i].label == category && $scope.menuData[i].pluginsNotLoaded !== undefined){
 			    $scope.menuData[i].plugins = angular.copy($scope.menuData[i].pluginsNotLoaded);
 			    delete $scope.menuData[i].pluginsNotLoaded;
 		    }
 	    },50,true);
-    }
+    };
 
     // detect when the menu finished loading
 	$scope.menuLoaded = false;
@@ -186,23 +186,23 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
 	    $timeout(function(){$scope.refreshPlayer();},0,true);
 
-    }
+    };
 
 	// remove validation for disabled plugins
 	$scope.removeValidation = function(plugin){
 		for (var i=0; i<plugin.properties.length; i++){
-			delete plugin.properties[i].invalidTooltip
+			delete plugin.properties[i].invalidTooltip;
 			var id = plugin.properties[i].id;
 			if ($.inArray(id, $scope.invalidProps) != -1)
 				$scope.invalidProps.splice($scope.invalidProps.indexOf(id), 1);
 		}
-	}
+	};
 
 	// revalidate enabled plugins
 	$scope.addValidation = function(plugin){
 		for (var i=0; i<plugin.properties.length; i++)
 			$scope.validate(plugin.properties[i]);
-	}
+	};
 
     // properties search
     $scope.searchProperty = function($item, $model, $label){
@@ -222,12 +222,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
         // blink selected property
         $("#"+$item.id).fadeTo(250, 0.1).fadeTo(250, 1.0).fadeTo(250, 0.1).fadeTo(250, 1.0).fadeTo(250, 0.1).fadeTo(250, 1.0);
-    }
+    };
 
     // handle refresh
     $scope.refreshNeeded = false;
     $scope.propertyChanged = function(property, checkAutoRefresh){
-	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~")==0){ // this is a preview entry change
+	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry.id;
 		    localStorageService.set('defaultEntry', property.selectedEntry);
 		    $scope.refreshPlayer();
@@ -242,17 +242,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
 	    $scope.dataChanged = true;
         $scope.validate(property);
-        if (property['player-refresh'] != false){
+        if (property['player-refresh'] !== false){
             $scope.refreshNeeded = true;
         }
-	    if (checkAutoRefresh == true && $scope.refreshNeeded && $scope.autoPreview){
+	    if (checkAutoRefresh === true && $scope.refreshNeeded && $scope.autoPreview){
 		    $scope.refreshPlayer();
 	    }
 	    if (property['player-refresh'] == 'aspectToggle'){ // handle aspect ratio change
 		    $scope.aspectRatio = property.initvalue == 'wide' ? 9/16 : 3/4;
 		    $scope.refreshPlayer();
 	    }
-    }
+    };
 
     // validation
     $scope.validate = function(property){
@@ -268,7 +268,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             property.invalidTooltip = "Value must be equal or bigger than "+property.min;
         if (property.max && parseInt(property.initvalue) >  parseInt(property.max))
             property.invalidTooltip = "Value must be equal or less than "+property.max;
-        if (property.require && property.initvalue == "")
+        if (property.require && property.initvalue === "")
             property.invalidTooltip = "This field is required";
 
         // if not valid - add the invalid tooltip to this field and add this property to the invalid properties array
@@ -276,25 +276,25 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             $scope.isValid = false;
             $scope.invalidProps.push(property.id);
         }
-    }
+    };
 
     $scope.checkPlayerRefresh = function(){
         return $scope.refreshNeeded;
-    }
+    };
 
     $scope.refreshPlayer = function(){
         $scope.refreshNeeded = false;
-	    if ($scope.selectedEntry != ''){ // entries were already loaded - load the player
+	    if ($scope.selectedEntry !== ''){ // entries were already loaded - load the player
 		    $scope.renderPlayer();
 	    }else{ // wait for entries to load
 		    $scope.intervalID = setInterval(function(){
-			    if ($scope.selectedEntry != ''){
+			    if ($scope.selectedEntry !== ''){
 				    clearInterval($scope.intervalID);
 				    $scope.renderPlayer(); // load the player and stop waiting...
 			    }
 		    },100);
 	    }
-    }
+    };
 
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
@@ -303,7 +303,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$("#kVideoTarget").width(playerWidth);
 		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40);
 		for (var plug in $scope.playerData.config.plugins)
-			if ($scope.playerData.config.plugins[plug]['enabled'] == true)
+			if ($scope.playerData.config.plugins[plug]['enabled'] === true)
 				$scope.playerData.config.plugins[plug]['plugin'] = true;
 		var flashvars = {'jsonConfig': angular.toJson($scope.playerData.config)}; // update the player with the new configuration
 		if ($scope.isIE8) {                      // for IE8 add transparent mode
@@ -311,7 +311,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		var entryID = $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
 		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID);
-	}
+	};
 
 	$scope.save = function(){
 		if ($scope.invalidProps.length > 0){
@@ -365,7 +365,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				}
 			);
 		}
-	}
+	};
 
 	$scope.backToList = function(){
 		if (!$scope.dataChanged) {
@@ -390,7 +390,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				}
 			});
 		}
-	}
+	};
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
@@ -406,14 +406,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					if ($scope.playerData.config.plugins[plug]){
 						properties[plug].enabled = true;
 					}else{
-						properties[plug].enabled = false;;
+						properties[plug].enabled = false;
 					}
 					// get plugin properties from player data
 					$scope.getPlayerProperties(properties[plug].children);
 				}
 			}
 		}
-	}
+	};
 
 	$scope.getPlayerProperties = function(properties){
 		for (var i=0; i<properties.length; i++){
@@ -424,20 +424,20 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				}
 			}
 		}
-	}
+	};
 
 	$scope.getDataForModel = function(data, model, filter){
 		var val = angular.copy(data);
 		var modelArr = model.split(".");
 		for (var i=0; i < modelArr.length; i++){
-			if (val[modelArr[i]] != undefined){
+			if (val[modelArr[i]] !== undefined){
 				val = val[modelArr[i]];
 			}else{
 				return false;
 			}
 		}
 		return filter ?  $scope.getFilter(val, filter) : val;
-	}
+	};
 
 	$scope.getFilter = function(val, filter){
 		if (filter == "companions" && !$.isArray(val)){
@@ -448,21 +448,21 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					val.push({"label": companions[i].substr(0,companions[i].indexOf(":")),"width": companions[i].split(":")[1],"height": companions[i].split(":")[2]});
 		}
 		return val;
-	}
+	};
 
 	$scope.updatePlayerData = function(){
 		for (var category=1; category < $scope.menuData.length; category++){ // we start at index=1 to skip the search category
-			if ($scope.menuData[category].properties != undefined){ // flat properties: basic properties
+			if ($scope.menuData[category].properties !== undefined){ // flat properties: basic properties
 				$scope.setPlayerProperties($scope.menuData[category].properties);
 			}else{ // plugins
-				var pluginsStr = $scope.menuData[category]['plugins'] != undefined ? 'plugins' : 'pluginsNotLoaded'; // support plugins that we didn't render the menu for yet
+				var pluginsStr = $scope.menuData[category]['plugins'] !== undefined ? 'plugins' : 'pluginsNotLoaded'; // support plugins that we didn't render the menu for yet
 				for (var plug=0; plug < $scope.menuData[category][pluginsStr].length; plug++)
 					if ($scope.menuData[category][pluginsStr][plug].enabled === true) {// get only enabled plugins
 						$scope.setPlayerProperties($scope.menuData[category][pluginsStr][plug].properties);
 					}
 			}
 		}
-	}
+	};
 
 	$scope.setPlayerProperties = function(properties){
 		for (var i=0; i<properties.length; i++){
@@ -475,7 +475,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.setDataForModel(properties[i]);
 			}
 		}
-	}
+	};
 
 	$scope.setDataForModel = function(data){
 		if (data.model && data.model.indexOf("~")==-1 && data.type != 'readonly'){
@@ -483,7 +483,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			var pData = $scope.playerData;
 			for (var j=0; j<objArr.length; j++){  // go through the object names in the model path
 				var prop = objArr[j];
-				if (j == objArr.length-1 && data.initvalue != undefined){  // last object in model path - this is the value property
+				if (j == objArr.length-1 && data.initvalue !== undefined){  // last object in model path - this is the value property
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
 				}else{
 					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
@@ -493,7 +493,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				}
 			}
 		}
-	}
+	};
 
 	$scope.setFilter = function(data, filter){
 		var res = "";
@@ -506,6 +506,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if (filter == "entry"){
 			return data.id? data.id : data;
 		}
-	}
+	};
 
 }]);

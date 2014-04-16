@@ -12,7 +12,7 @@ DirectivesModule.directive('bindOnce', function() {
 				$scope.$destroy();
 			}, 0);
 		}
-	}
+	};
 });
 
 DirectivesModule.directive('onFinishRender', function ($timeout) {
@@ -27,7 +27,7 @@ DirectivesModule.directive('onFinishRender', function ($timeout) {
 				},3000);
 			}
 		}
-	}
+	};
 });
 
 DirectivesModule.directive('ngEnter', function () {
