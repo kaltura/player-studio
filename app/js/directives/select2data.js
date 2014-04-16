@@ -23,12 +23,12 @@ DirectivesModule.directive('select2Data', [
                         $scope.model = {'id':modelData, 'text':modelData};// unfortunately we don't have the media name anymore...
                     }
                 }
-                if (typeof $attrs['allowCustomValues'] != 'undefined') {
-                    $scope.selectOpts.createSearchChoice = function (term) {
-                        var translatedText = $filter('translate')($attrs['allowCustomValues']);
-                        return {id: term, text: term + ' (' + translatedText + ")"};
-                    };
-                }
+//                if (typeof $attrs['allowCustomValues'] != 'undefined') {
+//                    $scope.selectOpts.createSearchChoice = function (term) {
+//                        var translatedText = $filter('translate')($attrs['allowCustomValues']);
+//                        return {id: term, text: term + ' (' + translatedText + ")"};
+//                    };
+//                }
                 $scope.selectOpts['data'] = menuSvc.doAction($attrs.source);
                 if ($attrs.query) {
                     $scope.selectOpts['data'].results = [];
