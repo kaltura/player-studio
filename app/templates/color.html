@@ -1,7 +1,7 @@
 <div class="color" style="padding-top: 15px">
 	<span bind-once id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
-	<input type="text" style="width:100px" class="pull-right" ng-if="isIE8" ng-model="property.initvalue" ng-change="propertyChanged(property, true)" ng-enter="propertyChanged(property, true)" ng-blur="propertyChanged(property, true)" ng-disabled="plugin!=null && !plugin.enabled" tooltip="{{property.tooltip}}" tooltip-placement="right" tooltip-popup-delay="1000">
+	<input type="text" style="width:100px" class="pull-right alpha" ng-if="isIE8" ng-model="property.initvalue" ng-change="propertyChanged(property, true)" ng-enter="propertyChanged(property, true)" ng-blur="propertyChanged(property, true)" ng-disabled="plugin!=null && !plugin.enabled" tooltip="{{property.tooltip}}" tooltip-placement="right" tooltip-popup-delay="1000">
 	<spectrum-colorpicker class="pull-right" ng-if="!isIE8 && plugin!=null && !plugin.enabled" options="{showInput: true, disabled: true, showButtons: false}" ng-model="property.initvalue"></spectrum-colorpicker>
 	<spectrum-colorpicker ng-change="propertyChanged(property, true)" class="pull-right" ng-if="!isIE8 && plugin!=null && plugin.enabled"  options="{showInput: true, disabled: false, clickoutFiresChange: true, showButtons: false, preferredFormat: 'hex'}" ng-model="property.initvalue"></spectrum-colorpicker>
 	<hr bind-once ng-if="property.endline">
