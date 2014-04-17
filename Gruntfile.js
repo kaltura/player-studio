@@ -111,6 +111,7 @@ module.exports = function(grunt) {
                     'app/lib/jquery-1.10.2.min.js',
                     'app/lib/jquery.xdomainrequest.min.js',
                     'app/bower_components/angular/angular.min.js',
+	                'app/lib/angular-spectrum-colorpicker.min.js',
 	                'app/lib/jquery.alphanum.js'
                 ],
                 dest: '_dist/vendor/vendorOld.min.js'
