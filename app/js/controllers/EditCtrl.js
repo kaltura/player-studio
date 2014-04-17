@@ -226,6 +226,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
     // handle refresh
     $scope.refreshNeeded = false;
+	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry.id;
@@ -245,8 +246,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         if (property['player-refresh'] !== false){
             $scope.refreshNeeded = true;
         }
-	    if (checkAutoRefresh === true && $scope.refreshNeeded && $scope.autoPreview){
-		    $scope.refreshPlayer();
+	    if (checkAutoRefresh !== false && $scope.refreshNeeded && $scope.autoPreview){
+		    if (checkAutoRefresh == 'enter') // prevent refresh on blur after refresh on enter
+			    $scope.lastRefreshID = property.id;
+		    if (checkAutoRefresh == 'blur' && $scope.lastRefreshID == property.id){
+			    $scope.lastRefreshID = '';
+		    }else{
+		        $scope.refreshPlayer();
+		    }
 	    }
 	    if (property['player-refresh'] == 'aspectToggle'){ // handle aspect ratio change
 		    $scope.aspectRatio = property.initvalue == 'wide' ? 9/16 : 3/4;
