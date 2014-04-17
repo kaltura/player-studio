@@ -320,6 +320,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID);
 	};
 
+	$(window).resize(function () {
+		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40); // resize player height according to irs width and aspect ratio on window resize
+	});
+
 	$scope.save = function(){
 		if ($scope.invalidProps.length > 0){
 			$modal.open({ templateUrl: 'templates/message.html',
