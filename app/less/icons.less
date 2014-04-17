@@ -1,67 +1,83 @@
 @font-face {
-	font-family: 'icomoon1';
-	src:url('fonts/icomoon1.eot');
-	src:url('fonts/icomoon1.eot?#iefix') format('embedded-opentype'),
-		url('fonts/icomoon1.ttf') format('truetype'),
-		url('fonts/icomoon1.woff') format('woff'),
-		url('fonts/icomoon1.svg#icomoon') format('svg');
-	font-weight: normal;
-	font-style: normal;
+  font-family: 'icomoon';
+  src: url('fonts/icomoon.eot');
+  src: url('fonts/icomoon.eot?#iefix') format('embedded-opentype'), url('fonts/icomoon.ttf') format('truetype'), url('fonts/icomoon.woff') format('woff'), url('fonts/icomoon.svg#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
-
-[class^="icon-"], [class*=" icon-"] {
-	font-family: 'icomoon1';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
-
-	/* Better Font Rendering =========== */
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-
 .icon-open:before {
-	content: "\e604";
+  content: "\e604";
 }
 .icon-Close:before {
-	content: "\e605";
+  content: "\e605";
 }
 .icon-TabSearch:before {
-	content: "\e606";
+  content: "\e606";
 }
 .icon-TabPlugins:before {
-	content: "\e607";
+  content: "\e607";
 }
 .icon-TabMonetization:before {
-	content: "\e608";
+  content: "\e608";
 }
 .icon-TabLookandFeel:before {
-	content: "\e609";
+  content: "\e609";
 }
 .icon-TabEngagement:before {
-	content: "\e60a";
+  content: "\e60a";
 }
 .icon-TabBasicSettings:before {
-	content: "\e60b";
+  content: "\e60b";
 }
 .icon-TabAnalytics:before {
-	content: "\e60c";
+  content: "\e60c";
 }
 .icon-defult:before {
-	content: "\e60d";
+  content: "\e60d";
 }
 .icon-checkmark-circle:before {
-	content: "\e600";
+  content: "\e600";
 }
 .icon-copy:before {
-	content: "\e601";
+  content: "\e601";
 }
 .icon-eye:before {
-	content: "\e602";
+  content: "\e602";
 }
 .icon-close:before {
-	content: "\e603";
+  content: "\e603";
+}
+.icon{
+  cursor: pointer;
+  color: #fff;
+  display: block;
+  padding: 8px;
+  width: 100%;
+  text-align: center;
+  height: 50px;
+  font-size: 180%;
+  opacity: 0.18;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=18)";
+}
+.icon:hover {
+  opacity: 0.5;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  text-decoration: none;
+}
+.icon.active {
+  opacity: 1;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 }

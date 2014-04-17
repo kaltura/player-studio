@@ -60,18 +60,19 @@ module.exports = function(grunt) {
                 src: [
                     '_dist/app/*.js',
                     '_dist/app/controllers/*.js',
-                    '_dist/app/services/*.js',
-                    '_dist/app/directives/*.js'
+                    '_dist/app/services/*.js'
                 ],
                 dest: '_dist/main.js'
             },
             libs: {
                 src: [
                     'app/lib/malihu_custon_scrollbar/jquery.mousewheel.min.js',
+                    'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.js',
                     'app/lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.10.0.js',
                     'app/lib/localStorage/angular-local-storage.min.js',
                     'app/lib/sprintf.js',
                     'app/lib/spin.min.js',
+	                'app/lib/spectrum.js',
                     'app/lib/jquery.timeago.js',
                     'app/ib/jquery.animate-colors-min.js',
                     'app/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js',
@@ -109,7 +110,8 @@ module.exports = function(grunt) {
                     'bower_components/selectivizr/selectivizr.js',
                     'app/lib/jquery-1.10.2.min.js',
                     'app/lib/jquery.xdomainrequest.min.js',
-                    'app/bower_components/angular/angular.min.js'
+                    'app/bower_components/angular/angular.min.js',
+	                'app/lib/jquery.alphanum.js'
                 ],
                 dest: '_dist/vendor/vendorOld.min.js'
             }
@@ -133,7 +135,7 @@ module.exports = function(grunt) {
             combine: {
                 files: {
                     //  '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
-                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css', 'app/bower_components/select2/select2.css', 'app/lib/colorpicker/css/colorpicker.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
+                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css', 'app/bower_components/select2/select2.css', 'app/css/spectrum.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
                 }
 
             }
@@ -182,10 +184,6 @@ module.exports = function(grunt) {
                     { // dev only
                         src: 'app/js/services/defaultPlayer.json',
                         dest: '_dist/js/services/defaultPlayer.json'
-                    },
-                    { // IE8 fix
-                        src: 'app/template/menu/menuPage.html',
-                        dest: '_dist/template/menu/menuPage.html'
                     },
                     {
                         expand: true,
@@ -251,7 +249,7 @@ module.exports = function(grunt) {
         ngtemplates: {
             KMCModule: {
                 cwd: 'app',
-                src: ['templates/**/*.html', 'view/**/*.html'],
+	            src: ['templates/**/*.html', 'view/**/*.html'],
                 dest: '_dist/templates.js',
                 options: {
                     htmlmin: { collapseWhitespace: true, collapseBooleanAttributes: true }

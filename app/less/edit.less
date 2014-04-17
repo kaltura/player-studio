@@ -1,562 +1,110 @@
-@import 'mixins.less';
-
-//layout
-body#edit, body#new {
-  div.section {
-    padding: 0;
-    height: 100%;
-    #outerWrap {
-      margin-left: 56px;
-      overflow-x: hidden;
-      height: 100%;
-    }
-
-    .scroller,
-    .wrapper {
-      position: relative;
-      overflow: hidden;
-    }
-    #menuTriggerWrap {
-      z-index: 1000;
-      border: 1px solid #DDD;
-      border-left: 0;
-      border-radius: 0 0 7px 0;
-      padding: 4px;
-      background: #eee;
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      width: 30px;
-      height: 34px;
-      .menu-trigger {
-        position: absolute;
-        color: #272727;
-        cursor: pointer;
-        font-size: 14px;
-        z-index: 1000;
-        -webkit-transition: all 0.5s;
-        -moz-transition: all 0.5s;
-        transition: all 0.5s;
-        &:hover, &:focus, &:active {
-          padding-left: 5px;
-          text-decoration: none;
-        }
-      }
-    }
-    .wrapper {
-      width: 70%;
-      overflow-y: auto;
-      #headerRow {
-        margin-bottom: 20px;
-      }
-      .container {
-        display: block;
-        position: relative;
-        width: 90%;
-        padding-right: 0;
-        padding-left: 0;
-        margin: auto;
-        #spacer {
-          padding-top: 25px; // for ie8 to show the control bar (height is a guess here)
-          margin-top: 56.25%; //16-9
-          height: 0;
-          &.narrow {
-            margin-top: 75%; //4-3
-          }
-        }
-        #autoPreviewLabel {
-          padding-top: 5px;
-          vertical-align: top;
-          display: inline-block;
-          padding-right: 20px
-        }
-        #kVideoContainer {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          #kVideoTarget {
-            width: 100%;
-            overflow: hidden;
-            height: 100%;
-          }
-
-        }
-      }
-    }
-
-    #mp-pusher {
-      left: 30%;
-      height: 100%;
-      position: relative;
-    }
-
-    #mp-menu {
-      position: absolute;
-      left: -30%;
-      width: 30%;
-      height: 100%;
-      min-width: 260px;
-      overflow: hidden;
-      background: #eee;
-      #mp-inner {
-        height: 100%;
-      }
-    }
-
-    .separator {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      border-top: 1px solid #dddddd;
-      height: 5px;
-    }
-
-    #mp-mainlevel {
-      height: 100%;
-      padding-top: 25px;
-      width: 56px;
-      position: absolute;
-      z-index: 1000;
-      background: #323232; /* Old browsers */
-      /* IE9 SVG, needs conditional override of 'filter' to 'none' */
-      background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzMyMzIzMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzMDMwMzAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-      background: -moz-linear-gradient(left, #323232 0%, #303030 100%); /* FF3.6+ */
-      background: -webkit-gradient(linear, left top, right top, color-stop(0%, #323232), color-stop(100%, #303030)); /* Chrome,Safari4+ */
-      background: -webkit-linear-gradient(left, #323232 0%, #303030 100%); /* Chrome10+,Safari5.1+ */
-      background: -o-linear-gradient(left, #323232 0%, #303030 100%); /* Opera 11.10+ */
-      background: -ms-linear-gradient(left, #323232 0%, #303030 100%); /* IE10+ */
-      background: linear-gradient(to right, #323232 0%, #303030 100%); /* W3C */
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#323232', endColorstr='#303030', GradientType=1); /* IE6-8 */
-      ul {
-        list-style: none;
-        padding: 0;
-        li {
-          margin-bottom: 10px;
-          a.icon {
-            cursor: pointer;
-            color: #fff;
-            display: block;
-            padding: 8px;
-            width: 100%;
-            text-align: center;
-            height: 50px;
-            font-size: 180%;
-            //    border-bottom: 2px solid #eee;
-            opacity: 0.18;
-            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=18)";
-            &:hover {
-              opacity: 0.5;
-              -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-              text-decoration: none;
-            }
-            &.active {
-              opacity: 1;
-              -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-            }
-          }
-        }
-      }
-    }
-
-    .mp-level {
-      position: absolute;
-      padding: 5px;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #eee;
-
-    }
-
-    .mp-level .mp-level {
-      left: -100%;
-      z-index: 100;
-    }
-
-    .mp-level.mp-level-open, .mp-level.mp-level-in-stack {
-      left: 0;
-
-    }
-
-    #mp-pusher,
-    .mp-level {
-      -webkit-transition: all 0.5s;
-      -moz-transition: all 0.5s;
-      transition: all 0.5s;
-    }
-
-    /* content style */
-    #mp-menu {
-      ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-      #mp-base > ul > li > div.mp-level > a.mp-back {
-        display: none;
-      }
-
-      #mp-base > ul > li > div.menu-level-trigger > a {
-        display: none;
-      }
-
-      ul.menuList > li, label, div.form-element {
-        hr {
-          border-top: 1px solid #ccc;
-          border-bottom: 1px solid #fff;
-          clear: both;
-          margin-top: 16px;
-          margin-bottom: 0px;
-          &.divider {
-            // from the directive
-            margin-top: 36px;
-          }
-        }
-        &[type="dropdown"] {
-          hr {
-            margin-top: 20px;
-          }
-        }
-      }
-      div.subPageHeaderWrapper {
-        > * {
-          padding-top: 20px;
-          position: relative;
-        }
-        h2.subMenuHeader {
-          margin: 0;
-          display: inline-block;
-          padding: 14px;
-          padding-top: 24px;
-          padding-bottom: 11px;
-          color: #272727;
-          text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
-          font-weight: bold;
-          font-family: arial, sans-serif;
-          font-size: 18px;
-        }
-      }
-      .tab-content {
-        margin-left: -0.6em;
-        margin-right: -0.6em;
-      }
-      .levelDesc {
-        margin: 0 14px;
-        display: block;
-        font-size: 13px;
-        margin-bottom: 10px;
-        color: #555555;
-        font-family: arial, sans-serif;
-        font-weight: normal;
-      }
-
-      .mp-level ul.menuList > li {
-        clear: both;
-        label, .form-element, &.form-element {
-          padding: 0.6em 1em;
-          .ng-invalid {
-            outline: 1px solid red;
-          }
-          .placeholder {
-            color: #999999;
-          }
-          display: block;
-          text-align: left;
-          clear: both;
-          font-weight: normal;
-          font-size: 13px;
-          margin-bottom: 0px;
-          color: #555555;
-          .inputHolder {
-            width: 100%;
-          }
-          span.control-label, span.featureLabel {
-            font-weight: bold;
-          }
-          i.icon {
-            float: left;
-            vertical-align: bottom;
-            line-height: 1.4em;
-            margin-right: 5%;
-            display: inline;
-            font-size: 22px;
-            & + .inputHolder {
-              width: 85%;
-            }
-          }
-          html.lt-ie9 &[type="featuremenu"] div.header {
-            width: 90%;
-          }
-          &[type="featuremenu"], &[type="menupage"], {
-            div.header {
-              a.menu-level-trigger {
-                &:after {
-                  .booticon;
-                  display: inline;
-                  content: "\e080";
-                }
-              }
-              cursor: pointer;
-              .featureLabel {
-                color: #009dff;
-              }
-              font-weight: bold;
-
-              i.glyphicon-play {
-                -webkit-transition: all 0.3s;
-                -moz-transition: all 0.3s;
-                -ms-transition: all 0.3s;
-                -o-transition: all 0.3s;
-                transition: all 0.3s;
-                color: #009dff;
-                font-size: 10px;
-              }
-            }
-            span.pull-right {
-              //checkbox
-              .prettycheckbox a {
-                margin-top: -5px;
-              }
-            }
-            div.in, div.collapse, div.collapsing {
-              margin-top: 10px;
-              &:not(.tooltip) {
-                width: 100%;
-                label, div.form-element {
-                  .featureLabel {
-                    font-weight: normal;
-                    color: #555555
-                  }
-                  padding-right: 0;
-                  padding-left: 0;
-
-                }
-
-              }
-            }
-          }
-          &[type="readonly"], &[type="infoaction"] {
-            .button-wrapper {
-              float: right;
-              button {
-                background: #009dff;
-                border-color: #0086d9;
-                &:hover, &:focus, &:active {
-                  background: #067ec9;
-                  border-color: #0086d9;
-                }
-              }
-            }
-            span {
-              width: auto;
-              &.control-data {
-                text-align: center;
-                &.infodata {
-                  float: left;
-                  text-align: left;
-                  padding-left: 5%;
-                }
-              }
-              &.control-label {
-                min-width: 80px;
-                float: left;
-              }
-            }
-          }
-          &[type="button"] {
-            text-align: center;
-          }
-          i.pull-right.glyphicon {
-            padding-top: 4px;
-            margin-left: 10px;
-          }
-          input[type="text"], div[model-text] input {
-            font-size: 13px;
-            width: 100%;
-            height: 28px;
-            padding: 3px 10px 3px 10px;
-          }
-          div.fullwidth > .select2-container {
-            float: none;
-            width: 100%;
-          }
-
-          &[type="dropdown"] {
-            span.control-label {
-              height: 1em;
-              display: inline-block;
-              vertical-align: middle;
-            }
-          }
-          .prettycheckbox a {
-            float: right;
-            margin-top: -6px;
-            width: 25px;
-            height: 25px;
-          }
-          &[type="radio"] {
-            label {
-              padding: 1px;
-              margin: 0;
-              width: 33%;
-              float: left;
-              display: inline;
-              clear: none;
-              text-align: center;
-              &:first-child {
-                text-align: left;
-              }
-              .optionLabel {
-                bottom: 8px;
-                position: relative;
-              }
-
-            }
-            input {
-              margin: 4px;
-            }
-            .form-group {
-
-              label:last-child {
-                float: right;
-                text-align: right;
-              }
-            }
-          }
-
-          .form-group {
-            text-align: center;
-            margin: auto;
-            width: 100%;
-            height: 30px;
-          }
-          .dynSection {
-            margin-bottom: 10px;
-           > a{float:right;}
-            ul {
-              border: 1px solid #ccc;
-              border-radius: 5px;
-            }
-          }
-          .colorExample {
-            display: block;
-            width: 25px;
-            height: 25px;
-            float: right;
-            border: 1px solid #808080;
-            background-color: azure;
-          }
-          .sortContainer {
-            margin-bottom: 20px;
-            overflow: hidden;
-            h4 {
-              padding-left: 0;
-            }
-            border: 1px solid #272727;
-            li.sortObj {
-              &:active, &:hover, &:focus {
-                background: #666666;
-                color: white;
-              }
-              &.ui-sortable-helper {
-                border: 1px solid darkred;
-              }
-              min-height: 28px;
-              border-bottom: 1px dashed #666;
-              &:last-child {
-                border-bottom: none;
-              }
-              &:first-child {
-                border-top: 1px dashed #666;
-              }
-              i {
-                padding-left: 10px;
-              }
-
-            }
-          }
-        }
-      }
-
-      ul.dropdown-menu {
-        border-radius: 5px;
-        li {
-          border-radius: 5px;
-          a {
-            font-size: 13px;
-            font-weight: lighter;
-            border-bottom: 1px solid #ddd;
-            color: #555555;
-            &:hover {
-              background-color: #eee;
-            }
-          }
-          &.active a {
-            background-color: #eee;
-          }
-        }
-      }
-
-      //back
-      .mp-back {
-        background: rgba(0, 0, 0, 0.1);
-        outline: none;
-        color: #000;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 700;
-        display: block;
-        font-size: 0.8em;
-        padding: 1em;
-        position: relative;
-        box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
-        -webkit-transition: background 0.3s;
-        -moz-transition: background 0.3s;
-        transition: background 0.3s;
-      }
-
-      .mp-back::before {
-        .booticon;
-        content: "\e079";
-        color: black;
-      }
-
-    }
-
-    .rotate90 {
-      transform: rotate(90deg);
-      -ms-transform: rotate(90deg); /* IE 9 */
-      -webkit-transform: rotate(90deg); /* Safari and Chrome */
-    }
-
-    .triangle {
-      margin-left: 10px;
-      width: 0px;
-      height: 0px;
-      border-style: solid;
-      border-width: 5px 0 5px 8.7px;
-      border-color: transparent transparent transparent #000000;
-    }
-
-    .glyphicon-play {
-      color: #000;
-    }
-
-    //    .form-control, .insput-group-addon {
-    //      font-size: 13px;
-    //      height: 30px;
-    //    }
-
-    .dropdown-menu li a {
-      padding: 3px 11px;
-    }
-
-  }
-  #menuSearch .form-group {
-    padding: 0.6em 1em;
-    width: 100%; // to prevent firefox bug
-  }
+.menu{
+  width: 425px;
+  height: 100%;
+  position: fixed;
+  background-color: lightgrey;
 }
+
+.categories{
+  background-color: #333333;
+  width: 60px;
+  height: 100%;
+  padding-left: 5px;
+  padding-top: 20px;
+}
+
+.categoryIcon{
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.category{
+  position: absolute;
+  margin-left: 70px;
+  width: 350px;
+  padding-top: 5px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.plugin{
+  width: 120px;
+  height: 24px;
+  background-color: yellow;
+  margin-left: 80px;
+}
+
+.text{
+  padding-top: 5px;
+}
+
+.text input{
+  width: 100%;
+}
+
+.checkbox{
+  padding-top: 10px;
+  height: 40px;
+}
+
+.number{
+  padding-top: 10px;
+  height: 40px;
+}
+.number > input{
+  width: 76px;
+}
+.color{
+  padding-top: 10px;
+  height: 50px;
+}
+
+.dropdownContainer{
+  height: 40px;
+  padding-top: 5px;
+}
+
+.dropdown{
+  float: right;
+}
+
+.readonly{
+  color: #555555;
+  margin-left: 10px;
+}
+
+hr{
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+}
+
+.spaceLeft{
+  margin-left: 5px;
+}
+
+.errorIcon{
+  margin-left: 3px;
+  color: red;
+}
+.rotate90 {
+  transform: rotate(90deg);
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari and Chrome */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1); /* IE 8 */
+}
+.invalid{
+  color: red;
+  border: 1px solid red;
+}
+.loading{
+  color: green;
+  font-weight: bold;
+}
+input:disabled{
+  color: #cacaca;
+}
+/* Bootstrap resets */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
