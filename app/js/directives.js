@@ -15,7 +15,7 @@ DirectivesModule.directive('bindOnce', function() {
 	};
 });
 
-DirectivesModule.directive('onFinishRender', function ($timeout) {
+DirectivesModule.directive('onFinishRender', ['$timeout', function ($timeout) {
 	return {
 		restrict: 'A',
 		link: function (scope, element, attr) {
@@ -28,7 +28,7 @@ DirectivesModule.directive('onFinishRender', function ($timeout) {
 			}
 		}
 	};
-});
+}]);
 
 DirectivesModule.directive('ngEnter', function () {
 	return function (scope, element, attrs) {
