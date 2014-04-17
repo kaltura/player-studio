@@ -322,7 +322,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.save = function(){
 		if ($scope.invalidProps.length > 0){
-			$modal.open({ templateUrl: 'template/dialog/message.html',
+			$modal.open({ templateUrl: 'templates/message.html',
 				controller: 'ModalInstanceCtrl',
 				resolve: {
 					settings: function() {
@@ -342,7 +342,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			PlayerService.savePlayer($scope.playerData).then(function(value) {
 					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
 					apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
-					$modal.open({ templateUrl: 'template/dialog/message.html',
+					$modal.open({ templateUrl: 'templates/message.html',
 						controller: 'ModalInstanceCtrl',
 						resolve: {
 							settings: function() {
@@ -358,7 +358,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					});
 				},
 				function(msg) {
-					$modal.open({ templateUrl: 'template/dialog/message.html',
+					$modal.open({ templateUrl: 'templates/message.html',
 						controller: 'ModalInstanceCtrl',
 						resolve: {
 							settings: function() {
@@ -380,7 +380,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		else {
 			var modal = $modal.open(
-				{ templateUrl: 'template/dialog/message.html',
+				{ templateUrl: 'templates/message.html',
 					controller: 'ModalInstanceCtrl',
 					resolve: {
 						settings: function() {

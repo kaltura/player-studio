@@ -175,7 +175,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 } else {
                     var msgText = $scope.oldVersionEditText;
                     var modal = $modal.open({
-                            templateUrl: 'template/dialog/message.html',
+                            templateUrl: 'templates/message.html',
                             controller: 'ModalInstanceCtrl',
                             resolve: {
                                 settings: function() {
@@ -222,7 +222,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             // delete a player (after user confirmation)
             $scope.deletePlayer = function(item) {
                 var modal = $modal.open({
-                    templateUrl: 'template/dialog/message.html',
+                    templateUrl: 'templates/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
                         settings: function() {
@@ -240,7 +240,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                             $scope.data.splice($scope.data.indexOf(item), 1); // delete player from local memory list of players (splice)
                             $scope.triggerLayoutChange(); // update scroller as the list size changed
                         }, function(reason) {
-                            $modal.open({ templateUrl: 'template/dialog/message.html',
+                            $modal.open({ templateUrl: 'templates/message.html',
                                 controller: 'ModalInstanceCtrl',
                                 resolve: {
                                     settings: function() {
@@ -264,7 +264,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 var text = '<span>' + $filter("translate")("Do you want to update this player?<br>Some features and design may be lost.") + '</span>';
                 var html5lib = player.html5Url.substr(0, player.html5Url.indexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
                 var modal = $modal.open({
-                    templateUrl: 'template/dialog/message.html',
+                    templateUrl: 'templates/message.html',
                     controller: 'ModalInstanceCtrl',
                     resolve: {
                         settings: function() {
@@ -284,7 +284,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                             player.tags = 'html5studio,player';
                             upgradeProccess.resolve('upgrade finished successfully');
                         }, function(reason) {
-                            $modal.open({ templateUrl: 'template/dialog/message.html',
+                            $modal.open({ templateUrl: 'templates/message.html',
                                 controller: 'ModalInstanceCtrl',
                                 resolve: {
                                     settings: function() {
