@@ -324,84 +324,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40); // resize player height according to irs width and aspect ratio on window resize
 	});
 
-	$scope.save = function(){
-		if ($scope.invalidProps.length > 0){
-			$modal.open({ templateUrl: 'templates/message.html',
-				controller: 'ModalInstanceCtrl',
-				resolve: {
-					settings: function() {
-						return {
-							'title': 'Save Player Settings',
-							'message': 'Some plugin features values are invalid. The player cannot be saved.',
-							buttons: [
-								{result: true, label: 'OK', cssClass: 'btn-primary'}
-							]
-						};
-					}
-				}
-			});
-		}else{
-			$scope.updatePlayerData();
-			$scope.dataChanged = false;
-			PlayerService.savePlayer($scope.playerData).then(function(value) {
-					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
-					apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
-					$modal.open({ templateUrl: 'templates/message.html',
-						controller: 'ModalInstanceCtrl',
-						resolve: {
-							settings: function() {
-								return {
-									'title': 'Save Player Settings',
-									'message': 'Player Saved Successfully',
-									buttons: [
-										{result: true, label: 'OK', cssClass: 'btn-primary'}
-									]
-								};
-							}
-						}
-					});
-				},
-				function(msg) {
-					$modal.open({ templateUrl: 'templates/message.html',
-						controller: 'ModalInstanceCtrl',
-						resolve: {
-							settings: function() {
-								return {
-									'title': 'Player save failure',
-									'message': msg
-								};
-							}
-						}
-					});
-				}
-			);
-		}
-	};
 
-	$scope.backToList = function(){
-		if (!$scope.dataChanged) {
-			$location.url('/list');
-		}
-		else {
-			var modal = $modal.open(
-				{ templateUrl: 'templates/message.html',
-					controller: 'ModalInstanceCtrl',
-					resolve: {
-						settings: function() {
-							return {
-								'title': 'Navigation confirmation',
-								message: 'You are about to leave this page without saving, are you sure you want to discard the changes?'
-							};
-						}
 
-					}});
-			modal.result.then(function(result) {
-				if (result) {
-					$location.url('/list');
-				}
-			});
-		}
-	};
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
@@ -516,6 +440,90 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "entry"){
 			return data.id? data.id : data;
+		}
+	};
+
+}]);
+
+KMCMenu.controller('PlayerCtrl', ['$scope','PlayerService', 'apiService', '$modal', '$location', 'localStorageService',
+	function ($scope, PlayerService, apiService, $modal, $location, localStorageService) {
+
+	$scope.backToList = function(){
+		if (!$scope.dataChanged) {
+			$location.url('/list');
+		}
+		else {
+			var modal = $modal.open(
+				{ templateUrl: 'templates/message.html',
+					controller: 'ModalInstanceCtrl',
+					resolve: {
+						settings: function() {
+							return {
+								'title': 'Navigation confirmation',
+								message: 'You are about to leave this page without saving, are you sure you want to discard the changes?'
+							};
+						}
+
+					}});
+			modal.result.then(function(result) {
+				if (result) {
+					$location.url('/list');
+				}
+			});
+		}
+	};
+
+	$scope.save = function(){
+		if ($scope.invalidProps.length > 0){
+			$modal.open({ templateUrl: 'templates/message.html',
+				controller: 'ModalInstanceCtrl',
+				resolve: {
+					settings: function() {
+						return {
+							'title': 'Save Player Settings',
+							'message': 'Some plugin features values are invalid. The player cannot be saved.',
+							buttons: [
+								{result: true, label: 'OK', cssClass: 'btn-primary'}
+							]
+						};
+					}
+				}
+			});
+		}else{
+			$scope.updatePlayerData();
+			$scope.dataChanged = false;
+			PlayerService.savePlayer($scope.playerData).then(function(value) {
+					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
+					apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
+					$modal.open({ templateUrl: 'templates/message.html',
+						controller: 'ModalInstanceCtrl',
+						resolve: {
+							settings: function() {
+								return {
+									'title': 'Save Player Settings',
+									'message': 'Player Saved Successfully',
+									buttons: [
+										{result: true, label: 'OK', cssClass: 'btn-primary'}
+									]
+								};
+							}
+						}
+					});
+				},
+				function(msg) {
+					$modal.open({ templateUrl: 'templates/message.html',
+						controller: 'ModalInstanceCtrl',
+						resolve: {
+							settings: function() {
+								return {
+									'title': 'Player save failure',
+									'message': msg
+								};
+							}
+						}
+					});
+				}
+			);
 		}
 	};
 
