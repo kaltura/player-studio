@@ -184,6 +184,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }else{
 		    $scope.addValidation(plugin);
 	    }
+	    $scope.dataChanged = true;
 	    $timeout(function(){$scope.refreshPlayer();},0,true);
 
     };
