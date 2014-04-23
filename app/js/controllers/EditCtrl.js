@@ -225,7 +225,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     };
 
     // handle refresh
-    $scope.refreshNeeded = false;
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
@@ -243,9 +242,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
 	    $scope.dataChanged = true;
         $scope.validate(property);
-        if (property['player-refresh'] !== false){
-            $scope.refreshNeeded = true;
-        }
+	    $scope.refreshNeeded = (property['player-refresh'] !== false);
 	    if (checkAutoRefresh !== false && $scope.refreshNeeded && $scope.autoPreview){
 		    if (checkAutoRefresh == 'enter') // prevent refresh on blur after refresh on enter
 			    $scope.lastRefreshID = property.id;
@@ -323,9 +320,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$(window).resize(function () {
 		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40); // resize player height according to irs width and aspect ratio on window resize
 	});
-
-
-
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
