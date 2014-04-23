@@ -69,7 +69,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         $scope.propertiesSearch = []; // prepare an array for all properties to be used in search
 
         // add search section to the menu data
-        $scope.menuData = [{'label': 'Menu Search', 'description': 'Search for menu property', 'icon': 'TabSearch', 'properties':[{'type':'search','model':'menuProperties'}]}];
+        $scope.menuData = [{'label': 'Menu Search', 'description': 'Search allows you to find any plugin property within the menu.', 'icon': 'TabSearch', 'properties':[{'type':'search','model':'menuProperties'}]}];
         var categoryIndex = 0; // for search indexing
 
         for (var cat in data){
@@ -219,9 +219,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                     props[i].children[$item.tabIndex].active = true;
             }
         }
-
         // blink selected property
-        $("#"+$item.id).fadeTo(250, 0.1).fadeTo(250, 1.0).fadeTo(250, 0.1).fadeTo(250, 1.0).fadeTo(250, 0.1).fadeTo(250, 1.0);
+		var counter=0;
+	    var blinkID = setInterval(function(){
+		    var visible = $("#"+$item.id).css("visibility") == "visible" ? "hidden" : "visible";
+		    $("#"+$item.id).css("visibility", visible);
+		    counter++;
+		    if (counter == 6)
+		        clearInterval(blinkID);
+	    },250)
     };
 
     // handle refresh
