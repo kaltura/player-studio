@@ -1,5 +1,5 @@
 .menu{
-  width: 425px;
+  width: 440px;
   height: 100%;
   position: fixed;
   background-color: #f3f2ee;
@@ -42,7 +42,8 @@
 .category{
   position: absolute;
   margin-left: 70px;
-  width: 350px;
+  padding-right: 20px;
+  width: 370px;
   padding-top: 5px;
   height: 100%;
   overflow-y: auto;
@@ -60,6 +61,10 @@
   font-weight: 700 !important;
   font-size: 13px;
   color: #555;
+  margin-right: 2px;
+}
+.disabled{
+  color: #777777;
 }
 
 .text{
@@ -97,9 +102,8 @@
   height: 40px;
   padding-top: 5px;
 }
-
 .select2-drop .select2-chosen{
-  font-weight: 400 !important;
+  line-height: 1.4 !important;
   font-size: 13px !important;
   color: #555 !important;
 }
@@ -138,18 +142,19 @@ hr{
   -ms-filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1); /* IE 8 */
 }
 .invalid{
-  color: red;
-  border: 1px solid red;
+  color: red !important;
+  border: 1px solid red !important;
 }
 .loading{
-  color: green;
+  color: black;
+  font-size: 13px;
   font-weight: bold;
 }
 
 input[type=text]{
   font-size: 13px;
-  line-height: 1.428571429;
-  padding: 6px 12px;
+  line-height: 1.4;
+  padding: 3px 6px;
   height: 28px;
   color: #555;
   background-color: #fff;
@@ -165,5 +170,69 @@ input[type=text]{
 input:disabled{
   color: #cacaca;
 }
+
+.accHeader{
+  margin-right: 5px;
+  font-size: 13px;
+  color: #555;
+  font-weight: 700;
+}
+.accHeaderArrow{
+  font-size: 10px;
+  color: #555;
+}
+.accHeaderArrow:hover{
+  font-size: 10px;
+  color: #000;
+}
+.accHeader:hover{
+  color: #000;
+}
+a:hover{
+  text-decoration: none!important;
+}
+.helpIcon{
+  font-size: 11px;
+  color: #555;
+}
+.tabHeader{
+  font-size: 13px;
+  font-weight: 400;
+}
+/*
+input[type="checkbox"]
+{
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+input[type="checkbox"]::before
+{
+	content: "";
+	display: inline-block;
+	line-height: 18px;
+	margin: 0 8px 0 0;
+	vertical-align: middle;
+	background: url('checkbox/checkbox.png') no-repeat;
+}
+
+input[type="checkbox"]:disabled
+{
+	background: url('checkbox/checkbox_disabled.png') no-repeat;
+	cursor: default;
+}
+
+input[type="checkbox"]:not(:checked):hover::before
+{
+	background: url('checkbox/checkbox.png') no-repeat;
+	cursor: pointer;
+}
+
+input[type="checkbox"]:checked::before
+{
+	background: url('checkbox/checkbox_selected.png') no-repeat;
+}
+*/
 /* Bootstrap resets */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

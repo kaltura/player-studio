@@ -1,7 +1,7 @@
 <div class="text">
 
 	<div tabset>
-		<div tab ng-repeat="tab in property.children" heading="{{tab.label}}" active="tab.active" disabled="tab.disabled">
+		<div tab ng-repeat="tab in property.children" heading="{{tab.label}}" active="tab.active" class="tabHeader" disabled="plugin!=null && !plugin.enabled">
 			<div ng-repeat="property in tab.children" ng-include="'templates/' + property.type +'.html'"></div>
 		</div>
 	</div>

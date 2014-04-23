@@ -253,7 +253,7 @@ module.exports = function(grunt) {
 	            src: ['templates/**/*.html', 'view/**/*.html'],
                 dest: '_dist/templates.js',
                 options: {
-                    htmlmin: { collapseWhitespace: true, collapseBooleanAttributes: true }
+                    htmlmin: { collapseWhitespace: false, collapseBooleanAttributes: false }
                 }
             }
         }

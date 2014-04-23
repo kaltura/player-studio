@@ -1,14 +1,14 @@
 <div ng-show="selectedCategory==category.label" class="category">
 	<p class="categoryLabel" bind-once>{{category.label}}</p>
 	<p class="categoryDesc" bind-once>{{category.description}}</p>
-	<p class="loading" ng-if="category.pluginsNotLoaded">Loading, please wait...</p>
+	<p class="loading" ng-if="category.pluginsNotLoaded"><i class="glyphicon glyphicon-refresh" style="margin-right: 5px"></i>Loading, please wait...</p>
 	<div ng-repeat="property in category.properties" ng-include="'templates/' + property.type +'.html'"></div>
 
 	<div accordion close-others="false">
 		<div accordion-group ng-repeat="plugin in category.plugins" is-open="plugin.isopen" on-finish-render>
 			<div accordion-heading>
-				<span id="{{plugin.id}}" style="margin-right: 5px">{{plugin.label}}</span><input class="pull-right" type="checkbox" ng-model="plugin.enabled" ng-click="togglePlugin(plugin, $event)">
-				<i ng-class="{rotate90:plugin.isopen}" class="glyphicon glyphicon-play" style="font-size: 12px"></i>
+				<span id="{{plugin.id}}" class="accHeader">{{plugin.label}}</span><input class="pull-right" type="checkbox" ng-model="plugin.enabled" ng-click="togglePlugin(plugin, $event)">
+				<i ng-class="{rotate90:plugin.isopen}" class="glyphicon glyphicon-play accHeaderArrow"></i>
 			</div>
 			<p bind-once class="categoryDesc" ng-bind-html="plugin.description"></p>
 			<div ng-repeat="property in plugin.properties" ng-include="'templates/' + property.type +'.html'"></div>

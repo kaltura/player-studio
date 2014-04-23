@@ -227,7 +227,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    counter++;
 		    if (counter == 6)
 		        clearInterval(blinkID);
-	    },250)
+	    },250);
     };
 
     // handle refresh
