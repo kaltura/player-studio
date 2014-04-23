@@ -2,14 +2,14 @@
   width: 425px;
   height: 100%;
   position: fixed;
-  background-color: lightgrey;
+  background-color: #f3f2ee;
 }
 
 .categories{
-  background-color: #333333;
-  width: 60px;
+  background-color: #1c1c1c;
+  width: 50px;
   height: 100%;
-  padding-left: 5px;
+  padding-left: 0px;
   padding-top: 20px;
 }
 
@@ -18,6 +18,25 @@
   height: 50px;
   position: absolute;
   cursor: pointer;
+}
+
+.categoryLabel{
+  margin: 0;
+  display: inline-block;
+  padding-top: 18px;
+  padding-bottom: 11px;
+  color: #272727;
+  text-shadow: 0 0 1px rgba(0,0,0,.1);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.categoryDesc{
+  display: block;
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #555;
+  font-weight: 400;
 }
 
 .category{
@@ -36,8 +55,21 @@
   margin-left: 80px;
 }
 
+.pluginLabel{
+  text-align: left;
+  font-weight: 700 !important;
+  font-size: 13px;
+  color: #555;
+}
+
 .text{
   padding-top: 5px;
+  margin-bottom: 8px;
+}
+
+.entrySelector{
+  padding-top: 5px;
+  margin-bottom: 30px;
 }
 
 .text input{
@@ -66,6 +98,12 @@
   padding-top: 5px;
 }
 
+.select2-drop .select2-chosen{
+  font-weight: 400 !important;
+  font-size: 13px !important;
+  color: #555 !important;
+}
+
 .dropdown{
   float: right;
 }
@@ -73,12 +111,16 @@
 .readonly{
   color: #555555;
   margin-left: 10px;
+  font-weight: 400;
+  font-size: 13px;
 }
 
 hr{
   width: 100%;
-  height: 2px;
   bottom: 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #fff;
+  clear: both;
 }
 
 .spaceLeft{
@@ -103,6 +145,23 @@ hr{
   color: green;
   font-weight: bold;
 }
+
+input[type=text]{
+  font-size: 13px;
+  line-height: 1.428571429;
+  padding: 6px 12px;
+  height: 28px;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
 input:disabled{
   color: #cacaca;
 }

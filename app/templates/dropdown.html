@@ -1,5 +1,5 @@
 <div class="text dropdownContainer">
-	<span bind-once id="{{property.id}}">{{property.label}}</span>
+	<span bind-once class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
 	<select ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, true)" ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}" ng-model="property.initvalue" class="dropdown">
 		<option value="{{item.value}}" ng-repeat="item in property.options">

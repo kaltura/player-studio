@@ -1,5 +1,5 @@
 <div class="number">
-	<span bind-once id="{{property.id}}">{{property.label}}</span>
+	<span bind-once class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
 	<input class="pull-right numeric" ng-class="{invalid: property.invalidTooltip}" name="num{{property.id}}" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')" ng-disabled="plugin!=null && !plugin.enabled" ng-model="property.initvalue" tooltip="{{property.invalidTooltip}}">
 	<hr bind-once ng-if="property.endline">

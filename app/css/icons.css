@@ -69,11 +69,11 @@
 	text-align: center;
 	height: 50px;
 	font-size: 180%;
-	opacity: 0.18;
+	opacity: 0.3;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=18)";
 }
 .icon:hover {
-	opacity: 0.5;
+	opacity: 0.7;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 	text-decoration: none;
 }

@@ -1,6 +1,6 @@
 <div ng-show="selectedCategory==category.label" class="category">
-	<p bind-once><h4>{{category.label}}</h4></p>
-	<p bind-once>{{category.description}}</p>
+	<p class="categoryLabel" bind-once>{{category.label}}</p>
+	<p class="categoryDesc" bind-once>{{category.description}}</p>
 	<p class="loading" ng-if="category.pluginsNotLoaded">Loading, please wait...</p>
 	<div ng-repeat="property in category.properties" ng-include="'templates/' + property.type +'.html'"></div>
 
@@ -10,7 +10,7 @@
 				<span id="{{plugin.id}}" style="margin-right: 5px">{{plugin.label}}</span><input class="pull-right" type="checkbox" ng-model="plugin.enabled" ng-click="togglePlugin(plugin, $event)">
 				<i ng-class="{rotate90:plugin.isopen}" class="glyphicon glyphicon-play" style="font-size: 12px"></i>
 			</div>
-			<p bind-once ng-bind-html="plugin.description"></p>
+			<p bind-once class="categoryDesc" ng-bind-html="plugin.description"></p>
 			<div ng-repeat="property in plugin.properties" ng-include="'templates/' + property.type +'.html'"></div>
 		</div>
 	</div>

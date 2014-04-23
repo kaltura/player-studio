@@ -1,5 +1,5 @@
 <div class="text">
-	<span bind-once id="{{property.id}}">{{property.label}}</span>
+	<span bind-once class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
 	<input ui-select2="entriesSelectBox" ng-model="selectedEntry" class="dropdown" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged({'selectedEntry': selectedEntry, 'model': property.model})" type="hidden"/>
 	<hr bind-once ng-if="property.endline" style="margin-top: 40px">
