@@ -352,7 +352,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:name': data.name,
 					'uiConf:tags': data.tags,
 					'uiConf:description': data.description ? data.description : '',
-					'uiConf:config': angular.toJson(data2Save)
+					'uiConf:config': JSON.stringify(data2Save, null, "\t")
 				};
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
