@@ -96,6 +96,7 @@ module.exports = function(grunt) {
                     'app/lib/modernizer.min.js',
                     'app/bower_components/jquery/jquery.min.js',
                     'app/bower_components/angular/angular.min.js',
+	                'app/lib/jquery.xdomainrequest.min.js',
                     'app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js'
                 ],
                 dest: '_dist/vendor/vendor.min.js'
