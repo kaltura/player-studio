@@ -444,11 +444,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 	};
 
-}]);
-
-KMCMenu.controller('PlayerCtrl', ['$scope','PlayerService', 'apiService', '$modal', '$location', 'localStorageService',
-	function ($scope, PlayerService, apiService, $modal, $location, localStorageService) {
-
 	$scope.backToList = function(){
 		if (!$scope.dataChanged) {
 			$location.url('/list');
