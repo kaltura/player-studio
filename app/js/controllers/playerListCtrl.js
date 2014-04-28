@@ -53,8 +53,8 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 });
             }
 
-	        // get KDP default XML
-	        PlayerService.getKDPConfig();
+			// get KDP default XML
+			PlayerService.getKDPConfig();
 
             // delete temp players if exists in cache (players that were created but not saved)
             if (localStorageService.get('tempPlayerID')) {
