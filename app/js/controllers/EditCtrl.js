@@ -146,6 +146,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    // for search - load all categories so we can display search results. use timeout to display the search screen before loading the categories (blocking code)
 	    if (category == "Menu Search"){
 		    $timeout(function(){
+			    $("#searchField").focus();
 			    for (var i=2; i<$scope.menuData.length; i++)
 				    if ($scope.menuData[i].pluginsNotLoaded !== undefined){
 					    $scope.menuData[i].plugins = angular.copy($scope.menuData[i].pluginsNotLoaded);
@@ -170,6 +171,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         $scope.templatesLoaded++;
         if ($scope.templatesLoaded == $scope.templatesToLoad){
 	        $scope.menuLoaded = true;
+	        $timeout(function(){
+		        $("#searchField").focus();
+	        },100);
+
             //$("#debugger").show();
         }
     });
