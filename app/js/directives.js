@@ -21,7 +21,8 @@ DirectivesModule.directive('onFinishRender', ['$timeout', function ($timeout) {
 		link: function (scope, element, attr) {
 			if (scope.$last === true) { // accordion section finished loading - init jQuery plugins after 3 seconds to allow menu items to render first
 				$timeout(function(){
-					$(".numeric").numeric({allowMinus: false, allowDecSep: false}); // set integer number fields to accept only numbers
+					$(".numeric").not(".allowNegative").numeric({allowMinus: false, allowDecSep: false}); // set integer number fields to accept only numbers
+					$(".allowNegative").numeric({allowMinus: true, allowDecSep: false}); // set integer number fields to accept only numbers
 					$(".float").numeric({allowMinus: false, allowDecSep: true});    // set float number fields to accept only floating numbers
 					$(".alpha").alphanum({allow:'-_=+,.!@#$%^&*(){}[]|?~\'',disallow: '"'});    // set float number fields to accept only floating numbers
 				},3000);
