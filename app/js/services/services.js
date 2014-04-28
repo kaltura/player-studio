@@ -328,6 +328,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 var deferred = $q.defer();
                 var data2Save = angular.copy(data.config);
                 data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
+	            // add Widevine support
+	            if (data2Save.plugins.widevine){
+		            data2Save.uiVars.flavorTags = 'widevine_mbr,mbr,web';
+	            }
                 var request = {
                     'service': 'uiConf',
                     'action': 'update',
