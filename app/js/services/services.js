@@ -73,6 +73,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
         var playerId = 'kVideoTarget';
         var currentRefresh = null;
         var nextRefresh = false;
+	    var kdpConfig = '';
         var defaultCallback = function() {
             playersService.refreshNeeded = false;
             currentRefresh.resolve(true);
@@ -166,6 +167,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                             'uiConf:tags': 'html5studio,player',
                             'uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
                             'uiConf:creationMode': 2,
+	                        'uiConf:confFile': kdpConfig,
                             'uiConf:config': angular.toJson(data)
                         };
                         apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
@@ -297,6 +299,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getDefaultConfig': function() {
                 return $http.get('js/services/defaultPlayer.json');
             },
+	        'getKDPConfig': function () {
+		        $http.get('js/services/kdp.xml').success(function (data, status, headers, config) {
+			        kdpConfig = data;
+		        });
+	        },
             "preparePluginsDataForRender": function(data) {
                 // clean data before save (remove _featureEnabled and objects that contain enabled recursively)
                 var copyobj = data.plugins || data;
