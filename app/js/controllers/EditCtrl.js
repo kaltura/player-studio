@@ -24,7 +24,22 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		// set default entry
 		$timeout(function(){
-			$scope.selectedEntry = localStorageService.get('defaultEntry') ? localStorageService.get('defaultEntry') : $scope.userEntries[0];
+			// get the preview entry: check if exists in cache and if so - check if exists in the entries list from server. If not found - use first entry from the list
+			if (localStorageService.get('defaultEntry')){
+				var previewEntry = localStorageService.get('defaultEntry');
+				var found = false;
+				for (var i=0; i<$scope.userEntries.length; i++){
+					if ($scope.userEntries[i].id == previewEntry.id){
+						found = true;
+						$scope.selectedEntry = previewEntry;
+					}
+				}
+				if (!found){
+					$scope.selectedEntry = $scope.userEntries[0];
+				}
+			}else{
+				$scope.selectedEntry = $scope.userEntries[0];
+			}
 		},0,true);
 	});
 	// set user entries select2 options and query
