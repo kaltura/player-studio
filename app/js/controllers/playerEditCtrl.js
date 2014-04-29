@@ -37,30 +37,30 @@ angular.module('KMCModule').controller('PlayerEditCtrl',
                             $scope.userEntriesList.push({'id': value.id, 'text': value.name});
                     });
 
-                    // get the preview entry: check if exists in cache and if so - check if exists in the entries list from server. If not found - use first entry from the list
-	                if (PlayerService.getPreviewEntry()){
-		                var previewEntry = PlayerService.getPreviewEntry();
-		                var found = false;
-		                for (var i=0; i<$scope.userEntriesList.length; i++){
-			                if ($scope.userEntriesList[i].id == previewEntry.id){
-				                found = true;
-				                $scope.settings.previewEntry = previewEntry;
-			                }
-		                }
-		                if (!found){
-			                $scope.settings.previewEntry = $scope.userEntriesList[0];
-		                }
-	                }else{
-		                $scope.settings.previewEntry = $scope.userEntriesList[0];
-	                }
+			// get the preview entry: check if exists in cache and if so - check if exists in the entries list from server. If not found - use first entry from the list
+			if (PlayerService.getPreviewEntry()) {
+				var previewEntry = PlayerService.getPreviewEntry();
+				var found = false;
+				for (var i = 0; i < $scope.userEntriesList.length; i++) {
+					if ($scope.userEntriesList[i].id == previewEntry.id) {
+						found = true;
+						$scope.settings.previewEntry = previewEntry;
+					}
+				}
+				if (!found) {
+					$scope.settings.previewEntry = $scope.userEntriesList[0];
+				}
+			} else {
+				$scope.settings.previewEntry = $scope.userEntriesList[0];
+			}
 
-                    PlayerService.setPreviewEntry($scope.settings.previewEntry);
-                    // render the player for the first time
-                    PlayerService.playerRefresh().then(function() {
-                        menuSvc.menuScope.playerInitDone = true;
-                    });
-                });
-            }, 200);
+			PlayerService.setPreviewEntry($scope.settings.previewEntry);
+			// render the player for the first time
+			PlayerService.playerRefresh().then(function() {
+			menuSvc.menuScope.playerInitDone = true;
+			});
+			});
+			}, 200);
 
 
             /* set tags
