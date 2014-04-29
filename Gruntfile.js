@@ -194,6 +194,10 @@ module.exports = function(grunt) {
                         src: 'app/js/services/defaultPlayer.json',
                         dest: '_dist/js/services/defaultPlayer.json'
                     },
+	                {
+		                src: 'app/js/services/kdp.xml',
+		                dest: '_dist/js/services/kdp.xml'
+	                },
                     { // IE8 fix
                         src: 'app/template/menu/menuPage.html',
                         dest: '_dist/template/menu/menuPage.html'
