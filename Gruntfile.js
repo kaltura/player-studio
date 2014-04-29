@@ -183,9 +183,13 @@ module.exports = function(grunt) {
                         src: 'app/bower_components/select2/select2-spinner.gif',
                         dest: '_dist/css/select2-spinner.gif'
                     },
-                    { // dev only
+                    {
                         src: 'app/js/services/defaultPlayer.json',
                         dest: '_dist/js/services/defaultPlayer.json'
+                    },
+	                {
+                        src: 'app/js/services/kdp.xml',
+                        dest: '_dist/js/services/kdp.xml'
                     },
                     {
                         expand: true,
