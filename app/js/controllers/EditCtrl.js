@@ -90,15 +90,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         for (var cat in data){
             categoryIndex++;             // used for search indexing
             $scope.templatesToLoad += 2; // for each category we load 2 templates: one for the icon and one for the data
-            var category = {'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon};
+            var category = {'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon, properties:[]};
             var plugs = data[cat].children;
             if (plugs.length !== undefined){
                 // array means properties and not nested plugins - we can add the templates for the properties directly
-                category.properties = [];
                 for (var pl=0; pl<plugs.length; pl++){
-                    $scope.templatesToLoad++;
-                    $scope.propertiesSearch.push({'label':plugs[pl].label,'categoryIndex':categoryIndex, 'accIndex': -1, 'id': 'prop'+$scope.templatesToLoad});  // search indexing
-                    category.properties.push($.extend(plugs[pl],{'id':'prop'+$scope.templatesToLoad}));
+	                $scope.addPropertyToCategory(category, categoryIndex, plugs[pl]);
                 }
             }else{
                 // nested plugins - create an accordion for the plugins
@@ -107,6 +104,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 for (var plug in plugs){
                     pluginIndex++;
                     var p = plugs[plug];
+	                if (p.children === undefined){ // this is a flat object like a Flashvar and not a plugin
+		                $scope.addPropertyToCategory(category, categoryIndex, p);
+		                continue;
+	                }
                     $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
                     var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
                     plugin.properties = [];
@@ -154,6 +155,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    requestNotificationChannel.requestEnded('edit'); // hide spinner
 	    $scope.refreshPlayer();
     });
+
+	$scope.addPropertyToCategory = function(category, categoryIndex, property)	{
+		$scope.templatesToLoad++;
+		$scope.propertiesSearch.push({'label':property.label,'categoryIndex':categoryIndex, 'accIndex': -1, 'id': 'prop'+$scope.templatesToLoad});  // search indexing
+		category.properties.push($.extend(property,{'id':'prop'+$scope.templatesToLoad}));
+	};
 
     // set selected category when clicking on a category icon
     $scope.categorySelected = function(category){
@@ -356,16 +363,20 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.getPlayerProperties(properties);
 			}else{ // plugin
 				for (var plug in properties){
-					// save plugin name in a model
-					properties[plug].model = plug;
-					// check plugin enabled
-					if ($scope.playerData.config.plugins[plug]){
-						properties[plug].enabled = true;
-					}else{
-						properties[plug].enabled = false;
+					if (properties[plug].children){
+						// save plugin name in a model
+						properties[plug].model = plug;
+						// check plugin enabled
+						if ($scope.playerData.config.plugins[plug]){
+							properties[plug].enabled = true;
+						}else{
+							properties[plug].enabled = false;
+						}
+						// get plugin properties from player data
+						$scope.getPlayerProperties(properties[plug].children);
+					}else{ // Flashvar
+						$scope.getPlayerProperties([properties[plug]]);
 					}
-					// get plugin properties from player data
-					$scope.getPlayerProperties(properties[plug].children);
 				}
 			}
 		}
@@ -410,7 +421,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		for (var category=1; category < $scope.menuData.length; category++){ // we start at index=1 to skip the search category
 			if ($scope.menuData[category].properties !== undefined){ // flat properties: basic properties
 				$scope.setPlayerProperties($scope.menuData[category].properties);
-			}else{ // plugins
+			}
+			if ($scope.menuData[category]['plugins'] !== undefined || $scope.menuData[category]['pluginsNotLoaded'] !== undefined){ // plugins
 				var pluginsStr = $scope.menuData[category]['plugins'] !== undefined ? 'plugins' : 'pluginsNotLoaded'; // support plugins that we didn't render the menu for yet
 				for (var plug=0; plug < $scope.menuData[category][pluginsStr].length; plug++)
 					if ($scope.menuData[category][pluginsStr][plug].enabled === true) {// get only enabled plugins
