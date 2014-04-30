@@ -24,7 +24,7 @@ DirectivesModule.directive('onFinishRender', ['$timeout', function ($timeout) {
 					$(".numeric").not(".allowNegative").numeric({allowMinus: false, allowDecSep: false}); // set integer number fields to accept only numbers
 					$(".allowNegative").numeric({allowMinus: true, allowDecSep: false}); // set integer number fields to accept only numbers
 					$(".float").numeric({allowMinus: false, allowDecSep: true});    // set float number fields to accept only floating numbers
-					$(".alpha").alphanum({allow:'-_=+,.!@#$%^&*(){}[]|?~\'',disallow: '"'});    // set float number fields to accept only floating numbers
+					$(".alpha").alphanum({allow:'-_=+,.!:/@#$%^&*(){}[]|?~\'',disallow: '"'});    // set float number fields to accept only floating numbers
 				},3000);
 			}
 		}
