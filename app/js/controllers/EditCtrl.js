@@ -92,57 +92,51 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             $scope.templatesToLoad += 2; // for each category we load 2 templates: one for the icon and one for the data
             var category = {'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon, properties:[]};
             var plugs = data[cat].children;
-            if (plugs.length !== undefined){
-                // array means properties and not nested plugins - we can add the templates for the properties directly
-                for (var pl=0; pl<plugs.length; pl++){
-	                $scope.addPropertyToCategory(category, categoryIndex, plugs[pl]);
-                }
-            }else{
-                // nested plugins - create an accordion for the plugins
-                var plugins = [];
-                var pluginIndex = -1; // for search indexing
-                for (var plug in plugs){
-                    pluginIndex++;
-                    var p = plugs[plug];
-	                if (p.children === undefined){ // this is a flat object like a Flashvar and not a plugin
-		                $scope.addPropertyToCategory(category, categoryIndex, p);
-		                continue;
-	                }
-                    $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-                    var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
-                    plugin.properties = [];
-                    // check for tabs
+
+            var plugins = [];
+            var pluginIndex = -1; // for search indexing
+            for (var plug in plugs){
+                var p = plugs[plug];
+                if (p.children === undefined){ // this is a flat object like a Flashvar and not a plugin
+	                $scope.addPropertyToCategory(category, categoryIndex, p);
+                }else{
+	                pluginIndex++;
+	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
+	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
+	                plugin.properties = [];
+	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
-                    if (p.sections){ // tabs found - create tabs
-                        $scope.templatesToLoad++; // count tabs template
-                        for (var tab=0; tab < p.sections.tabset.length; tab++){
-                            tabObj.children.push(p.sections.tabset[tab]);
-                        }
-                    }
-                    for (var i=0; i<p.children.length; i++){
+	                if (p.sections){ // tabs found - create tabs
+	                    $scope.templatesToLoad++; // count tabs template
+	                    for (var tab=0; tab < p.sections.tabset.length; tab++){
+	                        tabObj.children.push(p.sections.tabset[tab]);
+	                    }
+	                }
+	                for (var i=0; i<p.children.length; i++){
 	                    if (p.children[i].filter !== undefined) // apply filter if exists
 		                    p.children[i].initvalue = $scope.getFilter(p.children[i].initvalue, p.children[i].filter);
 
-                        $scope.templatesToLoad++;
-                        if (p.sections && p.children[i].section){ // property should be put in the correct tab
+	                    $scope.templatesToLoad++;
+	                    if (p.sections && p.children[i].section){ // property should be put in the correct tab
 	                        for (var t=0; t < tabObj.children.length; t++){
-                                if (p.children[i].section == tabObj.children[t].key){
-                                    tabObj.children[t].children.push($.extend(p.children[i],{'id':'prop'+$scope.templatesToLoad}));
-                                    $scope.propertiesSearch.push({'label':p.children[i].label + ' ('+ p.label +')','categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'tabIndex': t, 'id': 'prop'+$scope.templatesToLoad}); // add property to search indexing
-                                }
-                            }
-                        } else { // no tabs - add property to the plugin root
-                            $scope.propertiesSearch.push({'label':p.children[i].label + ' ('+ p.label +')','categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'prop'+$scope.templatesToLoad}); // add property to search indexing
-                            plugin.properties.push($.extend(p.children[i],{'id':'prop'+$scope.templatesToLoad}));
-                        }
-                    }
-                    if (p.sections){ // add tabs object
-                        plugin.properties.push(tabObj);
-                    }
-                    plugins.push(plugin);
+	                            if (p.children[i].section == tabObj.children[t].key){
+	                                tabObj.children[t].children.push($.extend(p.children[i],{'id':'prop'+$scope.templatesToLoad}));
+	                                $scope.propertiesSearch.push({'label':p.children[i].label + ' ('+ p.label +')','categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'tabIndex': t, 'id': 'prop'+$scope.templatesToLoad}); // add property to search indexing
+	                            }
+	                        }
+	                    } else { // no tabs - add property to the plugin root
+	                        $scope.propertiesSearch.push({'label':p.children[i].label + ' ('+ p.label +')','categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'prop'+$scope.templatesToLoad}); // add property to search indexing
+	                        plugin.properties.push($.extend(p.children[i],{'id':'prop'+$scope.templatesToLoad}));
+	                    }
+	                }
+	                if (p.sections){ // add tabs object
+	                    plugin.properties.push(tabObj);
+	                }
+	                plugins.push(plugin);
                 }
-                category.plugins = plugins;
             }
+            category.plugins = plugins;
+
             $scope.menuData.push(category);
         }
 
