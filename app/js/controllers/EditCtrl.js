@@ -99,7 +99,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 var p = plugs[plug];
                 if (p.children === undefined){ // this is a flat object like a Flashvar and not a plugin
 	                $scope.addPropertyToCategory(category, categoryIndex, p);
-                }else{
+                }else{ // plugin
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
 	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
