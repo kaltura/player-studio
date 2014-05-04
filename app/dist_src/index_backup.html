@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html id="ng-app" lang="en" ng-app="KMCModule" xmlns:ng="http://angularjs.org">
+<script type="text/javascript">
+	window.ie8 = false;
+</script>
+<!--[if gte IE 8]>
+<script type="text/javascript">
+	window.ie8 = true;
+</script>
+<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,12 +31,8 @@
     </script>
     <!--[if lt IE 9]>
 	<script type="text/javascript">
-		if (window.localStorage.getItem('updateHash') == null || window.localStorage.getItem('updateHash') == "true"){
-			window.localStorage.setItem('updateHash', "false");
-			window.location.hash = window.location.hash;
-		}
+		document.location = "ie8.html";
 	</script>
-    <script type="text/javascript" src="vendor/vendorOld.min.js"></script>
     <![endif]-->
     <!--[if gte IE 9]><!-->
     <!-- min vendor lib -->
@@ -44,8 +48,8 @@
     <![endif]-->
 
     <!--  app stylesheet-->
-    <link rel="stylesheet" href="css/studio.css"/>
     <link rel="stylesheet" href="css/vendor.css"/>
+	<link rel="stylesheet" href="css/studio.css"/>
 
     <!-- min extrnal lib -->
     <script type="text/javascript" src="lib/libs.js"></script>
@@ -59,8 +63,8 @@
 </head>
 <body id="{{routeName}}">
 <div class="kmcSubNav">
-	<a class='btn' href="javascript:navigateToFlashStudio()">Flash Studio</a>
-	<a class='btn active' href="index.html">Universal Studio</a>
+	<a id="flashStudioBtn" class='btn' href="javascript:navigateToFlashStudio()">Flash Studio</a>
+	<a id="htmlStudioBtn" class='btn active' href="index.html">Universal Studio</a>
 </div>
 <loading-widget></loading-widget>
 <div class="section relative" ng-view></div>
