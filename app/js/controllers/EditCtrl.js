@@ -380,7 +380,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		for (var i=0; i<properties.length; i++){
 			if (properties[i].model && properties[i].model.indexOf("~")==-1){
 				var dataForModel = $scope.getDataForModel($scope.playerData, properties[i].model, properties[i].filter);
-				if (dataForModel !== false){
+				if (dataForModel !== null){
 					properties[i].initvalue = dataForModel;
 				}
 			}
@@ -394,10 +394,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if (val[modelArr[i]] !== undefined){
 				val = val[modelArr[i]];
 			}else{
-				return false;
+				return null;
 			}
 		}
-		return filter ?  $scope.getFilter(val, filter) : val;
+		return filter !== undefined ?  $scope.getFilter(val, filter) : val;
 	};
 
 	$scope.getFilter = function(val, filter){
