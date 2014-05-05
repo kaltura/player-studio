@@ -152,30 +152,53 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 var deferred = $q.defer();
                 playersService.getDefaultConfig().
                     success(function(data, status, headers, config) {
-                        var request = {
-                            'service': 'uiConf',
-                            'action': 'add',
-                            'uiConf:objectType': 'KalturaUiConf',
-                            'uiConf:objType': 1,
-                            'uiConf:description': '',
-                            'uiConf:height': '395',
-                            'uiConf:width': '560',
-                            'uiConf:swfUrl': '/flash/kdp3/v3.9.8/kdp3.swf',
-                            'uiConf:fUrlVersion': '3.9.8',
-                            'uiConf:version': '161',
-                            'uiConf:name': 'New Player',
-                            'uiConf:tags': 'html5studio,player',
-                            'uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
-                            'uiConf:creationMode': 2,
-	                        'uiConf:confFile': kdpConfig,
-                            'uiConf:config': angular.toJson(data)
-                        };
+		                var request;
+		                // under KMC - clone the default KMC player and update it
+		                if (window.kmc && window.kmc.vars && window.kmc.vars.default_kdp){
+			                request = {
+				                service: 'multirequest',
+				                'action': null,
+				                '1:service': 'uiconf',
+				                '1:action': 'clone',
+				                '1:id': window.kmc.vars.default_kdp.id,
+				                '2:service': 'uiconf',
+				                '2:action': 'update',
+				                '2:id': '{1:result:id}',
+				                '2:uiConf:name': 'New Player',
+				                '2:uiConf:objectType': 'KalturaUiConf',
+				                '2:uiConf:objType': 1,
+				                '2:uiConf:tags': 'html5studio,player',
+				                '2:uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
+				                '2:uiConf:creationMode': 2,
+				                '2:uiConf:config': angular.toJson(data)
+			                };
+		                }else{ // for stand alone studio - create a new player from scratch. Not working on IE9 and IE8 due to long query string
+	                        request = {
+	                            'service': 'uiConf',
+	                            'action': 'add',
+	                            'uiConf:objectType': 'KalturaUiConf',
+	                            'uiConf:objType': 1,
+	                            'uiConf:description': '',
+	                            'uiConf:height': '395',
+				                'uiConf:width': '560',
+				                'uiConf:swfUrl': '/flash/kdp3/v3.9.8/kdp3.swf',
+				                'uiConf:fUrlVersion': '3.9.8',
+				                'uiConf:version': '161',
+				                'uiConf:name': 'New Player',
+				                'uiConf:tags': 'html5studio,player',
+				                'uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
+				                'uiConf:creationMode': 2,
+				                'uiConf:confFile': kdpConfig,
+				                'uiConf:config': angular.toJson(data)
+			                };
+		                };
                         apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
                         apiService.doRequest(request).then(function(data) {
-                            playersService.setCurrentPlayer(data);
+	                        var playerData = $.isArray(data) ? data[1] : data; // when using kmc.vars.default_kdp.id we get an array because of the multi request
+	                        playersService.setCurrentPlayer(playerData);
                             apiService.setCache(true); // restore cache usage
-                            localStorageService.set('tempPlayerID', data.id);
-                            deferred.resolve(data);
+                            localStorageService.set('tempPlayerID', playerData.id);
+                            deferred.resolve(playerData);
                         }, function(reason) {
                             deferred.reject(reason);
                         });
