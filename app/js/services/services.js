@@ -191,7 +191,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				                'uiConf:confFile': kdpConfig,
 				                'uiConf:config': angular.toJson(data)
 			                };
-		                };
+		                }
                         apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
                         apiService.doRequest(request).then(function(data) {
 	                        var playerData = $.isArray(data) ? data[1] : data; // when using kmc.vars.default_kdp.id we get an array because of the multi request
