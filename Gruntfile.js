@@ -176,9 +176,13 @@ module.exports = function(grunt) {
                         dest: '_dist/vendor/'
                     },
                     {
-                        src: 'app/bower_components/select2/select2.png',
-                        dest: '_dist/css/select2.png'
+                        src: 'app/bower_components/select2/select2x2.png',
+                        dest: '_dist/css/select2x2.png'
                     },
+	                {
+		                src: 'app/bower_components/select2/select2.png',
+		                dest: '_dist/css/select2.png'
+	                },
                     {
                         src: 'app/bower_components/select2/select2-spinner.gif',
                         dest: '_dist/css/select2-spinner.gif'
