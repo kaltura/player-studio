@@ -691,6 +691,8 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
         listMedia: function() {
             var request = {
                 'service': 'baseentry',
+	            'filter:mediaTypeIn': '1,2,5,6,201', // copied from KMC search
+	            'filter:objectType': 'KalturaMediaEntryFilter',
                 'action': 'list'
 
             };
