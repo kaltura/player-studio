@@ -709,6 +709,27 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location' , 'local
             };
             return apiService.doRequest(request, true);
         },
+	    listPlaylists: function() {
+		    var request = {
+			    'service': 'baseentry',
+			    'filter:objectType':'KalturaBaseEntryFilter',
+			    'filter:typeEqual': '5',
+			    'action': 'list'
+
+		    };
+		    return apiService.doRequest(request);
+	    },
+	    searchPlaylists: function(term) {
+		    var request = {
+			    'service': 'baseentry',
+			    'action': 'list',
+			    'filter:freeText': term,
+			    'filter:objectType':'KalturaBaseEntryFilter',
+			    'filter:typeEqual': '5',
+			    ignoreNull: '1'
+		    };
+		    return apiService.doRequest(request, true);
+	    },
         useCache: true,
         setCache: function(useCache) {
             apiService.useCache = useCache;
