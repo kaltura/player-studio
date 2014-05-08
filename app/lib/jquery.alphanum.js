@@ -58,7 +58,7 @@
 		allowLower         : true,  // Allow lower case characters
 		allowCaseless      : true,  // Allow characters that don't have both upper & lower variants - eg Arabic or Chinese
 		allowLatin         : true,  // a-z A-Z
-		allowOtherCharSets : true,  // eg é, Á, Arabic, Chinese etc
+		allowOtherCharSets : true,  // eg ï¿½, ï¿½, Arabic, Chinese etc
 		forceUpper         : false, // Convert lower case characters to upper case
 		forceLower         : false, // Convert upper case characters to lower case
 		maxLength          : NaN    // eg Max Length
@@ -132,10 +132,10 @@
 	// Not too worried about comments containing higher order characters for now (let's wait and see if it becomes a problem)
 	function getBlacklistNonAscii(){
 		var blacklist = 
-			  "\xAC"     // ¬
-			+ "\u20AC"   // €
-			+ "\xA3"     // £
-			+ "\xA6"     // ¦
+			  "\xAC"     // ï¿½
+			+ "\u20AC"   // ï¿½
+			+ "\xA3"     // ï¿½
+			+ "\xA6"     // ï¿½
 			;
 		return blacklist;
 	}
@@ -161,6 +161,7 @@
 				// setTimeout is necessary for handling the 'paste' event
 				setTimeout(function(){
 					trimTextbox($textbox, trimFunction, settings, pastedText);
+					$textbox.trigger("change");
 				}, 0);
 			});
 
