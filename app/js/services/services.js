@@ -13,6 +13,45 @@ KMCServices.factory('apiCache', function($cacheFactory) {
     });
 });
 
+KMCServices.factory('select2Svc', function($timeout) {
+	var select2Svc = {
+		'getConfig' : function(entries, searchFunc){
+			var confObj = {
+				allowClear: false,
+				width: '100%',
+				initSelection : function (element, callback) {
+					callback($(element).data('$ngModelController').$modelValue);
+				},
+				query: function (query) {
+					var timeVar = null;
+					var data = {results: []};
+					if (query.term) {
+						if (timeVar) {
+							$timeout.cancel(timeVar);
+						}
+						timeVar = $timeout(function() {
+							searchFunc(query.term).then(function(results) {
+								angular.forEach(results.objects, function(entry) {
+									data.results.push({id: entry.id, text: entry.name});
+								});
+								timeVar = null;
+								return query.callback(data);
+							});
+						}, 200);
+					}
+					else{
+						return query.callback({results: entries});
+					}
+					query.callback(data);
+				}
+			};
+			return confObj;
+		}
+	};
+	return select2Svc;
+});
+
+
 KMCServices.factory('sortSvc', [function() {
     var containers = {};
     var sorter = {};

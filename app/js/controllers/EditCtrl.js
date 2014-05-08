@@ -1,7 +1,7 @@
 var KMCMenu = angular.module('KMCmenu', ['ui.bootstrap', 'ngSanitize', 'ui.select2', 'angularSpectrumColorpicker']);
 
-KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', '$location','requestNotificationChannel',
-	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, $location, requestNotificationChannel) {
+KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', '$location','requestNotificationChannel', 'select2Svc',
+	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, $location, requestNotificationChannel, select2Svc) {
 
 	$scope.playerData = angular.copy(PlayerData);   // get the player data
     $scope.isIE8 = window.ie8;                      // set IE8 flash for color picker
@@ -42,36 +42,16 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}
 		},0,true);
 	});
-	// set user entries select2 options and query
-	$scope.entriesSelectBox = {
-		allowClear: true,
-		width: '100%',
-		initSelection : function (element, callback) {
-			callback($(element).data('$ngModelController').$modelValue);
-		},
-		query: function (query) {
-			var timeVar = null;
-			var data = {results: []};
-			if (query.term) {
-				if (timeVar) {
-					$timeout.cancel(timeVar);
-				}
-				timeVar = $timeout(function() {
-					apiService.searchMedia(query.term).then(function(results) {
-						angular.forEach(results.objects, function(entry) {
-							data.results.push({id: entry.id, text: entry.name});
-						});
-						timeVar = null;
-						return query.callback(data);
-					});
-				}, 200);
-			}
-			else{
-				return query.callback({results: $scope.userEntries});
-			}
-			query.callback(data);
+	$scope.entriesSelectBox = select2Svc.getConfig($scope.userEntries, apiService.searchMedia); // set user entries select2 options and query
+
+	// load user playlists data
+	$scope.userPlaylists = [];
+	apiService.listPlaylists().then(function(data) {
+		for (var i=0; i < data.objects.length; i++){
+			$scope.userPlaylists.push({'id': data.objects[i].id, 'text': data.objects[i].name});
 		}
-	};
+	});
+	$scope.playlistSelectBox = select2Svc.getConfig($scope.userPlaylists, apiService.searchPlaylists); // set user playlists select2 options and query
 
     // load menu data and parse it
     editableProperties.then(function(data) {
@@ -89,7 +69,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
         for (var cat in data){
             categoryIndex++;             // used for search indexing
-            $scope.templatesToLoad += 2; // for each category we load 2 templates: one for the icon and one for the data
+            //$scope.templatesToLoad += 2; // for each category we load 2 templates: one for the icon and one for the data. currently removed to support IE8
             var category = {'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon, properties:[]};
             var plugs = data[cat].children;
 
