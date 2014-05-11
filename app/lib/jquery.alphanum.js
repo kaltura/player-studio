@@ -161,7 +161,8 @@
 				// setTimeout is necessary for handling the 'paste' event
 				setTimeout(function(){
 					trimTextbox($textbox, trimFunction, settings, pastedText);
-					$textbox.trigger("change");
+					if (pastedText != "")
+						$textbox.trigger("change");
 				}, 0);
 			});
 
