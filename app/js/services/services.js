@@ -439,12 +439,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         delete data.vars['ks'];
                     }
 // set an api request to update the uiconf
+		            var playerTag =  playerObj.tags.indexOf("playlist") != -1 ? "playlist" : "player"; // set player tag to player or playlist according to the original player tag
                     var request = {
                         'service': 'uiConf',
                         'action': 'update',
-                        'id': playerObj.id,                    // the id of the player to update
-                        'uiConf:tags': 'html5studio,player',   // update tags to prevent breaking the old studio which looks for the tag kdp3
-                        'uiConf:html5Url': html5lib,           // update the html5 lib to the new version
+                        'id': playerObj.id,                        // the id of the player to update
+                        'uiConf:tags': 'html5studio,' + playerTag, // update tags to prevent breaking the old studio which looks for the tag kdp3
+                        'uiConf:html5Url': html5lib,               // update the html5 lib to the new version
                         'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
                     };
                     apiService.doRequest(request).then(function(result) {
