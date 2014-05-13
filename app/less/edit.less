@@ -1,9 +1,10 @@
 .menu{
   width: 440px;
-  height: 95%;
+  height: 100%;
   position: fixed;
   background-color: #f3f2ee;
-  box-shadow: 3px 3px 2px #888888;
+  /*box-shadow: 3px 3px 2px #888888;*/
+  border-right: 1px solid #cccccc;
 }
 
 .categories{
@@ -208,20 +209,40 @@ a:hover{
   padding-right: 100px;
   height: 100%
 }
-@media all and (max-width: 1170px){
+.menuFooter{
+  position: absolute;
+  width: 390px;
+  margin-left: 50px;
+  height: 1px;
+  bottom: 33px;
+  background-color: #cccccc
+}
+@media all and (max-width: 1070px){
   .previewArea .btn{
 	font-size: 10px;
   }
   .autoPreview{
 	font-size: 11px;
   }
+  .previewArea{
+	margin-left: 460px;
+	padding-top: 10px;
+	padding-right: 10px;
+	height: 100%
+  }
 }
-@media all and (max-width: 1260px) and (min-width: 1171px){
+@media all and (max-width: 1260px) and (min-width: 1071px){
   .previewArea .btn{
 	font-size: 11px;
   }
   .autoPreview{
 	font-size: 12px;
+  }
+  .previewArea{
+	margin-left: 500px;
+	padding-top: 10px;
+	padding-right: 50px;
+	height: 100%
   }
 }
 /*
