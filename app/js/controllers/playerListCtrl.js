@@ -286,6 +286,9 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                             player.html5Url = html5lib;
                             player.tags = 'html5studio,player';
                             upgradeProccess.resolve('upgrade finished successfully');
+	                        if ($("#kcms",parent.document).length > 0){
+	                            $("#kcms",parent.document)[0].refreshPlayersList(); // trigger players list refresh on KMC
+	                        }
                         }, function(reason) {
                             $modal.open({ templateUrl: 'templates/message.html',
                                 controller: 'ModalInstanceCtrl',
