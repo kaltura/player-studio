@@ -252,7 +252,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     });
 	var kmc = window.parent.kmc;
     if (kmc && kmc.vars.studio.showFlashStudio === false){
-        $("#flashStudioBtn").hide();
+        $(".kmcSubNav").hide();
     }
     if (kmc && kmc.vars.studio.showHTMLStudio === false){
         $("#htmlStudioBtn").hide();

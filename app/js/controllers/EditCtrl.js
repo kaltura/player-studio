@@ -14,7 +14,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.setAutoPreview = function(){
 		localStorageService.set('autoPreview', !$scope.autoPreview);
 	};
-
+	if (window.parent.kmc && window.parent.kmc.vars.studio.showFlashStudio === false){
+		$(".menuFooter").css("bottom","1px");
+	}
     // load user entries data
     $scope.userEntries = [];
 	$scope.selectedEntry = '';
