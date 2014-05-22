@@ -333,6 +333,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
+		// create uiVars objects from flattened object
+		for (var uivar in $scope.playerData.config.uiVars){
+			if (uivar.indexOf(".") !== -1){
+				$scope.playerData.config.uiVars[uivar.split(".")[0]]= {"enabled" :true};
+				$scope.playerData.config.uiVars[uivar.split(".")[0]][uivar.split(".")[1]] = $scope.playerData.config.uiVars[uivar];
+				delete $scope.playerData.config.uiVars[uivar];
+			}
+		}
 		for (var cat in data){
 			var properties = data[cat].children;
 			if ($.isArray(properties)){ // flat properties for basic display
@@ -404,6 +412,21 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					if ($scope.menuData[category][pluginsStr][plug].enabled === true) {// get only enabled plugins
 						$scope.setPlayerProperties($scope.menuData[category][pluginsStr][plug].properties);
 					}
+			}
+		}
+
+		// flatten nested UIVars
+		for (var uivar in $scope.playerData.config.uiVars){
+			if (typeof $scope.playerData.config.uiVars[uivar] === "object"){
+				var updatedUiVar, uiVarValue;
+				for (var prop in $scope.playerData.config.uiVars[uivar]){
+					if (prop!="enabled"){
+						updatedUiVar = uivar + "." + prop;
+						uiVarValue = $scope.playerData.config.uiVars[uivar][prop];
+					}
+				}
+				delete $scope.playerData.config.uiVars[uivar];
+				$scope.playerData.config.uiVars[updatedUiVar] = uiVarValue;
 			}
 		}
 	};
