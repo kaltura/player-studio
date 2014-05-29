@@ -51,6 +51,24 @@ KMCServices.factory('select2Svc', function($timeout) {
 	return select2Svc;
 });
 
+KMCServices.factory('utilsSvc', function() {
+	var utilsSvc = {
+		'str2val' : function(str){
+			if (typeof str !== "string")
+				return str;
+
+			var retVal = str;
+			if (str.toLowerCase() === "true")
+				retVal = true;
+			if (str.toLowerCase() === "false")
+				retVal = false;
+			if (!isNaN(parseFloat(str)) && parseFloat(str).toString().length === str.length)
+				retVal = parseFloat(str);
+			return retVal;
+		}
+	};
+	return utilsSvc;
+});
 
 KMCServices.factory('sortSvc', [function() {
     var containers = {};

@@ -1,7 +1,7 @@
 var KMCMenu = angular.module('KMCmenu', ['ui.bootstrap', 'ngSanitize', 'ui.select2', 'angularSpectrumColorpicker']);
 
-KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', '$location','requestNotificationChannel', 'select2Svc',
-	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, $location, requestNotificationChannel, select2Svc) {
+KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', '$location','requestNotificationChannel', 'select2Svc', 'utilsSvc',
+	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, $location, requestNotificationChannel, select2Svc, utilsSvc) {
 
 	$scope.playerData = angular.copy(PlayerData);   // get the player data
     $scope.isIE8 = window.ie8;                      // set IE8 flash for color picker
@@ -333,6 +333,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
+
+		// set editable uivars list
+		$scope.excludedUiVars = ['autoPlay', 'autoMute', 'mediaProxy.preferedFlavorBR', 'adsOnReplay']; // these uiVars are already in the menu, do not list them
+		$scope.playerData.vars = [];
+		for (var uivar in $scope.playerData.config.uiVars){
+			if ($scope.excludedUiVars.indexOf(uivar) === -1)
+				$scope.playerData.vars.push({'label':uivar, 'value': $scope.playerData.config.uiVars[uivar]});
+		}
+
 		// create uiVars objects from flattened object
 		for (var uivar in $scope.playerData.config.uiVars){
 			if (uivar.indexOf(".") !== -1){
@@ -341,6 +350,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				delete $scope.playerData.config.uiVars[uivar];
 			}
 		}
+
 		for (var cat in data){
 			var properties = data[cat].children;
 			if ($.isArray(properties)){ // flat properties for basic display
@@ -351,7 +361,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
-						if ($scope.playerData.config.plugins[plug]){
+						if ($scope.playerData.config.plugins[plug] || plug == "uiVars"){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
@@ -429,6 +439,26 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.playerData.config.uiVars[updatedUiVar] = uiVarValue;
 			}
 		}
+
+		// merge updates ui vars data
+		for (var i=0; i < $scope.playerData.vars.length; i++){
+			if ($scope.excludedUiVars.indexOf($scope.playerData.vars[i].label) === -1) // don't update uiVars that are already in the menu on other places
+				$scope.playerData.config.uiVars[$scope.playerData.vars[i].label] = utilsSvc.str2val($scope.playerData.vars[i].value);
+		}
+
+		// remove unused ui vars: deleted / renamed by user
+		for (var uivar in $scope.playerData.config.uiVars){
+			var found = false;
+			if ($scope.excludedUiVars.indexOf(uivar) !== -1)
+				found = true;
+			for (var i=0; i < $scope.playerData.vars.length; i++){
+				if ($scope.playerData.vars[i].label === uivar)
+					found = true;
+			}
+			if (!found)
+				delete $scope.playerData.config.uiVars[uivar];
+		}
+
 	};
 
 	$scope.setPlayerProperties = function(properties){

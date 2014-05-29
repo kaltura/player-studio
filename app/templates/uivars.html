@@ -1,0 +1,31 @@
+<div class="text">
+	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
+	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i><br>
+	<!--ul style="padding-left: 15px; margin-top: 15px">
+		<li ng-repeat="item in property.initvalue" style="padding-top: 5px">
+			<span class="categoryDesc" ng-class="{disabled: plugin!=null && !plugin.enabled}">Key:&nbsp;<input type="text" class="alpha" on-finish-render ng-model="item.label" style="width: 140px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')">&nbsp;Value:&nbsp;<input type="text" ng-model="item.value" on-finish-render style="width: 50px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')">
+			<a href ng-click="property.initvalue.splice($index, 1);propertyChanged(property, true)" tooltip="Remove variable">&nbsp;[X]</a></span>
+		</li>
+		<li>
+			<a href ng-click="property.initvalue.push({'label':''});propertyChanged(property, true)" tooltip="Add a new variable">[add]</a>
+		</li>
+	</ul-->
+	<br><table style="margin-bottom: 10px">
+		<thead>
+			<tr class="pluginLabel">
+				<th>Key</th>
+				<th>Value</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in property.initvalue" style="line-height: 36px">
+				<td style="width: 180px"><input type="text" style="width: 160px" class="alpha" on-finish-render ng-model="item.label"  ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
+				<td style="width: 90px"><input type="text" style="width: 80px" ng-model="item.value" on-finish-render  ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
+				<td style="width: 20px"><a href ng-click="property.initvalue.splice($index, 1);propertyChanged(property, true)" tooltip="Remove variable">[X]</a></span></td>
+			</tr>
+		</tbody>
+	</table>
+	<a href ng-click="property.initvalue.push({'label':''});propertyChanged(property, true)" tooltip="Add a new variable">[add]</a>
+	<hr bind-once ng-if="property.endline">
+</div>
