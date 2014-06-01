@@ -1,17 +1,6 @@
 <div class="text">
 	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i><br>
-	<!--ul style="padding-left: 15px; margin-top: 15px">
-		<li ng-repeat="item in property.initvalue" style="padding-top: 5px">
-			<span class="categoryDesc" ng-class="{disabled: plugin!=null && !plugin.enabled}">Div ID:&nbsp;<input type="text" class="alpha" on-finish-render ng-model="item.label" style="width: 100px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')">&nbsp;W:&nbsp;<input class="numeric" type="text" ng-model="item.width" on-finish-render style="width: 35px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')">&nbsp;H:&nbsp;<input class="numeric" type="text" on-finish-render ng-model="item.height" style="width: 35px" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')">
-			<a ng-if="plugin!=null && plugin.enabled" href ng-click="property.initvalue.splice($index, 1);propertyChanged(property, true)" >&nbsp;[X]</a></span>
-			<span class="categoryDesc" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-if="plugin!=null && !plugin.enabled">&nbsp;[X]</span>
-		</li>
-		<li>
-			<a ng-if="plugin!=null && plugin.enabled" href ng-click="property.initvalue.push({'label':''});propertyChanged(property, true)">[add]</a>
-			<span ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-if="plugin!=null && !plugin.enabled">[add]</span>
-		</li>
-	</ul-->
 	<br><table style="margin-bottom: 10px">
 	<thead>
 	<tr ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel">
@@ -26,12 +15,12 @@
 		<td style="width: 130px"><input type="text" style="width: 120px" class="alpha" ng-disabled="plugin!=null && !plugin.enabled" on-finish-render ng-model="item.label"  ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
 		<td style="width: 60px"><input type="text" style="width: 50px" class="numeric" ng-disabled="plugin!=null && !plugin.enabled" ng-model="item.width" on-finish-render  ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
 		<td style="width: 60px"><input type="text" style="width: 50px" class="numeric" ng-disabled="plugin!=null && !plugin.enabled" ng-model="item.height" on-finish-render  ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
-		<td style="width: 20px" ng-if="plugin!=null && plugin.enabled"><a href ng-click="property.initvalue.splice($index, 1);propertyChanged(property, true)" tooltip="Remove variable">[X]</a></span></td>
+		<td style="width: 20px" ng-if="plugin!=null && plugin.enabled"><a href ng-click="property.initvalue.splice($index, 1);propertyChanged(property, true)" tooltip="Remove companion">[X]</a></span></td>
 		<td style="width: 20px" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-if="plugin!=null && !plugin.enabled"><span>[X]</span></td>
 	</tr>
 	</tbody>
 </table>
-	<a ng-if="plugin!=null && plugin.enabled" href ng-click="property.initvalue.push({'label':''});propertyChanged(property, true)" tooltip="Add a new variable">[add]</a>
+	<a ng-if="plugin!=null && plugin.enabled" href ng-click="property.initvalue.push({'label':''});propertyChanged(property, true)" tooltip="Add companion">[add]</a>
 	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-if="plugin!=null && !plugin.enabled">[add]</span>
 	<hr bind-once ng-if="property.endline">
 </div>
