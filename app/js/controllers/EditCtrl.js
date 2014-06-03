@@ -334,6 +334,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
 
+		// support UIVars array of objects
+		if ($.isArray($scope.playerData.config.uiVars)){
+			var uiVarsObj = {};
+			for (var i=0; i<$scope.playerData.config.uiVars.length; i++)
+				uiVarsObj[$scope.playerData.config.uiVars[i]["key"]] = $scope.playerData.config.uiVars[i]["value"];
+			$scope.playerData.config.uiVars = uiVarsObj;
+		}
+
 		// set editable uivars list
 		$scope.excludedUiVars = ['autoPlay', 'autoMute', 'mediaProxy.preferedFlavorBR', 'adsOnReplay']; // these uiVars are already in the menu, do not list them
 		$scope.playerData.vars = [];
@@ -446,7 +454,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.playerData.config.uiVars[$scope.playerData.vars[i].label] = utilsSvc.str2val($scope.playerData.vars[i].value);
 		}
 
-		// remove unused ui vars: deleted / renamed by user
+		// remove unused ui vars: deleted / renamed by user and convert to uivars array
+		var uiVarsArray = [];
 		for (var uivar in $scope.playerData.config.uiVars){
 			var found = false;
 			if ($scope.excludedUiVars.indexOf(uivar) !== -1)
@@ -457,8 +466,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}
 			if (!found)
 				delete $scope.playerData.config.uiVars[uivar];
+			else
+				uiVarsArray.push({"key":uivar, "value": $scope.playerData.config.uiVars[uivar],"overrideFlashvar":false});
 		}
-
+		$scope.playerData.config.uiVars = uiVarsArray;
 	};
 
 	$scope.setPlayerProperties = function(properties){
