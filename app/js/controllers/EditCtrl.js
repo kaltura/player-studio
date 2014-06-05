@@ -345,13 +345,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		// set editable uivars list
 		$scope.excludedUiVars = ['autoPlay', 'autoMute', 'mediaProxy.preferedFlavorBR', 'adsOnReplay']; // these uiVars are already in the menu, do not list them
 		$scope.playerData.vars = [];
-		for (var uivar in $scope.playerData.config.uiVars){
+		var uivar;
+		for (uivar in $scope.playerData.config.uiVars){
 			if ($scope.excludedUiVars.indexOf(uivar) === -1)
 				$scope.playerData.vars.push({'label':uivar, 'value': $scope.playerData.config.uiVars[uivar]});
 		}
 
 		// create uiVars objects from flattened object
-		for (var uivar in $scope.playerData.config.uiVars){
+		for (uivar in $scope.playerData.config.uiVars){
 			if (uivar.indexOf(".") !== -1){
 				$scope.playerData.config.uiVars[uivar.split(".")[0]]= {"enabled" :true};
 				$scope.playerData.config.uiVars[uivar.split(".")[0]][uivar.split(".")[1]] = $scope.playerData.config.uiVars[uivar];
@@ -434,7 +435,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 
 		// flatten nested UIVars
-		for (var uivar in $scope.playerData.config.uiVars){
+		var uivar;
+		for (uivar in $scope.playerData.config.uiVars){
 			if (typeof $scope.playerData.config.uiVars[uivar] === "object"){
 				var updatedUiVar, uiVarValue;
 				for (var prop in $scope.playerData.config.uiVars[uivar]){
@@ -456,12 +458,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 		// remove unused ui vars: deleted / renamed by user and convert to uivars array
 		var uiVarsArray = [];
-		for (var uivar in $scope.playerData.config.uiVars){
+		for (uivar in $scope.playerData.config.uiVars){
 			var found = false;
 			if ($scope.excludedUiVars.indexOf(uivar) !== -1)
 				found = true;
-			for (var i=0; i < $scope.playerData.vars.length; i++){
-				if ($scope.playerData.vars[i].label === uivar)
+			for (var j=0; j < $scope.playerData.vars.length; j++){
+				if ($scope.playerData.vars[j].label === uivar)
 					found = true;
 			}
 			if (!found)
