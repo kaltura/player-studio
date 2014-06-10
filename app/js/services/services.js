@@ -211,13 +211,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     success(function(data, status, headers, config) {
 		                var request;
 		                // under KMC - clone the default KMC player and update it
-		                if (window.kmc && window.kmc.vars && window.kmc.vars.default_kdp){
+		                if (window.parent && window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.default_kdp){
 			                request = {
 				                service: 'multirequest',
 				                'action': null,
 				                '1:service': 'uiconf',
 				                '1:action': 'clone',
-				                '1:id': window.kmc.vars.default_kdp.id,
+				                '1:id': window.parent.kmc.vars.default_kdp.id,
 				                '2:service': 'uiconf',
 				                '2:action': 'update',
 				                '2:id': '{1:result:id}',
