@@ -409,8 +409,22 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 var data2Save = angular.copy(data.config);
                 data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
 	            // add Widevine support
-	            if (data2Save.plugins.widevine){
-		            data2Save.uiVars.push({"key": "flavorTags","overrideFlashvar": false, "value":"widevine_mbr,mbr,web"});
+	            if ($.isArray(data2Save.uiVars)){
+		            var widevineVarIndex = -1;
+		            for (var i=0; i<data2Save.uiVars.length; i++){
+			            if (data2Save.uiVars[i].key === "flavorTags"){
+				            widevineVarIndex = i;
+			            }
+		            }
+		            if (data2Save.plugins.widevine){
+			            if (widevineVarIndex === -1){
+			                data2Save.uiVars.push({"key": "flavorTags","overrideFlashvar": false, "value":"widevine_mbr,mbr,web"}); // add widevine Flashvar
+			            }
+		            }else{
+			            if (widevineVarIndex !== -1){
+				            data2Save.uiVars.splice(widevineVarIndex,1); // remove widevine flashvar if it exists and widevine plugin is disabled
+			            }
+		            }
 	            }
                 var request = {
                     'service': 'uiConf',
