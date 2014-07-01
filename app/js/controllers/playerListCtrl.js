@@ -127,7 +127,13 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             // check if this player should be upgraded (binded to the player's HTML outdated message)
             $scope.checkVersionNeedsUpgrade = function(item) {
                 var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL
-                return (html5libVersion == "1" || item.config === null); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
+                return ((html5libVersion == "1" || item.config === null) && item.tags.indexOf("playlist") === -1); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
+            };
+
+            // check if this player is an old playlist
+            $scope.checkOldPlaylistPlayer = function(item) {
+                var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL
+                return ((html5libVersion == "1" || item.config === null) && item.tags.indexOf("playlist") !== -1); // this player is an old playlist that is not supported in Universal studio
             };
 
             $scope.showSubTitle = true; // show the subtitle text below the title
@@ -165,6 +171,9 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.oldVersionEditText = $filter('translate')(
                 'This player must be updated before editing. <br/>' +
                 'Some features and design may be lost.');
+	        // check for old playlist player
+	        $scope.oldPlaylistEditText = $filter('translate')(
+		        'Playlists created in Flash Studio cannot be edited in Universal Studio.<br>Please use Flash Studio to edit this player.');
             var goToEditPage = function(id){
                 requestNotificationChannel.requestStarted('edit');
                 $location.path('/edit/' + id);
@@ -172,27 +181,46 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.goToEditPage = function (item, $event) {
                 if ($event)
                     $event.preventDefault();
-                if (!$scope.checkVersionNeedsUpgrade(item)) {
+                if (!$scope.checkVersionNeedsUpgrade(item) && !$scope.checkOldPlaylistPlayer(item)) {
                     goToEditPage(item.id);
                     return false;
-                } else {
-                    var msgText = $scope.oldVersionEditText;
-                    var modal = $modal.open({
-                            templateUrl: 'templates/message.html',
-                            controller: 'ModalInstanceCtrl',
-                            resolve: {
-                                settings: function() {
-                                    return {
-                                        'title': 'Edit confirmation',
-                                        'message': msgText,
-                                        buttons: [
-                                            {result: false, label: 'Cancel', cssClass: 'btn-default'},
-                                            {result: true, label: 'Upgrade', cssClass: 'btn-primary'}
-                                        ]
-                                    };
-                                }}
-                        }
-                    );
+                } else{
+	                if ($scope.checkOldPlaylistPlayer(item)){
+		                var msgText = $scope.oldPlaylistEditText;
+		                var modal = $modal.open({
+				                templateUrl: 'templates/message.html',
+				                controller: 'ModalInstanceCtrl',
+				                resolve: {
+					                settings: function() {
+						                return {
+							                'title': 'Edit confirmation',
+							                'message': msgText,
+							                buttons: [
+								                {result: false, label: 'OK', cssClass: 'btn-default'}
+							                ]
+						                };
+					                }}
+			                }
+		                );
+	                }else{
+	                    var msgText = $scope.oldVersionEditText;
+	                    var modal = $modal.open({
+	                            templateUrl: 'templates/message.html',
+	                            controller: 'ModalInstanceCtrl',
+	                            resolve: {
+	                                settings: function() {
+	                                    return {
+	                                        'title': 'Edit confirmation',
+	                                        'message': msgText,
+	                                        buttons: [
+	                                            {result: false, label: 'Cancel', cssClass: 'btn-default'},
+	                                            {result: true, label: 'Upgrade', cssClass: 'btn-primary'}
+	                                        ]
+	                                    };
+	                                }}
+	                        }
+	                    );
+	                }
                     modal.result.then(function(result) {
                         if (result) {
                             // update the player and when its done - go to the edit page
