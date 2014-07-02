@@ -185,42 +185,28 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                     goToEditPage(item.id);
                     return false;
                 } else{
-	                if ($scope.checkOldPlaylistPlayer(item)){
-		                var msgText = $scope.oldPlaylistEditText;
-		                var modal = $modal.open({
-				                templateUrl: 'templates/message.html',
-				                controller: 'ModalInstanceCtrl',
-				                resolve: {
-					                settings: function() {
-						                return {
-							                'title': 'Edit confirmation',
-							                'message': msgText,
-							                buttons: [
-								                {result: false, label: 'OK', cssClass: 'btn-default'}
-							                ]
-						                };
-					                }}
-			                }
-		                );
-	                }else{
-	                    var msgText = $scope.oldVersionEditText;
-	                    var modal = $modal.open({
-	                            templateUrl: 'templates/message.html',
-	                            controller: 'ModalInstanceCtrl',
-	                            resolve: {
-	                                settings: function() {
-	                                    return {
-	                                        'title': 'Edit confirmation',
-	                                        'message': msgText,
-	                                        buttons: [
-	                                            {result: false, label: 'Cancel', cssClass: 'btn-default'},
-	                                            {result: true, label: 'Upgrade', cssClass: 'btn-primary'}
-	                                        ]
-	                                    };
-	                                }}
-	                        }
-	                    );
+	                var msgText, buttons;
+	                if ($scope.checkVersionNeedsUpgrade(item)){
+		                msgText = $filter('translate')('This player must be updated before editing. <br/>Some features and design may be lost.');
+		                buttons = [{result: false, label: 'Cancel', cssClass: 'btn-default'}, {result: true, label: 'Upgrade', cssClass: 'btn-primary'}];
 	                }
+	                if ($scope.checkOldPlaylistPlayer(item)){
+		                msgText = $filter('translate')('Playlists created in Flash Studio cannot be edited in Universal Studio.<br>Please use Flash Studio to edit this player.');
+		                buttons = [{result: false, label: 'OK', cssClass: 'btn-default'}];
+	                }
+	                var modal = $modal.open({
+			                templateUrl: 'templates/message.html',
+			                controller: 'ModalInstanceCtrl',
+			                resolve: {
+				                settings: function() {
+					                return {
+						                'title': 'Edit confirmation',
+						                'message': msgText,
+						                buttons: buttons
+					                };
+				                }}
+		                }
+	                );
                     modal.result.then(function(result) {
                         if (result) {
                             // update the player and when its done - go to the edit page
