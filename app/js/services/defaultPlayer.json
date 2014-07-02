@@ -18,7 +18,6 @@
         "skipBtn": []
     },
     "uiVars": {
-        "imageDefaultDuration": 2,
         "autoPlay": false,
         "autoMute": false
     },
