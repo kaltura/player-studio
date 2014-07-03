@@ -224,6 +224,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				                '2:uiConf:name': 'New Player',
 				                '2:uiConf:objectType': 'KalturaUiConf',
 				                '2:uiConf:objType': 1,
+				                '2:uiConf:width': 560,
+				                '2:uiConf:height': 395,
 				                '2:uiConf:tags': 'html5studio,player',
 				                '2:uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
 				                '2:uiConf:creationMode': 2,
