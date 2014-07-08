@@ -17,6 +17,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	if (window.parent.kmc && window.parent.kmc.vars.studio.showFlashStudio === false){
 		$(".menuFooter").css("bottom","1px");
 	}
+	// verify leave page when data is not saved
+	window.onbeforeunload = function(){
+		if($scope.dataChanged){
+			return 'You are about to leave this page without saving.';
+		}
+	};
     // load user entries data
     $scope.userEntries = [];
 	$scope.selectedEntry = '';
