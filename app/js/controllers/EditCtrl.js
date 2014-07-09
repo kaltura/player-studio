@@ -18,7 +18,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$(".menuFooter").css("bottom","1px");
 	}
 	// verify leave page when data is not saved
-	window.onbeforeunload = function(){
+	window.parent.onbeforeunload = function(){
 		if($scope.dataChanged){
 			return 'You are about to leave this page without saving.';
 		}
