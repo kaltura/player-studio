@@ -17,12 +17,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	if (window.parent.kmc && window.parent.kmc.vars.studio.showFlashStudio === false){
 		$(".menuFooter").css("bottom","1px");
 	}
-	// verify leave page when data is not saved
-	window.parent.onbeforeunload = function(){
-		if($scope.dataChanged){
-			return 'You are about to leave this page without saving.';
-		}
-	};
+	window.parent.studioDataChanged = false; // used when navigating away from studio
     // load user entries data
     $scope.userEntries = [];
 	$scope.selectedEntry = '';
@@ -194,6 +189,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    $scope.addValidation(plugin);
 	    }
 	    $scope.dataChanged = true;
+	    window.parent.studioDataChanged = true; // used when navigating away from studio
 	    $timeout(function(){$scope.refreshPlayer();},0,true);
 
     };
@@ -257,6 +253,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    return;
 	    }
 	    $scope.dataChanged = true;
+	    window.parent.studioDataChanged = true; // used when navigating away from studio
         $scope.validate(property);
 	    $scope.refreshNeeded = (property['player-refresh'] !== false);
 	    if (checkAutoRefresh !== false && $scope.refreshNeeded && $scope.autoPreview){
@@ -568,6 +565,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}else{
 			$scope.updatePlayerData();
 			$scope.dataChanged = false;
+			window.parent.studioDataChanged = false; // used when navigating away from studio
 			PlayerService.savePlayer($scope.playerData).then(function(value) {
 					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
 					apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
