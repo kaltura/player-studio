@@ -323,6 +323,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if ($scope.playerData.config.plugins[plug]['enabled'] === true)
 				$scope.playerData.config.plugins[plug]['plugin'] = true;
 		var flashvars = {'jsonConfig': angular.toJson($scope.playerData.config)}; // update the player with the new configuration
+		if (window.parent.kmc && window.parent.kmc.vars.ks){
+			angular.extend(flashvars, {'ks': window.parent.kmc.vars.ks}); // add ks if available
+		}
 		if ($scope.isIE8) {                      // for IE8 add transparent mode
 			angular.extend(flashvars, {'wmode': 'transparent'});
 		}
