@@ -21,29 +21,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // load user entries data
     $scope.userEntries = [];
 	$scope.selectedEntry = '';
+	$scope.entriesTypeSelector = 'Entries';
 	apiService.listMedia().then(function(data) {
 		for (var i=0; i < data.objects.length; i++){
 			$scope.userEntries.push({'id': data.objects[i].id, 'text': data.objects[i].name});
 		}
 		// set default entry
-		$timeout(function(){
-			// get the preview entry: check if exists in cache and if so - check if exists in the entries list from server. If not found - use first entry from the list
-			if (localStorageService.get('defaultEntry')){
-				var previewEntry = localStorageService.get('defaultEntry');
-				var found = false;
-				for (var i=0; i<$scope.userEntries.length; i++){
-					if ($scope.userEntries[i].id == previewEntry.id){
-						found = true;
-						$scope.selectedEntry = previewEntry;
-					}
-				}
-				if (!found){
-					$scope.selectedEntry = $scope.userEntries[0];
-				}
-			}else{
-				$scope.selectedEntry = $scope.userEntries[0];
-			}
-		},0,true);
+		if ($scope.playerData.tags.indexOf("player") !== -1){
+			$scope.selectDefaultEntry($scope.userEntries);
+		}
 	});
 	$scope.entriesSelectBox = select2Svc.getConfig($scope.userEntries, apiService.searchMedia); // set user entries select2 options and query
 
@@ -53,8 +39,54 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		for (var i=0; i < data.objects.length; i++){
 			$scope.userPlaylists.push({'id': data.objects[i].id, 'text': data.objects[i].name});
 		}
+		if ($scope.playerData.tags.indexOf("playlist") !== -1){
+			$scope.selectDefaultEntry($scope.userPlaylists, function(){
+				$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
+			});
+			$scope.entriesTypeSelector = 'Playlist';
+		}
 	});
 	$scope.playlistSelectBox = select2Svc.getConfig($scope.userPlaylists, apiService.searchPlaylists); // set user playlists select2 options and query
+
+	$scope.setEntriesType = function(entriesType)	{
+		$scope.entriesTypeSelector = entriesType;
+		if (entriesType === 'Entries'){
+			$scope.selectDefaultEntry($scope.userEntries);
+		}else{
+			$scope.selectDefaultEntry($scope.userPlaylists);
+			$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
+		}
+		$scope.refreshPlayer();
+	}
+
+	$scope.setPlaylistEntry = function(id, label){
+		if ($scope.entriesTypeSelector === 'Playlist' && $scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
+			$scope.playerData.config.plugins.playlistAPI.kpl0Id = id;
+			$scope.playerData.config.plugins.playlistAPI.kpl0Name = label;
+		}
+	}
+
+	$scope.selectDefaultEntry = function(entriesArr, callback){
+		// get the preview entry: check if exists in cache and if so - check if exists in the entries list from server. If not found - use first entry from the list
+		if (localStorageService.get('defaultEntry')){
+			var previewEntry = localStorageService.get('defaultEntry');
+			var found = false;
+			for (var i=0; i<entriesArr.length; i++){
+				if (entriesArr[i].id == previewEntry.id){
+					found = true;
+					$scope.selectedEntry = previewEntry;
+				}
+			}
+			if (!found){
+				$scope.selectedEntry = entriesArr[0];
+			}
+		}else{
+			$scope.selectedEntry = entriesArr[0];
+		}
+		if (callback){
+			callback();
+		}
+	}
 
     // load menu data and parse it
     editableProperties.then(function(data) {
@@ -190,7 +222,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
-	    $timeout(function(){$scope.refreshPlayer();},0,true);
+	    $timeout(function(){
+		    $scope.refreshPlayer();
+	    },0,true);
 
     };
 
@@ -240,8 +274,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
-		    $scope.selectedEntry = property.selectedEntry.id;
+		    $scope.selectedEntry = property.selectedEntry;
 		    localStorageService.set('defaultEntry', property.selectedEntry);
+		    $scope.setPlaylistEntry(property.selectedEntry.id, property.selectedEntry.text);
 		    $scope.refreshPlayer();
 		    return;
 	    }
@@ -315,6 +350,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
+		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
 		// calculate player size according to aspect ratio
 		var playerWidth = $scope.aspectRatio == 9/16 ? '100%' : '70%';
 		$("#kVideoTarget").width(playerWidth);
@@ -322,6 +358,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		for (var plug in $scope.playerData.config.plugins)
 			if ($scope.playerData.config.plugins[plug]['enabled'] === true)
 				$scope.playerData.config.plugins[plug]['plugin'] = true;
+
+		$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
+
 		var flashvars = {'jsonConfig': angular.toJson($scope.playerData.config)}; // update the player with the new configuration
 		if (window.parent.kmc && window.parent.kmc.vars.ks){
 			angular.extend(flashvars, {'ks': window.parent.kmc.vars.ks}); // add ks if available
@@ -495,6 +534,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.setDataForModel = function(data){
 		if (data.model && data.model.indexOf("~")==-1 && data.type != 'readonly'){
+			if (data.model === "config.plugins.playlistAPI.kpl0Id" || data.model === "config.plugins.playlistAPI.kpl0Name"){ // do not update playlist id or name from the menu (it is not exposed there) - keep the playerData values
+				return;
+			}
 			var objArr = data.model.split(".");  // break the model path to array
 			var pData = $scope.playerData;
 			for (var j=0; j<objArr.length; j++){  // go through the object names in the model path
@@ -569,6 +611,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.updatePlayerData();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
+			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
+				$scope.playerData.tags = 'html5studio,playlist'; // set playlist tag
+			}else{
+				$scope.playerData.tags = 'html5studio,player'; // set playlist tag
+			}
 			PlayerService.savePlayer($scope.playerData).then(function(value) {
 					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
 					apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
