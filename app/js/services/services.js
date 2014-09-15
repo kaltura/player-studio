@@ -193,7 +193,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 		            "wid": "_" + wid,
 		            "uiconf_id": uiconf_id,
 		            "flashvars": flashvars,
-		            "entry_id": entry_id
+		            "entry_id": entry_id,
+		            "readyCallback": function(){
+			            $("#kVideoTarget_ifp").contents().find('link[href$="playList.css"]').clone().appendTo($('head')); // inject playlist css from iframe to parent
+		            }
 	            });
             },
             'setKDPAttribute': function(attrStr, value) {
