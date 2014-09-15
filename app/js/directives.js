@@ -21,6 +21,11 @@ DirectivesModule.directive('onFinishRender', ['$timeout', function ($timeout) {
 		link: function (scope, element, attr) {
 			if (scope.$last === true) { // accordion section finished loading - init jQuery plugins after 3 seconds to allow menu items to render first
 				$timeout(function(){
+					if ($(".playlistSetup").length === 0){
+						$('div:contains("Playlist Configuration").panel').before('<div class="playlistSetup">Playlist setup:</div>'); // add playlist separator
+					}
+				},50);
+				$timeout(function(){
 					$(".numeric").not(".allowNegative").numeric({allowMinus: false, allowDecSep: false}); // set integer number fields to accept only numbers
 					$(".allowNegative").numeric({allowMinus: true, allowDecSep: false}); // set integer number fields to accept only numbers
 					$(".float").numeric({allowMinus: false, allowDecSep: true});    // set float number fields to accept only floating numbers

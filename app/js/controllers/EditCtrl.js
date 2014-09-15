@@ -57,14 +57,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
 		}
 		$scope.refreshPlayer();
-	}
+	};
 
 	$scope.setPlaylistEntry = function(id, label){
 		if ($scope.entriesTypeSelector === 'Playlist' && $scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
 			$scope.playerData.config.plugins.playlistAPI.kpl0Id = id;
 			$scope.playerData.config.plugins.playlistAPI.kpl0Name = label;
 		}
-	}
+	};
 
 	$scope.selectDefaultEntry = function(entriesArr, callback){
 		// get the preview entry: check if exists in cache and if so - check if exists in the entries list from server. If not found - use first entry from the list
@@ -86,7 +86,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if (callback){
 			callback();
 		}
-	}
+	};
 
     // load menu data and parse it
     editableProperties.then(function(data) {
