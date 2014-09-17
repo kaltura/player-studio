@@ -65,10 +65,6 @@
                                 <small>{{'This player requires updating'| translate}}
                                 </small>
                             </span>
-							<span class=" alert alert-warning" ng-show="checkOldPlaylistPlayer(item)">
-                                <small>{{'Playlists created in Flash Studio cannot be migrated to Universal Studio'| translate}}
-                                </small>
-                            </span>
 							</div>
 						</td>
 						<td class="idCol">{{item.id}}</td>
@@ -76,7 +72,7 @@
 						<td class="visible-lg col-lg-2 text-center"><span>{{item.createdAt | timeago }}</span></td>
 						<td class="actionBtns ">
 							<div class="inner">
-								<button type="button" class="btn btn-link" ng-click="duplicate(item)" ng-show="!checkOldPlaylistPlayer(item)"><span
+								<button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
 										class="icon-copy"></span> {{'Duplicate'| translate}}
 								</button>
 								<button type="button" class="btn btn-link" ng-click="deletePlayer(item)"><span

@@ -127,7 +127,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             // check if this player should be upgraded (binded to the player's HTML outdated message)
             $scope.checkVersionNeedsUpgrade = function(item) {
                 var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL
-                return ((html5libVersion == "1" || item.config === null) && item.tags.indexOf("playlist") === -1); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
+                return ((html5libVersion == "1" || item.config === null) ); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
             };
 
             // check if this player is an old playlist
@@ -279,6 +279,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 var upgradeProccess = $q.defer();
                 var currentVersion = player.html5Url.split("/v")[1].split("/")[0];
                 var text = '<span>' + $filter("translate")("Do you want to update this player?<br>Some features and design may be lost.") + '</span>';
+	            var isPlaylist = player.tags.indexOf("playlist") !== -1;
+	            if (isPlaylist){
+		            text+="<br><span><b>Note:</b> Playlist configuration will not be updated.<br>Please re-configure your playlist plugin after this update.</span>"
+	            }
                 var html5lib = player.html5Url.substr(0, player.html5Url.indexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
                 var modal = $modal.open({
                     templateUrl: 'templates/message.html',
@@ -294,11 +298,11 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 });
                 modal.result.then(function(result) {
                     if (result)
-                        PlayerService.playerUpdate(player, html5lib).then(function(data) {
+                        PlayerService.playerUpdate(player, html5lib, isPlaylist).then(function(data) {
                             // update local data (we will not retrieve from the server again)
                             player.config = angular.fromJson(data.config);
                             player.html5Url = html5lib;
-                            player.tags = 'html5studio,player';
+                            player.tags = isPlaylist ? 'html5studio,playlist' : 'html5studio,player';
                             upgradeProccess.resolve('upgrade finished successfully');
 	                        if ($("#kcms",window.parent.document).length > 0){
 	                            $("#kcms",window.parent.document)[0].refreshPlayersList(); // trigger players list refresh on KMC

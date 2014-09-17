@@ -452,7 +452,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 });
                 return deferred.promise;
             },
-            'playerUpdate': function(playerObj, html5lib) {
+            'playerUpdate': function(playerObj, html5lib, isPlaylist) {
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
                 var rejectText = $filter('translate')('Update player action was rejected: ');
@@ -475,7 +475,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         delete data['widgetId'];
                         delete data.vars['ks'];
                     }
-// set an api request to update the uiconf
+// set an api request to update the uiconf. update playlist includeInLayout if needed
+	                if (isPlaylist && data.plugins.playlistAPI){
+		                data.plugins.playlistAPI.includeInLayout = true;
+	                }
 		            var playerTag =  playerObj.tags.indexOf("playlist") != -1 ? "playlist" : "player"; // set player tag to player or playlist according to the original player tag
                     var request = {
                         'service': 'uiConf',
