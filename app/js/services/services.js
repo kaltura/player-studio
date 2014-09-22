@@ -450,7 +450,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     // refresh KMC players list so that the new player will appear in the "Preview and Embed" screen
                     var kmc = window.parent.kmc;
                     if (kmc && kmc.preview_embed) {
-                        kmc.preview_embed.updateList(false);
+                        kmc.preview_embed.updateList(data.tags.indexOf("playlist") !== -1);
                     }
                     deferred.resolve(result);
                 });
