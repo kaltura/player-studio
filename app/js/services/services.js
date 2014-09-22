@@ -440,6 +440,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'uiConf:description': data.description ? data.description : '',
                     'uiConf:config': JSON.stringify(data2Save, null, "\t")
                 };
+	            // update the player version to the latest version when using production players
+	            if (data.html5Url.indexOf("/html5/html5lib/") === 0){
+		            request['uiConf:html5Url'] = "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php';
+	            }
                 apiService.doRequest(request).then(function(result) {
                     playersCache[data.id] = data; // update player data in players cache
 	                currentPlayer = {};
