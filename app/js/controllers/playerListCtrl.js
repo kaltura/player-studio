@@ -281,7 +281,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 var text = '<span>' + $filter("translate")("Do you want to update this player?<br>Some features and design may be lost.") + '</span>';
 	            var isPlaylist = player.tags.indexOf("playlist") !== -1;
 	            if (isPlaylist){
-		            text+="<br><span><b>Note:</b> Playlist configuration will not be updated.<br>Please re-configure your playlist plugin after this update.</span>"
+		            text+="<br><span><b>Note:</b> Playlist configuration will not be updated.<br>Please re-configure your playlist plugin after this update.</span>";
 	            }
                 var html5lib = player.html5Url.substr(0, player.html5Url.indexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
                 var modal = $modal.open({
