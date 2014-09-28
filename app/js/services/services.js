@@ -51,7 +51,7 @@ KMCServices.factory('select2Svc', function($timeout) {
 	return select2Svc;
 });
 
-KMCServices.factory('utilsSvc', function() {
+KMCServices.factory('utilsSvc', function($modal) {
 	var utilsSvc = {
 		'str2val' : function(str){
 			if (typeof str !== "string")
@@ -64,6 +64,40 @@ KMCServices.factory('utilsSvc', function() {
 				retVal = false;
 			if (!isNaN(parseFloat(str)) && parseFloat(str).toString().length === str.length)
 				retVal = parseFloat(str);
+			return retVal;
+		},
+		'alert' : function(title, msg){
+			var retVal = $modal.open({ templateUrl: 'templates/message.html',
+				controller: 'ModalInstanceCtrl',
+				resolve: {
+					settings: function() {
+						return {
+							'title': title,
+							'message': msg,
+							buttons: [
+								{result: true, label: 'OK', cssClass: 'btn-primary'}
+							]
+						};
+					}
+				}
+			});
+			return retVal;
+		},
+		'confirm' : function(title, msg, lbl){
+			var retVal = $modal.open({ templateUrl: 'templates/message.html',
+				controller: 'ModalInstanceCtrl',
+				resolve: {
+					settings: function() {
+						return {
+							'title': title,
+							'message': msg,
+							buttons: [
+								{result: false, label: 'Cancel', cssClass: 'btn-default'}, {result: true, label: lbl, cssClass: 'btn-primary'}
+							]
+						};
+					}
+				}
+			});
 			return retVal;
 		}
 	};
