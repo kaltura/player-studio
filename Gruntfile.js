@@ -175,6 +175,12 @@ module.exports = function(grunt) {
                         src: 'angular.min.js.map',
                         dest: '_dist/vendor/'
                     },
+	                {
+		                expand: true,
+		                cwd: 'app/bower_components/angular-animate/',
+		                src: 'angular-animate.min.js.map',
+		                dest: '_dist/lib/'
+	                },
                     {
                         src: 'app/bower_components/select2/select2x2.png',
                         dest: '_dist/css/select2x2.png'
