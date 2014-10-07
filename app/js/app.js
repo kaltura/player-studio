@@ -186,7 +186,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 }
             }]}
         });
-    }]).run(function ($rootScope, $rootElement, $location) {
+    }]).run(["$rootScope", "$rootElement", "$location", function ($rootScope, $rootElement, $location) {
     var appLoad = new Date();
     var debug = false;
 
@@ -258,4 +258,4 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         $("#htmlStudioBtn").hide();
     }
 
-});
+}]);
