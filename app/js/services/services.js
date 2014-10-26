@@ -490,6 +490,23 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 });
                 return deferred.promise;
             },
+	        'playerUpgrade': function(playerObj, html5lib){
+		        var request = {
+			        'service': 'uiConf',
+			        'action': 'update',
+			        'id': playerObj.id,                        // the id of the player to update
+			        'uiConf:html5Url': html5lib                // update the html5 lib to the new version
+		        };
+		        var deferred = $q.defer();
+		        var rejectText = $filter('translate')('Upgrade player action was rejected: ');
+		        apiService.doRequest(request).then(function(result) {
+				        deferred.resolve(result);
+			        }, function(msg) {
+				        deferred.reject(rejectText + msg);
+			        }
+		        );
+		        return deferred.promise;
+	        },
             'playerUpdate': function(playerObj, html5lib, isPlaylist) {
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
