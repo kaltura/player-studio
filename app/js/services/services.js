@@ -7,13 +7,13 @@ KMCServices.config(['$httpProvider', function($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 
-KMCServices.factory('apiCache', function($cacheFactory) {
+KMCServices.factory('apiCache', ['$cacheFactory', function($cacheFactory) {
     return $cacheFactory('apiCache', {
         capacity: 10
     });
-});
+}]);
 
-KMCServices.factory('select2Svc', function($timeout) {
+KMCServices.factory('select2Svc', ['$timeout', function($timeout) {
 	var select2Svc = {
 		'getConfig' : function(entries, searchFunc){
 			var confObj = {
@@ -49,9 +49,9 @@ KMCServices.factory('select2Svc', function($timeout) {
 		}
 	};
 	return select2Svc;
-});
+}]);
 
-KMCServices.factory('utilsSvc', function($modal) {
+KMCServices.factory('utilsSvc', ['$modal', function($modal) {
 	var utilsSvc = {
 		'str2val' : function(str){
 			if (typeof str !== "string")
@@ -102,7 +102,7 @@ KMCServices.factory('utilsSvc', function($modal) {
 		}
 	};
 	return utilsSvc;
-});
+}]);
 
 KMCServices.factory('sortSvc', [function() {
     var containers = {};

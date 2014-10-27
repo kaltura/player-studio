@@ -78,9 +78,7 @@ DirectivesModule.directive('hiddenValue', [function() {
         restrict: 'EA'
     };
 }]);
-DirectivesModule.directive('sortOrder', [
-    'sortSvc',
-    function (sortSvc) {
+DirectivesModule.directive('sortOrder', ['sortSvc', function (sortSvc) {
         return {
             restrict: 'EA',
             replace: true,
@@ -112,7 +110,7 @@ DirectivesModule.directive('sortOrder', [
         };
     }
 ]);
-DirectivesModule.directive("onbeforeunload", ["$window", "$filter", '$location',function ($window, $filter,$location) {
+DirectivesModule.directive("onbeforeunload", ["$window", "$filter", '$location',function ($window, $filter, $location) {
     var unloadtext, forms = [];
 
     function handleOnbeforeUnload() {
@@ -163,9 +161,7 @@ DirectivesModule.directive("onbeforeunload", ["$window", "$filter", '$location',
         });
     };
 }]);
-DirectivesModule.directive('mcustomScrollbar', [
-	'$timeout',
-	function ($timeout) {
+DirectivesModule.directive('mcustomScrollbar', ['$timeout',	function ($timeout) {
 		return {
 			priority: 0,
 			scope: {},
