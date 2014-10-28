@@ -123,12 +123,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $scope.sort.sortCol = colName;
                 $scope.sort.reverse = !$scope.sort.reverse;
             };
-
 	        // check if this player is a v2 player that can be upgraded to a new version
 	        $scope.checkV2Upgrade = function(item) {
-		        var html5libVersion = parseFloat(item.html5Url.substr(item.html5Url.indexOf('/v') + 2)); // get html5 lib version number from its URL
-		        return !$scope.checkVersionNeedsUpgrade(item) && parseFloat(window.MWEMBED_VERSION) > html5libVersion;
-		        //return ((html5libVersion == "1" || item.config === null) ); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
+		        var html5libVersion = item.html5Url.substring(item.html5Url.indexOf('/v')+2, item.html5Url.indexOf('/mwEmbedLoader.php')); // get html5 lib version from its URL
+		        return !$scope.checkVersionNeedsUpgrade(item) && window.MWEMBED_VERSION !== html5libVersion;
 	        };
 
             // check if this player should be upgraded (binded to the player's HTML outdated message)
@@ -283,9 +281,12 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			// upgrade a V2 player to the latest version
 	        $scope.upgrade = function(player){
 		        var upgradeProccess = $q.defer();
-		        var html5libVersion = parseFloat(player.html5Url.substr(player.html5Url.indexOf('/v') + 2)).toFixed(2);
-		        var currentVersion = parseFloat(window.MWEMBED_VERSION).toFixed(2);
-		        var modal = utilsSvc.confirm('Upgrading confirmation','This will upgrade the player "' + player.name + '" (ID: ' + player.id + ') from version ' + html5libVersion + ' to <a href="https://github.com/kaltura/mwEmbed/releases/tag/v'+currentVersion+'" target="_blank">version ' + currentVersion +'</a>', 'Upgrade');
+		        var html5libVersion = player.html5Url.substring(player.html5Url.indexOf('/v')+2, player.html5Url.indexOf('/mwEmbedLoader.php'));
+		        var currentVersion = window.MWEMBED_VERSION;
+		        var msg = 'This will upgrade the player "' + player.name + '" (ID: ' + player.id + ').';
+		        msg+='<br>Current player version: ' + html5libVersion;
+		        msg+='<br>Upgrade to version: ' + currentVersion + '<a href="https://github.com/kaltura/mwEmbed/releases/tag/v'+currentVersion+'" target="_blank"> (release notes)</a>';
+		        var modal = utilsSvc.confirm('Upgrading confirmation', msg, 'Upgrade');
 		        modal.result.then(function(result) {
 			        if (result) {
 				        var html5lib = player.html5Url.substr(0, player.html5Url.indexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
