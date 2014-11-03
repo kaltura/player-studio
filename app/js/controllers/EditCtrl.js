@@ -69,6 +69,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.entriesTypeSelector === 'Playlist' && $scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
 			$scope.playerData.config.plugins.playlistAPI.kpl0Id = id;
 			$scope.playerData.config.plugins.playlistAPI.kpl0Name = label;
+			$scope.$broadcast('setPlaylistEvent', [id, label]);
 		}
 	};
 
@@ -411,6 +412,27 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}
 		}
 
+		// support multiple playlists
+		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
+			var playlistData = $scope.playerData.config.plugins.playlistAPI;
+			var playlistMenuArr = data.lookAndFeel.children.playlistAPI.children;
+			var i = 0;
+			while (playlistData["kpl" + i + "Id"]) {
+				// check if we need to add this to the menu
+				var found = false;
+				for (var j = 0; j < playlistMenuArr.length; j++) {
+					if (playlistMenuArr[j].model.indexOf("kpl" + i + "Id") !== -1) {
+						found = true;
+					}
+				}
+				if (!found) {
+					playlistMenuArr.push({"model": "config.plugins.playlistAPI.kpl" + i + "Id", "type": "hiddenValue"});
+					playlistMenuArr.push({"model": "config.plugins.playlistAPI.kpl" + i + "Name", "type": "hiddenValue"});
+				}
+				i++;
+			}
+		}
+
 		for (var cat in data){
 			var properties = data[cat].children;
 			if ($.isArray(properties)){ // flat properties for basic display
@@ -540,9 +562,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.setDataForModel = function(data){
 		if (data.model && data.model.indexOf("~")==-1 && data.type != 'readonly'){
-			if (data.model === "config.plugins.playlistAPI.kpl0Id" || data.model === "config.plugins.playlistAPI.kpl0Name"){ // do not update playlist id or name from the menu (it is not exposed there) - keep the playerData values
-				return;
-			}
 			var objArr = data.model.split(".");  // break the model path to array
 			var pData = $scope.playerData;
 			for (var j=0; j<objArr.length; j++){  // go through the object names in the model path

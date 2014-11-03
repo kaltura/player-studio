@@ -1,0 +1,42 @@
+<div class="text" ng-controller="playlistCtrl">
+	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
+	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}"
+	   ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right"
+	   tooltip-popup-delay="500"></i><br>
+	<br>
+	<table style="margin-bottom: 10px">
+
+		<thead>
+		<tr ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel">
+			<th>Playlist Name</th>
+			<th>Playlist ID</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="item in additionalPlaylists" style="line-height: 36px">
+			<td style="width: 135px"><input type="text" style="width: 125px" class="alpha"
+			                                ng-disabled="(plugin!=null && !plugin.enabled) || !item.editable"
+			                                on-finish-render ng-model="item.name"
+			                                ng-change="updatePlaylist(property, false)"
+			                                ng-enter="updatePlaylist(property, 'enter')"
+			                                ng-blur="updatePlaylist(property, 'blur')"></td>
+			<td style="width: 135px"><input type="text" style="width: 125px" class="alpha"
+			                                ng-disabled="(plugin!=null && !plugin.enabled) || !item.editable"
+			                                on-finish-render ng-model="item.id"
+			                                ng-change="updatePlaylist(property, false)"
+			                                ng-enter="updatePlaylist(property, 'enter')"
+			                                ng-blur="updatePlaylist(property, 'blur')"></td>
+			<td style="width: 20px" ng-if="plugin!=null && plugin.enabled && item.editable"><a href
+			                                                                                   ng-click="deletePlaylist($index, property)"
+			                                                                                   tooltip="Remove Playlist">[X]</a></span>
+			</td>
+			<td style="width: 20px" ng-class="{disabled: (plugin!=null && !plugin.enabled) || !item.editable}"
+			    ng-if="(plugin!=null && !plugin.enabled) || !item.editable"><span>[X]</span></td>
+		</tr>
+		</tbody>
+	</table>
+	<a ng-if="plugin!=null && plugin.enabled" href ng-click="addPlaylist(property)" tooltip="Add Playlist">[add]</a>
+	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-if="plugin!=null && !plugin.enabled">[add]</span>
+	<hr bind-once ng-if="property.endline">
+</div>
