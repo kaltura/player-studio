@@ -14,7 +14,9 @@ KMCMenu.controller('playlistCtrl', ['$scope', '$modal', 'utilsSvc',
 		}
 
 		// update the table when the user change playlist selection
-		$scope.additionalPlaylists[0] = {"id": $scope.playerData.config.plugins.playlistAPI.kpl0Id, "name": $scope.playerData.config.plugins.playlistAPI.kpl0Name, "editable": false};
+		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
+			$scope.additionalPlaylists[0] = {"id": $scope.playerData.config.plugins.playlistAPI.kpl0Id, "name": $scope.playerData.config.plugins.playlistAPI.kpl0Name, "editable": false};
+		}
 		$scope.$on('setPlaylistEvent', function (event, params) {
 			$scope.additionalPlaylists[0] = {"id": params[0], "name": params[1], "editable": false};
 		});
@@ -40,8 +42,8 @@ KMCMenu.controller('playlistCtrl', ['$scope', '$modal', 'utilsSvc',
 			}
 			// add updated playlist properties
 			for (var i = 0; i < $scope.additionalPlaylists.length; i++) {
-				$scope.plugin.properties.push({"model": "config.plugins.playlistAPI.kpl" + i + "Id", "initvalue": $scope.additionalPlaylists[i].id});
-				$scope.plugin.properties.push({"model": "config.plugins.playlistAPI.kpl" + i + "Name", "initvalue": $scope.additionalPlaylists[i].name});
+				$scope.plugin.properties.push({"model": "config.plugins.playlistAPI.kpl" + i + "Id", "initvalue": $scope.additionalPlaylists[i].id, "type": "hiddenValue"});
+				$scope.plugin.properties.push({"model": "config.plugins.playlistAPI.kpl" + i + "Name", "initvalue": $scope.additionalPlaylists[i].name, "type": "hiddenValue"});
 			}
 
 			// remove redundant playlists from playerData
