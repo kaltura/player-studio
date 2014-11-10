@@ -416,20 +416,20 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
 			var playlistData = $scope.playerData.config.plugins.playlistAPI;
 			var playlistMenuArr = data.lookAndFeel.children.playlistAPI.children;
-			var i = 0;
-			while (playlistData["kpl" + i + "Id"]) {
+			var playlistIndex = 0;
+			while (playlistData["kpl" + playlistIndex + "Id"]) {
 				// check if we need to add this to the menu
 				var found = false;
 				for (var j = 0; j < playlistMenuArr.length; j++) {
-					if (playlistMenuArr[j].model.indexOf("kpl" + i + "Id") !== -1) {
+					if (playlistMenuArr[j].model.indexOf("kpl" + playlistIndex + "Id") !== -1) {
 						found = true;
 					}
 				}
 				if (!found) {
-					playlistMenuArr.push({"model": "config.plugins.playlistAPI.kpl" + i + "Id", "type": "hiddenValue"});
-					playlistMenuArr.push({"model": "config.plugins.playlistAPI.kpl" + i + "Name", "type": "hiddenValue"});
+					playlistMenuArr.push({"model": "config.plugins.playlistAPI.kpl" + playlistIndex + "Id", "type": "hiddenValue"});
+					playlistMenuArr.push({"model": "config.plugins.playlistAPI.kpl" + playlistIndex + "Name", "type": "hiddenValue"});
 				}
-				i++;
+				playlistIndex++;
 			}
 		}
 

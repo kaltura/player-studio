@@ -24,13 +24,13 @@ KMCMenu.controller('playlistCtrl', ['$scope', '$modal', 'utilsSvc',
 		$scope.addPlaylist = function (prop) {
 			//property.initvalue.push({'label':''});
 			$scope.additionalPlaylists.push({"id": "", "name": "", "editable": true});
-			$scope.propertyChanged(prop, true)
-		}
+			$scope.propertyChanged(prop, true);
+		};
 
 		$scope.deletePlaylist = function (index, prop) {
 			$scope.additionalPlaylists.splice(index, 1);
 			$scope.updatePlaylist(prop, true);
-		}
+		};
 
 		$scope.updatePlaylist = function (prop, trigger) {
 			// remove previous playlist properties
@@ -41,9 +41,9 @@ KMCMenu.controller('playlistCtrl', ['$scope', '$modal', 'utilsSvc',
 				}
 			}
 			// add updated playlist properties
-			for (var i = 0; i < $scope.additionalPlaylists.length; i++) {
-				$scope.plugin.properties.push({"model": "config.plugins.playlistAPI.kpl" + i + "Id", "initvalue": $scope.additionalPlaylists[i].id, "type": "hiddenValue"});
-				$scope.plugin.properties.push({"model": "config.plugins.playlistAPI.kpl" + i + "Name", "initvalue": $scope.additionalPlaylists[i].name, "type": "hiddenValue"});
+			for (var playlistIndex = 0; playlistIndex < $scope.additionalPlaylists.length; playlistIndex++) {
+				$scope.plugin.properties.push({"model": "config.plugins.playlistAPI.kpl" + playlistIndex + "Id", "initvalue": $scope.additionalPlaylists[playlistIndex].id, "type": "hiddenValue"});
+				$scope.plugin.properties.push({"model": "config.plugins.playlistAPI.kpl" + playlistIndex + "Name", "initvalue": $scope.additionalPlaylists[playlistIndex].name, "type": "hiddenValue"});
 			}
 
 			// remove redundant playlists from playerData
@@ -55,6 +55,6 @@ KMCMenu.controller('playlistCtrl', ['$scope', '$modal', 'utilsSvc',
 				}
 			}
 			$scope.propertyChanged(prop, trigger);
-		}
+		};
 
 	}]);
