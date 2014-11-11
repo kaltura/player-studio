@@ -51,16 +51,16 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.setEntriesType = function(entriesType)	{
 		$scope.entriesTypeSelector = entriesType;
 		if (entriesType === 'Entries'){
-			$scope.selectDefaultEntry($scope.userEntries);
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
-				utilsSvc.alert("Configuration change required","You must uncheck the Playlist plugin to preview entries.<br>The Playlist plugin can be found in the 'Look and Feel' category.");
+				$scope.setPluginEnabled("playlistAPI", false);
 			}
+			$scope.selectDefaultEntry($scope.userEntries);
 		}else{
+			if (!$scope.playerData.config.plugins.playlistAPI || ($scope.playerData.config.plugins.playlistAPI && !$scope.playerData.config.plugins.playlistAPI.plugin)){
+				$scope.setPluginEnabled("playlistAPI", true);
+			}
 			$scope.selectDefaultEntry($scope.userPlaylists);
 			$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
-			if (!$scope.playerData.config.plugins.playlistAPI || ($scope.playerData.config.plugins.playlistAPI && !$scope.playerData.config.plugins.playlistAPI.plugin)){
-				utilsSvc.alert("Configuration change required","You must check the Playlist plugin to preview playlists.<br>The Playlist plugin can be found in the 'Look and Feel' category.");
-			}
 		}
 		$scope.refreshPlayer();
 	};
@@ -629,4 +629,20 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 	};
 
-}]);
+		$scope.setPluginEnabled = function (model, enabled) {
+			for (var cat in $scope.menuData) {
+				var plugins = $scope.menuData[cat].pluginsNotLoaded ? $scope.menuData[cat].pluginsNotLoaded : $scope.menuData[cat].plugins;
+				if (plugins && plugins.length > 0) {
+					for (var i = 0; i < plugins.length; i++) {
+						if (plugins[i].model === model) {
+							plugins[i].enabled = enabled; // update menu data so the plugin checkbox will update
+							if ($scope.playerData.config.plugins[model] && !enabled) {
+								delete $scope.playerData.config.plugins[model]; // remove plugin from player data if enabled=false
+							}
+						}
+					}
+				}
+			}
+		};
+
+	}]);
