@@ -465,7 +465,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			            }
 		            }
 	            }
-                var request = {
+	            // remove preview playlist from data before saving
+	            if (data2Save.plugins.playlistAPI) {
+		            if (data2Save.plugins.playlistAPI.kpl0Id) {
+			            delete data2Save.plugins.playlistAPI.kpl0Id;
+		            }
+		            if (data2Save.plugins.playlistAPI.kpl0Name) {
+			            delete data2Save.plugins.playlistAPI.kpl0Name;
+		            }
+	            }
+	            var request = {
                     'service': 'uiConf',
                     'action': 'update',
                     'id': data.id,

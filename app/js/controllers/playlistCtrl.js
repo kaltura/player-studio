@@ -22,7 +22,6 @@ KMCMenu.controller('playlistCtrl', ['$scope', '$modal', 'utilsSvc',
 		});
 
 		$scope.addPlaylist = function (prop) {
-			//property.initvalue.push({'label':''});
 			$scope.additionalPlaylists.push({"id": "", "name": "", "editable": true});
 			$scope.propertyChanged(prop, true);
 		};

@@ -416,7 +416,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
 			var playlistData = $scope.playerData.config.plugins.playlistAPI;
 			var playlistMenuArr = data.lookAndFeel.children.playlistAPI.children;
-			var playlistIndex = 0;
+			var playlistIndex = 1;
 			while (playlistData["kpl" + playlistIndex + "Id"]) {
 				// check if we need to add this to the menu
 				var found = false;
