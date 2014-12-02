@@ -61,14 +61,9 @@
 						                        ng-href="edit/{{item.id}}">{{item.name}}</a>
 
 							<div class="alertsWrapper">
-                            <span class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item)">
-                                <small>{{'This player requires updating'| translate}}
-                                </small>
-                            </span>
-							<span class=" alert alert-warning" ng-show="checkOldPlaylistPlayer(item)">
-                                <small>{{'Playlists created in Flash Studio cannot be migrated to Universal Studio'| translate}}
-                                </small>
-                            </span>
+	                            <span class=" alert alert-warning" ng-show="checkVersionNeedsUpgrade(item)">
+	                                <small>{{'This player requires updating'| translate}}</small>
+	                            </span>
 							</div>
 						</td>
 						<td class="idCol">{{item.id}}</td>
@@ -76,7 +71,7 @@
 						<td class="visible-lg col-lg-2 text-center"><span>{{item.createdAt | timeago }}</span></td>
 						<td class="actionBtns ">
 							<div class="inner">
-								<button type="button" class="btn btn-link" ng-click="duplicate(item)" ng-show="!checkOldPlaylistPlayer(item)"><span
+								<button type="button" class="btn btn-link" ng-click="duplicate(item)"><span
 										class="icon-copy"></span> {{'Duplicate'| translate}}
 								</button>
 								<button type="button" class="btn btn-link" ng-click="deletePlayer(item)"><span
@@ -86,6 +81,12 @@
 								        ng-show="checkVersionNeedsUpgrade(item)"
 								        ng-click="update(item)"><span class="glyphicon glyphicon-refresh"></span>
 									{{'Update'|
+									translate}}
+								</button>
+								<button type="button" class="btn btn-link"
+								        ng-show="checkV2Upgrade(item)"
+								        ng-click="upgrade(item)"><span class="glyphicon glyphicon-arrow-up"></span>
+									{{'Upgrade'|
 									translate}}
 								</button>
 							</div>

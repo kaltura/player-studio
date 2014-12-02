@@ -21,6 +21,11 @@ DirectivesModule.directive('onFinishRender', ['$timeout', function ($timeout) {
 		link: function (scope, element, attr) {
 			if (scope.$last === true) { // accordion section finished loading - init jQuery plugins after 3 seconds to allow menu items to render first
 				$timeout(function(){
+					if ($(".playlistSetup").length === 0){
+						$('div:contains("Playlist Configuration").panel').before('<div class="playlistSetup">Playlist setup:</div>'); // add playlist separator
+					}
+				},50);
+				$timeout(function(){
 					$(".numeric").not(".allowNegative").numeric({allowMinus: false, allowDecSep: false}); // set integer number fields to accept only numbers
 					$(".allowNegative").numeric({allowMinus: true, allowDecSep: false}); // set integer number fields to accept only numbers
 					$(".float").numeric({allowMinus: false, allowDecSep: true});    // set float number fields to accept only floating numbers
@@ -73,9 +78,7 @@ DirectivesModule.directive('hiddenValue', [function() {
         restrict: 'EA'
     };
 }]);
-DirectivesModule.directive('sortOrder', [
-    'sortSvc',
-    function (sortSvc) {
+DirectivesModule.directive('sortOrder', ['sortSvc', function (sortSvc) {
         return {
             restrict: 'EA',
             replace: true,
@@ -107,7 +110,7 @@ DirectivesModule.directive('sortOrder', [
         };
     }
 ]);
-DirectivesModule.directive("onbeforeunload", ["$window", "$filter", '$location',function ($window, $filter,$location) {
+DirectivesModule.directive("onbeforeunload", ["$window", "$filter", '$location',function ($window, $filter, $location) {
     var unloadtext, forms = [];
 
     function handleOnbeforeUnload() {
@@ -158,9 +161,7 @@ DirectivesModule.directive("onbeforeunload", ["$window", "$filter", '$location',
         });
     };
 }]);
-DirectivesModule.directive('mcustomScrollbar', [
-	'$timeout',
-	function ($timeout) {
+DirectivesModule.directive('mcustomScrollbar', ['$timeout',	function ($timeout) {
 		return {
 			priority: 0,
 			scope: {},

@@ -7,13 +7,13 @@ KMCServices.config(['$httpProvider', function($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 
-KMCServices.factory('apiCache', function($cacheFactory) {
+KMCServices.factory('apiCache', ['$cacheFactory', function($cacheFactory) {
     return $cacheFactory('apiCache', {
         capacity: 10
     });
-});
+}]);
 
-KMCServices.factory('select2Svc', function($timeout) {
+KMCServices.factory('select2Svc', ['$timeout', function($timeout) {
 	var select2Svc = {
 		'getConfig' : function(entries, searchFunc){
 			var confObj = {
@@ -49,9 +49,9 @@ KMCServices.factory('select2Svc', function($timeout) {
 		}
 	};
 	return select2Svc;
-});
+}]);
 
-KMCServices.factory('utilsSvc', function() {
+KMCServices.factory('utilsSvc', ['$modal', function($modal) {
 	var utilsSvc = {
 		'str2val' : function(str){
 			if (typeof str !== "string")
@@ -65,10 +65,44 @@ KMCServices.factory('utilsSvc', function() {
 			if (!isNaN(parseFloat(str)) && parseFloat(str).toString().length === str.length)
 				retVal = parseFloat(str);
 			return retVal;
+		},
+		'alert' : function(title, msg){
+			var retVal = $modal.open({ templateUrl: 'templates/message.html',
+				controller: 'ModalInstanceCtrl',
+				resolve: {
+					settings: function() {
+						return {
+							'title': title,
+							'message': msg,
+							buttons: [
+								{result: true, label: 'OK', cssClass: 'btn-primary'}
+							]
+						};
+					}
+				}
+			});
+			return retVal;
+		},
+		'confirm' : function(title, msg, lbl){
+			var retVal = $modal.open({ templateUrl: 'templates/message.html',
+				controller: 'ModalInstanceCtrl',
+				resolve: {
+					settings: function() {
+						return {
+							'title': title,
+							'message': msg,
+							buttons: [
+								{result: false, label: 'Cancel', cssClass: 'btn-default'}, {result: true, label: lbl, cssClass: 'btn-primary'}
+							]
+						};
+					}
+				}
+			});
+			return retVal;
 		}
 	};
 	return utilsSvc;
-});
+}]);
 
 KMCServices.factory('sortSvc', [function() {
     var containers = {};
@@ -193,7 +227,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 		            "wid": "_" + wid,
 		            "uiconf_id": uiconf_id,
 		            "flashvars": flashvars,
-		            "entry_id": entry_id
+		            "entry_id": entry_id,
+		            "readyCallback": function(){
+			            $("#kVideoTarget_ifp").contents().find('link[href$="playList.css"]').clone().appendTo($('head')); // inject playlist css from iframe to parent
+		            }
 	            });
             },
             'setKDPAttribute': function(attrStr, value) {
@@ -428,7 +465,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			            }
 		            }
 	            }
-                var request = {
+	            // remove preview playlist from data before saving
+	            if (data2Save.plugins.playlistAPI) {
+		            if (data2Save.plugins.playlistAPI.kpl0Id) {
+			            delete data2Save.plugins.playlistAPI.kpl0Id;
+		            }
+		            if (data2Save.plugins.playlistAPI.kpl0Name) {
+			            delete data2Save.plugins.playlistAPI.kpl0Name;
+		            }
+	            }
+	            var request = {
                     'service': 'uiConf',
                     'action': 'update',
                     'id': data.id,
@@ -447,13 +493,30 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     // refresh KMC players list so that the new player will appear in the "Preview and Embed" screen
                     var kmc = window.parent.kmc;
                     if (kmc && kmc.preview_embed) {
-                        kmc.preview_embed.updateList(false);
+                        kmc.preview_embed.updateList(data.tags.indexOf("playlist") !== -1);
                     }
                     deferred.resolve(result);
                 });
                 return deferred.promise;
             },
-            'playerUpdate': function(playerObj, html5lib) {
+	        'playerUpgrade': function(playerObj, html5lib){
+		        var request = {
+			        'service': 'uiConf',
+			        'action': 'update',
+			        'id': playerObj.id,                        // the id of the player to update
+			        'uiConf:html5Url': html5lib                // update the html5 lib to the new version
+		        };
+		        var deferred = $q.defer();
+		        var rejectText = $filter('translate')('Upgrade player action was rejected: ');
+		        apiService.doRequest(request).then(function(result) {
+				        deferred.resolve(result);
+			        }, function(msg) {
+				        deferred.reject(rejectText + msg);
+			        }
+		        );
+		        return deferred.promise;
+	        },
+            'playerUpdate': function(playerObj, html5lib, isPlaylist) {
 // use the upgradePlayer service to convert the old XML config to the new json config object
                 var deferred = $q.defer();
                 var rejectText = $filter('translate')('Update player action was rejected: ');
@@ -476,7 +539,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         delete data['widgetId'];
                         delete data.vars['ks'];
                     }
-// set an api request to update the uiconf
+// set an api request to update the uiconf. update playlist includeInLayout if needed
+	                if (isPlaylist && data.plugins.playlistAPI){
+		                data.plugins.playlistAPI.includeInLayout = true;
+	                }
 		            var playerTag =  playerObj.tags.indexOf("playlist") != -1 ? "playlist" : "player"; // set player tag to player or playlist according to the original player tag
                     var request = {
                         'service': 'uiConf',
