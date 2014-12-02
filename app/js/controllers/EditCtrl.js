@@ -227,6 +227,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }else{
 		    $scope.addValidation(plugin);
 	    }
+	    if (plugin.model == "playlistAPI"){
+		    if (plugin.enabled) {
+			    $scope.entriesTypeSelector = "Entries";
+			    $scope.selectDefaultEntry($scope.userEntries);
+		    }else{
+			    $scope.entriesTypeSelector = "Playlist";
+			    $scope.selectDefaultEntry($scope.userPlaylists);
+		    }
+	    }
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
 	    $timeout(function(){
