@@ -1,0 +1,22 @@
+<div class="text" ng-controller="keyValuePairsCtrl">
+	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
+	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i><br>
+	<br><table style="margin-bottom: 10px">
+		<thead>
+			<tr class="pluginLabel" ng-show="keyValuePairs.length">
+				<th>Key</th>
+				<th>Value</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in keyValuePairs" style="line-height: 36px">
+				<td style="width: 140px"><input type="text" style="width: 120px" on-finish-render ng-model="item.key" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
+				<td style="width: 140px"><input type="text" style="width: 120px" on-finish-render ng-model="item.value" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
+				<td style="width: 20px"><a href ng-click="keyValuePairs.splice($index, 1);propertyChanged(property, true)" tooltip="Remove key">[X]</a></span></td>
+			</tr>
+		</tbody>
+	</table>
+	<a href ng-click="keyValuePairs.push({'key':'', 'value':''});propertyChanged(property, true)" tooltip="Add a new key">[add]</a>
+	<hr bind-once ng-if="property.endline">
+</div>

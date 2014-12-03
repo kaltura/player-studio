@@ -366,6 +366,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
+		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
 		// calculate player size according to aspect ratio
 		var playerWidth = $scope.aspectRatio == 9/16 ? '100%' : '70%';
