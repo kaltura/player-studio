@@ -15,7 +15,7 @@ DirectivesModule.directive('bindOnce', function() {
 	};
 });
 
-DirectivesModule.directive('onFinishRender', ['$timeout', function ($timeout) {
+DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($timeout, $compile) {
 	return {
 		restrict: 'A',
 		link: function (scope, element, attr) {
@@ -23,6 +23,10 @@ DirectivesModule.directive('onFinishRender', ['$timeout', function ($timeout) {
 				$timeout(function(){
 					if ($(".playlistSetup").length === 0){
 						$('div:contains("Playlist Configuration").panel').before('<div class="playlistSetup">Playlist setup:</div>'); // add playlist separator
+					}
+					if ($(".addPlugin").length === 0){
+						var addPluginBtn = $compile(angular.element('<p style="margin-top: 40px; margin-left: 115px"><button ng-click="addPlugin()" class="btn btn-default addPlugin"><i class="glyphicon glyphicon-plus">&nbsp;</i>Add Plugin</button></p>'))(scope);
+						$('div:contains("UI Variables").panel').after(addPluginBtn); // add playlist separator
 					}
 				},50);
 				$timeout(function(){

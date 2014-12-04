@@ -655,4 +655,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}
 		};
 
+		$scope.addPlugin = function(){
+			var modal = utilsSvc.userInput('Add custom plugin','Plugin Name:', 'Add');
+			$timeout(function(){
+				$(".userInput").alphanum({allowSpace: false});
+			},50);
+
+			modal.result.then(function(result) {
+				if (result) {
+					alert(result);
+				}
+			});
+		};
+
 	}]);

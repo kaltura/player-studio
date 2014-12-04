@@ -99,6 +99,23 @@ KMCServices.factory('utilsSvc', ['$modal', function($modal) {
 				}
 			});
 			return retVal;
+		},
+		'userInput' : function(title, msg, lbl){
+			var retVal = $modal.open({ templateUrl: 'templates/inputWindow.html',
+				controller: 'ModalInstanceInputCtrl',
+				resolve: {
+					settings: function() {
+						return {
+							'title': title,
+							'message': msg,
+							buttons: [
+								{result: false, label: 'Cancel', cssClass: 'btn-default'}, {result: true, label: lbl, cssClass: 'btn-primary'}
+							]
+						};
+					}
+				}
+			});
+			return retVal;
 		}
 	};
 	return utilsSvc;
