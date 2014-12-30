@@ -8,7 +8,7 @@
 	                      ng-model="property.initvalue"></spectrum-colorpicker>
 	<spectrum-colorpicker ng-change="propertyChanged(property, true)" class="pull-right"
 	                      ng-if="plugin!=null && plugin.enabled"
-	                      options="{showInput: true, disabled: false, clickoutFiresChange: true, showButtons: false, preferredFormat: 'hex', showAlpha: property.alpha}"
+	                      options="{showInput: true, disabled: false, clickoutFiresChange: true, showButtons: false, preferredFormat: 'rgb', showAlpha: property.alpha}"
 	                      ng-model="property.initvalue"></spectrum-colorpicker>
 	<hr bind-once ng-if="property.endline">
 </div>
