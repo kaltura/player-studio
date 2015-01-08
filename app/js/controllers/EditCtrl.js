@@ -536,7 +536,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		// merge updates ui vars data
 		for (var i=0; i < $scope.playerData.vars.length; i++){
 			if ($scope.excludedUiVars.indexOf($scope.playerData.vars[i].label) === -1) // don't update uiVars that are already in the menu on other places
-				$scope.playerData.config.uiVars[$scope.playerData.vars[i].label] = utilsSvc.str2val($scope.playerData.vars[i].value);
+				if ($scope.playerData.vars[i].label !== "" && $scope.playerData.vars[i].value !== "") // don't save UIVars with empty key or value
+					$scope.playerData.config.uiVars[$scope.playerData.vars[i].label] = utilsSvc.str2val($scope.playerData.vars[i].value);
 		}
 
 		// remove unused ui vars: deleted / renamed by user and convert to uivars array
