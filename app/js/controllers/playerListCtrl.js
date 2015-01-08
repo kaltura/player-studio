@@ -193,7 +193,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 	                var msgText, buttons;
 	                if ($scope.checkVersionNeedsUpgrade(item)){
 		                msgText = $filter('translate')('This player must be updated before editing. <br/>Some features and design may be lost.');
-		                buttons = [{result: false, label: 'Cancel', cssClass: 'btn-default'}, {result: true, label: 'Upgrade', cssClass: 'btn-primary'}];
+		                buttons = [{result: false, label: 'Cancel', cssClass: 'btn-default'}, {result: true, label: 'Update', cssClass: 'btn-primary'}];
 	                }
 	                if ($scope.checkOldPlaylistPlayer(item)){
 		                msgText = $filter('translate')('Playlists created in Flash Studio cannot be edited in Universal Studio.<br>Please use Flash Studio to edit this player.');
