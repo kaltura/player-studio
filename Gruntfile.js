@@ -98,7 +98,8 @@ module.exports = function(grunt) {
                     'app/bower_components/angular/angular.min.js',
 	                'app/lib/jquery.xdomainrequest.min.js',
                     'app/lib/angular-spectrum-colorpicker.min.js',
-                    'app/lib/jquery.alphanum.js'
+                    'app/lib/jquery.alphanum.js',
+                    'app/lib/json-edit/directives.js'
                 ],
                 dest: '_dist/vendor/vendor.min.js'
             },
@@ -137,7 +138,7 @@ module.exports = function(grunt) {
             combine: {
                 files: {
                     //  '_dist/css/studio.css': ['app/css/app.css', 'app/css/edit.css', 'app/css/new.css', 'app/css/list.css', 'app/css/icons.css'],
-                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css', 'app/bower_components/select2/select2.css', 'app/css/spectrum.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
+                    '_dist/css/vendor.css': ['app/bower_components/bootstrap/dist/css/bootstrap.min.css', 'app/bower_components/select2/select2.css', 'app/css/spectrum.css', 'app/css/json-edit.css', 'app/lib/malihu_custon_scrollbar/jquery.mCustomScrollbar.css']
                 }
 
             }

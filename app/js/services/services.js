@@ -428,7 +428,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 var copyobj = data.plugins || data;
                 angular.forEach(copyobj, function(value, key) {
                     if (angular.isObject(value)) {
-                        if (typeof value.enabled == 'undefined' || value.enabled === false) {
+                        if ( value.enabled && value.enabled === false) {
                             delete copyobj[key];
                         }
                         else {
