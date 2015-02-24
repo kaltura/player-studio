@@ -8,6 +8,6 @@ KMCMenu.controller('entrySelectorCtrl', ['$scope',
 				}
 			}
 			return id;
-		}
+		};
 	}
 ]);
