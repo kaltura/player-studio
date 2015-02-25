@@ -25,7 +25,7 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 						$('div:contains("Playlist Configuration").panel').before('<div class="playlistSetup">Playlist setup:</div>'); // add playlist separator
 					}
 					if ($(".addPlugin").length === 0){
-						var addPluginBtn = $compile(angular.element('<p style="margin-top: 40px; margin-left: 115px"><button ng-click="addPlugin()" class="btn btn-default addPlugin"><i class="glyphicon glyphicon-plus">&nbsp;</i>Add Plugin</button></p>'))(scope);
+						var addPluginBtn = $compile(angular.element('<p style="margin-top: 40px; margin-bottom: 36px; margin-left: 80px"><button ng-click="addPlugin()" class="btn btn-default addPlugin"><i class="glyphicon glyphicon-plus">&nbsp;</i>Add Custom Plugin</button></p>'))(scope);
 						$('div:contains("UI Variables").panel').after(addPluginBtn); // add playlist separator
 					}
 				},50);

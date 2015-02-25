@@ -689,7 +689,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					$scope.menuData[i].plugins.push({
 						description: model + " custom plugin.",
 						enabled: true,
-						isopen: true,
+						isopen: $.isEmptyObject(data) ? true: false,
 						custom: true,
 						label: model + " custom plugin",
 						model: model,
