@@ -3,7 +3,10 @@
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip-html-unsafe="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i><br>
 	<!--textarea type="text" ng-class="{invalid: property.invalidTooltip}"  tooltip="{{property.invalidTooltip}}" tooltip-placement="top" tooltip-popup-delay="0" ng-model="property.initvalue" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')" ng-disabled="plugin!=null && !plugin.enabled"></textarea-->
 	<div class="jsonView">
-		<json child="property.initvalue" default-collapsed="true" type="object"></json>
+		<div ng-hide="plugin!=null && !plugin.enabled">
+			<json child="property.initvalue" default-collapsed="true" type="object"></json>
+		</div>
+		<span ng-class="{disabled: true}" ng-show="plugin!=null && !plugin.enabled">Please enable the plugin to edit this property</span>
 	</div>
 	<hr bind-once ng-if="property.endline">
 </div>
