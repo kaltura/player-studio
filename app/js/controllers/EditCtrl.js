@@ -162,6 +162,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             $scope.menuData.push(category);
         }
 
+	    // add support for custom plugins
+	    for (var plug in $scope.playerData.config.plugins ){
+		    var plugin = angular.copy($scope.playerData.config.plugins[plug]);
+		    if ( plugin.custom ){
+			    delete plugin.custom;
+			    delete plugin.enabled;
+			    delete plugin.plugin;
+			    $scope.addCustomPlugin(plug, plugin);
+		    }
+	    }
+
 	    // to boost performances - don't render all categories now, only search and basic display
 	    for (var j=2; j<$scope.menuData.length; j++){
 		    $scope.menuData[j].pluginsNotLoaded = angular.copy($scope.menuData[j].plugins);
@@ -512,7 +523,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				var pluginsStr = $scope.menuData[category]['plugins'] !== undefined ? 'plugins' : 'pluginsNotLoaded'; // support plugins that we didn't render the menu for yet
 				for (var plug=0; plug < $scope.menuData[category][pluginsStr].length; plug++)
 					if ($scope.menuData[category][pluginsStr][plug].enabled === true) {// get only enabled plugins
-						$scope.setPlayerProperties($scope.menuData[category][pluginsStr][plug].properties);
+						var plugin = $scope.menuData[category][pluginsStr][plug];
+						$scope.setPlayerProperties(plugin.properties);
+						if (plugin.custom){
+							$scope.updateCustomPlugins(plugin.model);
+						}
 					}
 			}
 		}
@@ -581,7 +596,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
 				}else{
 					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
-						pData[prop] = {'enabled':true};
+						pData[prop] = data.custom ? {'custom':true, 'enabled':true} : {'enabled':true};
 					}
 					pData = pData[prop];   // go to the next object in the object path
 				}
@@ -661,12 +676,45 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$timeout(function(){
 				$(".userInput").alphanum({allowSpace: false});
 			},50);
-
 			modal.result.then(function(result) {
 				if (result) {
-					alert(result);
+					$scope.addCustomPlugin(result, {});
 				}
 			});
+		};
+
+		$scope.addCustomPlugin = function(model, data){
+			for (var i=0; i < $scope.menuData.length; i++){
+				if ( $scope.menuData[i].label === "Plugins" ){
+					$scope.menuData[i].plugins.push({
+						description: model + " custom plugin.",
+						enabled: true,
+						isopen: true,
+						custom: true,
+						label: model + " custom plugin",
+						model: model,
+						properties: [{
+							initvalue: data,
+							custom: true,
+							helpnote: "Configuration options",
+							label: "Configuration options",
+							model: "config.plugins." + model + ".config", // set config object to be edited by the json editor. Will be copied and removed when saving player data
+							type: "json"
+						}]
+					});
+				}
+			}
+		};
+
+		$scope.updateCustomPlugins = function(plugin){
+			if ($scope.playerData.config.plugins[plugin] && $scope.playerData.config.plugins[plugin]["config"]){
+				var conf = $scope.playerData.config.plugins[plugin]["config"];
+				$scope.playerData.config.plugins[plugin] = {'enabled': true, 'custom': true, 'plugin': true}; // clear previous properties
+				for (var prop in conf){ // copy properties from config object to the plugin root
+					$scope.playerData.config.plugins[plugin][prop] = conf[prop];
+				}
+				delete $scope.playerData.config.plugins[plugin].config; // delete config object
+			}
 		};
 
 	}]);
