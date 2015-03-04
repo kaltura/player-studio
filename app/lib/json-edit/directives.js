@@ -24,6 +24,7 @@ angular.module('JSONedit', ['ui.sortable'])
     restrict: 'E',
     scope: {
       child: '=',
+	  allowComplexTypes: '=',
       type: '@',
       defaultCollapsed: '='
     },
@@ -34,7 +35,7 @@ angular.module('JSONedit', ['ui.sortable'])
         var refName = "Reference";
         var boolName = "Boolean"
 
-        scope.valueTypes = [stringName, objectName, arrayName, refName, boolName];
+        scope.valueTypes = (scope.allowComplexTypes === false) ? [stringName, boolName] : [stringName, objectName, arrayName, refName, boolName];
         scope.sortableOptions = {
             axis: 'y'
         };

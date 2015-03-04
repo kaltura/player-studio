@@ -695,6 +695,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						model: model,
 						properties: [{
 							initvalue: data,
+							allowComplexTypes: false,
 							custom: true,
 							helpnote: "Configuration options",
 							label: "Configuration options",
