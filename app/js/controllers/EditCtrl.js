@@ -684,7 +684,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		};
 
 		$scope.importPlugin = function(){
-			var modal = utilsSvc.userInput('Import plugin','Plugin Configuration String:', 'Import',{"width":"95%"});
+			var modal = utilsSvc.userInput('Import plugin','Plugin Configuration String:', 'Import',{"width":"100%"});
 			modal.result.then(function(result) {
 				if (result) {
 					var arr = result.split("&"); // break config string to array
