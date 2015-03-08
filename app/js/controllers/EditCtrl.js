@@ -672,13 +672,45 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		};
 
 		$scope.addPlugin = function(){
-			var modal = utilsSvc.userInput('Add custom plugin','Plugin Name:', 'Add');
+			var modal = utilsSvc.userInput('Add custom plugin','Plugin Name:', 'Add',{"width":"50%"});
 			$timeout(function(){
 				$(".userInput").alphanum({allowSpace: false});
 			},50);
 			modal.result.then(function(result) {
 				if (result) {
 					$scope.addCustomPlugin(result, {});
+				}
+			});
+		};
+
+		$scope.importPlugin = function(){
+			var modal = utilsSvc.userInput('Import plugin','Plugin Configuration String:', 'Import',{"width":"95%"});
+			modal.result.then(function(result) {
+				if (result) {
+					var arr = result.split("&"); // break config string to array
+					if ( arr[0].indexOf("=") == -1 ){ // we have a plugin name, create a custom plugin
+						var model = arr[0];           // the plugin name is the first item in the array
+						var data = {};
+						for ( var  i = 1; i < arr.length; i++ ){ // break each item in the array to key/value pair and add to data object
+							var keyVal = arr[i].split("=");
+							data[keyVal[0]] = keyVal[1];
+						}
+						$scope.addCustomPlugin(model,data);
+					}else{
+						for ( var  i = 0; i < arr.length; i++ ){ // break each item in the array to key/value pair and add to UIVars in menu data
+							var keyVal = arr[i].split("=");
+							for ( var j=0; j < $scope.menuData.length; j++ ){
+								if ( $scope.menuData[j].label === "Plugins" ){
+									for ( var k = 0; k < $scope.menuData[j].plugins.length; k++ ){
+										if ( $scope.menuData[j].plugins[k].model === "uiVars" ){
+											var vars = $scope.menuData[j].plugins[k].properties[0].initvalue;
+											vars.push( {'label':keyVal[0], 'value': keyVal[1]} );
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			});
 		};

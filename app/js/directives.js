@@ -25,8 +25,12 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 						$('div:contains("Playlist Configuration").panel').before('<div class="playlistSetup">Playlist setup:</div>'); // add playlist separator
 					}
 					if ($(".addPlugin").length === 0){
-						var addPluginBtn = $compile(angular.element('<p style="margin-top: 40px; margin-bottom: 36px; margin-left: 80px"><button ng-click="addPlugin()" class="btn btn-default addPlugin"><i class="glyphicon glyphicon-plus">&nbsp;</i>Add Custom Plugin</button></p>'))(scope);
-						$('div:contains("UI Variables").panel').after(addPluginBtn); // add playlist separator
+						var addPluginBtn = $compile(angular.element('<p style="margin-top: 40px; margin-bottom: 36px"><button ng-click="addPlugin()" class="btn btn-default addPlugin"><i class="glyphicon glyphicon-plus">&nbsp;</i>Create New Plugin</button></p>'))(scope);
+						$('div:contains("UI Variables").panel').after(addPluginBtn);
+					}
+					if ($(".importPlugin").length === 0){
+						var importPluginBtn = $compile(angular.element('<p style="float: left; margin-right: 20px"><button ng-click="importPlugin()" class="btn btn-default importPlugin"><i class="glyphicon glyphicon-import">&nbsp;</i>Import Plugin</button></p>'))(scope);
+						$(".addPlugin").after(importPluginBtn);
 					}
 				},50);
 				$timeout(function(){

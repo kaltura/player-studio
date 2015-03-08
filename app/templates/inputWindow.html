@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body">
         <p ng-bind-html="message | HTMLunsafe"></p>
-	    <input type="text" class="userInput" ng-model="userInput">
+	    <input type="text" class="userInput" ng-style="inputStyle" ng-model="userInput">
     </div>
     <div class="modal-footer">
         <button ng-repeat="btn in buttons" ng-click="close(btn.result)" class="btn" ng-class="btn.cssClass">{{ btn.label}}</button>
