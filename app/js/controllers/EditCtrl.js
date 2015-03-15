@@ -163,13 +163,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         }
 
 	    // add support for custom plugins
-	    for (var plug in $scope.playerData.config.plugins ){
-		    var plugin = angular.copy($scope.playerData.config.plugins[plug]);
-		    if ( plugin.custom ){
-			    delete plugin.custom;
-			    delete plugin.enabled;
-			    delete plugin.plugin;
-			    $scope.addCustomPlugin(plug, plugin);
+	    for (var pl in $scope.playerData.config.plugins ){
+		    var custom_plugin = angular.copy($scope.playerData.config.plugins[pl]);
+		    if ( custom_plugin.custom ){
+			    delete custom_plugin.custom;
+			    delete custom_plugin.enabled;
+			    delete custom_plugin.plugin;
+			    $scope.addCustomPlugin(pl, custom_plugin);
 		    }
 	    }
 
@@ -685,6 +685,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 		$scope.importPlugin = function(){
 			var modal = utilsSvc.userInput('Import plugin','Plugin Configuration String:', 'Import',{"width":"100%"});
+			var keyVal;
 			modal.result.then(function(result) {
 				if (result) {
 					var arr = result.split("&"); // break config string to array
@@ -692,13 +693,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						var model = arr[0];           // the plugin name is the first item in the array
 						var data = {};
 						for ( var  i = 1; i < arr.length; i++ ){ // break each item in the array to key/value pair and add to data object
-							var keyVal = arr[i].split("=");
+							keyVal = arr[i].split("=");
 							data[keyVal[0]] = keyVal[1];
 						}
 						$scope.addCustomPlugin(model,data);
 					}else{
-						for ( var  i = 0; i < arr.length; i++ ){ // break each item in the array to key/value pair and add to UIVars in menu data
-							var keyVal = arr[i].split("=");
+						for ( var  inx = 0; inx < arr.length; inx++ ){ // break each item in the array to key/value pair and add to UIVars in menu data
+							keyVal = arr[inx].split("=");
 							for ( var j=0; j < $scope.menuData.length; j++ ){
 								if ( $scope.menuData[j].label === "Plugins" ){
 									for ( var k = 0; k < $scope.menuData[j].plugins.length; k++ ){
