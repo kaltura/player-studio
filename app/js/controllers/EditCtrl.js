@@ -162,6 +162,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
             $scope.menuData.push(category);
         }
 
+	    // add support for custom plugins
+	    for (var plug in $scope.playerData.config.plugins ){
+		    var plugin = angular.copy($scope.playerData.config.plugins[plug]);
+		    if ( plugin.custom ){
+			    delete plugin.custom;
+			    delete plugin.enabled;
+			    delete plugin.plugin;
+			    $scope.addCustomPlugin(plug, plugin);
+		    }
+	    }
+
 	    // to boost performances - don't render all categories now, only search and basic display
 	    for (var j=2; j<$scope.menuData.length; j++){
 		    $scope.menuData[j].pluginsNotLoaded = angular.copy($scope.menuData[j].plugins);
@@ -512,7 +523,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				var pluginsStr = $scope.menuData[category]['plugins'] !== undefined ? 'plugins' : 'pluginsNotLoaded'; // support plugins that we didn't render the menu for yet
 				for (var plug=0; plug < $scope.menuData[category][pluginsStr].length; plug++)
 					if ($scope.menuData[category][pluginsStr][plug].enabled === true) {// get only enabled plugins
-						$scope.setPlayerProperties($scope.menuData[category][pluginsStr][plug].properties);
+						var plugin = $scope.menuData[category][pluginsStr][plug];
+						$scope.setPlayerProperties(plugin.properties);
+						if (plugin.custom){
+							$scope.updateCustomPlugins(plugin.model);
+						}
 					}
 			}
 		}
@@ -581,7 +596,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
 				}else{
 					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
-						pData[prop] = {'enabled':true};
+						pData[prop] = data.custom ? {'custom':true, 'enabled':true} : {'enabled':true};
 					}
 					pData = pData[prop];   // go to the next object in the object path
 				}
@@ -653,6 +668,85 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						}
 					}
 				}
+			}
+		};
+
+		$scope.addPlugin = function(){
+			var modal = utilsSvc.userInput('Add custom plugin','Plugin Name:', 'Add',{"width":"50%"});
+			$timeout(function(){
+				$(".userInput").alphanum({allowSpace: false});
+			},50);
+			modal.result.then(function(result) {
+				if (result) {
+					$scope.addCustomPlugin(result, {});
+				}
+			});
+		};
+
+		$scope.importPlugin = function(){
+			var modal = utilsSvc.userInput('Import plugin','Plugin Configuration String:', 'Import',{"width":"100%"});
+			modal.result.then(function(result) {
+				if (result) {
+					var arr = result.split("&"); // break config string to array
+					if ( arr[0].indexOf("=") == -1 ){ // we have a plugin name, create a custom plugin
+						var model = arr[0];           // the plugin name is the first item in the array
+						var data = {};
+						for ( var  i = 1; i < arr.length; i++ ){ // break each item in the array to key/value pair and add to data object
+							var keyVal = arr[i].split("=");
+							data[keyVal[0]] = keyVal[1];
+						}
+						$scope.addCustomPlugin(model,data);
+					}else{
+						for ( var  i = 0; i < arr.length; i++ ){ // break each item in the array to key/value pair and add to UIVars in menu data
+							var keyVal = arr[i].split("=");
+							for ( var j=0; j < $scope.menuData.length; j++ ){
+								if ( $scope.menuData[j].label === "Plugins" ){
+									for ( var k = 0; k < $scope.menuData[j].plugins.length; k++ ){
+										if ( $scope.menuData[j].plugins[k].model === "uiVars" ){
+											var vars = $scope.menuData[j].plugins[k].properties[0].initvalue;
+											vars.push( {'label':keyVal[0], 'value': keyVal[1]} );
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+		};
+
+		$scope.addCustomPlugin = function(model, data){
+			for (var i=0; i < $scope.menuData.length; i++){
+				if ( $scope.menuData[i].label === "Plugins" ){
+					$scope.menuData[i].plugins.push({
+						description: model + " custom plugin.",
+						enabled: true,
+						isopen: $.isEmptyObject(data) ? true: false,
+						custom: true,
+						label: model + " custom plugin",
+						model: model,
+						properties: [{
+							initvalue: data,
+							allowComplexTypes: false,
+							custom: true,
+							helpnote: "Configuration options",
+							label: "Configuration options",
+							model: "config.plugins." + model + ".config", // set config object to be edited by the json editor. Will be copied and removed when saving player data
+							type: "json"
+						}]
+					});
+				}
+			}
+		};
+
+		$scope.updateCustomPlugins = function(plugin){
+			if ($scope.playerData.config.plugins[plugin] && $scope.playerData.config.plugins[plugin]["config"]){
+				var conf = $scope.playerData.config.plugins[plugin]["config"];
+				$scope.playerData.config.plugins[plugin] = {'enabled': true, 'custom': true, 'plugin': true}; // clear previous properties
+				for (var prop in conf){ // copy properties from config object to the plugin root
+					$scope.playerData.config.plugins[plugin][prop] = conf[prop];
+				}
+				delete $scope.playerData.config.plugins[plugin].config; // delete config object
 			}
 		};
 
