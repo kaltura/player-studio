@@ -498,6 +498,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'id': data.id,
                     'uiConf:name': data.name,
                     'uiConf:tags': data.tags,
+		            'uiConf:height': data.height,
+		            'uiConf:width': data.width,
                     'uiConf:description': data.description ? data.description : '',
                     'uiConf:config': JSON.stringify(data2Save, null, "\t")
                 };

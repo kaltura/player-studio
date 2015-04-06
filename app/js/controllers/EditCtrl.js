@@ -4,10 +4,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, $location, requestNotificationChannel, select2Svc, utilsSvc) {
 
 	$scope.playerData = angular.copy(PlayerData);   // get the player data
-    $scope.isIE8 = window.ie8;                      // set IE8 flash for color picker
+	$scope.isIE8 = window.ie8;                      // set IE8 flash for color picker
     $scope.invalidProps = [];                       // array of invalid properties
 	$scope.dataChanged = false;                     // flag if the player data was changed so we can issue an alert if returning to list without saving
-	$scope.aspectRatio = 9/16;                      // set aspect ratio to wide screen
+	var playerRatio = ($scope.playerData.height / $scope.playerData.width);
+	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
@@ -327,9 +328,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		        $scope.refreshPlayer();
 		    }
 	    }
-	    if (property['player-refresh'] == 'aspectToggle'){ // handle aspect ratio change
-		    $scope.aspectRatio = property.initvalue == 'wide' ? 9/16 : 3/4;
-		    $scope.refreshPlayer();
+	    if (property.aspectRatio && property.aspectRatio!=="custom"){
+		    var aspect = property.aspectRatio == "wide" ? 9/16 : 3/4;
+		    $scope.playerData.height = parseInt($scope.playerData.width * aspect);
 	    }
     };
 
@@ -379,10 +380,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$scope.updatePlayerData(); // update the player data from the menu data
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
-		// calculate player size according to aspect ratio
-		var playerWidth = $scope.aspectRatio == 9/16 ? '100%' : '70%';
-		$("#kVideoTarget").width(playerWidth);
-		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40);
+		$("#kVideoTarget").width($scope.playerData.width);
+		$("#kVideoTarget").height($scope.playerData.height);
+
 		for (var plug in $scope.playerData.config.plugins)
 			if ($scope.playerData.config.plugins[plug]['enabled'] === true)
 				$scope.playerData.config.plugins[plug]['plugin'] = true;
@@ -399,10 +399,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		var entryID = $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
 		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID);
 	};
-
-	$(window).resize(function () {
-		$("#kVideoTarget").height($("#kVideoTarget").width()*$scope.aspectRatio+40); // resize player height according to irs width and aspect ratio on window resize
-	});
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
