@@ -60,6 +60,12 @@
 .icon-close:before {
   content: "\e603";
 }
+.icon-lock:before {
+	content: "\e60f";
+}
+.icon-unlock:before {
+	content: "\e610";
+}
 .icon{
 	cursor: pointer;
 	color: #fff;

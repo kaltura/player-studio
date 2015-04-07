@@ -112,6 +112,10 @@
 	height: 40px;
 	padding-top: 5px;
 }
+.dimensions{
+	height: 130px;
+	padding-top: 5px;
+}
 .select2-drop .select2-chosen{
 	line-height: 1.4 !important;
 	font-size: 13px !important;
