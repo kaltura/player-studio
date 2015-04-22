@@ -347,37 +347,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 
             },
             'getPlayer': function(id) {
-                var foundInCache = false;
                 var deferred = $q.defer();
-                if (typeof currentPlayer.id != 'undefined') { // find if player obj is already loaded
-                    if (currentPlayer.id == id || id == 'currentEdit') { // this ability to get the player data  we alreayd work on is there for future revert update feature.
-                        currentPlayer.config.plugins = this.preparePluginsDataForRender(currentPlayer.config.plugins); // refilter the data incase it was made dirty
-                        playersService.setCurrentPlayer(currentPlayer); // reEnabled plugins.
+                apiService.setCache(false);
+                var request = {
+                    'service': 'uiConf',
+                    'action': 'get',
+                    'id': id
+                };
+                apiService.doRequest(request).then(function(result) {
+                        playersService.setCurrentPlayer(result);
                         deferred.resolve(currentPlayer);
-                        foundInCache = true;
                     }
-                }
-                if (!foundInCache) {
-                    // find player data by its ID in the list cache
-                    if (typeof playersCache[id] != 'undefined') {
-                        playersService.setCurrentPlayer(playersCache[id]);
-                        deferred.resolve(currentPlayer);
-                        foundInCache = true;
-                    }
-                }
-                if (!foundInCache) {
-                    var request = {
-                        'service': 'uiConf',
-                        'action': 'get',
-                        'id': id
-
-                    };
-                    apiService.doRequest(request).then(function(result) {
-                            playersService.setCurrentPlayer(result);
-                            deferred.resolve(currentPlayer);
-                        }
-                    );
-                }
+                );
                 return deferred.promise;
             },
             setCurrentPlayer: function(player) {
