@@ -82,6 +82,9 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 'filter:objectType': 'KalturaUiConfFilter',
                 'filter:creationModeEqual': '2',
                 'ignoreNull': '1',
+				'responseProfile:objectType':'KalturaDetachedResponseProfile',
+				'responseProfile:type':'1',
+				'responseProfile:fields':'id,name,html5Url,createdAt,updatedAt',
                 'page:objectType': 'KalturaFilterPager',
                 'pager:pageIndex': '1',
                 'pager:pageSize': '999',
@@ -92,7 +95,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 $scope.data = data.objects;   // players list
                 $scope.calculateTotalItems(); // calculate the total items including search filters to display in the pager
                 PlayerService.cachePlayers(data.objects); // save players list data to memory cache
-	            requestNotificationChannel.requestEnded('list');
+				requestNotificationChannel.requestEnded('list');
                 setTimeout(function(){
                     $scope.triggerLayoutChange(); // update scroller;
                 },300);
@@ -132,13 +135,13 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             // check if this player should be upgraded (binded to the player's HTML outdated message)
             $scope.checkVersionNeedsUpgrade = function(item) {
                 var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL
-                return ((html5libVersion == "1" || item.config === null) ); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
+                return ((html5libVersion == "1") ); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
             };
 
             // check if this player is an old playlist
             $scope.checkOldPlaylistPlayer = function(item) {
                 var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL
-                return ((html5libVersion == "1" || item.config === null) && item.tags.indexOf("playlist") !== -1); // this player is an old playlist that is not supported in Universal studio
+                return ((html5libVersion == "1") && item.tags.indexOf("playlist") !== -1); // this player is an old playlist that is not supported in Universal studio
             };
 
             $scope.showSubTitle = true; // show the subtitle text below the title
