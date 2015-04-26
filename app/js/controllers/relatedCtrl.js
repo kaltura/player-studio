@@ -15,7 +15,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 				$scope.relatedOption = "playlistId";
 				$scope.playlistId = data.playlistId;
 			}
-		};
+		}
 
 		// update entries list
 		$scope.entryListChange = function(){
