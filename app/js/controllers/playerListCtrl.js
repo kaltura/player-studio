@@ -68,12 +68,6 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 });
             }
 
-            // clear cache if we came back from edit page and we have dirty data
-//            if (menuSvc.menuScope.playerEdit && !menuSvc.menuScope.playerEdit.$pristine){
-//                apiService.setCache(false);
-//                PlayerService.clearCurrentPlayer();
-//            }
-
             // get players list from KMC
             var playersRequest = {
                 'filter:tagsMultiLikeOr': 'kdp3,html5studio',
@@ -84,7 +78,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
                 'ignoreNull': '1',
 				'responseProfile:objectType':'KalturaDetachedResponseProfile',
 				'responseProfile:type':'1',
-				'responseProfile:fields':'id,name,html5Url,createdAt,updatedAt',
+				'responseProfile:fields':'id,name,html5Url,createdAt,updatedAt,tags',
                 'page:objectType': 'KalturaFilterPager',
                 'pager:pageIndex': '1',
                 'pager:pageSize': '999',
