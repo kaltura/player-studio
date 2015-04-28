@@ -3,5 +3,5 @@
 	<label ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}"><input type="checkbox" ng-change="propertyChanged(property, true)" ng-disabled="plugin!=null && !plugin.enabled" ng-model="property.initvalue">{{property.label}}</label>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
 	<!--pretty-checkbox ng-disabled="plugin!=null && !plugin.enabled" ng-model="property.initvalue" label="property.label"></pretty-checkbox-->
-	<hr bind-once ng-if="property.endline" style="margin-left: -50px;width: 365px">
+	<hr bind-once ng-if="property.endline" style="margin-left: -50px;width: 380px">
 </div>
