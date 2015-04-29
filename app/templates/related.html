@@ -6,7 +6,7 @@
 		<label class="btn btn-default btn-sm" ng-model="relatedOption" btn-radio="'playlistId'">Playlist ID</label>
 		<label class="btn btn-default btn-sm" ng-model="relatedOption" btn-radio="'entryList'">Entries List</label>
 	</div>
-	<span class="featureDesc" ng-show="relatedOption=='relatedToEntry'">Entries related to the current entry will be displayed.<br>If no related entries exist, the plugin is hidden.</span>
+	<span class="featureDesc" ng-show="relatedOption=='relatedToEntry'">Entries related to the current entry will be displayed.<br>If there are no related entries, the plugin is disabled.</span>
 
 	<span class="featureDesc" ng-show="relatedOption=='playlistId'">Select Playlist:</span>
 	<input ng-show="relatedOption=='playlistId'" ui-select2="{{property.configObject}}" data-placeholder="{{getLabel(playlistId, property.configObject)}}" ng-model="playlistId" class="dropdown" ng-disabled="plugin!=null && !plugin.enabled" ng-change="playlistIdChange();propertyChanged(property, true)" type="hidden"/>
