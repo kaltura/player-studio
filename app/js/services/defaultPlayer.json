@@ -14,8 +14,7 @@
         "liveStatus": [],
         "liveBackBtn": [],
         "fullScreenBtn": [],
-        "logo": [],
-        "skipBtn": []
+        "logo": []
     },
     "uiVars": {
         "autoPlay": false,
