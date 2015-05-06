@@ -1,0 +1,16 @@
+<div class="text" style="height: 115px" ng-controller="relatedCtrl">
+	<span class="pluginLabel" ng-class="{disabled: plugin!=null && !plugin.enabled}" id="{{property.id}}">{{property.label}}</span>
+	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip-html-unsafe="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i><br>
+	<div class="btn-group" style="margin-bottom: 5px; margin-top: 5px; width: 100%">
+		<label class="btn btn-default btn-sm" ng-model="relatedOption" btn-radio="'relatedToEntry'" ng-click="relatedSelected()">Related to Entry</label>
+		<label class="btn btn-default btn-sm" ng-model="relatedOption" btn-radio="'playlistId'">Playlist ID</label>
+		<label class="btn btn-default btn-sm" ng-model="relatedOption" btn-radio="'entryList'">Entries List</label>
+	</div>
+	<span class="featureDesc" ng-show="relatedOption=='relatedToEntry'">Entries related to the current entry will be displayed.<br>If there are no related entries, the plugin is disabled.</span>
+
+	<span class="featureDesc" ng-show="relatedOption=='playlistId'">Select Playlist:</span>
+	<input ng-show="relatedOption=='playlistId'" ui-select2="{{property.configObject}}" data-placeholder="{{getLabel(playlistId, property.configObject)}}" ng-model="playlistId" class="dropdown" ng-disabled="plugin!=null && !plugin.enabled" ng-change="playlistIdChange();propertyChanged(property, true)" type="hidden"/>
+
+	<span class="featureDesc" ng-show="relatedOption=='entryList'" >Please enter a comma delimited list of entries:</span>
+	<input type="text" class="alpha" ng-show="relatedOption=='entryList'" ng-model="entryList" ng-change="entryListChange();propertyChanged(property, false)" ng-enter="entryListChange();propertyChanged(property, 'enter')" ng-blur="entryListChange();propertyChanged(property, 'blur')" ng-disabled="plugin!=null && !plugin.enabled">
+</div>
