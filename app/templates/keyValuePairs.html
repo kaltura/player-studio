@@ -11,12 +11,12 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="item in keyValuePairs" style="line-height: 36px">
-				<td style="width: 140px"><input type="text" style="width: 120px" on-finish-render ng-model="item.key" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
-				<td style="width: 140px"><input type="text" style="width: 120px" on-finish-render ng-model="item.value" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"></td>
+				<td style="width: 140px"><input type="text" style="width: 120px" on-finish-render ng-model="item.key" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"  ng-class="{disabled: plugin!=null && !plugin.enabled}"></td>
+				<td style="width: 140px"><input type="text" style="width: 120px" on-finish-render ng-model="item.value" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')"  ng-class="{disabled: plugin!=null && !plugin.enabled}"></td>
 				<td style="width: 20px"><a href ng-click="keyValuePairs.splice($index, 1);propertyChanged(property, true)" tooltip="Remove key">[X]</a></span></td>
 			</tr>
 		</tbody>
 	</table>
-	<a href ng-click="keyValuePairs.push({'key':'', 'value':''});propertyChanged(property, true)" tooltip="Add a new key">[add]</a>
+	<a href  ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-click="keyValuePairs.push({'key':'', 'value':''});propertyChanged(property, true)" tooltip="Add a new key">[add]</a>
 	<hr bind-once ng-if="property.endline">
 </div>
