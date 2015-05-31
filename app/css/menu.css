@@ -90,7 +90,9 @@
 .text input{
 	width: 100%;
 }
-
+.text  input[type='checkbox']{
+	width: 20px;
+}
 .checkbox{
 	padding-top: 10px;
 	height: 40px;
