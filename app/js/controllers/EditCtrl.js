@@ -318,6 +318,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
         $scope.validate(property);
+	    if (property.aspectRatio && property.aspectRatio!=="custom"){
+		    var aspect = property.aspectRatio == "wide" ? 9/16 : 3/4;
+		    $scope.playerData.height = parseInt($scope.playerData.width * aspect);
+	    }
 	    $scope.refreshNeeded = (property['player-refresh'] !== false);
 	    if (checkAutoRefresh !== false && $scope.refreshNeeded && $scope.autoPreview){
 		    if (checkAutoRefresh == 'enter') // prevent refresh on blur after refresh on enter
@@ -327,10 +331,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    }else{
 		        $scope.refreshPlayer();
 		    }
-	    }
-	    if (property.aspectRatio && property.aspectRatio!=="custom"){
-		    var aspect = property.aspectRatio == "wide" ? 9/16 : 3/4;
-		    $scope.playerData.height = parseInt($scope.playerData.width * aspect);
 	    }
     };
 
