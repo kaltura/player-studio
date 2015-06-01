@@ -1,0 +1,6 @@
+<div class="text">
+	<span class="pluginLabel" ng-class="{disabled: plugin!=null && !plugin.enabled}" id="{{property.id}}">{{property.label}}</span>
+	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip-html-unsafe="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i><br>
+	<input type="text" class="numbersArray" ng-class="{invalid: property.invalidTooltip}"  tooltip="{{property.invalidTooltip}}" tooltip-placement="top" tooltip-popup-delay="0" ng-model="property.initvalue" ng-change="propertyChanged(property, false)" ng-enter="propertyChanged(property, 'enter')" ng-blur="propertyChanged(property, 'blur')" ng-disabled="plugin!=null && !plugin.enabled">
+	<hr bind-once ng-if="property.endline">
+</div>
