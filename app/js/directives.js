@@ -38,7 +38,7 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 					$(".allowNegative").numeric({allowMinus: true, allowDecSep: false}); // set integer number fields to accept only numbers
 					$(".float").numeric({allowMinus: false, allowDecSep: true});    // set float number fields to accept only floating numbers
 					$(".alpha").alphanum({allow:'-_=+,.!:;/@#$%^&*(){}[]|?~\'',disallow: '"'});    // set float number fields to accept only floating numbers
-					$(".numbersArray").numeric({allowMinus: false, allowDecSep: false, allowThouSep : true});    // set numbers array fields to accept only numbers and comma
+					$(".numbersArray").alphanum({allow:',.',allowUpper: false, allowLower:false, disallow: '-_=+"!:;/@#$%^&*(){}[]|?~\''});    // set numbers array fields to accept only numbers and comma
 				},3000);
 			}
 		}
