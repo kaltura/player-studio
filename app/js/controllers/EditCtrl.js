@@ -10,6 +10,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	var playerRatio = ($scope.playerData.height / $scope.playerData.width);
 	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
+	$scope.menuOpen = true;
 	// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
 	$scope.setAutoPreview = function(){
@@ -96,6 +97,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 	};
 
+	$scope.toggleMenu = function(){
+		$scope.menuOpen = !$scope.menuOpen;
+	};
     // load menu data and parse it
     editableProperties.then(function(data) {
 		data=angular.copy(data); // prevent changing original data
