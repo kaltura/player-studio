@@ -5,6 +5,12 @@
   background-color: #f3f2ee;
   /*box-shadow: 3px 3px 2px #888888;*/
   border-right: 1px solid #cccccc;
+  overflow-x: hidden;
+  -webkit-transition: width 0.3s;
+  -moz-transition: width 0.3s;
+  -o-transition: width 0.3s;
+  -ms-transition: width 0.3s;
+  transition: width 0.3s;
 }
 
 .categories{
@@ -227,10 +233,15 @@ a:hover{
   font-weight: 400;
 }
 .previewArea{
-  margin-left: 550px;
+  margin-left: 490px;
   padding-top: 10px;
-  padding-right: 100px;
-  height: 100%
+  padding-right: 50px;
+  height: 100%;
+  -webkit-transition: margin-left 0.3s;
+  -moz-transition: margin-left 0.3s;
+  -o-transition: margin-left 0.3s;
+  -ms-transition: margin-left 0.3s;
+  transition: margin-left 0.3s;
 }
 .menuFooter{
   position: absolute;
@@ -239,6 +250,28 @@ a:hover{
   height: 1px;
   bottom: 33px;
   background-color: #cccccc
+}
+.toggleMenu{
+  position: absolute;
+  border-radius: 0px 0px 8px 0px;
+  height: 40px;
+  width: 24px;
+  left: 440px;
+  background-color: #f3f2ee;
+  padding-left: 4px;
+  padding-top: 10px;
+  border-right: 1px solid
+  #cccccc;
+  border-bottom: 1px solid #cccccc;
+  cursor: pointer;
+  -webkit-transition: left 0.3s;
+  -moz-transition: left 0.3s;
+  -o-transition: left 0.3s;
+  -ms-transition: left 0.3s;
+  transition: left 0.3s;
+}
+.toggleMenu:hover{
+  background-color: #cacaca;
 }
 @media all and (max-width: 1070px){
   .previewArea .btn{
@@ -262,7 +295,7 @@ a:hover{
 	font-size: 12px;
   }
   .previewArea{
-	margin-left: 500px;
+	margin-left: 490px;
 	padding-top: 10px;
 	padding-right: 50px;
 	height: 100%
