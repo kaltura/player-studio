@@ -9,11 +9,11 @@
 		</option>
 	</select>
 <br><br>
-	<span class="pluginLabel">Width:</span><input class="numeric" style="width: 80px; margin-left: 5px" type="text" ng-class="{invalid: property.invalidTooltip, allowNegative: property.allowNegative}" ng-change="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-enter="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-blur="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-disabled="plugin!=null && !plugin.enabled" ng-model="playerData.width" tooltip="{{property.invalidTooltip}}"><span> px</span>
+	<span class="pluginLabel">Width:</span><input class="numeric" style="width: 80px; margin-left: 5px" type="text" ng-class="{invalid: property.invalidTooltip, allowNegative: property.allowNegative}" ng-change="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-enter="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-disabled="plugin!=null && !plugin.enabled" ng-model="playerData.width" tooltip="{{property.invalidTooltip}}"><span> px</span>
 	<div class="pull-right">
 		<i class="icon-lock" ng-if="aspectRatio != 'custom'" style="margin-right: 8px; cursor: pointer" tooltip="{{property.helpnote2}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
 		<i class="icon-unlock" ng-if="aspectRatio == 'custom'" style="margin-right: 8px"></i>
-		<span class="pluginLabel" ng-class="{disabled: aspectRatio != 'custom'}">Height:</span><input class="numeric" style="width: 80px; margin-left: 5px" type="text" ng-class="{invalid: property.invalidTooltip, allowNegative: property.allowNegative}" ng-change="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-enter="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-blur="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-disabled="aspectRatio!= 'custom'" ng-model="playerData.height" tooltip="{{property.invalidTooltip}}"><span> px</span>
+		<span class="pluginLabel" ng-class="{disabled: aspectRatio != 'custom'}">Height:</span><input class="numeric" style="width: 80px; margin-left: 5px" type="text" ng-class="{invalid: property.invalidTooltip, allowNegative: property.allowNegative}" ng-change="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-enter="propertyChanged({'aspectRatio': aspectRatio, 'model': aspectRatio})" ng-disabled="aspectRatio!= 'custom'" ng-model="playerData.height" tooltip="{{property.invalidTooltip}}"><span> px</span>
 	</div>
 	<hr bind-once ng-if="property.endline">
 </div>
