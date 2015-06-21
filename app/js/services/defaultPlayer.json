@@ -14,7 +14,8 @@
         "liveStatus": [],
         "liveBackBtn": [],
         "fullScreenBtn": [],
-        "logo": []
+        "logo": [],
+	    "playersJsReceiver": []
     },
     "uiVars": {
         "autoPlay": false,
