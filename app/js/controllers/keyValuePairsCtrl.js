@@ -19,7 +19,7 @@ KMCMenu.controller('keyValuePairsCtrl', ['$scope',
 		// update player data
 		$scope.updateData = function () {
 			$scope.updateKeyValueData();
-		}
+		};
 
 		$scope.updateKeyValueData = function(){
 			if ($scope.playerData.config.plugins && $scope.playerData.config.plugins[$scope.plugin.model]) {
@@ -33,6 +33,6 @@ KMCMenu.controller('keyValuePairsCtrl', ['$scope',
 					data[$scope.keyValuePairs[i].key.toString()] = $scope.keyValuePairs[i].value.toString();
 				}
 			}
-		}
+		};
 	}
 ]);
