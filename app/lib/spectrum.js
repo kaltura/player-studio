@@ -51,7 +51,7 @@
         return contains(style.backgroundColor, 'rgba') || contains(style.backgroundColor, 'hsla');
     })(),
     inputTypeColorSupport = (function() {
-        var colorInput = $("<input type='color' value='!' />")[0];
+        var colorInput = $("<input type='color' value='#ffffff' />")[0];
         return colorInput.type === "color" && colorInput.value !== "!";
     })(),
     replaceInput = [
