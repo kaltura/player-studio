@@ -393,7 +393,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 		$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
 
-		var flashvars = {'jsonConfig': angular.toJson($scope.playerData.config)}; // update the player with the new configuration
+		var flashvars = {};
+		if ($scope.playerData.config.enviornmentConfig && $scope.playerData.config.enviornmentConfig.localizationCode){ // support localizationCode
+			angular.extend(flashvars, {'localizationCode': $scope.playerData.config.enviornmentConfig.localizationCode});
+		}
+		delete $scope.playerData.config.enviornmentConfig;
+		angular.extend(flashvars,{'jsonConfig': angular.toJson($scope.playerData.config)}); // update the player with the new configuration
 		if (window.parent.kmc && window.parent.kmc.vars.ks){
 			angular.extend(flashvars, {'ks': window.parent.kmc.vars.ks}); // add ks if available
 		}

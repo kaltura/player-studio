@@ -455,6 +455,15 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			            delete data2Save.plugins.playlistAPI.kpl0Name;
 		            }
 	            }
+	            if (data2Save.enviornmentConfig) {
+		            delete data2Save.enviornmentConfig.enabled;
+		            if ( data2Save.enviornmentConfig.localizationCode !== undefined && data2Save.enviornmentConfig.localizationCode === "" ){
+			            delete data2Save.enviornmentConfig.localizationCode;
+		            }
+		            if (angular.equals({}, data2Save.enviornmentConfig)){
+			            delete data2Save.enviornmentConfig;
+		            }
+	            }
 	            var request = {
                     'service': 'uiConf',
                     'action': 'update',
