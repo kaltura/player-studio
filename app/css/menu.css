@@ -87,7 +87,9 @@
 	padding-top: 5px;
 	margin-bottom: 8px;
 }
-
+.text.sm{
+    padding-top: 10px;
+}
 .entrySelector{
 	padding-top: 5px;
 	margin-bottom: 30px;
@@ -95,6 +97,10 @@
 
 .text input{
 	width: 100%;
+}
+.text.sm input{
+    width: 120px;
+    float: right;
 }
 .text  input[type='checkbox']{
 	width: 20px;
