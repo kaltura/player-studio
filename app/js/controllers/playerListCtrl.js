@@ -72,7 +72,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             var playersRequest = {
                 'filter:tagsMultiLikeOr': 'kdp3,html5studio',
                 'filter:orderBy': '-updatedAt',
-                'filter:objTypeEqual': '1',
+                'filter:objTypeIn': '1,8',
                 'filter:objectType': 'KalturaUiConfFilter',
                 'filter:creationModeEqual': '2',
                 'ignoreNull': '1',
