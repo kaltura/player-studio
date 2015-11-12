@@ -421,7 +421,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 
 		// set editable uivars list
-		$scope.excludedUiVars = ['autoPlay', 'autoMute', 'adsOnReplay', 'enableTooltips']; // these uiVars are already in the menu, do not list them
+		$scope.excludedUiVars = ['autoPlay', 'autoMute', 'adsOnReplay', 'enableTooltips','EmbedPlayer.SimulateMobile']; // these uiVars are already in the menu, do not list them
 		$scope.playerData.vars = [];
 		var uivar;
 		for (uivar in $scope.playerData.config.uiVars){
