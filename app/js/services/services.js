@@ -367,7 +367,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				                $location.url('/list');
 			                }
 		                }
-
                     }
                 );
                 return deferred.promise;
