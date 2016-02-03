@@ -173,8 +173,8 @@ KMCServices.factory('sortSvc', [function() {
 }]
 );
 
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', 'localStorageService',
-    function($http, $modal, $log, $q, apiService, $filter, localStorageService) {
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService' , '$filter', 'localStorageService','$location','utilsSvc',
+    function($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc) {
         var playersCache = {};
         var currentPlayer = {};
         var previewEntry;
@@ -355,8 +355,19 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                     'id': id
                 };
                 apiService.doRequest(request).then(function(result) {
-                        playersService.setCurrentPlayer(result);
-                        deferred.resolve(currentPlayer);
+		                // validate result to catch invalid JSON configs
+		                if (typeof result.config === 'string') {
+			                try {
+				                angular.fromJson(result.config);
+				                playersService.setCurrentPlayer(result);
+				                deferred.resolve(currentPlayer);
+			                }catch(e){
+				                deferred.reject("invalid JSON config");
+				                utilsSvc.alert('Invalid Player','The player configuration object is not valid.<br>Consider deleting this player or contact support.<br>Player ID: ' + result.id);
+				                $location.url('/list');
+			                }
+		                }
+
                     }
                 );
                 return deferred.promise;
