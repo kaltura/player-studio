@@ -280,7 +280,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 		        var upgradeProccess = $q.defer();
 		        var html5libVersion = player.html5Url.substring(player.html5Url.indexOf('/v')+2, player.html5Url.indexOf('/mwEmbedLoader.php'));
 		        var currentVersion = window.MWEMBED_VERSION;
-		        var msg = 'This will upgrade the player "' + player.name + '" (ID: ' + player.id + ').';
+		        var msg = 'This will update the player "' + player.name + '" (ID: ' + player.id + ').';
 		        msg+='<br>Current player version: ' + html5libVersion;
 		        msg+='<br>Upgrade to version: ' + currentVersion + '<a href="https://github.com/kaltura/mwEmbed/releases/tag/v'+currentVersion+'" target="_blank"> (release notes)</a>';
 		        var modal = utilsSvc.confirm('Upgrading confirmation', msg, 'Upgrade');
@@ -311,10 +311,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             $scope.update = function(player) {
                 var upgradeProccess = $q.defer();
                 var currentVersion = player.html5Url.split("/v")[1].split("/")[0];
-                var text = '<span>' + $filter("translate")("Do you want to update this player?<br>Some features and design may be lost.") + '</span>';
+                var text = '<span>' + $filter("translate")("Do you want to upgrade this player?<br>Some features and design may be lost.") + '</span>';
 	            var isPlaylist = player.tags.indexOf("playlist") !== -1;
 	            if (isPlaylist){
-		            text+="<br><span><b>Note:</b> Playlist configuration will not be updated.<br>Please re-configure your playlist plugin after this update.</span>";
+		            text+="<br><span><b>Note:</b> Playlist configuration will not be updated.<br>Please re-configure your playlist plugin after this upgrade.</span>";
 	            }
                 var html5lib = player.html5Url.substr(0, player.html5Url.indexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
 	            var modal = utilsSvc.confirm('Update confirmation',text, 'Update');
