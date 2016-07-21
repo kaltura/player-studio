@@ -13,8 +13,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.menuOpen = true;
 	// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
+	$scope.simulateMobile = false;
 	$scope.setAutoPreview = function(){
 		localStorageService.set('autoPreview', !$scope.autoPreview);
+	};
+	$scope.setSimulateMobile = function(){
+		setTimeout(function(){
+			$scope.refreshPlayer();
+		},0);
 	};
 	if (window.parent.kmc && window.parent.kmc.vars.studio.showFlashStudio === false){
 		$(".menuFooter").css("bottom","1px");
@@ -397,6 +403,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.playerData.config.enviornmentConfig && $scope.playerData.config.enviornmentConfig.localizationCode){ // support localizationCode
 			angular.extend(flashvars, {'localizationCode': $scope.playerData.config.enviornmentConfig.localizationCode});
 		}
+		if ($scope.simulateMobile){
+			angular.extend(flashvars,{'EmbedPlayer.SimulateMobile': true});
+		}
 		delete $scope.playerData.config.enviornmentConfig;
 		angular.extend(flashvars,{'jsonConfig': angular.toJson($scope.playerData.config)}); // update the player with the new configuration
 		if (window.parent.kmc && window.parent.kmc.vars.ks){
@@ -421,7 +430,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 
 		// set editable uivars list
-		$scope.excludedUiVars = ['autoPlay', 'autoMute', 'adsOnReplay', 'enableTooltips','EmbedPlayer.SimulateMobile']; // these uiVars are already in the menu, do not list them
+		$scope.excludedUiVars = ['autoPlay', 'autoMute', 'adsOnReplay', 'enableTooltips', 'EmbedPlayer.EnableMobileSkin']; // these uiVars are already in the menu, do not list them
 		$scope.playerData.vars = [];
 		var uivar;
 		for (uivar in $scope.playerData.config.uiVars){
