@@ -3,9 +3,11 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('LoginCtrl',
-    ['$scope', 'apiService', '$location', 'localStorageService', 'requestNotificationChannel','$filter',
-        function($scope, apiService, $location, localStorageService, requestNotificationChannel,$filter) {
+    ['$scope', 'apiService', '$location', 'localStorageService', 'requestNotificationChannel','$filter','utilsSvc',
+        function($scope, apiService, $location, localStorageService, requestNotificationChannel,$filter,utilsSvc) {
             requestNotificationChannel.requestEnded('list'); // if coming from list this would stop the spinner
+
+            $scope.shouldAllowLogin = !utilsSvc.isHostedInKMC3();
             $scope.formError = true;
             $scope.formHelpMsg = $filter('translate')('You must login to use this application');
             $scope.email = '';

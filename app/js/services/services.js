@@ -53,6 +53,10 @@ KMCServices.factory('select2Svc', ['$timeout', function($timeout) {
 
 KMCServices.factory('utilsSvc', ['$modal', function($modal) {
 	var utilsSvc = {
+        isHostedInKMC3 : function()
+        {
+            return (window && window.parent && window.parent.kmc && window.parent.kmc.version === '3');
+        },
 		'str2val' : function(str){
 			if (typeof str !== "string")
 				return str;

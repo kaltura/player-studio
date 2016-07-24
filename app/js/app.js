@@ -195,7 +195,7 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
     },1000);
 
 
-    if (typeof window.parent.kmc != 'undefined') {
+    if (typeof window.parent.kmc != 'undefined' && window.parent.kmc.version !== '3') {
         $('html').addClass('inKmc');
     }
 

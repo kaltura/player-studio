@@ -1,6 +1,12 @@
 <div class="jumbotron fullheight">
     <div class="container">
-        <div id="loginBox" class="">
+        <div class="" data-ng-if="!shouldAllowLogin" style="text-align: center">
+            <h2 class="text-muted page-header">
+                Session expired, please re-login to the KMC
+            </h2>
+
+        </div>
+        <div id="loginBox" class="" data-ng-if="shouldAllowLogin">
             <h2 class="text-muted page-header" id="pageHeader">
                 Login to v2.0 Studio
             </h2>
