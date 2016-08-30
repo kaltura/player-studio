@@ -606,6 +606,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			var pData = $scope.playerData;
 			for (var j=0; j<objArr.length; j++){  // go through the object names in the model path
 				var prop = objArr[j];
+				if (typeof(pData) === 'undefined') continue;
 				if (j == objArr.length-1 && data.initvalue !== undefined){  // last object in model path - this is the value property
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
 				}else{
