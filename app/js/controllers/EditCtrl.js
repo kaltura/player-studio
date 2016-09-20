@@ -612,7 +612,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
 						pData[prop] = data.custom ? {'custom':true, 'enabled':true} : {'enabled':true};
 					}
-					pData = pData[prop];   // go to the next object in the object path
+					if (pData[prop]){
+						pData = pData[prop];   // go to the next object in the object path
+					}
 				}
 			}
 		}
