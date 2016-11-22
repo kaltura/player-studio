@@ -309,6 +309,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                         apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
                         apiService.doRequest(request).then(function(data) {
 	                        var playerData = $.isArray(data) ? data[1] : data; // when using kmc.vars.default_kdp.id we get an array because of the multi request
+	                        playerData["autoUpdate"] = true; // new players always auto-update
 	                        playersService.setCurrentPlayer(playerData);
                             apiService.setCache(true); // restore cache usage
                             localStorageService.set('tempPlayerID', playerData.id);
@@ -487,7 +488,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
                 };
 	            // update the player version to the latest version when using production players
 	            if (data.html5Url.indexOf("/html5/html5lib/") === 0){
-		            request['uiConf:html5Url'] = "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php';
+	            	if (data.autoUpdate){
+			            request['uiConf:html5Url'] = "/html5/html5lib/{latest}/mwEmbedLoader.php";
+		            }else {
+			            request['uiConf:html5Url'] = "/html5/html5lib/v" + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
+		            }
 	            }
                 apiService.doRequest(request).then(function(result) {
                     playersCache[data.id] = data; // update player data in players cache

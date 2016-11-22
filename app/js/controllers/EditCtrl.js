@@ -11,6 +11,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
+	if (typeof $scope.playerData["autoUpdate"] === "undefined") { // new players will have autoUpdate set to true. Old players will not have autoUpdate defined so we derive from html5url
+		$scope.playerData["autoUpdate"] = $scope.playerData.html5Url.indexOf("{latest}") !== -1;
+	}
 	// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
 	$scope.simulateMobile = false;
@@ -323,6 +326,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    var prop = property['player-refresh'].split(".")[1];
 		    var kdp = document.getElementById('kVideoTarget');
 		    kdp.setKDPAttribute(obj, prop, property.initvalue);
+		    return;
+	    }
+	    if (property.model === "autoUpdate"){ // handle auto-update checkbox
+		    $scope.playerData["autoUpdate"] = property.initvalue;
 		    return;
 	    }
 	    $scope.dataChanged = true;

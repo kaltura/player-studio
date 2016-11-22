@@ -9,6 +9,15 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             requestNotificationChannel.requestStarted('list');
             $rootScope.lang = 'en-US';
 
+	        var getHTML5Version = function(path){
+	        	var version = "";
+		        if (path.indexOf("{latest}") !== -1){
+		        	version = "latest";
+		        }else{
+		        	version = path.substring(path.lastIndexOf('/v')+2, path.indexOf('/mwEmbedLoader.php'));
+		        }
+		        return version;
+	        }
             // init search
             $scope.search = '';
             $scope.searchSelect2Options = {};
@@ -122,19 +131,19 @@ angular.module('KMCModule').controller('PlayerListCtrl',
             };
 	        // check if this player is a v2 player that can be upgraded to a new version
 	        $scope.checkV2Upgrade = function(item) {
-		        var html5libVersion = item.html5Url.substring(item.html5Url.indexOf('/v')+2, item.html5Url.indexOf('/mwEmbedLoader.php')); // get html5 lib version from its URL
-		        return !$scope.checkVersionNeedsUpgrade(item) && window.MWEMBED_VERSION !== html5libVersion;
+		        var html5libVersion = getHTML5Version(item.html5Url); // get html5 lib version from its URL
+		        return !$scope.checkVersionNeedsUpgrade(item) && window.MWEMBED_VERSION !== html5libVersion && html5libVersion !== "latest";
 	        };
 
             // check if this player should be upgraded (binded to the player's HTML outdated message)
             $scope.checkVersionNeedsUpgrade = function(item) {
-                var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL
+                var html5libVersion = getHTML5Version(item.html5Url)[0]; // get html5 lib version number from its URL
                 return ((html5libVersion == "1") ); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
             };
 
             // check if this player is an old playlist
             $scope.checkOldPlaylistPlayer = function(item) {
-                var html5libVersion = item.html5Url.substr(item.html5Url.indexOf('/v') + 2, 1); // get html5 lib version number from its URL
+                var html5libVersion = getHTML5Version(item.html5Url)[0]; // get html5 lib version number from its URL
                 return ((html5libVersion == "1") && item.tags.indexOf("playlist") !== -1); // this player is an old playlist that is not supported in Universal studio
             };
 
@@ -278,7 +287,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			// upgrade a V2 player to the latest version
 	        $scope.upgrade = function(player){
 		        var upgradeProccess = $q.defer();
-		        var html5libVersion = player.html5Url.substring(player.html5Url.indexOf('/v')+2, player.html5Url.indexOf('/mwEmbedLoader.php'));
+		        var html5libVersion = getHTML5Version(player.html5Url);
 		        var currentVersion = window.MWEMBED_VERSION;
 		        var msg = 'This will update the player "' + player.name + '" (ID: ' + player.id + ').';
 		        msg+='<br>Current player version: ' + html5libVersion;
@@ -286,7 +295,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 		        var modal = utilsSvc.confirm('Updating confirmation', msg, 'Update');
 		        modal.result.then(function(result) {
 			        if (result) {
-				        var html5lib = player.html5Url.substr(0, player.html5Url.indexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
+				        var html5lib = player.html5Url.substr(0, player.html5Url.lastIndexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
 				        PlayerService.playerUpgrade(player, html5lib).then(function(data) {
 					        // update local data (we will not retrieve from the server again)
 					        player.html5Url = html5lib;
@@ -316,7 +325,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 	            if (isPlaylist){
 		            text+="<br><span><b>Note:</b> Playlist configuration will not be updated.<br>Please re-configure your playlist plugin after this upgrade.</span>";
 	            }
-                var html5lib = player.html5Url.substr(0, player.html5Url.indexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
+                var html5lib = player.html5Url.substr(0, player.html5Url.lastIndexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
 	            var modal = utilsSvc.confirm('Upgrade confirmation',text, 'Upgrade');
                 modal.result.then(function(result) {
                     if (result)
