@@ -500,7 +500,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					if (data.autoUpdate) {
 						request['uiConf:html5Url'] = "/html5/html5lib/{latest}/mwEmbedLoader.php";
 					} else {
-						request['uiConf:html5Url'] = "/html5/html5lib/v" + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
+						if (data.html5Url.indexOf("{latest}") !== -1) {
+							request['uiConf:html5Url'] = "/html5/html5lib/v" + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
+						}
 					}
 				}
 				apiService.doRequest(request).then(function (result) {
