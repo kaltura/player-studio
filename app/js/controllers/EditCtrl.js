@@ -662,9 +662,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
-				$scope.playerData.tags = 'html5studio,playlist'; // set playlist tag
+				$scope.addTags(['html5studio','playlist']); // set playlist tag
 			}else{
-				$scope.playerData.tags = 'html5studio,player'; // set playlist tag
+				$scope.addTags(['html5studio','player']); // set player tag
 			}
 			PlayerService.savePlayer($scope.playerData).then(function(value) {
 					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
@@ -677,6 +677,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			);
 		}
 	};
+
+		$scope.addTags = function(tags){
+			tags.forEach(function(tag){
+				if ($scope.playerData.tags.indexOf(tag) === -1){
+					$scope.playerData.tags = $scope.playerData.tags + "," + tag;
+				}
+			});
+		};
 
 		$scope.setPluginEnabled = function (model, enabled) {
 			for (var cat in $scope.menuData) {
