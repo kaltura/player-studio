@@ -79,7 +79,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 
 			// get players list from KMC
 			var playersRequest = {
-				'filter:tagsMultiLikeOr': 'kdp3,html5studio',
+				'filter:tagsMultiLikeAnd': 'kalturaPlayerJs',
 				'filter:orderBy': '-updatedAt',
 				'filter:objTypeIn': '1,8',
 				'filter:objectType': 'KalturaUiConfFilter',
@@ -128,17 +128,6 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			$scope.sortBy = function (colName) {
 				$scope.sort.sortCol = colName;
 				$scope.sort.reverse = !$scope.sort.reverse;
-			};
-			// check if this player is a v2 player that can be upgraded to a new version
-			$scope.checkV2Upgrade = function (item) {
-				var html5libVersion = getHTML5Version(item.html5Url); // get html5 lib version from its URL
-				return !$scope.checkVersionNeedsUpgrade(item) && window.MWEMBED_VERSION !== html5libVersion && html5libVersion !== "latest";
-			};
-
-			// check if this player should be upgraded (binded to the player's HTML outdated message)
-			$scope.checkVersionNeedsUpgrade = function (item) {
-				var html5libVersion = getHTML5Version(item.html5Url)[0]; // get html5 lib version number from its URL
-				return ((html5libVersion == "1") ); // need to upgrade if the version is lower than 2 or the player doesn't have a config object
 			};
 
 			// check if this player is an old playlist
@@ -192,19 +181,11 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			$scope.goToEditPage = function (item, $event) {
 				if ($event)
 					$event.preventDefault();
-				if (!$scope.checkVersionNeedsUpgrade(item) && !$scope.checkOldPlaylistPlayer(item)) {
+				if (!$scope.checkOldPlaylistPlayer(item)) {
 					goToEditPage(item.id);
 					return false;
 				} else {
 					var msgText, buttons;
-					if ($scope.checkVersionNeedsUpgrade(item)) {
-						msgText = $filter('translate')('This player must be updated before editing. <br/>Some features and design may be lost.');
-						buttons = [{result: false, label: 'Cancel', cssClass: 'btn-default'}, {
-							result: true,
-							label: 'Update',
-							cssClass: 'btn-primary'
-						}];
-					}
 					if ($scope.checkOldPlaylistPlayer(item)) {
 						msgText = $filter('translate')('Playlists created in Flash Studio cannot be edited in Universal Studio.<br>Please use Flash Studio to edit this player.');
 						buttons = [{result: false, label: 'OK', cssClass: 'btn-default'}];
@@ -289,70 +270,6 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 				}, function () {
 					$log.info('Delete modal dismissed at: ' + new Date());
 				});
-			};
-			// upgrade a V2 player to the latest version
-			$scope.upgrade = function (player) {
-				var upgradeProccess = $q.defer();
-				var html5libVersion = getHTML5Version(player.html5Url);
-				var currentVersion = window.MWEMBED_VERSION;
-				var msg = 'This will update the player "' + player.name + '" (ID: ' + player.id + ').';
-				msg += '<br>Current player version: ' + html5libVersion;
-				msg += '<br>Update to version: ' + currentVersion + '<a href="https://github.com/kaltura/mwEmbed/releases/tag/v' + currentVersion + '" target="_blank"> (release notes)</a>';
-				var modal = utilsSvc.confirm('Updating confirmation', msg, 'Update');
-				modal.result.then(function (result) {
-					if (result) {
-						var html5lib = player.html5Url.substr(0, player.html5Url.lastIndexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
-						PlayerService.playerUpgrade(player, html5lib).then(function (data) {
-							// update local data (we will not retrieve from the server again)
-							player.html5Url = html5lib;
-							upgradeProccess.resolve('update finished successfully');
-							utilsSvc.alert('Player Updated', 'The player was updated successfully.');
-							if ($("#kcms", window.parent.document).length > 0) {
-								$("#kcms", window.parent.document)[0].refreshPlayersList(); // trigger players list refresh on KMC
-							}
-						}, function (reason) {
-							utilsSvc.alert('Update player failure', reason);
-							upgradeProccess.reject('update canceled');
-						});
-					} else {
-						$log.info('Update player dismissed at: ' + new Date());
-						upgradeProccess.reject('update canceled');
-					}
-				});
-				return upgradeProccess.promise;
-			};
-
-			// updater an outdated player
-			$scope.update = function (player) {
-				var upgradeProccess = $q.defer();
-				var currentVersion = player.html5Url.split("/v")[1].split("/")[0];
-				var text = '<span>' + $filter("translate")("Do you want to upgrade this player?<br>Some features and design may be lost.") + '</span>';
-				var isPlaylist = player.tags.indexOf("playlist") !== -1;
-				if (isPlaylist) {
-					text += "<br><span><b>Note:</b> Playlist configuration will not be updated.<br>Please re-configure your playlist plugin after this upgrade.</span>";
-				}
-				var html5lib = player.html5Url.substr(0, player.html5Url.lastIndexOf('/v') + 2) + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
-				var modal = utilsSvc.confirm('Upgrade confirmation', text, 'Upgrade');
-				modal.result.then(function (result) {
-					if (result)
-						PlayerService.playerUpdate(player, html5lib, isPlaylist).then(function (data) {
-							// update local data (we will not retrieve from the server again)
-							player.config = angular.fromJson(data.config);
-							player.html5Url = html5lib;
-							player.tags = isPlaylist ? 'html5studio,playlist' : 'html5studio,player';
-							upgradeProccess.resolve('upgrade finished successfully');
-							if ($("#kcms", window.parent.document).length > 0) {
-								$("#kcms", window.parent.document)[0].refreshPlayersList(); // trigger players list refresh on KMC
-							}
-						}, function (reason) {
-							utilsSvc.alert('Update player failure', reason);
-							upgradeProccess.reject('upgrade canceled');
-						});
-				}, function () {
-					$log.info('Update player dismissed at: ' + new Date());
-					upgradeProccess.reject('upgrade canceled');
-				});
-				return upgradeProccess.promise;
 			};
 		}
 	])

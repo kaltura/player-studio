@@ -291,7 +291,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'2:uiConf:objType': 1,
 							'2:uiConf:width': 560,
 							'2:uiConf:height': 395,
-							'2:uiConf:tags': 'html5studio,player',
+							'2:uiConf:tags': 'kalturaPlayerJs,player',
 							'2:uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
 							'2:uiConf:creationMode': 2,
 							'2:uiConf:config': angular.toJson(data)
@@ -309,7 +309,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'uiConf:fUrlVersion': '3.9.8',
 							'uiConf:version': '161',
 							'uiConf:name': 'New Player',
-							'uiConf:tags': 'html5studio,player',
+							'uiConf:tags': 'kalturaPlayerJs,player',
 							'uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
 							'uiConf:creationMode': 2,
 							'uiConf:confFile': kdpConfig,
@@ -514,71 +514,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						kmc.preview_embed.updateList(data.tags.indexOf("playlist") !== -1);
 					}
 					deferred.resolve(result);
-				});
-				return deferred.promise;
-			},
-			'playerUpgrade': function (playerObj, html5lib) {
-				var request = {
-					'service': 'uiConf',
-					'action': 'update',
-					'id': playerObj.id,                        // the id of the player to update
-					'uiConf:html5Url': html5lib                // update the html5 lib to the new version
-				};
-				var deferred = $q.defer();
-				var rejectText = $filter('translate')('Upgrade player action was rejected: ');
-				apiService.doRequest(request).then(function (result) {
-						deferred.resolve(result);
-					}, function (msg) {
-						deferred.reject(rejectText + msg);
-					}
-				);
-				return deferred.promise;
-			},
-			'playerUpdate': function (playerObj, html5lib, isPlaylist) {
-// use the upgradePlayer service to convert the old XML config to the new json config object
-				var deferred = $q.defer();
-				var rejectText = $filter('translate')('Update player action was rejected: ');
-
-				var method = 'get';
-				var url = window.kWidget.getPath() + 'services.php';
-				var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")};
-				if (window.IE < 10) {
-					params["callback"] = 'JSON_CALLBACK';
-					method = 'jsonp';
-				}
-				$http({
-					url: url,
-					method: method,
-					params: params
-				}).success(function (data, status, headers, config) {
-// clean some redundant data from received object
-					if (data['uiConfId']) {
-						delete data['uiConfId'];
-						delete data['widgetId'];
-						delete data.vars['ks'];
-					}
-// set an api request to update the uiconf. update playlist includeInLayout if needed
-					if (isPlaylist && data.plugins.playlistAPI) {
-						data.plugins.playlistAPI.includeInLayout = true;
-					}
-					var playerTag = playerObj.tags.indexOf("playlist") != -1 ? "playlist" : "player"; // set player tag to player or playlist according to the original player tag
-					var request = {
-						'service': 'uiConf',
-						'action': 'update',
-						'id': playerObj.id,                        // the id of the player to update
-						'uiConf:tags': 'html5studio,' + playerTag, // update tags to prevent breaking the old studio which looks for the tag kdp3
-						'uiConf:html5Url': html5lib,               // update the html5 lib to the new version
-						'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
-					};
-					apiService.doRequest(request).then(function (result) {
-							deferred.resolve(result);
-						}, function (msg) {
-							deferred.reject(rejectText + msg);
-						}
-					);
-				}).error(function (data, status, headers, config) {
-					deferred.reject("Error updating UIConf: " + data);
-					$log.error('Error updating UIConf: ' + data);
 				});
 				return deferred.promise;
 			}

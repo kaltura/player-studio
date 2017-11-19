@@ -664,7 +664,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
 				$scope.addTags(['html5studio','playlist']); // set playlist tag
 			}else{
-				$scope.addTags(['html5studio','player']); // set player tag
+				$scope.addTags(['kalturaPlayerJs','player']); // set player tag
 			}
 			PlayerService.savePlayer($scope.playerData).then(function(value) {
 					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
