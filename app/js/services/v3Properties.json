@@ -102,7 +102,7 @@
   },
   {
     "label": "Playback Options",
-    "icon": "TabLookandFeel",
+    "icon": "playback",
     "description": "Define playback settings",
     "type": "menu",
     "model": "config",
@@ -292,7 +292,7 @@
   },
   {
     "label": "Advanced Settings",
-    "icon": "TabAnalytics",
+    "icon": "advanced",
     "description": "Edit your player's configuration file",
     "type": "menu",
     "children": [
