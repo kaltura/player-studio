@@ -1,0 +1,7 @@
+<div class="checkbox">
+	<!--span bind-once>{{property.label}}</span><br-->
+	<label ng-class="{disabled: (plugin!=null && !plugin.enabled) || playerData.playerVersion=='beta'}" class="pluginLabel" id="{{property.id}}"><input type="checkbox" ng-change="propertyChanged(property, true)" ng-disabled="(plugin!=null && !plugin.enabled) || playerData.playerVersion=='beta' || property.disabled" ng-model="property.initvalue">{{property.label}}</label>
+	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: (plugin!=null && !plugin.enabled) || playerData.playerVersion=='beta'}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
+	<!--pretty-checkbox ng-disabled="plugin!=null && !plugin.enabled" ng-model="property.initvalue" label="property.label"></pretty-checkbox-->
+	<hr bind-once ng-if="property.endline" style="margin-left: -50px;width: 380px">
+</div>

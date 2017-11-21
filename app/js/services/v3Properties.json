@@ -1,0 +1,307 @@
+[
+  {
+    "label": "Basic Settings",
+    "type": "menu",
+    "description": "Basic settings let you set player name, entry and version",
+    "model": "basicSettings",
+    "icon": "TabBasicSettings",
+    "children": [
+      {
+        "label": "Player's ID:",
+        "type": "readonly",
+        "player-refresh": false,
+        "model": "id"
+      },
+      {
+        "label": "Player's Name",
+        "type": "text",
+        "player-refresh": false,
+        "require": true,
+        "model": "name",
+        "default": "New Player",
+        "helpnote": "Please enter a name for this player",
+        "endline": "true"
+      },
+      {
+        "label": "Backend Env",
+        "type": "dropdown",
+        "options": [
+          {
+            "label": "OVP",
+            "value": "ovp"
+          },
+          {
+            "label": "OTT",
+            "value": "ott"
+          }
+        ],
+        "model": "OvpOrOtt",
+        "helpnote": "Backend environment for this player",
+        "initvalue": "ovp"
+      },
+      {
+        "label": "Base URL",
+        "type": "text",
+        "filter": "noEmpty",
+        "model": "config.env.baseUrl",
+        "helpnote": "Base URL"
+      },
+      {
+        "label": "Backend URL",
+        "type": "text",
+        "filter": "noEmpty",
+        "model": "config.env.beUrl",
+        "helpnote": "Backend URL",
+        "endline": "true"
+      },
+      {
+        "label": "Player Version",
+        "type": "dropdown",
+        "options": [
+          {
+            "label": "Latest",
+            "value": "latest"
+          },
+          {
+            "label": "Beta",
+            "value": "beta"
+          }
+        ],
+        "model": "playerVersion",
+        "helpnote": "",
+        "initvalue": "latest"
+      },
+      {
+        "label": "Freeze on this player version",
+        "helpnote": "Freeze on this player version",
+        "type": "freezeVersion",
+        "endline": "true",
+        "filter": "not",
+        "model": "autoUpdate"
+      },
+      {
+        "label": "Preview entry",
+        "type": "select2data",
+        "allow-custom-values": true,
+        "source": "listEntries",
+        "query": "queryEntries",
+        "helpnote": "Select entry",
+        "player-refresh": true,
+        "width": "100%",
+        "model": "~selectedEntry",
+        "data-placeholder": "Pick an entry",
+        "endline": "true"
+      },
+      {
+        "label": "Last Update",
+        "type": "readonly",
+        "filter": "timeago",
+        "model": "updatedAt"
+      }
+    ]
+  },
+  {
+    "label": "Playback Options",
+    "icon": "TabLookandFeel",
+    "description": "Define playback settings",
+    "type": "menu",
+    "model": "config",
+    "children": [
+      {
+        "label": "Apply user preferences",
+        "helpnote": "Apply settings previously set by the user",
+        "type": "checkbox",
+        "filter": "not",
+        "endline": "true",
+        "model": "config.disableUserCache"
+      },
+      {
+        "label": "Captions default dispaly",
+        "type": "dropdown",
+        "options": [
+          {
+            "label": "Off",
+            "value": "off"
+          },
+          {
+            "label": "Auto",
+            "value": "auto"
+          },
+          {
+            "label": "Explicit",
+            "value": "explicit"
+          }
+        ],
+        "model": "config.playback.textLanguage",
+        "filter": "defaultLanguage",
+        "helpnote": "Default captions language. Auto will use user set preferences (local storage), browser language or the default language set in the entry itself"
+      },
+      {
+        "label": "Language key",
+        "type": "captions",
+        "model": "languageKey",
+        "helpnote": "Deafult captions language",
+        "endline": "true"
+      },
+      {
+        "label": "Enable CVAA",
+        "helpnote": "Display captions styling menu on the player",
+        "type": "checkbox",
+        "initvalue": true,
+        "disabled": true,
+        "endline": "true",
+        "model": ""
+      },
+      {
+        "label": "Quality Selector",
+        "helpnote": "Enables users to select the video bitrate",
+        "type": "checkbox",
+        "initvalue": true,
+        "disabled": true,
+        "endline": "true",
+        "model": ""
+      },
+      {
+        "label": "Audio track Selector",
+        "helpnote": "Enables users to select the audio language",
+        "type": "checkbox",
+        "initvalue": true,
+        "disabled": true,
+        "endline": "true",
+        "model": ""
+      },
+      {
+        "label": "Preload",
+        "helpnote": "Load the video asset on page load",
+        "type": "checkbox",
+        "endline": "true",
+        "filter": "preload",
+        "model": "config.playback.preload"
+      },
+      {
+        "label": "Autoplay",
+        "helpnote": "Autoplay on page load",
+        "type": "checkbox",
+        "model": "config.playback.autoplay"
+      },
+      {
+        "label": "Start Player Muted",
+        "helpnote": "Start Player Muted",
+        "type": "checkbox",
+        "model": "config.playback.muted"
+      },
+      {
+        "label": "Fallback to Muted Autoplay",
+        "helpnote": "Fallback to muted autoplay on browsers which block autoplay with sound",
+        "type": "checkbox",
+        "model": "config.playback.allowMutedAutoPlay"
+      }
+    ]
+  },
+  {
+    "label": "Analytics & Monetization",
+    "icon": "TabAnalytics",
+    "description": "",
+    "type": "menu",
+    "children": {
+      "youbora": {
+        "label": "Youbora",
+        "type": "featuremenu",
+        "description": "A powerful intelligence analytics and optimization platform to deliver online TV-quality video experiences. For full options see <a href='http://developer.nicepeopleatwork.com/apidocs/js/$YB.data.Options.html'>Here</a><br>",
+        "model": "config.plugins.youbora",
+        "endline": "true",
+        "children": [
+          {
+            "label": "Account code",
+            "type": "text",
+            "model": "config.plugins.youbora",
+            "helpnote": "Youbora account id",
+            "filter": "accountCode"
+          }
+        ]
+      },
+      "ima": {
+        "label": "IMA",
+        "type": "featuremenu",
+        "description": "<a href=\"https://developers.google.com/interactive-media-ads/docs/sdks/html5/v3/apis\" target=\"_blank\">IMA API</a>",
+        "model": "config.plugins.ima",
+        "children": [
+          {
+            "label": "Ad tag URL",
+            "validation": "url",
+            "type": "text",
+            "model": "config.plugins.ima.adTagUrl",
+            "helpnote": "Enter Ad tag URL"
+          },
+          {
+            "label": "Display ads on replay",
+            "helpnote": "Display ads on replay",
+            "type": "checkbox",
+            "model": "config.plugins.ima.adsOnReplay"
+          },
+          {
+            "label": "Loading Timeout",
+            "type": "number",
+            "model": "config.plugins.ima.timeout",
+            "helpnote": "Timeout for ad loading. If ad cannot be loaded within the specified time frame, load the video directly",
+            "min": 0,
+            "initvalue": 5,
+            "max": 1000
+          },
+          {
+            "label": "HTML Companions",
+            "type": "companions",
+            "model": "config.plugins.ima.companions.ads",
+            "helpnote": "For each companion ad please specify the container Div ID and the expected ad width and height",
+            "filter": "companions",
+            "initvalue": {
+              "Comp_300x250": {
+                "width": 300,
+                "height": 250
+              },
+              "Comp_728x90": {
+                "width": 728,
+                "height": 90
+              }
+            }
+          },
+          {
+            "label": "Size Criteria",
+            "options": [
+              {
+                "label": "Select Exact Match",
+                "value": "SELECT_EXACT_MATCH"
+              },
+              {
+                "label": "Select Near Match",
+                "value": "SELECT_NEAR_MATCH"
+              },
+              {
+                "label": "Ignore Size",
+                "value": "IGNORE"
+              }
+            ],
+            "type": "dropdown",
+            "model": "config.plugins.ima.companions.sizeCriteria",
+            "helpnote": "Available choices for size selection criteria: Select Exact Match ( default ) - Specifies that only companions that match the size of the companion ad slot exactly should be chosen. Select Near Match - Specifies that any companion close to the size of the companion ad slot should be chosen. Ignore Size - Specifies that size should be ignored when choosing companions.",
+            "initvalue": "SELECT_EXACT_MATCH"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "label": "Advanced Settings",
+    "icon": "TabAnalytics",
+    "description": "Edit your player's configuration file",
+    "type": "menu",
+    "children": [
+      {
+        "label": "",
+        "type": "json",
+        "model": "config",
+        "filter": "json"
+      }
+    ]
+  }
+]

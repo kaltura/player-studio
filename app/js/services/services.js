@@ -455,7 +455,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						}
 					} else {
 						if (key == "enabled") {
-							copyobj["plugin"] = true;
 							delete copyobj[key];
 						}
 					}
@@ -495,16 +494,18 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:description': data.description ? data.description : '',
 					'uiConf:config': JSON.stringify(data2Save, null, "\t")
 				};
-				// update the player version to the latest version when using production players
-				if (data.html5Url.indexOf("/html5/html5lib/") === 0) {
+				var playerObj = {};
+				var playerBundle = data.OvpOrOtt === "ott" ? "kalturaPlayer-ott" : "kalturaPlayer";
+				if (data.playerVersion === "beta") {
+					playerObj[playerBundle] = "{beta}";
+				} else { //latest
 					if (data.autoUpdate) {
-						request['uiConf:html5Url'] = "/html5/html5lib/{latest}/mwEmbedLoader.php";
+						playerObj[playerBundle] = "{latest}";
 					} else {
-						if (!data.tags || (data.tags && data.tags.length === 0) || (data.tags && data.tags.indexOf("Disable_Studio_Update") === -1) ) {
-							request['uiConf:html5Url'] = "/html5/html5lib/v" + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
-						}
+						playerObj[playerBundle] = "0.9.0";
 					}
 				}
+				request['uiConf:confVars'] = JSON.stringify(playerObj);
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
 					currentPlayer = {};
@@ -645,29 +646,9 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
 KMCServices.factory('editableProperties', ['$q', 'api', '$http', function ($q, api, $http) {
 	var deferred = $q.defer();
 	api.then(function () {
-		//for debbuging
-//       return $http.get('js/services/editableProperties.json').then(function(result){
-//           deferred.resolve(result.data);
-//        });
-//
-
-		var method = 'get';
-		var url = window.kWidget.getPath() + 'services.php?service=studioService';
-		if (window.IE < 10) {
-			url += '&callback=JSON_CALLBACK';
-			method = 'jsonp';
-		}
-		$http[method](url).then(function (result) {
-			var data = result.data;
-			if (typeof data == 'object') // json is OK
-				deferred.resolve(result.data);
-			else {
-				cl('JSON parse error of playerFeatures');
-				deferred.reject(false);
-			}
-		}, function (reason) {
-			deferred.reject(reason);
-		});
+      return $http.get('js/services/v3Properties.json').then(function(result){
+          deferred.resolve(result.data);
+       });
 	});
 	return deferred.promise;
 }]);
