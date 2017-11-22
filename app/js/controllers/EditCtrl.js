@@ -415,8 +415,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$scope.updatePlayerData(); // update the player data from the menu data
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
-		$("#kVideoTarget").width($scope.playerData.width);
-		$("#kVideoTarget").height($scope.playerData.height);
 
 		$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
 
@@ -436,7 +434,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			angular.extend(flashvars, {'wmode': 'transparent'});
 		}
 		var entryID = $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
-		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID);
+		requestNotificationChannel.requestStarted('edit'); // show spinner
+		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID, function () {
+			requestNotificationChannel.requestEnded('edit'); // hide spinner
+		});
 	};
 
 	// merge the player data with the menu data

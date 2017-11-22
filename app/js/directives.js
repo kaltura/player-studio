@@ -30,6 +30,9 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 					if ($(".Monetization").length === 0){
 						$('div:contains("IMA").panel').before('<div class="tabSubHeader Monetization">Monetization:</div><p class="categoryDesc">Content monetization settings</p>'); // add Monetization separator
 					}
+					if ($(".advancedDisclaimer").length === 0){
+						$('.jsonView').after('<br><br><br><br><p class="categoryDesc advancedDisclaimer">Note: After editing the below configuration, please click \'Save changes\'. In order to see changes propagate to other studio tabs, please also refresh the page</p>'); // add Advanced tab disclaimer
+					}
 					if ($(".addPlugin").length === 0){
 						var addPluginBtn = $compile(angular.element('<p style="margin-top: 40px; margin-bottom: 36px"><button ng-click="addPlugin()" class="btn btn-default addPlugin"><i class="glyphicon glyphicon-plus">&nbsp;</i>Create New Plugin</button></p>'))(scope);
 						$('div:contains("UI Variables").panel').after(addPluginBtn);

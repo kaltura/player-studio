@@ -194,6 +194,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 		var currentRefresh = null;
 		var nextRefresh = false;
 		var kdpConfig = '';
+		var kalturaPlayer;
 		var defaultCallback = function () {
 			playersService.refreshNeeded = false;
 			currentRefresh.resolve(true);
@@ -244,23 +245,54 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return previewEntryObj;
 				}
 			},
-			'renderPlayer': function (wid, uiconf_id, flashvars, entry_id) {
+			'renderPlayer': function (partner_id, uiconf_id, playerConfig, entry_id, callback) {
+				var loadPlayer = function () {
+					if (kalturaPlayer) {
+						kalturaPlayer.destroy();
+						$("#" + playerId).empty();
+					}
+					loadMedia();
+				};
+				var loadMedia = function () {
+					var providerConfig = {
+						partnerId: partner_id
+						// providerConfig.ks = config.ks;
+					};
+					try {
+						var config = JSON.parse(playerConfig.jsonConfig);
+					}catch (error){
+						logTime(error);
+						callback();
+					}
+					Object.assign(config, providerConfig);
+					kalturaPlayer = KalturaPlayer.setup(playerId, config);
+					kalturaPlayer.loadMedia(entry_id);
+					callback();
+				};
+				var require = function (url, callback) {
+					var head = document.getElementsByTagName("head")[0];
+					var script = document.createElement('script');
+					script.id = "kalturaPlayerFile";
+					script.src = url;
+					script.type = 'text/javascript';
+					// bind the event to the callback function
+					if (script.addEventListener) {
+						script.addEventListener("load", callback, false); // IE9+, Chrome, Firefox
+					}
+					else if (script.readyState) {
+						script.onreadystatechange = callback; // IE8
+					}
+					head.appendChild(script);
+				};
 				logTime('renderPlayer');
 				// clear companion divs
 				$("#Comp_300x250").empty();
 				$("#Comp_728x90").empty();
-				window.mw.setConfig('forceMobileHTML5', true);
-				window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
-				kWidget.embed({
-					"targetId": 'kVideoTarget',
-					"wid": "_" + wid,
-					"uiconf_id": uiconf_id,
-					"flashvars": flashvars,
-					"entry_id": entry_id,
-					"readyCallback": function () {
-						$("#kVideoTarget_ifp").contents().find('link[href$="playList.css"]').clone().appendTo($('head')); // inject playlist css from iframe to parent
-					}
-				});
+				if (!document.getElementById("kalturaPlayerFile")) {
+					require('//www.kaltura.com/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id, loadPlayer);
+				} else {
+					loadPlayer();
+				}
 			},
 			'setKDPAttribute': function (attrStr, value) {
 				var kdp = document.getElementById('kVideoTarget');
