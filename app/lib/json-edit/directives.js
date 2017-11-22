@@ -256,7 +256,6 @@ angular.module('JSONedit', ['ui.sortable'])
         var newElement = angular.element(template);
         $compile(newElement)(scope);
         element.replaceWith ( newElement );
-	    $(".glyphicon-chevron-down").hide();
     }
   };
 }]);

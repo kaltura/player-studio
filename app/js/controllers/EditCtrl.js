@@ -212,7 +212,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // set selected category when clicking on a category icon
     $scope.categorySelected = function(category){
 	    if (category === "Advanced Settings") {
-	    	$scope.renderPlayer();
+	    	$scope.updatePlayerData();
 	    }
 	    $scope.playerData.updateData = category !== "Advanced Settings";
         $scope.selectedCategory = category;
@@ -271,12 +271,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			    $scope.selectDefaultEntry($scope.userPlaylists);
 		    }
 	    }
+	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
-	    $timeout(function(){
-		    $scope.refreshPlayer();
-	    },0,true);
-
     };
 
 	// remove validation for disabled plugins
@@ -324,17 +321,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
-	    if (property.model === "playerVersion"){ // handle player version select refresh
-		    $scope.refreshPlayer();
-		    return;
-	    }
-	    if (property.model === "config.playback.textLanguage"){ // handle captions select refresh
-		    $scope.refreshPlayer();
-		    return;
+	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage"){ // handle player version and captions select
+		    $scope.updatePlayerData(); // update the player data from the menu data
 	    }
 	    if (property.model === "languageKey"){ // handle captions input updated
 		    $scope.playerData.languageKey = property.initvalue;
-		    return;
 	    }
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry;

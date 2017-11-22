@@ -237,6 +237,7 @@
             "label": "Display ads on replay",
             "helpnote": "Display ads on replay",
             "type": "checkbox",
+            "disabled": true,
             "model": "config.plugins.ima.adsOnReplay"
           },
           {
