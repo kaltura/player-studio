@@ -329,6 +329,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (property.model === "languageKey"){ // handle captions input updated
 		    $scope.playerData.languageKey = property.initvalue;
 	    }
+	    if (property.model === "config.env.baseUrl" || property.model === "config.env.beUrl"){ // handle refresh kaltura player
+		    window.KalturaPlayer = null;
+	    }
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry;
 		    localStorageService.set('defaultEntry', property.selectedEntry);

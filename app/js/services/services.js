@@ -272,7 +272,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				var require = function (url, callback) {
 					var head = document.getElementsByTagName("head")[0];
 					var script = document.createElement('script');
-					script.id = "kalturaPlayerFile";
 					script.src = url;
 					script.type = 'text/javascript';
 					// bind the event to the callback function

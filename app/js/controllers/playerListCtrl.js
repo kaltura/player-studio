@@ -5,16 +5,19 @@
 angular.module('KMCModule').controller('PlayerListCtrl',
 	['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc',
 		function (apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, utilsSvc) {
+			window.KalturaPlayer = null;
 			// start request to show the spinner. When data is rendered, the onFinishRender directive will hide the spinner
 			requestNotificationChannel.requestStarted('list');
 			$rootScope.lang = 'en-US';
 
 			var getHTML5Version = function (path) {
 				var version = '';
-				if (path.indexOf("{latest}") !== -1) {
-					version = "latest";
-				} else {
-					version = path.substring(path.lastIndexOf('/v') + 2, path.indexOf('/mwEmbedLoader.php'));
+				if (path) {
+					if (path.indexOf("{latest}") !== -1) {
+						version = "latest";
+					} else {
+						version = path.substring(path.lastIndexOf('/v') + 2, path.indexOf('/mwEmbedLoader.php'));
+					}
 				}
 				return version;
 			};
