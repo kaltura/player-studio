@@ -77,7 +77,8 @@
         "type": "freezeVersion",
         "endline": "true",
         "filter": "not",
-        "model": "autoUpdate"
+        "model": "autoUpdate",
+        "player-refresh": false
       },
       {
         "label": "Preview entry",

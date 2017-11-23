@@ -529,6 +529,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if (filter == "accountCode"){
 			if (val && val.options) {
 				return val.options.accountCode;
+			} else {
+				return "";
 			}
 		}
 		return val;

@@ -531,10 +531,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				if (data.playerVersion === "beta") {
 					playerObj[playerBundle] = "{beta}";
 				} else { //latest
-					if (data.autoUpdate) {
+					if (data.autoUpdate || !KalturaPlayer) {
 						playerObj[playerBundle] = "{latest}";
 					} else {
-						playerObj[playerBundle] = "0.9.0";
+						playerObj[playerBundle] = KalturaPlayer.VERSION;
 					}
 				}
 				request['uiConf:confVars'] = JSON.stringify(playerObj);
