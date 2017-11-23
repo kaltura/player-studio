@@ -288,10 +288,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				// clear companion divs
 				$("#Comp_300x250").empty();
 				$("#Comp_728x90").empty();
-				if (!document.getElementById("kalturaPlayerFile")) {
-					require('//www.kaltura.com/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id, loadPlayer);
-				} else {
+				if (window.KalturaPlayer) {
 					loadPlayer();
+				} else {
+					require('//www.kaltura.com/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id, function () {
+						if (window.KalturaPlayer) {
+							loadPlayer();
+						} else {
+							callback();
+						}
+					});
 				}
 			},
 			'setKDPAttribute': function (attrStr, value) {
@@ -324,7 +330,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'2:uiConf:width': 560,
 							'2:uiConf:height': 395,
 							'2:uiConf:tags': 'kalturaPlayerJs,player',
-							'2:uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
+							'2:uiConf:confVars': '{"kalturaPlayer":"{latest}"}',
 							'2:uiConf:creationMode': 2,
 							'2:uiConf:config': angular.toJson(data)
 						};
@@ -342,7 +348,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'uiConf:version': '161',
 							'uiConf:name': 'New Player',
 							'uiConf:tags': 'kalturaPlayerJs,player',
-							'uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
+							'uiConf:confVars': '{"kalturaPlayer":"{latest}"}',
 							'uiConf:creationMode': 2,
 							'uiConf:confFile': kdpConfig,
 							'uiConf:config': angular.toJson(data)

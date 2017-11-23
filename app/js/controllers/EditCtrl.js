@@ -13,12 +13,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.menuOpen = true;
 
 	var confVars = $scope.playerData.confVars;
-	var OvpOrOtt = confVars.indexOf('ott') > -1 ? 'ott' : 'ovp';
-	var playerVersion = confVars.indexOf('beta') > -1 ? 'beta' : 'latest';
-	var autoUpdate = (confVars.indexOf('beta') > -1 || confVars.indexOf('latest') > -1);
-	$scope.playerData['OvpOrOtt'] = OvpOrOtt;
-	$scope.playerData['playerVersion'] = playerVersion;
-	$scope.playerData['autoUpdate'] = autoUpdate;
+	if (confVars) {
+		var OvpOrOtt = confVars.indexOf('ott') > -1 ? 'ott' : 'ovp';
+		var playerVersion = confVars.indexOf('beta') > -1 ? 'beta' : 'latest';
+		var autoUpdate = (confVars.indexOf('beta') > -1 || confVars.indexOf('latest') > -1);
+		$scope.playerData['OvpOrOtt'] = OvpOrOtt;
+		$scope.playerData['playerVersion'] = playerVersion;
+		$scope.playerData['autoUpdate'] = autoUpdate;
+	}
 
 		// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
