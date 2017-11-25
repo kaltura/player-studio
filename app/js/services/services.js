@@ -331,7 +331,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'2:uiConf:tags': 'kalturaPlayerJs,player',
 							'2:uiConf:confVars': '{"kalturaPlayer":"{latest}"}',
 							'2:uiConf:creationMode': 2,
-							'2:uiConf:config': angular.toJson(data)
+							'2:uiConf:config': angular.toJson(data, true)
 						};
 					} else { // for stand alone studio - create a new player from scratch. Not working on IE9 and IE8 due to long query string
 						request = {
@@ -350,7 +350,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'uiConf:confVars': '{"kalturaPlayer":"{latest}"}',
 							'uiConf:creationMode': 2,
 							'uiConf:confFile': kdpConfig,
-							'uiConf:config': angular.toJson(data)
+							'uiConf:config': angular.toJson(data, true)
 						};
 					}
 					apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
