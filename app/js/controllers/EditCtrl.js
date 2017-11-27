@@ -626,10 +626,24 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}
 		}
 		if (filter == "accountCode") {
-			return data ? {accountCode: data} : {};
+			var youboraOptions = {};
+			if ($scope.playerData.config && $scope.playerData.config.plugins && $scope.playerData.config.plugins.youbora) {
+				youboraOptions = $scope.playerData.config.plugins.youbora.options || {};
+			}
+			if (data) {
+				youboraOptions.accountCode = data;
+			}
+			return youboraOptions;
 		}
 		if (filter == "loadVideoTimeout"){
-			return data ? {loadVideoTimeout: data} : {};
+			var AdsRenderingSettings = {};
+			if ($scope.playerData.config && $scope.playerData.config.plugins && $scope.playerData.config.plugins.ima) {
+				AdsRenderingSettings = $scope.playerData.config.plugins.ima.AdsRenderingSettings || {};
+			}
+			if (data) {
+				AdsRenderingSettings.loadVideoTimeout = data;
+			}
+			return AdsRenderingSettings;
 		}
 		if (filter == "noEmpty") {
 			return data || undefined;
