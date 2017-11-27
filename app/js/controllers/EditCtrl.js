@@ -24,7 +24,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 		// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
-	$scope.simulateMobile = false;
 	$scope.setAutoPreview = function(){
 		localStorageService.set('autoPreview', !$scope.autoPreview);
 	};
@@ -418,9 +417,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.playerData.config.enviornmentConfig && $scope.playerData.config.enviornmentConfig.localizationCode){ // support localizationCode
 			angular.extend(flashvars, {'localizationCode': $scope.playerData.config.enviornmentConfig.localizationCode});
 		}
-		if ($scope.simulateMobile){
-			angular.extend(flashvars,{'EmbedPlayer.SimulateMobile': true});
-		}
 		delete $scope.playerData.config.enviornmentConfig;
 		angular.extend(flashvars,{'jsonConfig': angular.toJson($scope.playerData.config)}); // update the player with the new configuration
 		if (window.parent.kmc && window.parent.kmc.vars.ks){
@@ -532,10 +528,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}
 		}
 		if (filter == "accountCode"){
-			if (val && val.options) {
-				return val.options.accountCode;
+			if (val && val.accountCode) {
+				return val.accountCode;
 			} else {
-				return "";
+				return val;
+			}
+		}
+		if (filter == "loadVideoTimeout"){
+			if (val && val.loadVideoTimeout) {
+				return val.loadVideoTimeout;
+			} else {
+				return val;
 			}
 		}
 		return val;
@@ -621,13 +624,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}
 		}
 		if (filter == "accountCode") {
-			var youbora = $scope.playerData.config.plugins.youbora;
-			if (youbora && youbora.options) {
-				youbora.options.accountCode = data;
-				return youbora;
-			} else {
-				return {enabled: true, options: {accountCode: data}};
-			}
+			return data ? {accountCode: data} : {};
+		}
+		if (filter == "loadVideoTimeout"){
+			return data ? {loadVideoTimeout: data} : {};
 		}
 		if (filter == "noEmpty") {
 			return data || undefined;

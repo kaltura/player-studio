@@ -215,7 +215,7 @@
           {
             "label": "Account code",
             "type": "text",
-            "model": "config.plugins.youbora",
+            "model": "config.plugins.youbora.options",
             "helpnote": "Youbora account id",
             "filter": "accountCode"
           }
@@ -244,11 +244,11 @@
           {
             "label": "Loading Timeout",
             "type": "number",
-            "model": "config.plugins.ima.timeout",
-            "helpnote": "Timeout for ad loading. If ad cannot be loaded within the specified time frame, load the video directly",
+            "model": "config.plugins.ima.AdsRenderingSettings",
+            "helpnote": "Timeout for ad loading (in milliseconds). If ad cannot be loaded within the specified time frame, load the video directly",
             "min": 0,
-            "initvalue": 5,
-            "max": 1000
+            "initvalue": 5000,
+            "filter": "loadVideoTimeout"
           },
           {
             "label": "HTML Companions",
