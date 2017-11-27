@@ -520,6 +520,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						delete data2Save.enviornmentConfig;
 					}
 				}
+				if (data2Save.ui) {
+					delete data2Save.ui.forceTouchUI;
+					if ($.isEmptyObject(data2Save.ui)) {
+						delete data2Save.ui;
+					}
+				}
 				var request = {
 					'service': 'uiConf',
 					'action': 'update',

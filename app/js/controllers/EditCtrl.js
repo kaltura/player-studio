@@ -28,6 +28,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		localStorageService.set('autoPreview', !$scope.autoPreview);
 	};
 	$scope.setSimulateMobile = function(){
+		window.KalturaPlayer = null;
+		$("#kVideoTarget").empty();
 		setTimeout(function(){
 			$scope.refreshPlayer();
 		},0);
