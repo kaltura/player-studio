@@ -12,7 +12,6 @@
     "autoplay": false,
     "allowMutedAutoPlay": true,
     "muted": false,
-    "forceTouchUI": false,
     "options": {
       "html5": {
         "hls": {},

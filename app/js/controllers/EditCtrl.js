@@ -429,7 +429,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		var entryID = $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
 		requestNotificationChannel.requestStarted('edit'); // show spinner
-		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID, function () {
+		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID, $scope.playerData.forceTouchUI, function () {
 			requestNotificationChannel.requestEnded('edit'); // hide spinner
 		});
 	};

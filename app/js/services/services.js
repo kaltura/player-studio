@@ -245,7 +245,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return previewEntryObj;
 				}
 			},
-			'renderPlayer': function (partner_id, uiconf_id, playerConfig, entry_id, callback) {
+			'renderPlayer': function (partner_id, uiconf_id, playerConfig, entry_id, forceTouchUI, callback) {
 				var loadPlayer = function () {
 					if (kalturaPlayer) {
 						kalturaPlayer.destroy();
@@ -265,6 +265,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						callback();
 					}
 					Object.assign(config, providerConfig);
+					if (forceTouchUI) {
+						Object.assign(config, {ui: {forceTouchUI: true}});
+					}
 					kalturaPlayer = KalturaPlayer.setup(playerId, config);
 					kalturaPlayer.loadMedia(entry_id);
 					callback();
@@ -518,12 +521,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 					if (angular.equals({}, data2Save.enviornmentConfig)) {
 						delete data2Save.enviornmentConfig;
-					}
-				}
-				if (data2Save.ui) {
-					delete data2Save.ui.forceTouchUI;
-					if ($.isEmptyObject(data2Save.ui)) {
-						delete data2Save.ui;
 					}
 				}
 				var request = {
