@@ -186,8 +186,8 @@
         "model": "config.playback.autoplay"
       },
       {
-        "label": "Start Player Muted",
-        "helpnote": "Start Player Muted",
+        "label": "Start Playback Muted",
+        "helpnote": "Start Playback Muted",
         "type": "checkbox",
         "model": "config.playback.muted"
       },
