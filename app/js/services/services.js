@@ -260,9 +260,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 				var loadMedia = function () {
 					var providerConfig = {
-						partnerId: partner_id,
-						ks: localStorageService.get("ks")
+						partnerId: partner_id
 					};
+					if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.ks) {
+						providerConfig['ks'] = window.parent.kmc.vars.ks;
+					}
 					try {
 						var config = JSON.parse(playerConfig.jsonConfig);
 						Object.assign(config, providerConfig);
