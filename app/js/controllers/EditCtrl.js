@@ -20,6 +20,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$scope.playerData['OvpOrOtt'] = OvpOrOtt;
 		$scope.playerData['playerVersion'] = playerVersion;
 		$scope.playerData['autoUpdate'] = autoUpdate;
+		if (!autoUpdate) {
+			try {
+				var confVarsObj = JSON.parse(confVars);
+				$scope.playerData['freezeVersionNum'] = confVarsObj[PlayerService.KALTURA_PLAYER] || confVarsObj[PlayerService.KALTURA_PLAYER_OTT];
+			} catch (e){
+				logTime(e);
+			}
+		}
 	}
 
 		// auto preview flag
@@ -29,7 +37,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	};
 	$scope.setSimulateMobile = function(){
 		window.KalturaPlayer = null;
-		$("#kVideoTarget").empty();
+		$("#" + PlayerService.PLAYER_ID).empty();
 		setTimeout(function(){
 			$scope.refreshPlayer();
 		},0);
@@ -324,14 +332,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
+	    if (property.model === "playerVersion" || property.model === "OvpOrOtt" || property.model === "config.env.baseUrl" || property.model === "config.env.beUrl"){ // handle player version, env and ovp/ott select
+		    window.KalturaPlayer = null;
+	    }
 	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage"){ // handle player version and captions select
 		    $scope.updatePlayerData(); // update the player data from the menu data
 	    }
 	    if (property.model === "languageKey"){ // handle captions input updated
 		    $scope.playerData.languageKey = property.initvalue;
-	    }
-	    if (property.model === "config.env.baseUrl" || property.model === "config.env.beUrl"){ // handle refresh kaltura player
-		    window.KalturaPlayer = null;
 	    }
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry;
@@ -429,7 +437,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		var entryID = $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
 		requestNotificationChannel.requestStarted('edit'); // show spinner
-		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID, $scope.playerData.forceTouchUI, function () {
+		PlayerService.renderPlayer($scope.playerData, flashvars, entryID, function () {
 			requestNotificationChannel.requestEnded('edit'); // hide spinner
 		});
 	};
@@ -669,6 +677,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.invalidProps.length > 0){
 			utilsSvc.alert('Save Player Settings','Some plugin features values are invalid. The player cannot be saved.');
 		}else{
+			var savePlayer = function () {
+				PlayerService.savePlayer($scope.playerData).then(function(value) {
+						localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
+						apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
+						utilsSvc.alert('Save Player Settings','Player Saved Successfully');
+					},
+					function(msg) {
+						utilsSvc.alert('Player save failure',msg);
+					}
+				);
+			};
 			$scope.updatePlayerData();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
@@ -677,15 +696,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}else{
 				$scope.addTags(['kalturaPlayerJs','player']); // set player tag
 			}
-			PlayerService.savePlayer($scope.playerData).then(function(value) {
-					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
-					apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
-					utilsSvc.alert('Save Player Settings','Player Saved Successfully');
-				},
-				function(msg) {
-					utilsSvc.alert('Player save failure',msg);
-				}
-			);
+			if (!$scope.playerData.autoUpdate && PlayerService.getPlayerVersion($scope.playerData) === '{latest}') {
+				//should load the latest KalturaPlayer to figure out the version number
+				PlayerService.loadKalturaPlayerScript($scope.playerData, function () {
+					savePlayer();
+				});
+			} else {
+				savePlayer();
+			}
 		}
 	};
 

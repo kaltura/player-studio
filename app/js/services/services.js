@@ -190,11 +190,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 		var currentPlayer = {};
 		var previewEntry;
 		var previewEntryObj;
-		var playerId = 'kVideoTarget';
 		var currentRefresh = null;
 		var nextRefresh = false;
 		var kdpConfig = '';
-		var kalturaPlayer;
 		var defaultCallback = function () {
 			playersService.refreshNeeded = false;
 			currentRefresh.resolve(true);
@@ -221,6 +219,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			return currentRefresh.promise;
 		};
 		var playersService = {
+			kalturaPlayer: null,
+			latestVersionNum: null,
+			PLAYER_ID: 'kVideoTarget',
+			KALTURA_PLAYER: 'kalturaPlayer',
+			KALTURA_PLAYER_OTT: 'kalturaPlayer-ott',
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
 				currentRefresh = null;
@@ -245,62 +248,84 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return previewEntryObj;
 				}
 			},
-			'renderPlayer': function (partner_id, uiconf_id, playerConfig, entry_id, forceTouchUI, callback) {
+			'renderPlayer': function (playerData, playerConfig, entry_id, callback) {
+				var partner_id = playerData.partnerId;
+				var forceTouchUI = playerData.forceTouchUI;
 				var loadPlayer = function () {
-					if (kalturaPlayer) {
-						kalturaPlayer.destroy();
-						$("#" + playerId).empty();
+					if (playersService.kalturaPlayer) {
+						playersService.kalturaPlayer.destroy();
+						$("#" + playersService.PLAYER_ID).empty();
 					}
 					loadMedia();
 				};
 				var loadMedia = function () {
 					var providerConfig = {
-						partnerId: partner_id
-						// providerConfig.ks = config.ks;
+						partnerId: partner_id,
+						ks: localStorageService.get("ks")
 					};
 					try {
 						var config = JSON.parse(playerConfig.jsonConfig);
+						Object.assign(config, providerConfig);
+						if (forceTouchUI) {
+							Object.assign(config, {ui: {forceTouchUI: true}});
+						}
+						playersService.kalturaPlayer = KalturaPlayer.setup(playersService.PLAYER_ID, config);
+						playersService.kalturaPlayer.loadMedia(entry_id);
+						callback();
 					}catch (error){
-						logTime(error);
+						console.error(error);
 						callback();
 					}
-					Object.assign(config, providerConfig);
-					if (forceTouchUI) {
-						Object.assign(config, {ui: {forceTouchUI: true}});
-					}
-					kalturaPlayer = KalturaPlayer.setup(playerId, config);
-					kalturaPlayer.loadMedia(entry_id);
-					callback();
 				};
+				logTime('renderPlayer');
+				// clear companion divs
+				$("#Comp_300x250").empty();
+				$("#Comp_728x90").empty();
+				playersService.loadKalturaPlayerScript(playerData, function () {
+					if (window.KalturaPlayer) {
+						loadPlayer();
+					} else {
+						callback();
+					}
+				});
+			},
+			'loadKalturaPlayerScript': function (playerData, callback) {
+				if (window.KalturaPlayer) {
+					callback();
+					return;
+				}
+				var partner_id = playerData.partnerId;
+				var uiconf_id = playerData.id;
 				var require = function (url, callback) {
 					var head = document.getElementsByTagName("head")[0];
 					var script = document.createElement('script');
 					script.src = url;
 					script.type = 'text/javascript';
 					// bind the event to the callback function
-					if (script.addEventListener) {
-						script.addEventListener("load", callback, false); // IE9+, Chrome, Firefox
+					if (script.addEventListener) { // IE9+, Chrome, Firefox
+						script.addEventListener("load", callback, false);
+						script.addEventListener("error", callback, false);
 					}
 					else if (script.readyState) {
 						script.onreadystatechange = callback; // IE8
 					}
 					head.appendChild(script);
 				};
-				logTime('renderPlayer');
-				// clear companion divs
-				$("#Comp_300x250").empty();
-				$("#Comp_728x90").empty();
-				if (window.KalturaPlayer) {
-					loadPlayer();
-				} else {
-					require('//www.kaltura.com/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id, function () {
-						if (window.KalturaPlayer) {
-							loadPlayer();
-						} else {
-							callback();
-						}
-					});
-				}
+				var playerBundle = playersService.getPlayerBundle(playerData);
+				var playerVersion = playersService.getPlayerVersion(playerData);
+				var playerVersionParam = playerBundle + '=' + playerVersion;
+
+				//TODO env should be configurable
+				var env = 'www.kaltura.com';
+				require('//'+ env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam, function () {
+				// uiconf_id = '23448266';
+				// var env = 'dev-backend31.dev.kaltura.com';
+				// require('//'+ env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam, function () {
+					if (window.KalturaPlayer && playerVersion === '{latest}') {
+						playersService.latestVersionNum = KalturaPlayer.VERSION;
+					}
+					callback();
+				});
 			},
 			'setKDPAttribute': function (attrStr, value) {
 				var kdp = document.getElementById('kVideoTarget');
@@ -332,7 +357,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'2:uiConf:width': 560,
 							'2:uiConf:height': 395,
 							'2:uiConf:tags': 'kalturaPlayerJs,player',
-							'2:uiConf:confVars': '{"kalturaPlayer":"{latest}"}',
+							'2:uiConf:confVars': '{' + playersService.KALTURA_PLAYER + ':"{latest}"}',
 							'2:uiConf:creationMode': 2,
 							'2:uiConf:config': angular.toJson(data, true)
 						};
@@ -350,7 +375,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'uiConf:version': '161',
 							'uiConf:name': 'New Player',
 							'uiConf:tags': 'kalturaPlayerJs,player',
-							'uiConf:confVars': '{"kalturaPlayer":"{latest}"}',
+							'uiConf:confVars': '{' + playersService.KALTURA_PLAYER + ':"{latest}"}',
 							'uiConf:creationMode': 2,
 							'uiConf:confFile': kdpConfig,
 							'uiConf:config': angular.toJson(data, true)
@@ -534,18 +559,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:description': data.description ? data.description : '',
 					'uiConf:config': JSON.stringify(data2Save, null, "\t")
 				};
-				var playerObj = {};
-				var playerBundle = data.OvpOrOtt === "ott" ? "kalturaPlayer-ott" : "kalturaPlayer";
-				if (data.playerVersion === "beta") {
-					playerObj[playerBundle] = "{beta}";
-				} else { //latest
-					if (data.autoUpdate || !KalturaPlayer) {
-						playerObj[playerBundle] = "{latest}";
-					} else {
-						playerObj[playerBundle] = KalturaPlayer.VERSION;
-					}
-				}
-				request['uiConf:confVars'] = JSON.stringify(playerObj);
+				request['uiConf:confVars'] = JSON.stringify(playersService.getPlayerVersionObj(data));
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
 					currentPlayer = {};
@@ -557,6 +571,28 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					deferred.resolve(result);
 				});
 				return deferred.promise;
+			},
+			'getPlayerBundle': function (data) {
+				return data.OvpOrOtt === "ott" ? playersService.KALTURA_PLAYER_OTT : playersService.KALTURA_PLAYER;
+			},
+			'getPlayerVersionObj' : function (data) {
+				var playerObj = {};
+				var playerBundle = playersService.getPlayerBundle(data);
+				if (data.playerVersion === "beta") {
+					playerObj[playerBundle] = "{beta}";
+				} else { //latest
+					if (data.autoUpdate) {
+						playerObj[playerBundle] = "{latest}";
+					} else {
+						playerObj[playerBundle] = data.freezeVersionNum || playersService.latestVersionNum || "{latest}";
+					}
+				}
+				return playerObj;
+			},
+			'getPlayerVersion' : function (data) {
+				var playerBundle = playersService.getPlayerBundle(data);
+				var playerVersionObj = playersService.getPlayerVersionObj(data);
+				return playerVersionObj[playerBundle];
 			}
 		};
 		return playersService;
