@@ -318,11 +318,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				var playerVersionParam = playerBundle + '=' + playerVersion;
 
 				//TODO env should be configurable
-				var env = 'www.kaltura.com';
-				require('//'+ env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam, function () {
-				// uiconf_id = '23448266';
-				// var env = 'dev-backend31.dev.kaltura.com';
+				// var env = 'www.kaltura.com';
 				// require('//'+ env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam, function () {
+				uiconf_id = '23448266';
+				var env = 'dev-backend31.dev.kaltura.com';
+				require('//'+ env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam, function () {
 					if (window.KalturaPlayer && playerVersion === '{latest}') {
 						playersService.latestVersionNum = KalturaPlayer.VERSION;
 					}

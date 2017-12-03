@@ -34,7 +34,8 @@ module.exports = function(grunt) {
                     "console": true,
                     "document": true,
                     "setTimeout": true,
-                    "Spinner": true
+                    "Spinner": true,
+                    "KalturaPlayer": true
                 }
             },
             dev: ['app/js/**/*.js']
@@ -194,9 +195,13 @@ module.exports = function(grunt) {
                         src: 'app/bower_components/select2/select2-spinner.gif',
                         dest: '_dist/css/select2-spinner.gif'
                     },
+	                {
+		                src: 'app/js/services/defaultPlayer.json',
+		                dest: '_dist/js/services/defaultPlayer.json'
+	                },
                     {
-                        src: 'app/js/services/defaultPlayer.json',
-                        dest: '_dist/js/services/defaultPlayer.json'
+                        src: 'app/js/services/v3Properties.json',
+                        dest: '_dist/js/services/v3Properties.json'
                     },
 	                {
                         src: 'app/js/services/kdp.xml',

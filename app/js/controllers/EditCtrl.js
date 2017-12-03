@@ -223,7 +223,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // set selected category when clicking on a category icon
     $scope.categorySelected = function(category){
 	    if (category === "Advanced Settings") {
-	    	$scope.updatePlayerData();
+			$scope.updatePlayerData();
 	    }
 	    $scope.playerData.updateData = category !== "Advanced Settings";
         $scope.selectedCategory = category;
