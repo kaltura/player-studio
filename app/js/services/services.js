@@ -317,7 +317,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				var playerVersion = playersService.getPlayerVersion(playerData);
 				var playerVersionParam = playerBundle + '=' + playerVersion;
 
-				var env = '//www.kaltura.com';
+				var env = 'www.kaltura.com';
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.service_url) {
 					env = window.parent.kmc.vars.service_url;
 				}
