@@ -42,7 +42,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.refreshPlayer();
 		},0);
 	};
-	if (window.parent.kmc && window.parent.kmc.vars.studio.showFlashStudio === false){
+	if (window.parent.kmc && window.parent.kmc.vars.studioV3.showFlashStudio === false){
 		$(".menuFooter").css("bottom","1px");
 	}
 	window.parent.studioDataChanged = false; // used when navigating away from studio

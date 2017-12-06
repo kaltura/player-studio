@@ -49,8 +49,8 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			// try to get studio config from KMC (should work if we are in KMC)
 			try {
 				var kmc = window.parent.kmc;
-				if (kmc && kmc.vars && kmc.vars.studio.config) {
-					config = kmc.vars.studio.config;
+				if (kmc && kmc.vars && kmc.vars.studioV3.config) {
+					config = kmc.vars.studioV3.config;
 					$scope.UIConf = angular.fromJson(config);
 				}
 			} catch (e) {

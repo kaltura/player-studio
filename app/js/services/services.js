@@ -802,8 +802,8 @@ KMCServices.provider('api', function () {
 				var html5lib = null;
 				try {
 					var kmc = window.parent.kmc;
-					if (kmc && kmc.vars && kmc.vars.studio.config) {
-						var config = angular.fromJson(kmc.vars.studio.config);
+					if (kmc && kmc.vars && kmc.vars.studioV3) {
+						var config = angular.fromJson(kmc.vars.studioV3);
 						html5lib = kmc.vars.api_url + "/html5/html5lib/" + config.html5_version + "/mwEmbedLoader.php";
 						loadHTML5Lib(html5lib);
 					}
