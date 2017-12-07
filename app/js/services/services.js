@@ -722,11 +722,9 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
 
 KMCServices.factory('editableProperties', ['$q', 'api', '$http', function ($q, api, $http) {
 	var deferred = $q.defer();
-	api.then(function () {
-      return $http.get('js/services/v3Properties.json').then(function(result){
-          deferred.resolve(result.data);
-       });
-	});
+    $http.get('js/services/v3Properties.json').then(function(result){
+        deferred.resolve(result.data);
+    });
 	return deferred.promise;
 }]);
 

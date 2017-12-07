@@ -251,8 +251,11 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
         }
     });
 	var kmc = window.parent.kmc;
-    if (kmc && kmc.vars.studioV3.showFlashStudio === false){
+    if (kmc && kmc.vars.studioV3.showFlashStudio === false && kmc.vars.studioV3.showHTMLStudio === false){
         $(".kmcSubNav").hide();
+    }
+    if (kmc && kmc.vars.studioV3.showFlashStudio === false){
+        $("#flashStudioBtn").hide();
     }
     if (kmc && kmc.vars.studioV3.showHTMLStudio === false){
         $("#htmlStudioBtn").hide();
