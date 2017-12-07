@@ -358,7 +358,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'2:uiConf:width': 560,
 							'2:uiConf:height': 395,
 							'2:uiConf:tags': 'kalturaPlayerJs,player',
-							'2:uiConf:confVars': '{' + playersService.KALTURA_PLAYER + ':"{latest}"}',
+							'2:uiConf:confVars': '{"' + playersService.KALTURA_PLAYER + '":"{latest}"}',
 							'2:uiConf:creationMode': 2,
 							'2:uiConf:config': angular.toJson(data, true)
 						};
@@ -376,7 +376,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'uiConf:version': '161',
 							'uiConf:name': 'New Player',
 							'uiConf:tags': 'kalturaPlayerJs,player',
-							'uiConf:confVars': '{' + playersService.KALTURA_PLAYER + ':"{latest}"}',
+							'uiConf:confVars': '{"' + playersService.KALTURA_PLAYER + '":"{latest}"}',
 							'uiConf:creationMode': 2,
 							'uiConf:confFile': kdpConfig,
 							'uiConf:config': angular.toJson(data, true)
