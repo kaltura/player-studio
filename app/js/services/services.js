@@ -184,8 +184,8 @@ KMCServices.factory('sortSvc', [function () {
 	}]
 );
 
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService', '$filter', 'localStorageService', '$location', 'utilsSvc',
-	function ($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc) {
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService', '$filter', 'localStorageService', '$location', 'utilsSvc', 'loadINI',
+	function ($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc, loadINI) {
 		var playersCache = {};
 		var currentPlayer = {};
 		var previewEntry;
@@ -298,6 +298,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				}
 				var partner_id = playerData.partnerId;
 				var uiconf_id = playerData.id;
+				var playerBundle = playersService.getPlayerBundle(playerData);
+				var playerVersion = playersService.getPlayerVersion(playerData);
+				var playerVersionParam = playerBundle + '=' + playerVersion;
+
 				var require = function (url, callback) {
 					var head = document.getElementsByTagName("head")[0];
 					var script = document.createElement('script');
@@ -313,20 +317,23 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 					head.appendChild(script);
 				};
-				var playerBundle = playersService.getPlayerBundle(playerData);
-				var playerVersion = playersService.getPlayerVersion(playerData);
-				var playerVersionParam = playerBundle + '=' + playerVersion;
 
-				var env = 'www.kaltura.com';
-				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.service_url) {
-					env = window.parent.kmc.vars.service_url;
+				var loadScript = function (env) {
+					require('//'+ env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam, function () {
+						if (window.KalturaPlayer && playerVersion === '{latest}') {
+							playersService.latestVersionNum = KalturaPlayer.VERSION;
+						}
+						callback();
+					});
+				};
+
+				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.host) {
+					loadScript(window.parent.kmc.vars.host);
+				} else {
+					loadINI.getINIConfig().success(function (data) {
+						loadScript(data.service_url);
+					});
 				}
-				require('//'+ env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam, function () {
-					if (window.KalturaPlayer && playerVersion === '{latest}') {
-						playersService.latestVersionNum = KalturaPlayer.VERSION;
-					}
-					callback();
-				});
 			},
 			'setKDPAttribute': function (attrStr, value) {
 				var kdp = document.getElementById('kVideoTarget');
