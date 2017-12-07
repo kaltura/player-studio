@@ -638,9 +638,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if ($scope.playerData.config && $scope.playerData.config.plugins && $scope.playerData.config.plugins.youbora) {
 				youboraOptions = $scope.playerData.config.plugins.youbora.options || {};
 			}
-			if (data) {
-				youboraOptions.accountCode = data;
-			}
+			youboraOptions.accountCode = data;
 			return youboraOptions;
 		}
 		if (filter == "loadVideoTimeout"){
@@ -648,9 +646,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if ($scope.playerData.config && $scope.playerData.config.plugins && $scope.playerData.config.plugins.ima) {
 				AdsRenderingSettings = $scope.playerData.config.plugins.ima.AdsRenderingSettings || {};
 			}
-			if (data) {
-				AdsRenderingSettings.loadVideoTimeout = data;
-			}
+			AdsRenderingSettings.loadVideoTimeout = data;
 			return AdsRenderingSettings;
 		}
 		if (filter == "noEmpty") {
