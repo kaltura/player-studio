@@ -22,7 +22,16 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 			if (scope.$last === true) { // accordion section finished loading - init jQuery plugins after 3 seconds to allow menu items to render first
 				$timeout(function(){
 					if ($(".playlistSetup").length === 0){
-						$('div:contains("Playlist Configuration").panel').before('<div class="playlistSetup">Playlist setup:</div>'); // add playlist separator
+						$('div:contains("Playlist Configuration").panel').before('<div class="tabSubHeader playlistSetup">Playlist setup:</div>'); // add playlist separator
+					}
+					if ($(".Analytics").length === 0){
+						$('div:contains("Youbora").panel').before('<div class="tabSubHeader Analytics">Analytics:</div><p class="categoryDesc">Kaltura supports robust analytics via the Kaltura platform as well as via 3rd party analytics providers</p>'); // add Analytics separator
+					}
+					if ($(".Monetization").length === 0){
+						$('div:contains("IMA").panel').before('<div class="tabSubHeader Monetization">Monetization:</div><p class="categoryDesc">Content monetization settings</p>'); // add Monetization separator
+					}
+					if ($(".advancedDisclaimer").length === 0){
+						$('.jsonView').after('<br><br><br><br><p class="categoryDesc advancedDisclaimer">Note: In order to see changes propagate to other studio tabs, please save and refresh the page</p>'); // add Advanced tab disclaimer
 					}
 					if ($(".addPlugin").length === 0){
 						var addPluginBtn = $compile(angular.element('<p style="margin-top: 40px; margin-bottom: 36px"><button ng-click="addPlugin()" class="btn btn-default addPlugin"><i class="glyphicon glyphicon-plus">&nbsp;</i>Create New Plugin</button></p>'))(scope);

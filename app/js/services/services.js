@@ -184,13 +184,12 @@ KMCServices.factory('sortSvc', [function () {
 	}]
 );
 
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService', '$filter', 'localStorageService', '$location', 'utilsSvc',
-	function ($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc) {
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService', '$filter', 'localStorageService', '$location', 'utilsSvc', 'loadINI',
+	function ($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc, loadINI) {
 		var playersCache = {};
 		var currentPlayer = {};
 		var previewEntry;
 		var previewEntryObj;
-		var playerId = 'kVideoTarget';
 		var currentRefresh = null;
 		var nextRefresh = false;
 		var kdpConfig = '';
@@ -220,6 +219,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			return currentRefresh.promise;
 		};
 		var playersService = {
+			kalturaPlayer: null,
+			latestVersionNum: null,
+			PLAYER_ID: 'kVideoTarget',
+			KALTURA_PLAYER: 'kalturaPlayer',
+			KALTURA_PLAYER_OTT: 'kalturaPlayer-ott',
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
 				currentRefresh = null;
@@ -244,23 +248,92 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return previewEntryObj;
 				}
 			},
-			'renderPlayer': function (wid, uiconf_id, flashvars, entry_id) {
+			'renderPlayer': function (playerData, playerConfig, entry_id, callback) {
+				var partner_id = playerData.partnerId;
+				var forceTouchUI = playerData.forceTouchUI;
+				var loadPlayer = function () {
+					if (playersService.kalturaPlayer) {
+						playersService.kalturaPlayer.destroy();
+						$("#" + playersService.PLAYER_ID).empty();
+					}
+					loadMedia();
+				};
+				var loadMedia = function () {
+					var providerConfig = {
+						partnerId: partner_id
+					};
+					if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.ks) {
+						providerConfig['ks'] = window.parent.kmc.vars.ks;
+					}
+					try {
+						var config = JSON.parse(playerConfig.jsonConfig);
+						Object.assign(config, providerConfig);
+						if (forceTouchUI) {
+							Object.assign(config, {ui: {forceTouchUI: true}});
+						}
+						playersService.kalturaPlayer = KalturaPlayer.setup(playersService.PLAYER_ID, config);
+						playersService.kalturaPlayer.loadMedia(entry_id);
+						callback();
+					}catch (error){
+						console.error(error);
+						callback();
+					}
+				};
 				logTime('renderPlayer');
 				// clear companion divs
 				$("#Comp_300x250").empty();
 				$("#Comp_728x90").empty();
-				window.mw.setConfig('forceMobileHTML5', true);
-				window.mw.setConfig('Kaltura.EnableEmbedUiConfJs', true);
-				kWidget.embed({
-					"targetId": 'kVideoTarget',
-					"wid": "_" + wid,
-					"uiconf_id": uiconf_id,
-					"flashvars": flashvars,
-					"entry_id": entry_id,
-					"readyCallback": function () {
-						$("#kVideoTarget_ifp").contents().find('link[href$="playList.css"]').clone().appendTo($('head')); // inject playlist css from iframe to parent
+				playersService.loadKalturaPlayerScript(playerData, function () {
+					if (window.KalturaPlayer) {
+						loadPlayer();
+					} else {
+						callback();
 					}
 				});
+			},
+			'loadKalturaPlayerScript': function (playerData, callback) {
+				if (window.KalturaPlayer) {
+					callback();
+					return;
+				}
+				var partner_id = playerData.partnerId;
+				var uiconf_id = playerData.id;
+				var playerBundle = playersService.getPlayerBundle(playerData);
+				var playerVersion = playersService.getPlayerVersion(playerData);
+				var playerVersionParam = playerBundle + '=' + playerVersion;
+
+				var require = function (url, callback) {
+					var head = document.getElementsByTagName("head")[0];
+					var script = document.createElement('script');
+					script.src = url;
+					script.type = 'text/javascript';
+					// bind the event to the callback function
+					if (script.addEventListener) { // IE9+, Chrome, Firefox
+						script.addEventListener("load", callback, false);
+						script.addEventListener("error", callback, false);
+					}
+					else if (script.readyState) {
+						script.onreadystatechange = callback; // IE8
+					}
+					head.appendChild(script);
+				};
+
+				var loadScript = function (env) {
+					require('//'+ env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam, function () {
+						if (window.KalturaPlayer && playerVersion === '{latest}') {
+							playersService.latestVersionNum = KalturaPlayer.VERSION;
+						}
+						callback();
+					});
+				};
+
+				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.host) {
+					loadScript(window.parent.kmc.vars.host);
+				} else {
+					loadINI.getINIConfig().success(function (data) {
+						loadScript(data.service_url);
+					});
+				}
 			},
 			'setKDPAttribute': function (attrStr, value) {
 				var kdp = document.getElementById('kVideoTarget');
@@ -291,10 +364,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'2:uiConf:objType': 1,
 							'2:uiConf:width': 560,
 							'2:uiConf:height': 395,
-							'2:uiConf:tags': 'html5studio,player',
-							'2:uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
+							'2:uiConf:tags': 'kalturaPlayerJs,player',
+							'2:uiConf:confVars': '{"' + playersService.KALTURA_PLAYER + '":"{latest}"}',
 							'2:uiConf:creationMode': 2,
-							'2:uiConf:config': angular.toJson(data)
+							'2:uiConf:config': angular.toJson(data, true)
 						};
 					} else { // for stand alone studio - create a new player from scratch. Not working on IE9 and IE8 due to long query string
 						request = {
@@ -309,11 +382,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'uiConf:fUrlVersion': '3.9.8',
 							'uiConf:version': '161',
 							'uiConf:name': 'New Player',
-							'uiConf:tags': 'html5studio,player',
-							'uiConf:html5Url': "/html5/html5lib/v" + window.MWEMBED_VERSION + '/mwEmbedLoader.php',
+							'uiConf:tags': 'kalturaPlayerJs,player',
+							'uiConf:confVars': '{"' + playersService.KALTURA_PLAYER + '":"{latest}"}',
 							'uiConf:creationMode': 2,
 							'uiConf:confFile': kdpConfig,
-							'uiConf:config': angular.toJson(data)
+							'uiConf:config': angular.toJson(data, true)
 						};
 					}
 					apiService.setCache(false); // disable cache before this request to prevent fetching last created player from cache
@@ -455,7 +528,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						}
 					} else {
 						if (key == "enabled") {
-							copyobj["plugin"] = true;
 							delete copyobj[key];
 						}
 					}
@@ -495,16 +567,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:description': data.description ? data.description : '',
 					'uiConf:config': JSON.stringify(data2Save, null, "\t")
 				};
-				// update the player version to the latest version when using production players
-				if (data.html5Url.indexOf("/html5/html5lib/") === 0) {
-					if (data.autoUpdate) {
-						request['uiConf:html5Url'] = "/html5/html5lib/{latest}/mwEmbedLoader.php";
-					} else {
-						if (!data.tags || (data.tags && data.tags.length === 0) || (data.tags && data.tags.indexOf("Disable_Studio_Update") === -1) ) {
-							request['uiConf:html5Url'] = "/html5/html5lib/v" + window.MWEMBED_VERSION + "/mwEmbedLoader.php";
-						}
-					}
-				}
+				request['uiConf:confVars'] = JSON.stringify(playersService.getPlayerVersionObj(data));
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
 					currentPlayer = {};
@@ -517,70 +580,27 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				});
 				return deferred.promise;
 			},
-			'playerUpgrade': function (playerObj, html5lib) {
-				var request = {
-					'service': 'uiConf',
-					'action': 'update',
-					'id': playerObj.id,                        // the id of the player to update
-					'uiConf:html5Url': html5lib                // update the html5 lib to the new version
-				};
-				var deferred = $q.defer();
-				var rejectText = $filter('translate')('Upgrade player action was rejected: ');
-				apiService.doRequest(request).then(function (result) {
-						deferred.resolve(result);
-					}, function (msg) {
-						deferred.reject(rejectText + msg);
-					}
-				);
-				return deferred.promise;
+			'getPlayerBundle': function (data) {
+				return data.OvpOrOtt === "ott" ? playersService.KALTURA_PLAYER_OTT : playersService.KALTURA_PLAYER;
 			},
-			'playerUpdate': function (playerObj, html5lib, isPlaylist) {
-// use the upgradePlayer service to convert the old XML config to the new json config object
-				var deferred = $q.defer();
-				var rejectText = $filter('translate')('Update player action was rejected: ');
-
-				var method = 'get';
-				var url = window.kWidget.getPath() + 'services.php';
-				var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")};
-				if (window.IE < 10) {
-					params["callback"] = 'JSON_CALLBACK';
-					method = 'jsonp';
+			'getPlayerVersionObj' : function (data) {
+				var playerObj = {};
+				var playerBundle = playersService.getPlayerBundle(data);
+				if (data.playerVersion === "beta") {
+					playerObj[playerBundle] = "{beta}";
+				} else { //latest
+					if (data.autoUpdate) {
+						playerObj[playerBundle] = "{latest}";
+					} else {
+						playerObj[playerBundle] = data.freezeVersionNum || playersService.latestVersionNum || "{latest}";
+					}
 				}
-				$http({
-					url: url,
-					method: method,
-					params: params
-				}).success(function (data, status, headers, config) {
-// clean some redundant data from received object
-					if (data['uiConfId']) {
-						delete data['uiConfId'];
-						delete data['widgetId'];
-						delete data.vars['ks'];
-					}
-// set an api request to update the uiconf. update playlist includeInLayout if needed
-					if (isPlaylist && data.plugins.playlistAPI) {
-						data.plugins.playlistAPI.includeInLayout = true;
-					}
-					var playerTag = playerObj.tags.indexOf("playlist") != -1 ? "playlist" : "player"; // set player tag to player or playlist according to the original player tag
-					var request = {
-						'service': 'uiConf',
-						'action': 'update',
-						'id': playerObj.id,                        // the id of the player to update
-						'uiConf:tags': 'html5studio,' + playerTag, // update tags to prevent breaking the old studio which looks for the tag kdp3
-						'uiConf:html5Url': html5lib,               // update the html5 lib to the new version
-						'uiConf:config': angular.toJson(data).replace("\"vars\":", "\"uiVars\":")  // update the config object and change vars to uiVars
-					};
-					apiService.doRequest(request).then(function (result) {
-							deferred.resolve(result);
-						}, function (msg) {
-							deferred.reject(rejectText + msg);
-						}
-					);
-				}).error(function (data, status, headers, config) {
-					deferred.reject("Error updating UIConf: " + data);
-					$log.error('Error updating UIConf: ' + data);
-				});
-				return deferred.promise;
+				return playerObj;
+			},
+			'getPlayerVersion' : function (data) {
+				var playerBundle = playersService.getPlayerBundle(data);
+				var playerVersionObj = playersService.getPlayerVersionObj(data);
+				return playerVersionObj[playerBundle];
 			}
 		};
 		return playersService;
@@ -709,31 +729,9 @@ KMCServices.directive('loadingWidget', ['requestNotificationChannel', function (
 
 KMCServices.factory('editableProperties', ['$q', 'api', '$http', function ($q, api, $http) {
 	var deferred = $q.defer();
-	api.then(function () {
-		//for debbuging
-//       return $http.get('js/services/editableProperties.json').then(function(result){
-//           deferred.resolve(result.data);
-//        });
-//
-
-		var method = 'get';
-		var url = window.kWidget.getPath() + 'services.php?service=studioService';
-		if (window.IE < 10) {
-			url += '&callback=JSON_CALLBACK';
-			method = 'jsonp';
-		}
-		$http[method](url).then(function (result) {
-			var data = result.data;
-			if (typeof data == 'object') // json is OK
-				deferred.resolve(result.data);
-			else {
-				cl('JSON parse error of playerFeatures');
-				deferred.reject(false);
-			}
-		}, function (reason) {
-			deferred.reject(reason);
-		});
-	});
+    $http.get('js/services/v3Properties.json').then(function(result){
+        deferred.resolve(result.data);
+    });
 	return deferred.promise;
 }]);
 
@@ -806,8 +804,8 @@ KMCServices.provider('api', function () {
 				var html5lib = null;
 				try {
 					var kmc = window.parent.kmc;
-					if (kmc && kmc.vars && kmc.vars.studio.config) {
-						var config = angular.fromJson(kmc.vars.studio.config);
+					if (kmc && kmc.vars && kmc.vars.studioV3) {
+						var config = angular.fromJson(kmc.vars.studioV3);
 						html5lib = kmc.vars.api_url + "/html5/html5lib/" + config.html5_version + "/mwEmbedLoader.php";
 						loadHTML5Lib(html5lib);
 					}

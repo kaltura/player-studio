@@ -11,21 +11,38 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
-	if (typeof $scope.playerData["autoUpdate"] === "undefined") { // new players will have autoUpdate set to true. Old players will not have autoUpdate defined so we derive from html5url
-		$scope.playerData["autoUpdate"] = $scope.playerData.html5Url.indexOf("{latest}") !== -1;
+
+	var confVars = $scope.playerData.confVars;
+	if (confVars) {
+		var OvpOrOtt = confVars.indexOf('ott') > -1 ? 'ott' : 'ovp';
+		var playerVersion = confVars.indexOf('beta') > -1 ? 'beta' : 'latest';
+		var autoUpdate = (confVars.indexOf('beta') > -1 || confVars.indexOf('latest') > -1);
+		$scope.playerData['OvpOrOtt'] = OvpOrOtt;
+		$scope.playerData['playerVersion'] = playerVersion;
+		$scope.playerData['autoUpdate'] = autoUpdate;
+		if (!autoUpdate) {
+			try {
+				var confVarsObj = JSON.parse(confVars);
+				$scope.playerData['freezeVersionNum'] = confVarsObj[PlayerService.KALTURA_PLAYER] || confVarsObj[PlayerService.KALTURA_PLAYER_OTT];
+			} catch (e){
+				logTime(e);
+			}
+		}
 	}
-	// auto preview flag
+
+		// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
-	$scope.simulateMobile = false;
 	$scope.setAutoPreview = function(){
 		localStorageService.set('autoPreview', !$scope.autoPreview);
 	};
 	$scope.setSimulateMobile = function(){
+		window.KalturaPlayer = null;
+		$("#" + PlayerService.PLAYER_ID).empty();
 		setTimeout(function(){
 			$scope.refreshPlayer();
 		},0);
 	};
-	if (window.parent.kmc && window.parent.kmc.vars.studio.showFlashStudio === false){
+	if (window.parent.kmc && window.parent.kmc.vars.studioV3.showFlashStudio === false){
 		$(".menuFooter").css("bottom","1px");
 	}
 	window.parent.studioDataChanged = false; // used when navigating away from studio
@@ -205,6 +222,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
     // set selected category when clicking on a category icon
     $scope.categorySelected = function(category){
+	    if (category === "Advanced Settings") {
+			$scope.updatePlayerData();
+	    }
+	    $scope.playerData.updateData = category !== "Advanced Settings";
         $scope.selectedCategory = category;
 	    // for search - load all categories so we can display search results. use timeout to display the search screen before loading the categories (blocking code)
 	    if (category == "Menu Search"){
@@ -261,12 +282,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			    $scope.selectDefaultEntry($scope.userPlaylists);
 		    }
 	    }
+	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
-	    $timeout(function(){
-		    $scope.refreshPlayer();
-	    },0,true);
-
     };
 
 	// remove validation for disabled plugins
@@ -314,6 +332,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
+	    if (property.model === "playerVersion" || property.model === "OvpOrOtt" || property.model === "config.env.baseUrl" || property.model === "config.env.beUrl"){ // handle player version, env and ovp/ott select
+		    window.KalturaPlayer = null;
+	    }
+	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage"){ // handle player version and captions select
+		    $scope.updatePlayerData(); // update the player data from the menu data
+	    }
+	    if (property.model === "languageKey"){ // handle captions input updated
+		    $scope.playerData.languageKey = property.initvalue;
+	    }
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry;
 		    localStorageService.set('defaultEntry', property.selectedEntry);
@@ -326,10 +353,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    var prop = property['player-refresh'].split(".")[1];
 		    var kdp = document.getElementById('kVideoTarget');
 		    kdp.setKDPAttribute(obj, prop, property.initvalue);
-		    return;
-	    }
-	    if (property.model === "autoUpdate"){ // handle auto-update checkbox
-		    $scope.playerData["autoUpdate"] = property.initvalue;
 		    return;
 	    }
 	    $scope.dataChanged = true;
@@ -397,21 +420,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$scope.updatePlayerData(); // update the player data from the menu data
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
-		$("#kVideoTarget").width($scope.playerData.width);
-		$("#kVideoTarget").height($scope.playerData.height);
-
-		for (var plug in $scope.playerData.config.plugins)
-			if ($scope.playerData.config.plugins[plug]['enabled'] === true)
-				$scope.playerData.config.plugins[plug]['plugin'] = true;
 
 		$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
 
 		var flashvars = {};
 		if ($scope.playerData.config.enviornmentConfig && $scope.playerData.config.enviornmentConfig.localizationCode){ // support localizationCode
 			angular.extend(flashvars, {'localizationCode': $scope.playerData.config.enviornmentConfig.localizationCode});
-		}
-		if ($scope.simulateMobile){
-			angular.extend(flashvars,{'EmbedPlayer.SimulateMobile': true});
 		}
 		delete $scope.playerData.config.enviornmentConfig;
 		angular.extend(flashvars,{'jsonConfig': angular.toJson($scope.playerData.config)}); // update the player with the new configuration
@@ -422,37 +436,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			angular.extend(flashvars, {'wmode': 'transparent'});
 		}
 		var entryID = $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
-		PlayerService.renderPlayer($scope.playerData.partnerId, $scope.playerData.id, flashvars, entryID);
+		requestNotificationChannel.requestStarted('edit'); // show spinner
+		PlayerService.renderPlayer($scope.playerData, flashvars, entryID, function () {
+			requestNotificationChannel.requestEnded('edit'); // hide spinner
+		});
 	};
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
-
-		// support UIVars array of objects
-		if ($.isArray($scope.playerData.config.uiVars)){
-			var uiVarsObj = {};
-			for (var i=0; i<$scope.playerData.config.uiVars.length; i++)
-				uiVarsObj[$scope.playerData.config.uiVars[i]["key"]] = $scope.playerData.config.uiVars[i]["value"];
-			$scope.playerData.config.uiVars = uiVarsObj;
-		}
-
-		// set editable uivars list
-		$scope.excludedUiVars = ['autoPlay', 'autoMute', 'adsOnReplay', 'enableTooltips', 'EmbedPlayer.EnableMobileSkin']; // these uiVars are already in the menu, do not list them
-		$scope.playerData.vars = [];
-		var uivar;
-		for (uivar in $scope.playerData.config.uiVars){
-			if ($scope.excludedUiVars.indexOf(uivar) === -1)
-				$scope.playerData.vars.push({'label':uivar, 'value': $scope.playerData.config.uiVars[uivar]});
-		}
-
-		// create uiVars objects from flattened object
-		for (uivar in $scope.playerData.config.uiVars){
-			if (uivar.indexOf(".") !== -1){
-				$scope.playerData.config.uiVars[uivar.split(".")[0]]= {"enabled" :true};
-				$scope.playerData.config.uiVars[uivar.split(".")[0]][uivar.split(".")[1]] = $scope.playerData.config.uiVars[uivar];
-				delete $scope.playerData.config.uiVars[uivar];
-			}
-		}
 
 		// support multiple playlists
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
@@ -526,16 +517,47 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.getFilter = function(val, filter){
 		if (filter == "companions" && !$.isArray(val)){
-			var companions = val.split(";");
-			val =[];
-			for (var i=0; i<companions.length; i++)
-				if (companions[i].indexOf(":") != -1)
-					val.push({"label": companions[i].substr(0,companions[i].indexOf(":")),"width": companions[i].split(":")[1],"height": companions[i].split(":")[2]});
+			var res = [];
+			$.each( val, function( key, value ) {
+				res.push({"label": key,"width": value.width,"height": value.height});
+			});
+			return res;
+		}
+		if (filter == "not"){
+			return !val;
+		}
+		if (filter == "preload"){
+			return val === "auto";
+		}
+		if (filter == "defaultLanguage"){
+			if (val === "off" || val === "auto"){
+				return val;
+			} else {
+				$scope.playerData.languageKey = val;
+				return "explicit";
+			}
+		}
+		if (filter == "accountCode"){
+			if (val && val.accountCode) {
+				return val.accountCode;
+			} else {
+				return val;
+			}
+		}
+		if (filter == "loadVideoTimeout"){
+			if (val && val.loadVideoTimeout) {
+				return val.loadVideoTimeout;
+			} else {
+				return val;
+			}
 		}
 		return val;
 	};
 
 	$scope.updatePlayerData = function(){
+		if ($scope.playerData.updateData === false) {
+			return;
+		}
 		for (var category=1; category < $scope.menuData.length; category++){ // we start at index=1 to skip the search category
 			if ($scope.menuData[category].properties !== undefined){ // flat properties: basic properties
 				$scope.setPlayerProperties($scope.menuData[category].properties);
@@ -552,46 +574,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					}
 			}
 		}
-
-		// flatten nested UIVars
-		var uivar;
-		for (uivar in $scope.playerData.config.uiVars){
-			if (typeof $scope.playerData.config.uiVars[uivar] === "object"){
-				var updatedUiVar, uiVarValue;
-				for (var prop in $scope.playerData.config.uiVars[uivar]){
-					if (prop!="enabled"){
-						updatedUiVar = uivar + "." + prop;
-						uiVarValue = $scope.playerData.config.uiVars[uivar][prop];
-					}
-				}
-				delete $scope.playerData.config.uiVars[uivar];
-				$scope.playerData.config.uiVars[updatedUiVar] = uiVarValue;
-			}
-		}
-
-		// merge updates ui vars data
-		for (var i=0; i < $scope.playerData.vars.length; i++){
-			if ($scope.excludedUiVars.indexOf($scope.playerData.vars[i].label) === -1) // don't update uiVars that are already in the menu on other places
-				if ($scope.playerData.vars[i].label !== "" && $scope.playerData.vars[i].value !== "") // don't save UIVars with empty key or value
-					$scope.playerData.config.uiVars[$scope.playerData.vars[i].label] = utilsSvc.str2val($scope.playerData.vars[i].value);
-		}
-
-		// remove unused ui vars: deleted / renamed by user and convert to uivars array
-		var uiVarsArray = [];
-		for (uivar in $scope.playerData.config.uiVars){
-			var found = false;
-			if ($scope.excludedUiVars.indexOf(uivar) !== -1)
-				found = true;
-			for (var j=0; j < $scope.playerData.vars.length; j++){
-				if ($scope.playerData.vars[j].label === uivar)
-					found = true;
-			}
-			if (!found)
-				delete $scope.playerData.config.uiVars[uivar];
-			else
-				uiVarsArray.push({"key":uivar, "value": $scope.playerData.config.uiVars[uivar],"overrideFlashvar":false});
-		}
-		$scope.playerData.config.uiVars = uiVarsArray;
 	};
 
 	$scope.setPlayerProperties = function(properties){
@@ -628,16 +610,49 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	};
 
 	$scope.setFilter = function(data, filter){
-		var res = "";
-		if (filter == "companions"){
-			for (var i=0; i<data.length; i++){
-				res += data[i].label + ":" + data[i].width + ":" + data[i].height + ";";
+		if (filter == "companions") {
+			var res = {};
+			for (var i = 0; i < data.length; i++) {
+				res[data[i].label] = {width: data[i].width, height: data[i].height};
 			}
-			return res.substr(0, res.length - 1);
+			return res;
 		}
-		if (filter == "entry"){
-			return data.id? data.id : data;
+		if (filter == "entry") {
+			return data.id ? data.id : data;
 		}
+		if (filter == "not") {
+			return !data;
+		}
+		if (filter == "preload") {
+			return data ? "auto" : "none";
+		}
+		if (filter == "defaultLanguage") {
+			if (data === "explicit") {
+				return $scope.playerData.languageKey;
+			} else {
+				return data;
+			}
+		}
+		if (filter == "accountCode") {
+			var youboraOptions = {};
+			if ($scope.playerData.config && $scope.playerData.config.plugins && $scope.playerData.config.plugins.youbora) {
+				youboraOptions = $scope.playerData.config.plugins.youbora.options || {};
+			}
+			youboraOptions.accountCode = data;
+			return youboraOptions;
+		}
+		if (filter == "loadVideoTimeout"){
+			var AdsRenderingSettings = {};
+			if ($scope.playerData.config && $scope.playerData.config.plugins && $scope.playerData.config.plugins.ima) {
+				AdsRenderingSettings = $scope.playerData.config.plugins.ima.AdsRenderingSettings || {};
+			}
+			AdsRenderingSettings.loadVideoTimeout = data;
+			return AdsRenderingSettings;
+		}
+		if (filter == "noEmpty") {
+			return data || undefined;
+		}
+		return data;
 	};
 
 	$scope.backToList = function(){
@@ -658,23 +673,33 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.invalidProps.length > 0){
 			utilsSvc.alert('Save Player Settings','Some plugin features values are invalid. The player cannot be saved.');
 		}else{
+			var savePlayer = function () {
+				PlayerService.savePlayer($scope.playerData).then(function(value) {
+						localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
+						apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
+						utilsSvc.alert('Save Player Settings','Player Saved Successfully');
+					},
+					function(msg) {
+						utilsSvc.alert('Player save failure',msg);
+					}
+				);
+			};
 			$scope.updatePlayerData();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
 				$scope.addTags(['html5studio','playlist']); // set playlist tag
 			}else{
-				$scope.addTags(['html5studio','player']); // set player tag
+				$scope.addTags(['kalturaPlayerJs','player']); // set player tag
 			}
-			PlayerService.savePlayer($scope.playerData).then(function(value) {
-					localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
-					apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
-					utilsSvc.alert('Save Player Settings','Player Saved Successfully');
-				},
-				function(msg) {
-					utilsSvc.alert('Player save failure',msg);
-				}
-			);
+			if (!$scope.playerData.autoUpdate && PlayerService.getPlayerVersion($scope.playerData) === '{latest}') {
+				//should load the latest KalturaPlayer to figure out the version number
+				PlayerService.loadKalturaPlayerScript($scope.playerData, function () {
+					savePlayer();
+				});
+			} else {
+				savePlayer();
+			}
 		}
 	};
 

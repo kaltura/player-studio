@@ -13,7 +13,7 @@
 
 /* JSON VIEW */
 .jsonObjectKey input{
-	width:90px !important;
+	width:125px !important;
 }
 .jsonLiteral input{
 	width:120px !important;
