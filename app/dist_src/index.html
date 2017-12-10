@@ -20,6 +20,9 @@
         function navigateToFlashStudio(){
 	        $("#kcms",parent.document)[0].gotoPage({moduleName: "studio",subtab: "playersList"});
         }
+        function navigateToV3Studio(){
+	        window.parent.kmc.functions.openStudioV3();
+        }
     </script>
     <!--[if lt IE 9]>
 	<script type="text/javascript">
@@ -61,6 +64,7 @@
 <div class="kmcSubNav">
 	<a class='btn active' id="htmlStudioBtn" href="index.html">Universal Studio</a>
 	<a class='btn' id="flashStudioBtn" href="javascript:navigateToFlashStudio()">Flash Studio</a>
+	<a class='btn' id="htmlStudioBtnV3" href="javascript:navigateToV3Studio()">Media Player Studio</a>
 </div>
 <loading-widget></loading-widget>
 <div class="section relative" ng-view></div>
