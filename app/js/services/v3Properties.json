@@ -40,21 +40,6 @@
         "initvalue": "ovp"
       },
       {
-        "label": "Base URL",
-        "type": "text",
-        "filter": "noEmpty",
-        "model": "config.env.baseUrl",
-        "helpnote": "Base URL"
-      },
-      {
-        "label": "Backend URL",
-        "type": "text",
-        "filter": "noEmpty",
-        "model": "config.env.beUrl",
-        "helpnote": "Backend URL",
-        "endline": "true"
-      },
-      {
         "label": "Player Version",
         "type": "dropdown",
         "options": [
@@ -117,7 +102,7 @@
         "model": "config.disableUserCache"
       },
       {
-        "label": "Captions default dispaly",
+        "label": "Captions default display",
         "type": "dropdown",
         "options": [
           {
