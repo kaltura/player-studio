@@ -53,7 +53,7 @@
           }
         ],
         "model": "playerVersion",
-        "helpnote": "",
+        "helpnote": "Select the TV Platform Player version to use for this player",
         "initvalue": "latest"
       },
       {
@@ -209,7 +209,7 @@
       "ima": {
         "label": "IMA",
         "type": "featuremenu",
-        "description": "<a href=\"https://developers.google.com/interactive-media-ads/docs/sdks/html5/v3/apis\" target=\"_blank\">IMA API</a>",
+        "description": "The Google IMA SDK for HTML5 V3 allows developers to request and track VAST ads in a HTML5 video environment. For full APIs see: <br><a href=\"https://developers.google.com/interactive-media-ads/docs/sdks/html5/v3/apis\" target=\"_blank\">Google IMA HTML5 SDK APIs</a>",
         "model": "config.plugins.ima",
         "children": [
           {
@@ -218,13 +218,6 @@
             "type": "text",
             "model": "config.plugins.ima.adTagUrl",
             "helpnote": "Enter Ad tag URL"
-          },
-          {
-            "label": "Display ads on replay",
-            "helpnote": "Display ads on replay",
-            "type": "checkbox",
-            "disabled": true,
-            "model": "config.plugins.ima.adsOnReplay"
           },
           {
             "label": "Loading Timeout",
