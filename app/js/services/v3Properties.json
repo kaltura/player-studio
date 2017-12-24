@@ -2,28 +2,28 @@
   {
     "label": "Basic Settings",
     "type": "menu",
-    "description": "Basic settings let you set player name, entry and version",
+    "description": "Basic settings let you set player name, version, entry, and more.",
     "model": "basicSettings",
     "icon": "TabBasicSettings",
     "children": [
       {
-        "label": "Player's ID:",
+        "label": "Player ID:",
         "type": "readonly",
         "player-refresh": false,
         "model": "id"
       },
       {
-        "label": "Player's Name",
+        "label": "Player Name",
         "type": "text",
         "player-refresh": false,
         "require": true,
         "model": "name",
         "default": "New Player",
-        "helpnote": "Please enter a name for this player",
+        "helpnote": "Add a unique name for the new player",
         "endline": "true"
       },
       {
-        "label": "Backend Env",
+        "label": "Backend Environment",
         "type": "dropdown",
         "options": [
           {
@@ -36,7 +36,7 @@
           }
         ],
         "model": "OvpOrOtt",
-        "helpnote": "Backend environment for this player",
+        "helpnote": "Select the backend environment for this player",
         "initvalue": "ovp"
       },
       {
@@ -53,12 +53,12 @@
           }
         ],
         "model": "playerVersion",
-        "helpnote": "Select the TV Platform Player version to use for this player",
+        "helpnote": "Select a TV Platform Player version - latest or beta. Beta allows you to experiment with new functionalities that will be released in the next version. Latest will always update to the latest version unless you select “Keep Player on Current Version“",
         "initvalue": "latest"
       },
       {
-        "label": "Freeze on this player version",
-        "helpnote": "Freeze on this player version",
+        "label": "Keep Player on Current Version",
+        "helpnote": "Prevents the player from automatically updating when a new version becomes available",
         "type": "freezeVersion",
         "endline": "true",
         "filter": "not",
@@ -66,12 +66,12 @@
         "player-refresh": false
       },
       {
-        "label": "Preview entry",
+        "label": "Select a Preview Video",
         "type": "select2data",
         "allow-custom-values": true,
         "source": "listEntries",
         "query": "queryEntries",
-        "helpnote": "Select entry",
+        "helpnote": "Select a video entry to preview with the new player",
         "player-refresh": true,
         "width": "100%",
         "model": "~selectedEntry",
@@ -79,7 +79,7 @@
         "endline": "true"
       },
       {
-        "label": "Last Update",
+        "label": "Last Update:",
         "type": "readonly",
         "filter": "timeago",
         "model": "updatedAt"
@@ -89,7 +89,7 @@
   {
     "label": "Playback Options",
     "icon": "playback",
-    "description": "Define playback settings",
+    "description": "Define playback settings.",
     "type": "menu",
     "model": "config",
     "children": [
@@ -120,7 +120,7 @@
         ],
         "model": "config.playback.textLanguage",
         "filter": "defaultLanguage",
-        "helpnote": "Default captions language. Auto will use user set preferences (local storage), browser language or the default language set in the entry itself"
+        "helpnote": "This is the default captions language. Off will not show captions at all. Auto will use the user set preferences from local storage, browser language, or the default language. Explicit requires entering a language code"
       },
       {
         "label": "Language key",
@@ -148,7 +148,7 @@
         "model": ""
       },
       {
-        "label": "Audio track Selector",
+        "label": "Audio Track Selector",
         "helpnote": "Enables users to select the audio language",
         "type": "checkbox",
         "initvalue": true,
@@ -158,7 +158,7 @@
       },
       {
         "label": "Preload",
-        "helpnote": "Load the video asset on page load",
+        "helpnote": "Load the video asset automatically when the page loads",
         "type": "checkbox",
         "endline": "true",
         "filter": "preload",
@@ -166,19 +166,19 @@
       },
       {
         "label": "Autoplay",
-        "helpnote": "Autoplay on page load",
+        "helpnote": "Play the video automatically when the page loads",
         "type": "checkbox",
         "model": "config.playback.autoplay"
       },
       {
         "label": "Start Playback Muted",
-        "helpnote": "Start Playback Muted",
+        "helpnote": "When playback begins, start video in muted mode",
         "type": "checkbox",
         "model": "config.playback.muted"
       },
       {
         "label": "Fallback to Muted Autoplay",
-        "helpnote": "Fallback to muted autoplay on browsers which block autoplay with sound",
+        "helpnote": "Fall back to muted autoplay on browsers that block autoplay with sound",
         "type": "checkbox",
         "model": "config.playback.allowMutedAutoPlay"
       }
@@ -201,7 +201,7 @@
             "label": "Account code",
             "type": "text",
             "model": "config.plugins.youbora.options",
-            "helpnote": "Youbora account id",
+            "helpnote": "Enter your Youbora account ID",
             "filter": "accountCode"
           }
         ]
@@ -217,13 +217,13 @@
             "validation": "url",
             "type": "text",
             "model": "config.plugins.ima.adTagUrl",
-            "helpnote": "Enter Ad tag URL"
+            "helpnote": "Enter a URL for the advertising tag"
           },
           {
             "label": "Loading Timeout",
             "type": "number",
             "model": "config.plugins.ima.AdsRenderingSettings",
-            "helpnote": "Timeout for ad loading (in milliseconds). If ad cannot be loaded within the specified time frame, load the video directly",
+            "helpnote": "Set the timeout for loading ads (in milliseconds). If an ad can’t be loaded within this timeframe, load the video automatically",
             "min": 0,
             "initvalue": 5000,
             "filter": "loadVideoTimeout"
@@ -232,7 +232,7 @@
             "label": "HTML Companions",
             "type": "companions",
             "model": "config.plugins.ima.companions.ads",
-            "helpnote": "For each companion ad please specify the container Div ID and the expected ad width and height",
+            "helpnote": "For each companion ad, specify the container Div ID and expected ad width/height",
             "filter": "companions",
             "initvalue": {
               "Comp_300x250": {
@@ -247,23 +247,8 @@
           },
           {
             "label": "Size Criteria",
-            "options": [
-              {
-                "label": "Select Exact Match",
-                "value": "SELECT_EXACT_MATCH"
-              },
-              {
-                "label": "Select Near Match",
-                "value": "SELECT_NEAR_MATCH"
-              },
-              {
-                "label": "Ignore Size",
-                "value": "IGNORE"
-              }
-            ],
-            "type": "dropdown",
+            "type": "sizeCriteria",
             "model": "config.plugins.ima.companions.sizeCriteria",
-            "helpnote": "Available choices for size selection criteria: Select Exact Match ( default ) - Specifies that only companions that match the size of the companion ad slot exactly should be chosen. Select Near Match - Specifies that any companion close to the size of the companion ad slot should be chosen. Ignore Size - Specifies that size should be ignored when choosing companions.",
             "initvalue": "SELECT_EXACT_MATCH"
           }
         ]
@@ -273,7 +258,7 @@
   {
     "label": "Advanced Settings",
     "icon": "advanced",
-    "description": "Edit your player's configuration file",
+    "description": "Edit your player’s configuration file using advanced settings. Recommended only for advanced player developers.",
     "type": "menu",
     "children": [
       {
