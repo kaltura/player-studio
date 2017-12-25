@@ -1,0 +1,16 @@
+<div class="text">
+    <span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
+    <select ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, true)" ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}" ng-model="property.initvalue" class="dropdown">
+        <option value="SELECT_EXACT_MATCH">Select Exact Match</option>
+        <option value="SELECT_NEAR_MATCH">Select Near Match</option>
+        <option value="IGNORE">Ignore Size</option>
+    </select>
+    <br><br>
+    <p ng-class="{disabled: plugin!=null && !plugin.enabled}" class="categoryDesc" id="{{property.id}}">Select the size criteria to apply to ads:</p>
+    <ul ng-class="{disabled: plugin!=null && !plugin.enabled}" class="categoryDesc">
+        <li>Select Exact Match (default) – Only companion that match the size of the companion ad slot exactly will be selected.</li>
+        <li>Select Near Match – Any companion that is close to the size of the companion ad slot can be selected.</li>
+        <li>Ignore Size – Size can be ignored when selecting companions.</li>
+    </ul>
+    <hr bind-once ng-if="property.endline">
+</div>
