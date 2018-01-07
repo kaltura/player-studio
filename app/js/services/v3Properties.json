@@ -79,7 +79,7 @@
         "endline": "true"
       },
       {
-        "label": "Last Update:",
+        "label": "Last updated:",
         "type": "readonly",
         "filter": "timeago",
         "model": "updatedAt"
