@@ -222,8 +222,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			kalturaPlayer: null,
 			latestVersionNum: null,
 			PLAYER_ID: 'kVideoTarget',
-			KALTURA_PLAYER: 'kalturaPlayer',
-			KALTURA_PLAYER_OTT: 'kalturaPlayer-ott',
+			KALTURA_PLAYER: 'kaltura-ovp-player',
+			KALTURA_PLAYER_OTT: 'kaltura-tv-player',
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
 				currentRefresh = null;
@@ -268,12 +268,13 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 					try {
 						var config = JSON.parse(playerConfig.jsonConfig);
-						Object.assign(config, providerConfig);
+						config.targetId = playersService.PLAYER_ID;
+						Object.assign(config.provider, providerConfig);
 						if (forceTouchUI) {
 							Object.assign(config, {ui: {forceTouchUI: true}});
 						}
-						playersService.kalturaPlayer = KalturaPlayer.setup(playersService.PLAYER_ID, config);
-						playersService.kalturaPlayer.loadMedia(entry_id);
+						playersService.kalturaPlayer = KalturaPlayer.setup(config);
+						playersService.kalturaPlayer.loadMedia({entryId: entry_id});
 						callback();
 					}catch (error){
 						console.error(error);
@@ -459,16 +460,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				if (typeof player.config == 'string') {
 					player.config = angular.fromJson(player.config);
 				}
-				if (typeof player.config != 'undefined' && typeof player.config.plugins != 'undefined') {
+				if (typeof player.config != 'undefined' && typeof player.config.player != 'undefined' && typeof player.config.player.plugins != 'undefined') {
 					player.config = playersService.addFeatureState(player.config); // preloaded data will get _featureEnabled
 				}
 				currentPlayer = player;
 			},
 			addFeatureState: function (data) {
-				angular.forEach(data.plugins, function (value, key) {
-					if ($.isArray(value)) data.plugins[key] = {};
-					if (angular.isObject(data.plugins[key]) && data.plugins[key].enabled !== false)
-						data.plugins[key].enabled = true;
+				angular.forEach(data.player.plugins, function (value, key) {
+					if ($.isArray(value)) data.player.plugins[key] = {};
+					if (angular.isObject(data.player.plugins[key]) && data.player.plugins[key].enabled !== false)
+						data.player.plugins[key].enabled = true;
 				});
 				return data;
 			},
@@ -538,14 +539,14 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'savePlayer': function (data) {
 				var deferred = $q.defer();
 				var data2Save = angular.copy(data.config);
-				data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
+				data2Save.player.plugins = playersService.preparePluginsDataForRender(data2Save.player.plugins);
 				// remove preview playlist from data before saving
-				if (data2Save.plugins.playlistAPI) {
-					if (data2Save.plugins.playlistAPI.kpl0Id) {
-						delete data2Save.plugins.playlistAPI.kpl0Id;
+				if (data2Save.player.plugins.playlistAPI) {
+					if (data2Save.player.plugins.playlistAPI.kpl0Id) {
+						delete data2Save.player.plugins.playlistAPI.kpl0Id;
 					}
-					if (data2Save.plugins.playlistAPI.kpl0Name) {
-						delete data2Save.plugins.playlistAPI.kpl0Name;
+					if (data2Save.player.plugins.playlistAPI.kpl0Name) {
+						delete data2Save.player.plugins.playlistAPI.kpl0Name;
 					}
 				}
 				if (data2Save.enviornmentConfig) {
