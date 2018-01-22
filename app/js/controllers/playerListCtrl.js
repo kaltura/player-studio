@@ -221,8 +221,13 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 
 			};
 
+			$scope.isHybridEnv = function() {
+				return PlayerService.getEnvType() === 2;
+			};
+
 			// clicking on the "new player" button should go to the new player page
 			$scope.newPlayer = function () {
+				PlayerService.OvpOrOtt = $scope.OvpOrOtt;
 				$location.path('/new');
 			};
 

@@ -14,10 +14,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	var confVars = $scope.playerData.confVars;
 	if (confVars) {
-		var OvpOrOtt = confVars.indexOf('ott') > -1 ? 'ott' : 'ovp';
 		var playerVersion = confVars.indexOf('beta') > -1 ? 'beta' : 'latest';
 		var autoUpdate = (confVars.indexOf('beta') > -1 || confVars.indexOf('latest') > -1);
-		$scope.playerData['OvpOrOtt'] = OvpOrOtt;
 		$scope.playerData['playerVersion'] = playerVersion;
 		$scope.playerData['autoUpdate'] = autoUpdate;
 		if (!autoUpdate) {
@@ -332,7 +330,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
-	    if (property.model === "playerVersion" || property.model === "OvpOrOtt" || property.model === "config.env.baseUrl" || property.model === "config.env.beUrl"){ // handle player version, env and ovp/ott select
+	    if (property.model === "playerVersion" || property.model === "config.env.baseUrl" || property.model === "config.env.beUrl"){ // handle player version, env and ovp/ott select
 		    window.KalturaPlayer = null;
 	    }
 	    if (property.model === "playerVersion" || property.model === "config.player.playback.textLanguage"){ // handle player version and captions select
@@ -690,7 +688,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if ($scope.playerData.config.player.plugins.playlistAPI && $scope.playerData.config.player.plugins.playlistAPI.plugin){
 				$scope.addTags(['html5studio','playlist']); // set playlist tag
 			}else{
-				$scope.addTags(['kalturaPlayerJs','player']); // set player tag
+				$scope.setTags(['kalturaPlayerJs','player', PlayerService.getPartnerType($scope.playerData)]); // set player tag
 			}
 			if (!$scope.playerData.autoUpdate && PlayerService.getPlayerVersion($scope.playerData) === '{latest}') {
 				//should load the latest KalturaPlayer to figure out the version number
@@ -709,6 +707,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					$scope.playerData.tags = $scope.playerData.tags + "," + tag;
 				}
 			});
+		};
+
+		$scope.setTags = function(tags){
+			$scope.playerData.tags = tags;
 		};
 
 		$scope.setPluginEnabled = function (model, enabled) {

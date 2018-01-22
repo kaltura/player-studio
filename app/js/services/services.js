@@ -224,6 +224,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			PLAYER_ID: 'kVideoTarget',
 			KALTURA_PLAYER: 'kaltura-ovp-player',
 			KALTURA_PLAYER_OTT: 'kaltura-tv-player',
+			OVP: 'ovp',
+			OTT: 'ott',
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
 				currentRefresh = null;
@@ -366,8 +368,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'2:uiConf:objType': 1,
 							'2:uiConf:width': 560,
 							'2:uiConf:height': 395,
-							'2:uiConf:tags': 'kalturaPlayerJs,player',
-							'2:uiConf:confVars': '{"' + playersService.KALTURA_PLAYER + '":"{latest}"}',
+							'2:uiConf:tags': 'kalturaPlayerJs,player,' + playersService.getPartnerType(),
+							'2:uiConf:confVars': '{"' + playersService.getPlayerBundle() + '":"{latest}"}',
 							'2:uiConf:creationMode': 2,
 							'2:uiConf:config': angular.toJson(data, true)
 						};
@@ -384,8 +386,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							'uiConf:fUrlVersion': '3.9.8',
 							'uiConf:version': '161',
 							'uiConf:name': 'New Player',
-							'uiConf:tags': 'kalturaPlayerJs,player',
-							'uiConf:confVars': '{"' + playersService.KALTURA_PLAYER + '":"{latest}"}',
+							'uiConf:tags': 'kalturaPlayerJs,player,' + playersService.getPartnerType(),
+							'uiConf:confVars': '{"' + playersService.getPlayerBundle() + '":"{latest}"}',
 							'uiConf:creationMode': 2,
 							'uiConf:confFile': kdpConfig,
 							'uiConf:config': angular.toJson(data, true)
@@ -582,8 +584,32 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				});
 				return deferred.promise;
 			},
+			'getEnvType': function () {
+				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.studioV3) {
+					return window.parent.kmc.vars.studioV3.envType;
+				} else {
+					return 2;
+				}
+			},
 			'getPlayerBundle': function (data) {
-				return data.OvpOrOtt === "ott" ? playersService.KALTURA_PLAYER_OTT : playersService.KALTURA_PLAYER;
+				switch (playersService.getEnvType()) {
+					case 0: //OVP
+						return playersService.KALTURA_PLAYER;
+					case 1: //OTT
+						return playersService.KALTURA_PLAYER_OTT;
+					case 2: //Hybrid
+						return (playersService.OvpOrOtt === playersService.OTT) ? playersService.KALTURA_PLAYER_OTT : playersService.KALTURA_PLAYER;
+				}
+			},
+			'getPartnerType': function (data) {
+				switch (playersService.getEnvType()) {
+					case 0: //OVP
+						return playersService.OVP;
+					case 1: //OTT
+						return playersService.OTT;
+					case 2: //Hybrid
+						return playersService.OvpOrOtt || playersService.OVP;
+				}
 			},
 			'getPlayerVersionObj' : function (data) {
 				var playerObj = {};
