@@ -229,39 +229,23 @@ html {
 }
 
 .env-dropdown {
-  min-width: 42px;
-  float: right;
-  margin-right: 4px;
-  margin-top: -37px;
-  &:focus{
-    outline: none;
-  }
-  &:active{
-    border: 0 !important;
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-  }
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
 
   .select2-choice {
     background: none;
     border: 0;
-    height: 40px;
-    &:focus{
-      outline: none;
-    }
+    height: 100%;
+    box-shadow: none;
   }
+
   .select2-choice > .select2-chosen {
     display: none;
   }
+
   .select2-arrow {
     display: none !important;
   }
-}
-
-.env-button {
-  width: 42px;
-  margin-left: -8px;
-  padding: 6px 0;
-  text-align: end;
-  border-radius: 0 4px 4px 0;
 }

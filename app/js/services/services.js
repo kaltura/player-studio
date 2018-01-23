@@ -588,6 +588,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.studioV3) {
 					return window.parent.kmc.vars.studioV3.envType;
 				} else {
+					// for local development
 					return 2;
 				}
 			},

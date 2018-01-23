@@ -9,21 +9,16 @@
                 translate}}
             </small>
             <div class="padTop clearfix">
-                <div class="pull-right">
+                <div class="pull-right" style="position: relative">
                     <button type="button" class="btn btn-primary" data-ng-click="newPlayer()">
                         <i class="glyphicon glyphicon-plus">&nbsp;</i>
                         {{'Add New player'| translate}}
                     </button>
-                    <span ng-show="isHybridEnv()">
-                        <button type="button" class="btn btn-primary env-button">
-                            <i class="glyphicon glyphicon-chevron-down">&nbsp;</i>
-                        </button>
-                        <br>
-                        <select class="select2-container env-dropdown" ui-select2="{  minimumResultsForSearch: -1}" ng-model="OvpOrOtt">
-                            <option value="ovp" selected>OVP</option>
-                            <option value="ott">OTT</option>
-                        </select>
-                    </span>
+                    <select class="select2-container env-dropdown" ui-select2="{  minimumResultsForSearch: -1}"
+                            ng-model="OvpOrOtt" ng-show="isHybridEnv()" ng-change="newPlayer()">
+                        <option value="ovp" selected>OVP</option>
+                        <option value="ott">OTT</option>
+                    </select>
                     <span>
 					</span>
                 </div>
