@@ -586,7 +586,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			},
 			'getEnvType': function () {
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.studioV3) {
-					return window.parent.kmc.vars.studioV3.envType;
+					return window.parent.kmc.vars.studioV3.publisherEnvType;
 				} else {
 					// for local development
 					return 2;
