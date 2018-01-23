@@ -23,23 +23,6 @@
         "endline": "true"
       },
       {
-        "label": "Backend Environment",
-        "type": "dropdown",
-        "options": [
-          {
-            "label": "OVP",
-            "value": "ovp"
-          },
-          {
-            "label": "OTT",
-            "value": "ott"
-          }
-        ],
-        "model": "OvpOrOtt",
-        "helpnote": "Select the backend environment for this player",
-        "initvalue": "ovp"
-      },
-      {
         "label": "Player Version",
         "type": "dropdown",
         "options": [
