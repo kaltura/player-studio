@@ -33,7 +33,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
     overflow: hidden;
     position: relative;
 
-    border: 1px solid #aaa;
+    border: 1px solid #aaa !important;
     white-space: nowrap;
     line-height: 26px;
     color: #444;
@@ -136,7 +136,7 @@ Version: 3.4.5 Timestamp: Mon Nov  4 08:22:42 PST 2013
 
     background: #fff;
     color: #000;
-    border: 1px solid #aaa;
+    border: 1px solid #aaa !important;
     border-top: 0;
 
     border-radius: 0 0 4px 4px;
