@@ -167,7 +167,7 @@
       },
       {
         "label": "Redirect Manifest to External Streams",
-        "helpnote": "Whether to force a source redirect to an external streams",
+        "helpnote": "Enable workaround for some user-agents that don't allow redirects after a successful CORS-preflight request",
         "type": "checkbox",
         "model": "config.player.sources.options.forceRedirectExternalStreams"
       }
