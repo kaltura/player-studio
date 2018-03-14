@@ -164,6 +164,12 @@
         "helpnote": "Fall back to muted autoplay on browsers that block autoplay with sound",
         "type": "checkbox",
         "model": "config.player.playback.allowMutedAutoPlay"
+      },
+      {
+        "label": "Redirect Manifest to External Streams",
+        "helpnote": "Whether to force a source redirect to an external streams",
+        "type": "checkbox",
+        "model": "config.player.sources.options.forceRedirectExternalStreams"
       }
     ]
   },
