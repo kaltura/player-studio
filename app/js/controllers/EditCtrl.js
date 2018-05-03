@@ -153,7 +153,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 }else{ // plugin
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex};
+	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName, 'kalturaPlayerMinVersion': p.kalturaPlayerMinVersion};
 	                plugin.properties = [];
 	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
@@ -269,6 +269,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    $scope.removeValidation(plugin);
 		    delete $scope.playerData.config.player.plugins[plugin.model]; // remove the plugin from the player data
 	    }else{
+	    	if (plugin.componentName) {
+			    window.KalturaPlayer = null;
+		    }
 		    $scope.addValidation(plugin);
 	    }
 	    if (plugin.model == "playlistAPI"){
@@ -565,6 +568,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				for (var plug=0; plug < $scope.menuData[category][pluginsStr].length; plug++)
 					if ($scope.menuData[category][pluginsStr][plug].enabled === true) {// get only enabled plugins
 						var plugin = $scope.menuData[category][pluginsStr][plug];
+						$scope.setPluginData(plugin);
 						$scope.setPlayerProperties(plugin.properties);
 						if (plugin.custom){
 							$scope.updateCustomPlugins(plugin.model);
@@ -572,6 +576,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					}
 			}
 		}
+	};
+
+	$scope.setPluginData = function(plugin){
+		$scope.playerData.plugins = $scope.playerData.plugins || {};
+		$scope.playerData.plugins[plugin.model] = {
+			componentName: plugin.componentName,
+			kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion
+		};
 	};
 
 	$scope.setPlayerProperties = function(properties){

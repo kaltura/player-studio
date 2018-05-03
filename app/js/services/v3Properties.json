@@ -189,6 +189,39 @@
           }
         ]
       },
+      "googleAnalytics": {
+        "label": "Google Analytics",
+        "type": "featuremenu",
+        "description": "",
+        "model": "config.player.plugins.googleAnalytics",
+        "endline": "true",
+        "componentName": "playkit-google-analytics",
+        "kalturaPlayerMinVersion": "0.25.0",
+        "children": [
+          {
+            "label": "Account code",
+            "type": "text",
+            "model": "config.player.plugins.googleAnalytics.trackingId",
+            "helpnote": "Enter your Google Analytics account ID i.e. UA-123456-7"
+          }
+        ]
+      },
+      "comscore": {
+        "label": "Comscore",
+        "type": "featuremenu",
+        "description": "",
+        "model": "config.player.plugins.comscore",
+        "endline": "true",
+        "componentName": "playkit-comscore",
+        "children": [
+          {
+            "label": "Publisher ID",
+            "type": "text",
+            "model": "config.player.plugins.comscore.publisherId",
+            "helpnote": "Enter your Comscore publisher ID"
+          }
+        ]
+      },
       "ima": {
         "label": "IMA",
         "type": "featuremenu",
