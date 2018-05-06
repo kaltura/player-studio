@@ -196,7 +196,7 @@
         "model": "config.player.plugins.googleAnalytics",
         "endline": "true",
         "componentName": "playkit-google-analytics",
-        "kalturaPlayerMinVersion": "0.25.3",
+        "kalturaPlayerMinVersion": "0.25.0",
         "children": [
           {
             "label": "Google tracking code",
