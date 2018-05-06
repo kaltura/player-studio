@@ -338,7 +338,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					var pluginsVersion = '';
 					for (var name in playerData.config.player.plugins) {
 						if (playerData.plugins[name] && playerData.plugins[name].componentName && playersService.isValidPlayerVersion(playerData, name)) {
-							pluginsVersion += (',' + playerData.plugins[name].componentName + '={latest}')
+							pluginsVersion += (',' + playerData.plugins[name].componentName + '={latest}');
 						}
 					}
 					return pluginsVersion;
