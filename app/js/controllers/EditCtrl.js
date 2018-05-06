@@ -268,7 +268,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    $scope.removeValidation(plugin);
 		    delete $scope.playerData.config.player.plugins[plugin.model]; // remove the plugin from the player data
 	    }else{
-	    	if (plugin.componentName) {
+			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
 		    }
 		    $scope.addValidation(plugin);
