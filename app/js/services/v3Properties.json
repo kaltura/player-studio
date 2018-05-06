@@ -176,7 +176,7 @@
       "youbora": {
         "label": "Youbora",
         "type": "featuremenu",
-        "description": "A powerful intelligence analytics and optimization platform to deliver online TV-quality video experiences. For full options see <a href='http://developer.nicepeopleatwork.com/apidocs/js/$YB.data.Options.html'>Here</a><br>",
+        "description": "A powerful intelligence analytics and optimization platform to deliver online TV-quality video experiences. For full options see <a href='http://developer.nicepeopleatwork.com/apidocs/js/$YB.data.Options.html'>Here</a>.<br>",
         "model": "config.player.plugins.youbora",
         "endline": "true",
         "children": [
@@ -186,6 +186,39 @@
             "model": "config.player.plugins.youbora.options",
             "helpnote": "Enter your Youbora account ID",
             "filter": "accountCode"
+          }
+        ]
+      },
+      "googleAnalytics": {
+        "label": "Google Analytics",
+        "type": "featuremenu",
+        "description": "Supports sending player analytics events to Google. For full configuration options see <a href='https://github.com/kaltura/playkit-js-google-analytics/blob/master/docs/configuration.md'>Google Analytics config file</a>.<br>",
+        "model": "config.player.plugins.googleAnalytics",
+        "endline": "true",
+        "componentName": "playkit-google-analytics",
+        "kalturaPlayerMinVersion": "0.25.0",
+        "children": [
+          {
+            "label": "Google tracking code",
+            "type": "text",
+            "model": "config.player.plugins.googleAnalytics.trackingId",
+            "helpnote": "The Google tracking code i.e. UA-30164991-1"
+          }
+        ]
+      },
+      "comscore": {
+        "label": "Comscore",
+        "type": "featuremenu",
+        "description": "",
+        "model": "config.player.plugins.comscore",
+        "endline": "true",
+        "componentName": "playkit-comscore",
+        "children": [
+          {
+            "label": "Publisher ID",
+            "type": "text",
+            "model": "config.player.plugins.comscore.publisherId",
+            "helpnote": "The Comscore publisher ID"
           }
         ]
       },
