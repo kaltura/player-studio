@@ -12,22 +12,21 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
 
-	var confVars = $scope.playerData.confVars;
-	if (confVars) {
-		var playerVersion = confVars.indexOf('beta') > -1 ? 'beta' : 'latest';
-		var autoUpdate = (confVars.indexOf('beta') > -1 || confVars.indexOf('latest') > -1);
-		$scope.playerData['playerVersion'] = playerVersion;
-		$scope.playerData['autoUpdate'] = autoUpdate;
-		if (!autoUpdate) {
-			try {
-				var confVarsObj = JSON.parse(confVars);
-				$scope.playerData['freezeVersionNum'] = confVarsObj[PlayerService.KALTURA_PLAYER] || confVarsObj[PlayerService.KALTURA_PLAYER_OTT];
-			} catch (e){
-				logTime(e);
+	try {
+		var confVarsObj = JSON.parse($scope.playerData.confVars);
+		if (confVarsObj) {
+			var playerName = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
+			var playerVersion = confVarsObj[playerName] === "{beta}" ? 'beta' : 'latest';
+			var autoUpdate = (confVarsObj[playerName] === "{beta}" || confVarsObj[playerName] === "{latest}");
+			$scope.playerData['playerVersion'] = playerVersion;
+			$scope.playerData['autoUpdate'] = autoUpdate;
+			if (!autoUpdate) {
+				$scope.playerData['freezeVersionNum'] = confVarsObj[playerName];
 			}
 		}
+	} catch (e) {
+		logTime(e);
 	}
-
 		// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
 	$scope.setAutoPreview = function(){

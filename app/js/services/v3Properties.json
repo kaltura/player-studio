@@ -196,13 +196,13 @@
         "model": "config.player.plugins.googleAnalytics",
         "endline": "true",
         "componentName": "playkit-google-analytics",
-        "kalturaPlayerMinVersion": "0.25.0",
+        "kalturaPlayerMinVersion": "0.25.3",
         "children": [
           {
-            "label": "Account code",
+            "label": "Google tracking code",
             "type": "text",
             "model": "config.player.plugins.googleAnalytics.trackingId",
-            "helpnote": "Enter your Google Analytics account ID i.e. UA-123456-7"
+            "helpnote": "The Google tracking code i.e. UA-30164991-1"
           }
         ]
       },
@@ -218,7 +218,7 @@
             "label": "Publisher ID",
             "type": "text",
             "model": "config.player.plugins.comscore.publisherId",
-            "helpnote": "Enter your Comscore publisher ID"
+            "helpnote": "The Comscore publisher ID"
           }
         ]
       },

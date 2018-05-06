@@ -250,16 +250,36 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return previewEntryObj;
 				}
 			},
+			'removeUnsupportedPlugins': function (playerData, plugins) {
+				for (var plugin in plugins) {
+					if (!playerData.plugins[plugin]) {
+						delete plugins[plugin];
+					}
+				}
+			},
+			'isValidPlayerVersion': function (playerData, pluginName) {
+				var pluginMinPlayerVersion = playerData.plugins[pluginName].kalturaPlayerMinVersion;
+				if (typeof pluginMinPlayerVersion === "string") {
+					var pluginMinPlayerVersionArr = pluginMinPlayerVersion.split('.');
+					var playerVersion = playersService.getPlayerVersion(playerData);
+					var playerVersionArr = playerVersion.split('.');
+					for (var i = 0; i < pluginMinPlayerVersionArr.length; i++) {
+						if (pluginMinPlayerVersionArr[i] > playerVersionArr[i]) {
+							console.warn(pluginName + ' plugin supported from Kaltura Player version ' + pluginMinPlayerVersion + ' and above');
+							delete playerData.plugins[pluginName];
+							return false;
+						}
+						if (pluginMinPlayerVersionArr[i] < playerVersionArr[i]) {
+							return true;
+						}
+
+					}
+				}
+				return true;
+			},
 			'renderPlayer': function (playerData, playerConfig, entry_id, callback) {
 				var partner_id = playerData.partnerId;
 				var forceTouchUI = playerData.forceTouchUI;
-				var removeUnsupportedPlugins = function (plugins) {
-					for (var plugin in plugins) {
-						if (playerData.plugins[plugin].support === false) {
-							delete plugins[plugin];
-						}
-					}
-				};
 				var loadPlayer = function () {
 					if (playersService.kalturaPlayer) {
 						playersService.kalturaPlayer.destroy();
@@ -277,7 +297,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 					try {
 						var config = JSON.parse(playerConfig.jsonConfig);
-						removeUnsupportedPlugins(config.player.plugins);
+						playersService.removeUnsupportedPlugins(playerData, config.player.plugins);
 						config.targetId = playersService.PLAYER_ID;
 						Object.assign(config.provider, providerConfig);
 						if (forceTouchUI) {
@@ -314,30 +334,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				var playerVersion = playersService.getPlayerVersion(playerData);
 				var playerVersionParam = playerBundle + '=' + playerVersion;
 
-				var isValidPlayerVersion = function (pluginName) {
-					var pluginMinPlayerVersion = playerData.plugins[pluginName].kalturaPlayerMinVersion;
-					if (typeof pluginMinPlayerVersion === "string") {
-						var pluginMinPlayerVersionArr = pluginMinPlayerVersion.split('.');
-						var playerVersionArr = playerVersion.split('.');
-						for (var i = 0; i < pluginMinPlayerVersionArr.length; i++) {
-							if (pluginMinPlayerVersionArr[i] > playerVersionArr[i]) {
-								console.warn(pluginName + ' plugin supported from Kaltura Player version ' + pluginMinPlayerVersion + ' and above');
-								playerData.plugins[pluginName].support = false;
-								return false;
-							}
-							if (pluginMinPlayerVersionArr[i] < playerVersionArr[i]) {
-								return true;
-							}
-
-						}
-					}
-					return true;
-				};
-
 				var getPluginsVersion = function () {
 					var pluginsVersion = '';
 					for (var name in playerData.config.player.plugins) {
-						if (playerData.plugins[name] && playerData.plugins[name].componentName && isValidPlayerVersion(name)) {
+						if (playerData.plugins[name] && playerData.plugins[name].componentName && playersService.isValidPlayerVersion(playerData, name)) {
 							pluginsVersion += (',' + playerData.plugins[name].componentName + '={latest}')
 						}
 					}
@@ -606,10 +606,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:tags': data.tags,
 					'uiConf:height': data.height,
 					'uiConf:width': data.width,
-					'uiConf:description': data.description ? data.description : '',
-					'uiConf:config': JSON.stringify(data2Save, null, "\t")
+					'uiConf:description': data.description ? data.description : ''
 				};
 				request['uiConf:confVars'] = JSON.stringify(playersService.getPlayerAndPluginsVersionObj(data));
+				playersService.removeUnsupportedPlugins(data, data2Save.player.plugins);
+				request['uiConf:config'] = JSON.stringify(data2Save, null, "\t");
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
 					currentPlayer = {};
@@ -669,7 +670,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				if (data.plugins) {
 					for (var plugin in data.config.player.plugins) {
 						var pluginData = data.plugins[plugin];
-						if (pluginData.componentName) {
+						if (pluginData && pluginData.componentName && playersService.isValidPlayerVersion(data, plugin)) {
 							playerAndPluginsVersionObj[pluginData.componentName] = '{latest}'
 						}
 					}
