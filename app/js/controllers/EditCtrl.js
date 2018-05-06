@@ -332,7 +332,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
-	    if (property.model === "playerVersion" || property.model === "config.env.baseUrl" || property.model === "config.env.beUrl"){ // handle player version, env and ovp/ott select
+	    if (property.model === "playerVersion" || (property.model === "autoUpdate" && !property.initvalue)){ // handle player version or freeze selection (when switch to latest)
 		    window.KalturaPlayer = null;
 	    }
 	    if (property.model === "playerVersion" || property.model === "config.player.playback.textLanguage"){ // handle player version and captions select
