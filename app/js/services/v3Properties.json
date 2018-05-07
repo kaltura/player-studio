@@ -207,9 +207,9 @@
         ]
       },
       "comscore": {
-        "label": "Comscore",
+        "label": "comScore",
         "type": "featuremenu",
-        "description": "",
+        "description": "Supports sending player analytics events to comScore.",
         "model": "config.player.plugins.comscore",
         "endline": "true",
         "componentName": "playkit-comscore",
@@ -218,7 +218,19 @@
             "label": "Publisher ID",
             "type": "text",
             "model": "config.player.plugins.comscore.publisherId",
-            "helpnote": "The Comscore publisher ID"
+            "helpnote": "The comScore publisher ID"
+          },
+          {
+            "label": "Label Mapping",
+            "type": "text",
+            "model": "config.player.plugins.comscore.labelMapping",
+            "helpnote": "The comScore Label Mapping"
+          },
+          {
+            "label": "Persistent Labels",
+            "type": "text",
+            "model": "config.player.plugins.comscore.persistentLabels",
+            "helpnote": "The comScore Persistent Labels"
           }
         ]
       },
