@@ -23,6 +23,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if (!autoUpdate) {
 				$scope.playerData['freezeVersionNum'] = confVarsObj[playerName];
 			}
+			for (var key in confVarsObj) {
+				if (key !== playerName) {
+					$scope.playerData.externals = $scope.playerData.externals || {};
+					$scope.playerData.externals[key] = {active: true};
+				}
+			}
 		}
 	} catch (e) {
 		logTime(e);
@@ -340,6 +346,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
 	    if (property.model === "languageKey"){ // handle captions input updated
 		    $scope.playerData.languageKey = property.initvalue;
+	    }
+	    if (property.componentName){ // handle external bundles
+		    $scope.playerData.externals = $scope.playerData.externals || {};
+		    $scope.playerData.externals[property.componentName] = {
+			    kalturaPlayerMinVersion: property.kalturaPlayerMinVersion,
+			    active: property.initvalue
+		    };
 	    }
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry;

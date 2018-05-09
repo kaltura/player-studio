@@ -257,22 +257,29 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 				}
 			},
-			'isValidPlayerVersion': function (playerData, pluginName) {
-				var pluginMinPlayerVersion = playerData.plugins[pluginName].kalturaPlayerMinVersion;
-				if (typeof pluginMinPlayerVersion === "string") {
-					var pluginMinPlayerVersionArr = pluginMinPlayerVersion.split('.');
+			'validatePluginsSupport': function (playerData) {
+				for (var plugin in playerData.plugins) {
+					var pluginData = playerData.plugins[plugin];
+					if (!playersService.isValidPlayerVersion(playerData, pluginData.kalturaPlayerMinVersion)) {
+						if (playerData.externals) {
+							delete playerData.externals[pluginData.componentName];
+						}
+						delete playerData.plugins[plugin];
+					}
+				}
+			},
+			'isValidPlayerVersion': function (playerData, requiredMinPlayerVersion) {
+				if (typeof requiredMinPlayerVersion === "string") {
 					var playerVersion = playersService.getPlayerVersion(playerData);
+					var requiredMinPlayerVersionArr = requiredMinPlayerVersion.split('.');
 					var playerVersionArr = playerVersion.split('.');
-					for (var i = 0; i < pluginMinPlayerVersionArr.length; i++) {
-						if (pluginMinPlayerVersionArr[i] > playerVersionArr[i]) {
-							console.warn(pluginName + ' plugin supported from Kaltura Player version ' + pluginMinPlayerVersion + ' and above');
-							delete playerData.plugins[pluginName];
+					for (var i = 0; i < requiredMinPlayerVersionArr.length; i++) {
+						if (requiredMinPlayerVersionArr[i] > playerVersionArr[i]) {
 							return false;
 						}
-						if (pluginMinPlayerVersionArr[i] < playerVersionArr[i]) {
+						if (requiredMinPlayerVersionArr[i] < playerVersionArr[i]) {
 							return true;
 						}
-
 					}
 				}
 				return true;
@@ -333,12 +340,14 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				var playerBundle = playersService.getPlayerBundle(playerData);
 				var playerVersion = playersService.getPlayerVersion(playerData);
 				var playerVersionParam = playerBundle + '=' + playerVersion;
+				playersService.validatePluginsSupport(playerData);
 
 				var getPluginsVersion = function () {
 					var pluginsVersion = '';
-					for (var name in playerData.config.player.plugins) {
-						if (playerData.plugins[name] && playerData.plugins[name].componentName && playersService.isValidPlayerVersion(playerData, name)) {
-							pluginsVersion += (',' + playerData.plugins[name].componentName + '={latest}');
+					for (var plugin in playerData.config.player.plugins) {
+						var pluginData = playerData.plugins[plugin];
+						if (pluginData && pluginData.componentName) {
+							pluginsVersion += (',' + pluginData.componentName + '={latest}');
 						}
 					}
 					return pluginsVersion;
@@ -667,12 +676,17 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			},
 			'getPlayerAndPluginsVersionObj': function (data) {
 				var playerAndPluginsVersionObj = playersService.getPlayerVersionObj(data);
-				if (data.plugins) {
-					for (var plugin in data.config.player.plugins) {
-						var pluginData = data.plugins[plugin];
-						if (pluginData && pluginData.componentName && playersService.isValidPlayerVersion(data, plugin)) {
-							playerAndPluginsVersionObj[pluginData.componentName] = '{latest}';
-						}
+				playersService.validatePluginsSupport(data);
+				for (var plugin in data.plugins) {
+					var pluginData = data.plugins[plugin] || {};
+					delete data.externals[pluginData.componentName];
+					if (data.config.player.plugins[plugin] && pluginData.componentName) {
+						playerAndPluginsVersionObj[pluginData.componentName] = '{latest}';
+					}
+				}
+				for (var external in data.externals) {
+					if (data.externals[external].active && playersService.isValidPlayerVersion(data, data.externals[external].kalturaPlayerMinVersion)) {
+						playerAndPluginsVersionObj[external] = '{latest}';
 					}
 				}
 				return playerAndPluginsVersionObj;

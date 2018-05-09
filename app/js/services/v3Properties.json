@@ -284,6 +284,22 @@
     }
   },
   {
+    "label": "Offline capabilities",
+    "icon": "nowifi",
+    "description": "",
+    "type": "menu",
+    "children": [
+      {
+        "label": "PWA",
+        "player-refresh": false,
+        "type": "checkbox",
+        "model": "externals.playkit-offline-manager.active",
+        "componentName": "playkit-offline-manager",
+        "kalturaPlayerMinVersion": "0.25.0"
+      }
+    ]
+  },
+  {
     "label": "Advanced Settings",
     "icon": "advanced",
     "description": "Edit your player’s configuration file using advanced settings. Recommended only for advanced player developers.",
