@@ -294,8 +294,7 @@
         "player-refresh": false,
         "type": "checkbox",
         "model": "externals.playkit-offline-manager.active",
-        "componentName": "playkit-offline-manager",
-        "kalturaPlayerMinVersion": "0.25.0"
+        "componentName": "playkit-offline-manager"
       }
     ]
   },
