@@ -296,8 +296,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 				var loadMedia = function () {
 					var providerConfig = {
-						partnerId: partner_id,
-						uiConfId: playerData.id
+						partnerId: partner_id
 					};
 					if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.ks) {
 						providerConfig['ks'] = window.parent.kmc.vars.ks;
@@ -307,6 +306,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						playersService.removeUnsupportedPlugins(playerData, config.player.plugins);
 						config.targetId = playersService.PLAYER_ID;
 						Object.assign(config.provider, providerConfig);
+						if (window.__kalturaplayerdata) {
+							config.provider.env = $.extend(true, {}, window.__kalturaplayerdata.UIConf[playerData.id].provider.env, config.provider.env)
+						}
 						if (forceTouchUI) {
 							Object.assign(config, {ui: {forceTouchUI: true}});
 						}
