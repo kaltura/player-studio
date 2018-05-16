@@ -225,7 +225,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			KALTURA_PLAYER_OTT: 'kaltura-tv-player',
 			OVP: 'ovp',
 			OTT: 'ott',
-			latestVersions: null,
+			playerVersionsMap: null,
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
 				currentRefresh = null;
@@ -658,16 +658,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				}
 			},
 			'getPlayerVersionsMap': function () {
-				if (!playersService.latestVersions) {
+				if (!playersService.playerVersionsMap) {
 					var kmc = window.parent.kmc;
 					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerVersionsMap) {
 						try {
-							playersService.latestVersions = JSON.parse(kmc.vars.studioV3.playerVersionsMap);
+							playersService.playerVersionsMap = JSON.parse(kmc.vars.studioV3.playerVersionsMap);
 						} catch (e) {}
 					}
-					playersService.latestVersions = angular.isObject(playersService.latestVersions) ? playersService.latestVersions : {};
+					playersService.playerVersionsMap = angular.isObject(playersService.playerVersionsMap) ? playersService.playerVersionsMap : {};
 				}
-				return playersService.latestVersions;
+				return playersService.playerVersionsMap;
 			},
 			'getComponentVersion': function (data, componentName) {
 				if (data.playerVersion === "beta") {
