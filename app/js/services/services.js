@@ -220,12 +220,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 		};
 		var playersService = {
 			kalturaPlayer: null,
-			latestVersionNum: null,
 			PLAYER_ID: 'kVideoTarget',
 			KALTURA_PLAYER: 'kaltura-ovp-player',
 			KALTURA_PLAYER_OTT: 'kaltura-tv-player',
 			OVP: 'ovp',
 			OTT: 'ott',
+			latestVersions: null,
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
 				currentRefresh = null;
@@ -307,7 +307,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						config.targetId = playersService.PLAYER_ID;
 						Object.assign(config.provider, providerConfig);
 						if (window.__kalturaplayerdata) {
-							config.provider.env = $.extend(true, {}, window.__kalturaplayerdata.UIConf[playerData.id].provider.env, config.provider.env)
+							config.provider.env = $.extend(true, {}, window.__kalturaplayerdata.UIConf[playerData.id].provider.env, config.provider.env);
 						}
 						if (forceTouchUI) {
 							Object.assign(config, {ui: {forceTouchUI: true}});
@@ -349,7 +349,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					for (var plugin in playerData.config.player.plugins) {
 						var pluginData = playerData.plugins[plugin];
 						if (pluginData && pluginData.componentName) {
-							pluginsVersion += (',' + pluginData.componentName + '={latest}');
+							pluginsVersion += (',' + pluginData.componentName + '=' + playersService.getComponentVersion(playerData, pluginData.componentName));
 						}
 					}
 					return pluginsVersion;
@@ -372,12 +372,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 
 				var loadScript = function (env) {
-					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion(), function () {
-						if (window.KalturaPlayer && playerVersion === '{latest}') {
-							playersService.latestVersionNum = KalturaPlayer.VERSION;
-						}
-						callback();
-					});
+					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion(), callback);
 				};
 
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.host) {
@@ -642,7 +637,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return 2;
 				}
 			},
-			'getPlayerBundle': function (data) {
+			'getPlayerBundle': function () {
 				switch (playersService.getEnvType()) {
 					case 0: //OVP
 						return playersService.KALTURA_PLAYER;
@@ -652,7 +647,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						return (playersService.OvpOrOtt === playersService.OTT) ? playersService.KALTURA_PLAYER_OTT : playersService.KALTURA_PLAYER;
 				}
 			},
-			'getPartnerType': function (data) {
+			'getPartnerType': function () {
 				switch (playersService.getEnvType()) {
 					case 0: //OVP
 						return playersService.OVP;
@@ -662,18 +657,37 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						return playersService.OvpOrOtt || playersService.OVP;
 				}
 			},
+			'getPlayerVersionsMap': function () {
+				if (!playersService.latestVersions) {
+					var kmc = window.parent.kmc;
+					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerVersionsMap) {
+						try {
+							playersService.latestVersions = JSON.parse(kmc.vars.studioV3.playerVersionsMap);
+						} catch (e) {}
+					}
+					playersService.latestVersions = angular.isObject(playersService.latestVersions) ? playersService.latestVersions : {};
+				}
+				return playersService.latestVersions;
+			},
+			'getComponentVersion': function (data, componentName) {
+				if (data.playerVersion === "beta") {
+					return '{beta}';
+				}
+				if (!data.autoUpdate) {
+					if (data.freezeVersions && data.freezeVersions[componentName]) {
+						return data.freezeVersions[componentName];
+					}
+					var componentVersion = playersService.getPlayerVersionsMap()[componentName];
+					if (componentVersion) {
+						return componentVersion;
+					}
+				}
+				return '{latest}';
+			},
 			'getPlayerVersionObj': function (data) {
 				var playerObj = {};
 				var playerBundle = playersService.getPlayerBundle(data);
-				if (data.playerVersion === "beta") {
-					playerObj[playerBundle] = "{beta}";
-				} else { //latest
-					if (data.autoUpdate) {
-						playerObj[playerBundle] = "{latest}";
-					} else {
-						playerObj[playerBundle] = data.freezeVersionNum || playersService.latestVersionNum || "{latest}";
-					}
-				}
+				playerObj[playerBundle] = playersService.getComponentVersion(data, playerBundle);
 				return playerObj;
 			},
 			'getPlayerAndPluginsVersionObj': function (data) {
@@ -685,12 +699,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						delete data.externals[pluginData.componentName];
 					}
 					if (data.config.player.plugins[plugin] && pluginData.componentName) {
-						playerAndPluginsVersionObj[pluginData.componentName] = '{latest}';
+						playerAndPluginsVersionObj[pluginData.componentName] = playersService.getComponentVersion(data, pluginData.componentName);
 					}
 				}
 				for (var external in data.externals) {
 					if (data.externals[external].active && playersService.isValidPlayerVersion(data, data.externals[external].kalturaPlayerMinVersion)) {
-						playerAndPluginsVersionObj[external] = '{latest}';
+						playerAndPluginsVersionObj[external] = playersService.getComponentVersion(data, external);
 					}
 				}
 				return playerAndPluginsVersionObj;
