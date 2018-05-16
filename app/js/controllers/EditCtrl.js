@@ -20,10 +20,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			var autoUpdate = (confVarsObj[playerName] === "{beta}" || confVarsObj[playerName] === "{latest}");
 			$scope.playerData['playerVersion'] = playerVersion;
 			$scope.playerData['autoUpdate'] = autoUpdate;
-			if (!autoUpdate) {
-				$scope.playerData['freezeVersionNum'] = confVarsObj[playerName];
-			}
 			for (var key in confVarsObj) {
+				if (confVarsObj[key] !== '{beta}' && confVarsObj[key] !== '{latest}') {
+					$scope.playerData.freezeVersions = $scope.playerData.freezeVersions || {};
+					$scope.playerData.freezeVersions[key] = confVarsObj[key];
+				}
 				if (key !== playerName) {
 					$scope.playerData.externals = $scope.playerData.externals || {};
 					$scope.playerData.externals[key] = {active: true};
@@ -714,14 +715,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}else{
 				$scope.setTags(['kalturaPlayerJs','player', PlayerService.getPartnerType($scope.playerData)]); // set player tag
 			}
-			if (!$scope.playerData.autoUpdate && PlayerService.getPlayerVersion($scope.playerData) === '{latest}') {
-				//should load the latest KalturaPlayer to figure out the version number
-				PlayerService.loadKalturaPlayerScript($scope.playerData, function () {
-					savePlayer();
-				});
-			} else {
-				savePlayer();
-			}
+			savePlayer();
 		}
 	};
 
