@@ -609,6 +609,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						delete data2Save.enviornmentConfig;
 					}
 				}
+				if (data.autoUpdate) {
+					data.freezeVersions = null;
+				}
 				var request = {
 					'service': 'uiConf',
 					'action': 'update',
