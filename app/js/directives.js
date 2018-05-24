@@ -31,7 +31,7 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 						$('div:contains("IMA").panel').before('<div class="tabSubHeader Monetization">Monetization</div><p class="categoryDesc">Content monetization settings.</p>'); // add Monetization separator
 					}
 					if ($(".pwa").length === 0){
-						$('div:contains("PWA").checkbox').after('<div class="pwa"></div><p class="categoryDesc">Progressive Web App (PWA) capability allows to download content and play it offline, on the browser itself.<br>More information and documentation can be found <a href=\'https://github.com/kaltura/playkit-js-offline-manager#playkit-js-offline-manager\'>here</a>.</p>'); // add pwa separator
+						$('div:contains("PWA").checkbox').after('<div class="pwa"></div><p class="categoryDesc">Progressive Web App (PWA) capability allows to download content and play it offline, on the browser itself.<br>More information and documentation can be found <a href="https://github.com/kaltura/playkit-js-offline-manager#playkit-js-offline-manager" target="_blank">here</a>.</p>'); // add pwa separator
 					}
 					if ($(".advancedDisclaimer").length === 0){
 						$('.jsonView').after('<br><br><br><br><p class="categoryDesc advancedDisclaimer">Note: To see your changes propagate to other Studio tabs, click <b>Save Player Settings</b> and refresh the page.</p>'); // add Advanced tab disclaimer
