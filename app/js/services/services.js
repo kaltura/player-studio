@@ -403,6 +403,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						'uiConf:description': '',
 						'uiConf:height': '395',
 						'uiConf:width': '560',
+						'uiConf:swfUrl': '/',
 						'uiConf:version': '161',
 						'uiConf:name': 'New Player',
 						'uiConf:tags': 'kalturaPlayerJs,player,' + playersService.getPartnerType(),
