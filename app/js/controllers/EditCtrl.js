@@ -665,12 +665,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			return youboraOptions;
 		}
 		if (filter == "loadVideoTimeout"){
-			var AdsRenderingSettings = {};
+			var adsRenderingSettings = {};
 			if ($scope.playerData.config && $scope.playerData.config.player.plugins && $scope.playerData.config.player.plugins.ima) {
-				AdsRenderingSettings = $scope.playerData.config.player.plugins.ima.AdsRenderingSettings || {};
+				adsRenderingSettings = $scope.playerData.config.player.plugins.ima.adsRenderingSettings || {};
 			}
-			AdsRenderingSettings.loadVideoTimeout = data;
-			return AdsRenderingSettings;
+			adsRenderingSettings.loadVideoTimeout = Number(data);
+			return adsRenderingSettings;
 		}
 		if (filter == "noEmpty") {
 			return data || undefined;

@@ -252,7 +252,7 @@
           {
             "label": "Loading Timeout",
             "type": "number",
-            "model": "config.player.plugins.ima.AdsRenderingSettings",
+            "model": "config.player.plugins.ima.adsRenderingSettings",
             "helpnote": "Set the timeout for loading ads (in milliseconds). If an ad can’t be loaded within this timeframe, load the video automatically",
             "min": 0,
             "initvalue": 5000,
