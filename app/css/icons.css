@@ -18,62 +18,65 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.icon-open:before {
-  content: "\e604";
-}
-.icon-Close:before {
-  content: "\e605";
-}
-.icon-TabSearch:before {
-  content: "\e611";
-}
-.icon-TabPlugins:before {
-  content: "\e607";
-}
-.icon-TabMonetization:before {
-  content: "\e608";
-}
-.icon-TabLookandFeel:before {
-  content: "\e609";
-}
-.icon-TabEngagement:before {
-  content: "\e60a";
-}
-.icon-TabBasicSettings:before {
-  content: "\e60b";
-}
-.icon-TabAnalytics:before {
-  content: "\e60c";
-}
-.icon-defult:before {
-  content: "\e60d";
-}
 .icon-checkmark-circle:before {
-  content: "\e600";
+    content: "\e600";
 }
 .icon-copy:before {
-  content: "\e601";
+    content: "\e601";
 }
 .icon-eye:before {
-  content: "\e602";
+    content: "\e602";
 }
 .icon-close:before {
-  content: "\e603";
+    content: "\e603";
+}
+.icon-open:before {
+    content: "\e604";
+}
+.icon-Close:before {
+    content: "\e605";
+}
+.icon-TabPlugins:before {
+    content: "\e607";
+}
+.icon-TabMonetization:before {
+    content: "\e608";
+}
+.icon-TabLookandFeel:before {
+    content: "\e609";
+}
+.icon-TabEngagement:before {
+    content: "\e60a";
+}
+.icon-TabBasicSettings:before {
+    content: "\e60b";
+}
+.icon-TabAnalytics:before {
+    content: "\e60c";
+}
+.icon-defult:before {
+    content: "\e60d";
 }
 .icon-lock:before {
-	content: "\e60f";
+    content: "\e60f";
 }
 .icon-unlock:before {
-	content: "\e610";
+    content: "\e610";
+}
+.icon-TabSearch:before {
+    content: "\e611";
 }
 .icon-advanced:before {
-	content: "\e901";
+    content: "\e612";
 }
 .icon-playback:before {
-	content: "\e902";
+    content: "\e613";
 }
 .icon-nowifi:before {
-    content: "\e903";
+    content: "\e614";
+}
+.icon-360:before {
+    content: "\e615";
 }
 .icon{
 	cursor: pointer;
