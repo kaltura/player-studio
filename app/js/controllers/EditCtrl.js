@@ -159,7 +159,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 }else{ // plugin
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName, 'kalturaPlayerMinVersion': p.kalturaPlayerMinVersion};
+	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName, 'kalturaPlayerMinVersion': p.kalturaPlayerMinVersion};
 	                plugin.properties = [];
 	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
@@ -339,7 +339,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     // handle refresh
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
     $scope.propertyChanged = function(property, checkAutoRefresh){
-	    if (property.model === "playerVersion" || property.model === "autoUpdate"){ // handle player version or freeze selection
+	    if (property.resetKalturaPlayer){
 		    window.KalturaPlayer = null;
 	    }
 	    if (property.model === "playerVersion" || property.model === "config.player.playback.textLanguage"){ // handle player version and captions select
@@ -674,6 +674,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "noEmpty") {
 			return data || undefined;
+		}
+		if (filter == "numberOnly"){
+			return Number(data);
 		}
 		return data;
 	};

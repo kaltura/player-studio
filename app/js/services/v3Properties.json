@@ -36,6 +36,7 @@
           }
         ],
         "model": "playerVersion",
+        "resetKalturaPlayer": true,
         "helpnote": "Select a TV Platform Player version - latest or beta. Beta allows you to experiment with new functionalities that will be released in the next version. Latest will always update to the latest version unless you select “Keep Player on Current Version“",
         "initvalue": "latest"
       },
@@ -45,6 +46,7 @@
         "type": "freezeVersion",
         "endline": "true",
         "filter": "not",
+        "resetKalturaPlayer": true,
         "model": "autoUpdate",
         "player-refresh": false
       },
@@ -300,6 +302,82 @@
         "kalturaPlayerMinVersion": "0.27.0"
       }
     ]
+  },
+  {
+    "label": "360 & VR",
+    "icon": "360",
+    "description": "Play spherical 360 videos and immersive VR mode.",
+    "type": "menu",
+    "children": {
+      "vr": {
+        "label": "Enable",
+        "description": "",
+        "type": "featuremenu",
+        "isOpen": true,
+        "model": "config.player.plugins.vr",
+        "componentName": "playkit-vr",
+        "kalturaPlayerMinVersion": "0.29.0",
+        "children": [
+          {
+            "label": "Toggle Stereo",
+            "type": "checkbox",
+            "model": "config.player.plugins.vr.toggleStereo",
+            "initvalue": true,
+            "resetKalturaPlayer": true,
+            "helpnote": "Whether to show the stereo toggle button (applicative to mobile devices)"
+          },
+          {
+            "label": "Start In Stereo Mode",
+            "type": "checkbox",
+            "model": "config.player.plugins.vr.startInStereo",
+            "helpnote": "Whether to start video with stereo mode"
+          },
+          {
+            "label": "Move Multiplier",
+            "type": "float",
+            "initvalue": 0.15,
+            "model": "config.player.plugins.vr.moveMultiplier",
+            "helpnote": "Defines the sensitivity of the mouse and touch movement"
+          },
+          {
+            "label": "Device Motion Multiplier",
+            "type": "float",
+            "initvalue": 1,
+            "model": "config.player.plugins.vr.deviceMotionMultiplier",
+            "helpnote": "Defines the sensitivity of the device motion",
+            "endline": "true"
+          },
+          {
+            "label": "Camera Options",
+            "type": "title"
+          },
+          {
+            "label": "Camera frustum field of view",
+            "helpnote": "Camera frustum vertical field of view, from bottom to top of view, in degrees",
+            "type": "float",
+            "initvalue": 75,
+            "filter": "numberOnly",
+            "model": "config.player.plugins.vr.cameraOptions.fov"
+          },
+          {
+            "label": "Camera frustum near plane",
+            "helpnote": "Camera frustum near plane. The valid range is greater than 0 and less than the current value of the far plane",
+            "type": "float",
+            "initvalue": 0.1,
+            "filter": "numberOnly",
+            "model": "config.player.plugins.vr.cameraOptions.near"
+          },
+          {
+            "label": "Camera frustum far plane",
+            "helpnote": "Camera frustum far plane. The valid range is between the current value of the near plane and infinity",
+            "type": "float",
+            "initvalue": 1000,
+            "filter": "numberOnly",
+            "model": "config.player.plugins.vr.cameraOptions.far"
+          }
+        ]
+      }
+    }
   },
   {
     "label": "Advanced Settings",
