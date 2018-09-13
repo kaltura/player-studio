@@ -1,7 +1,10 @@
 {
   "disableUserCache": false,
-  "player" : {
+  "player": {
     "plugins": {},
+    "sources": {
+      "options": {}
+    },
     "playback": {}
   },
   "provider": {

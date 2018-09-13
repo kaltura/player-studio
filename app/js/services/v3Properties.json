@@ -166,6 +166,12 @@
         "helpnote": "Fall back to muted autoplay on browsers that block autoplay with sound",
         "type": "checkbox",
         "model": "config.player.playback.allowMutedAutoPlay"
+      },
+      {
+        "label": "Redirect Manifest to External Streams",
+        "helpnote": "Enable workaround for some user-agents that don't allow redirects after a successful CORS-preflight request",
+        "type": "checkbox",
+        "model": "config.player.sources.options.forceRedirectExternalStreams"
       }
     ]
   },
