@@ -138,7 +138,17 @@
         "label": "Fallback to Muted Autoplay",
         "helpnote": "Fall back to muted autoplay on browsers that block autoplay with sound",
         "type": "checkbox",
-        "model": "config.player.playback.allowMutedAutoPlay"
+        "model": "config.player.playback.allowMutedAutoPlay",
+        "endline": "true"
+      },
+      {
+        "label": "Support legacy HLS with Flash",
+        "helpnote": "When using this option, if the platform doesn't support the media source extension or native HLS, we'll try to add Flash",
+        "type": "checkbox",
+        "player-refresh": false,
+        "model": "externals.playkit-flash.active",
+        "componentName": "playkit-flash",
+        "kalturaPlayerMinVersion": "0.32.0"
       }
     ]
   },
