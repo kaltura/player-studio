@@ -115,33 +115,6 @@
         "endline": "true"
       },
       {
-        "label": "Enable CVAA",
-        "helpnote": "Display captions styling menu on the player",
-        "type": "checkbox",
-        "initvalue": true,
-        "disabled": true,
-        "endline": "true",
-        "model": ""
-      },
-      {
-        "label": "Quality Selector",
-        "helpnote": "Enables users to select the video bitrate",
-        "type": "checkbox",
-        "initvalue": true,
-        "disabled": true,
-        "endline": "true",
-        "model": ""
-      },
-      {
-        "label": "Audio Track Selector",
-        "helpnote": "Enables users to select the audio language",
-        "type": "checkbox",
-        "initvalue": true,
-        "disabled": true,
-        "endline": "true",
-        "model": ""
-      },
-      {
         "label": "Preload",
         "helpnote": "Load the video asset automatically when the page loads",
         "type": "checkbox",
