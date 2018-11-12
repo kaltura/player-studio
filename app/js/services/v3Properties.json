@@ -363,6 +363,46 @@
     }
   },
   {
+    "label": "Cast",
+    "icon": "Chromecast",
+    "description": "",
+    "type": "menu",
+    "children": {
+      "cast": {
+        "label": "Sender",
+        "type": "featuremenu",
+        "model": "config.cast",
+        "isOpen": true,
+        "componentName": "playkit-cast-sender",
+        "kalturaPlayerMinVersion": "0.33.1",
+        "children": [
+          {
+            "label": "Application ID",
+            "type": "text",
+            "model": "config.cast.receiverApplicationId",
+            "helpnote": ""
+          },
+          {
+            "label": "VAST Ads",
+            "model": "config.cast.advertising.vast",
+            "type": "checkbox",
+            "initValue": false,
+            "helpnote": ""
+          }
+        ]
+      },
+      "receiver": {
+        "label": "Receiver",
+        "type": "featuremenu",
+        "model": "externals.playkit-cast-receiver.active",
+        "componentName": "playkit-cast-receiver",
+        "kalturaPlayerMinVersion": "0.33.1",
+        "children": [
+        ]
+      }
+    }
+  },
+  {
     "label": "Advanced Settings",
     "icon": "advanced",
     "description": "Edit your player’s configuration file using advanced settings. Recommended only for advanced player developers.",

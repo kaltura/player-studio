@@ -289,6 +289,30 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			    $scope.selectDefaultEntry($scope.userPlaylists);
 		    }
 	    }
+
+        if (this.category.label === "Cast") {
+            var plugins = this.category.plugins;
+            var senderElement = document.querySelector('#_' + plugins[0].id);
+            var receiverElement = document.querySelector('#_' + plugins[1].id);
+            var willActive = !plugin.enabled;
+            if (plugin.label === "Sender") {
+                if (willActive) {
+                    this.category.plugins[1].enabled = false;
+                    receiverElement.classList.add('disabled');
+                } else {
+                    receiverElement.classList.remove('disabled');
+                }
+            } else {
+                if (willActive) {
+                    this.category.plugins[0].enabled = false;
+                    senderElement.classList.add('disabled');
+                    delete $scope.playerData.config.cast;
+                } else {
+                    senderElement.classList.remove('disabled');
+                }
+            }
+        }
+
 	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
@@ -490,7 +514,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
-						if ($scope.playerData.config.player.plugins[plug] || plug == "uiVars"){
+						if ($scope.playerData.config[plug] || $scope.playerData.config.player.plugins[plug] || plug == "uiVars"){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
@@ -593,7 +617,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.setPluginData = function(plugin){
 		$scope.playerData.plugins = $scope.playerData.plugins || {};
-		$scope.playerData.plugins[plugin.model] = {
+        var modelArr = plugin.model.split('.');
+        var model = modelArr.length > 1 ? modelArr[1] : modelArr[0];
+		$scope.playerData.plugins[model] = {
 			componentName: plugin.componentName,
 			kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion
 		};
