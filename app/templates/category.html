@@ -11,7 +11,7 @@
 				<i ng-class="{rotate90:plugin.isopen}" class="glyphicon glyphicon-play accHeaderArrow"></i>
 			</div>
 			<p bind-once class="categoryDesc" ng-bind-html="plugin.description"></p>
-			<div ng-repeat="property in plugin.properties" ng-include="'templates/' + property.type +'.html'"></div>
+			<div ng-repeat="property in plugin.properties" ng-if="property.type" ng-include="'templates/' + property.type +'.html'"></div>
 		</div>
 	</div>
 </div>

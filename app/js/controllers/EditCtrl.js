@@ -527,7 +527,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
-						if ($scope.playerData.config[plug] || $scope.playerData.config.player.plugins[plug] || plug == "uiVars" || (plug === "receiver" && $scope.playerData.externals[properties[plug].componentName])){
+						if ($scope.playerData.config[plug] || $scope.playerData.config.player.plugins[plug] || plug == "uiVars" || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
