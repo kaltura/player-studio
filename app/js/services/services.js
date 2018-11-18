@@ -352,6 +352,12 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							pluginsVersion += (',' + pluginData.componentName + '=' + playersService.getComponentVersion(playerData, pluginData.componentName));
 						}
 					}
+					if (playerData.config.cast) {
+                        var castData = playerData.plugins.cast;
+                        if (castData && castData.componentName) {
+                            pluginsVersion += (',' + castData.componentName + '=' + playersService.getComponentVersion(playerData, castData.componentName));
+                        }
+					}
 					return pluginsVersion;
 				};
 
@@ -559,7 +565,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'savePlayer': function (data) {
 				var deferred = $q.defer();
 				var data2Save = angular.copy(data.config);
-				data2Save.player.plugins = playersService.preparePluginsDataForRender(data2Save.player.plugins);
+                data2Save.player.plugins = playersService.preparePluginsDataForRender(data2Save.player.plugins);
+                if (data2Save.cast) {
+                    data2Save.cast = playersService.preparePluginsDataForRender(data2Save.cast);
+                }
 				// remove preview playlist from data before saving
 				if (data2Save.player.plugins.playlistAPI) {
 					if (data2Save.player.plugins.playlistAPI.kpl0Id) {
@@ -672,10 +681,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				playersService.validatePluginsSupport(data);
 				for (var plugin in data.plugins) {
 					var pluginData = data.plugins[plugin] || {};
-					if (data.externals) {
+					if (data.externals && data.config.player.plugins[plugin]) {
 						delete data.externals[pluginData.componentName];
 					}
-					if (data.config.player.plugins[plugin] && pluginData.componentName) {
+					if ((data.config.player.plugins[plugin] || data.config[plugin]) && pluginData.componentName) {
 						playerAndPluginsVersionObj[pluginData.componentName] = playersService.getComponentVersion(data, pluginData.componentName);
 					}
 				}

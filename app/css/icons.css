@@ -78,6 +78,11 @@
 .icon-360:before {
     content: "\e615";
 }
+
+.icon-Chromecast:before {
+    content: "\e616";
+}
+
 .icon{
 	cursor: pointer;
 	color: #fff;

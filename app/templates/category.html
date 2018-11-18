@@ -5,7 +5,7 @@
 	<div ng-repeat="property in category.properties" ng-include="'templates/' + property.type +'.html'"></div>
 
 	<div accordion close-others="false">
-		<div accordion-group ng-repeat="plugin in category.plugins" is-open="plugin.isopen" on-finish-render>
+		<div id="{{'_' + plugin.id}}" accordion-group ng-repeat="plugin in category.plugins" is-open="plugin.isopen" on-finish-render>
 			<div accordion-heading>
 				<span id="{{plugin.id}}" class="accHeader">{{plugin.label}}</span><input ng-if="plugin.model !== 'uiVars'" class="pull-right" type="checkbox" ng-model="plugin.enabled" ng-click="togglePlugin(plugin, $event)">
 				<i ng-class="{rotate90:plugin.isopen}" class="glyphicon glyphicon-play accHeaderArrow"></i>

@@ -289,10 +289,47 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			    $scope.selectDefaultEntry($scope.userPlaylists);
 		    }
 	    }
+
+        if (this.category.label === "Cast") {
+          $scope.toggleCastPlugins(plugin, this.category.plugins);
+        }
+
 	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
     };
+
+	$scope.toggleCastPlugins = function (plugin, plugins) {
+		var senderElement = document.querySelector('#_' + plugins[0].id);
+		var receiverElement = document.querySelector('#_' + plugins[1].id);
+		var willActive = !plugin.enabled;
+		var senderPlugin = plugins[0];
+		var receiverPlugin = plugins[1];
+		$scope.playerData.externals = $scope.playerData.externals || {};
+		if (plugin.label === "Sender") {
+			if (willActive) {
+				receiverPlugin.enabled = false;
+				receiverElement.classList.add('disabled');
+                delete $scope.playerData.externals[receiverPlugin.componentName];
+			} else {
+				receiverElement.classList.remove('disabled');
+			}
+		} else {
+			if (willActive) {
+				$scope.playerData.externals[plugin.componentName] = {
+					kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion,
+					active: true
+				};
+				senderPlugin.enabled = false;
+				senderElement.classList.add('disabled');
+				delete $scope.playerData.config.cast;
+                delete $scope.playerData.externals[senderPlugin.componentName];
+			} else {
+				senderElement.classList.remove('disabled');
+                delete $scope.playerData.externals[plugin.componentName];
+			}
+		}
+	};
 
 	// remove validation for disabled plugins
 	$scope.removeValidation = function(plugin){
@@ -490,7 +527,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
-						if ($scope.playerData.config.player.plugins[plug] || plug == "uiVars"){
+						if ($scope.playerData.config[plug] || $scope.playerData.config.player.plugins[plug] || plug == "uiVars" || (plug === "receiver" && $scope.playerData.externals[properties[plug].componentName])){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
@@ -593,7 +630,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.setPluginData = function(plugin){
 		$scope.playerData.plugins = $scope.playerData.plugins || {};
-		$scope.playerData.plugins[plugin.model] = {
+        var modelArr = plugin.model.split('.');
+        var model = modelArr.length > 1 ? modelArr[modelArr.length - 1] : modelArr[0];
+		$scope.playerData.plugins[model] = {
 			componentName: plugin.componentName,
 			kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion
 		};
@@ -640,6 +679,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			}
 			return res;
 		}
+        if (filter == "advertising") {
+            if (!data) {
+                delete $scope.playerData.config.cast.advertising;
+            }
+        }
 		if (filter == "entry") {
 			return data.id ? data.id : data;
 		}
