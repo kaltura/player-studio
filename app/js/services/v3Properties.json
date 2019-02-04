@@ -149,6 +149,15 @@
         "model": "externals.playkit-flash.active",
         "componentName": "playkit-flash",
         "kalturaPlayerMinVersion": "0.32.0"
+      },
+      {
+        "label": "Support Youtube playback",
+        "helpnote": "When using this option, the player will support playing Youtube ingested content from the platform",
+        "type": "checkbox",
+        "player-refresh": false,
+        "model": "externals.playkit-youtube.active",
+        "componentName": "playkit-youtube",
+        "kalturaPlayerMinVersion": "0.32.0"
       }
     ]
   },
