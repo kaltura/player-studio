@@ -157,7 +157,7 @@
         "player-refresh": false,
         "model": "externals.playkit-youtube.active",
         "componentName": "playkit-youtube",
-        "kalturaPlayerMinVersion": "0.32.0"
+        "kalturaPlayerMinVersion": "0.39.1"
       }
     ]
   },
