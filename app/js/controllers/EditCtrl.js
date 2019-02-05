@@ -72,9 +72,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.userPlaylists.push({'id': data.objects[i].id, 'text': data.objects[i].name});
 		}
 		if ($scope.playerData.tags.indexOf("playlist") !== -1){
-			$scope.selectDefaultEntry($scope.userPlaylists, function(){
-				$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
-			});
+			$scope.selectDefaultEntry($scope.userPlaylists);
 			$scope.entriesTypeSelector = 'Playlist';
 		}
 	});
@@ -83,26 +81,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.setEntriesType = function(entriesType)	{
 		$scope.entriesTypeSelector = entriesType;
 		if (entriesType === 'Entries'){
-			if ($scope.playerData.config.player.plugins.playlistAPI && $scope.playerData.config.player.plugins.playlistAPI.plugin){
-				$scope.setPluginEnabled("playlistAPI", false);
-			}
 			$scope.selectDefaultEntry($scope.userEntries);
 		}else{
-			if (!$scope.playerData.config.player.plugins.playlistAPI || ($scope.playerData.config.player.plugins.playlistAPI && !$scope.playerData.config.player.plugins.playlistAPI.plugin)){
-				$scope.setPluginEnabled("playlistAPI", true);
-			}
 			$scope.selectDefaultEntry($scope.userPlaylists);
-			$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
 		}
 		$scope.refreshPlayer();
-	};
-
-	$scope.setPlaylistEntry = function(id, label){
-		if ($scope.entriesTypeSelector === 'Playlist' && $scope.playerData.config.player.plugins.playlistAPI && $scope.playerData.config.player.plugins.playlistAPI.plugin){
-			$scope.playerData.config.player.plugins.playlistAPI.kpl0Id = id;
-			$scope.playerData.config.player.plugins.playlistAPI.kpl0Name = label;
-			$scope.$broadcast('setPlaylistEvent', [id, label]);
-		}
 	};
 
 	$scope.selectDefaultEntry = function(entriesArr, callback){
@@ -395,7 +378,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (property.selectedEntry && property.selectedEntry.id && property.model.indexOf("~") === 0){ // this is a preview entry change
 		    $scope.selectedEntry = property.selectedEntry;
 		    localStorageService.set('defaultEntry', property.selectedEntry);
-		    $scope.setPlaylistEntry(property.selectedEntry.id, property.selectedEntry.text);
 		    $scope.refreshPlayer();
 		    return;
 	    }
@@ -472,8 +454,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
 
-		$scope.setPlaylistEntry($scope.selectedEntry.id, $scope.selectedEntry.text);
-
 		var flashvars = {};
 		if ($scope.playerData.config.enviornmentConfig && $scope.playerData.config.enviornmentConfig.localizationCode){ // support localizationCode
 			angular.extend(flashvars, {'localizationCode': $scope.playerData.config.enviornmentConfig.localizationCode});
@@ -486,11 +466,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.isIE8) {                      // for IE8 add transparent mode
 			angular.extend(flashvars, {'wmode': 'transparent'});
 		}
-		var entryID = $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
+		var entryID = $scope.selectedEntry && $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
 		requestNotificationChannel.requestStarted('edit'); // show spinner
 		PlayerService.renderPlayer($scope.playerData, flashvars, entryID, function () {
 			requestNotificationChannel.requestEnded('edit'); // hide spinner
-		});
+		}, $scope.entriesTypeSelector === "Playlist");
 	};
 
 	// merge the player data with the menu data

@@ -284,7 +284,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				}
 				return true;
 			},
-			'renderPlayer': function (playerData, playerConfig, entry_id, callback) {
+			'renderPlayer': function (playerData, playerConfig, entry_id, callback, isPlaylist) {
 				var partner_id = playerData.partnerId;
 				var forceTouchUI = playerData.forceTouchUI;
 				var loadPlayer = function () {
@@ -313,7 +313,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							Object.assign(config, {ui: {forceTouchUI: true}});
 						}
 						playersService.kalturaPlayer = KalturaPlayer.setup(config);
-						playersService.kalturaPlayer.loadMedia({entryId: entry_id});
+						if (isPlaylist) {
+							playersService.kalturaPlayer.loadPlaylist({playlistId: entry_id});
+						} else {
+							playersService.kalturaPlayer.loadMedia({entryId: entry_id});
+						}
 						callback();
 					} catch (error) {
 						console.error(error);
