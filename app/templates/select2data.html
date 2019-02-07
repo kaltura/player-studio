@@ -1,7 +1,7 @@
 <div class="text">
 	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
-	<div class="btn-group pull-right" style="margin-bottom: 10px">
+	<div class="btn-group pull-right" style="margin-bottom: 10px" ng-show="{{isOvp}}">
 		<label class="btn btn-default" ng-model="entriesTypeSelector" btn-radio="'Entries'" ng-click="setEntriesType('Entries')">Entries</label>
 		<label class="btn btn-default" ng-model="entriesTypeSelector" btn-radio="'Playlist'" ng-click="setEntriesType('Playlist')">Playlist</label>
 	</div>

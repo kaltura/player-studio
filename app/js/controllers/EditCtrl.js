@@ -12,6 +12,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
 
+	$scope.isOvp = PlayerService.getPartnerType() === PlayerService.OVP;
+
 	$scope.setInitialConfig = function () {
 		$scope.playerData.config.playlist = $scope.playerData.config.playlist || {options: {}, countdown: {}};
 	};
