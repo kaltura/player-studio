@@ -12,7 +12,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
 
-	try {
+	$scope.setInitialConfig = function () {
+		$scope.playerData.config.playlist = $scope.playerData.config.playlist || {options: {}, countdown: {}};
+	};
+	$scope.setInitialConfig();
+
+		try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
 			var playerName = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
@@ -702,6 +707,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if (filter == "numberOnly"){
 			return Number(data);
 		}
+		if (filter == "nullableNumber"){
+			return data ? Number(data) : undefined;
+		}
 		return data;
 	};
 
@@ -746,112 +754,112 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 	};
 
-		$scope.addTags = function(tags){
-			tags.forEach(function(tag){
-				if ($scope.playerData.tags.indexOf(tag) === -1){
-					$scope.playerData.tags = $scope.playerData.tags + "," + tag;
-				}
-			});
-		};
+	$scope.addTags = function(tags){
+		tags.forEach(function(tag){
+			if ($scope.playerData.tags.indexOf(tag) === -1){
+				$scope.playerData.tags = $scope.playerData.tags + "," + tag;
+			}
+		});
+	};
 
-		$scope.setTags = function(tags){
-			$scope.playerData.tags = tags;
-		};
+	$scope.setTags = function(tags){
+		$scope.playerData.tags = tags;
+	};
 
-		$scope.setPluginEnabled = function (model, enabled) {
-			for (var cat in $scope.menuData) {
-				var plugins = $scope.menuData[cat].pluginsNotLoaded ? $scope.menuData[cat].pluginsNotLoaded : $scope.menuData[cat].plugins;
-				if (plugins && plugins.length > 0) {
-					for (var i = 0; i < plugins.length; i++) {
-						if (plugins[i].model === model) {
-							plugins[i].enabled = enabled; // update menu data so the plugin checkbox will update
-							if ($scope.playerData.config.player.plugins[model] && !enabled) {
-								delete $scope.playerData.config.player.plugins[model]; // remove plugin from player data if enabled=false
-							}
+	$scope.setPluginEnabled = function (model, enabled) {
+		for (var cat in $scope.menuData) {
+			var plugins = $scope.menuData[cat].pluginsNotLoaded ? $scope.menuData[cat].pluginsNotLoaded : $scope.menuData[cat].plugins;
+			if (plugins && plugins.length > 0) {
+				for (var i = 0; i < plugins.length; i++) {
+					if (plugins[i].model === model) {
+						plugins[i].enabled = enabled; // update menu data so the plugin checkbox will update
+						if ($scope.playerData.config.player.plugins[model] && !enabled) {
+							delete $scope.playerData.config.player.plugins[model]; // remove plugin from player data if enabled=false
 						}
 					}
 				}
 			}
-		};
+		}
+	};
 
-		$scope.addPlugin = function(){
-			var modal = utilsSvc.userInput('Add custom plugin','Plugin Name:', 'Add',{"width":"50%"});
-			$timeout(function(){
-				$(".userInput").alphanum({allowSpace: false});
-			},50);
-			modal.result.then(function(result) {
-				if (result) {
-					$scope.addCustomPlugin(result, {});
-				}
-			});
-		};
+	$scope.addPlugin = function(){
+		var modal = utilsSvc.userInput('Add custom plugin','Plugin Name:', 'Add',{"width":"50%"});
+		$timeout(function(){
+			$(".userInput").alphanum({allowSpace: false});
+		},50);
+		modal.result.then(function(result) {
+			if (result) {
+				$scope.addCustomPlugin(result, {});
+			}
+		});
+	};
 
-		$scope.importPlugin = function(){
-			var modal = utilsSvc.userInput('Import plugin','Plugin Configuration String:', 'Import',{"width":"100%"});
-			var keyVal;
-			modal.result.then(function(result) {
-				if (result) {
-					var arr = result.split("&"); // break config string to array
-					if ( arr[0].indexOf("=") == -1 ){ // we have a plugin name, create a custom plugin
-						var model = arr[0];           // the plugin name is the first item in the array
-						var data = {};
-						for ( var  i = 1; i < arr.length; i++ ){ // break each item in the array to key/value pair and add to data object
-							keyVal = arr[i].split("=");
-							data[keyVal[0]] = keyVal[1];
-						}
-						$scope.addCustomPlugin(model,data);
-					}else{
-						for ( var  inx = 0; inx < arr.length; inx++ ){ // break each item in the array to key/value pair and add to UIVars in menu data
-							keyVal = arr[inx].split("=");
-							for ( var j=0; j < $scope.menuData.length; j++ ){
-								if ( $scope.menuData[j].label === "Plugins" ){
-									for ( var k = 0; k < $scope.menuData[j].plugins.length; k++ ){
-										if ( $scope.menuData[j].plugins[k].model === "uiVars" ){
-											var vars = $scope.menuData[j].plugins[k].properties[0].initvalue;
-											vars.push( {'label':keyVal[0], 'value': keyVal[1]} );
-										}
+	$scope.importPlugin = function(){
+		var modal = utilsSvc.userInput('Import plugin','Plugin Configuration String:', 'Import',{"width":"100%"});
+		var keyVal;
+		modal.result.then(function(result) {
+			if (result) {
+				var arr = result.split("&"); // break config string to array
+				if ( arr[0].indexOf("=") == -1 ){ // we have a plugin name, create a custom plugin
+					var model = arr[0];           // the plugin name is the first item in the array
+					var data = {};
+					for ( var  i = 1; i < arr.length; i++ ){ // break each item in the array to key/value pair and add to data object
+						keyVal = arr[i].split("=");
+						data[keyVal[0]] = keyVal[1];
+					}
+					$scope.addCustomPlugin(model,data);
+				}else{
+					for ( var  inx = 0; inx < arr.length; inx++ ){ // break each item in the array to key/value pair and add to UIVars in menu data
+						keyVal = arr[inx].split("=");
+						for ( var j=0; j < $scope.menuData.length; j++ ){
+							if ( $scope.menuData[j].label === "Plugins" ){
+								for ( var k = 0; k < $scope.menuData[j].plugins.length; k++ ){
+									if ( $scope.menuData[j].plugins[k].model === "uiVars" ){
+										var vars = $scope.menuData[j].plugins[k].properties[0].initvalue;
+										vars.push( {'label':keyVal[0], 'value': keyVal[1]} );
 									}
 								}
 							}
 						}
 					}
 				}
-			});
-		};
+			}
+		});
+	};
 
-		$scope.addCustomPlugin = function(model, data){
-			for (var i=0; i < $scope.menuData.length; i++){
-				if ( $scope.menuData[i].label === "Plugins" ){
-					$scope.menuData[i].plugins.push({
-						description: model + " custom plugin.",
-						enabled: true,
-						isopen: $.isEmptyObject(data) ? true: false,
+	$scope.addCustomPlugin = function(model, data){
+		for (var i=0; i < $scope.menuData.length; i++){
+			if ( $scope.menuData[i].label === "Plugins" ){
+				$scope.menuData[i].plugins.push({
+					description: model + " custom plugin.",
+					enabled: true,
+					isopen: $.isEmptyObject(data) ? true: false,
+					custom: true,
+					label: model + " custom plugin",
+					model: model,
+					properties: [{
+						initvalue: data,
+						allowComplexTypes: false,
 						custom: true,
-						label: model + " custom plugin",
-						model: model,
-						properties: [{
-							initvalue: data,
-							allowComplexTypes: false,
-							custom: true,
-							helpnote: "Configuration options",
-							label: "Configuration options",
-							model: "config.player.plugins." + model + ".config", // set config object to be edited by the json editor. Will be copied and removed when saving player data
-							type: "json"
-						}]
-					});
-				}
+						helpnote: "Configuration options",
+						label: "Configuration options",
+						model: "config.player.plugins." + model + ".config", // set config object to be edited by the json editor. Will be copied and removed when saving player data
+						type: "json"
+					}]
+				});
 			}
-		};
+		}
+	};
 
-		$scope.updateCustomPlugins = function(plugin){
-			if ($scope.playerData.config.player.plugins[plugin] && $scope.playerData.config.player.plugins[plugin]["config"]){
-				var conf = $scope.playerData.config.player.plugins[plugin]["config"];
-				$scope.playerData.config.player.plugins[plugin] = {'enabled': true, 'custom': true, 'plugin': true}; // clear previous properties
-				for (var prop in conf){ // copy properties from config object to the plugin root
-					$scope.playerData.config.player.plugins[plugin][prop] = conf[prop];
-				}
-				delete $scope.playerData.config.player.plugins[plugin].config; // delete config object
+	$scope.updateCustomPlugins = function(plugin){
+		if ($scope.playerData.config.player.plugins[plugin] && $scope.playerData.config.player.plugins[plugin]["config"]){
+			var conf = $scope.playerData.config.player.plugins[plugin]["config"];
+			$scope.playerData.config.player.plugins[plugin] = {'enabled': true, 'custom': true, 'plugin': true}; // clear previous properties
+			for (var prop in conf){ // copy properties from config object to the plugin root
+				$scope.playerData.config.player.plugins[plugin][prop] = conf[prop];
 			}
-		};
+			delete $scope.playerData.config.player.plugins[plugin].config; // delete config object
+		}
+	};
 
-	}]);
+}]);
