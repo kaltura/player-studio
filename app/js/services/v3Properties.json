@@ -161,55 +161,56 @@
         "endline": "true"
       },
       {
-        "type": "label",
-        "value": "Playlist",
-        "bold": true
-      },
-      {
-        "type": "label",
-        "value": "Options"
-      },
-      {
-        "label": "Auto continue",
-        "helpnote": "Determine whether to continue to the next item automatically",
-        "type": "checkbox",
-        "initvalue": true,
-        "filter": "playlistOptions",
-        "model": "config.playlist.options.autoContinue"
-      },
-      {
-        "label": "Loop",
-        "helpnote": "Determine whether to play the playlist in a loop. When is true the playlist will played automatically even autoContinue is false",
-        "type": "checkbox",
-        "filter": "playlistOptions",
-        "model": "config.playlist.options.loop"
-      },
-      {
-        "type": "label",
-        "value": "Countdown"
-      },
-      {
-        "label": "Showing",
-        "helpnote": "Determines whether to show the countdown",
-        "type": "checkbox",
-        "initvalue": true,
-        "model": "config.playlist.countdown.showing"
-      },
-      {
-        "label": "Time to show",
-        "helpnote": "Shows when the countdown is scheduled to appear (by default, this is towards the end)",
-        "type": "float",
-        "filter": "nullableNumber",
-        "model": "config.playlist.countdown.timeToShow"
-      },
-      {
-        "label": "Duration",
-        "helpnote": "Shows for how long the countdown will appear",
-        "type": "float",
-        "filter": "nullableNumber",
-        "min": 0,
-        "initvalue": 10,
-        "model": "config.playlist.countdown.duration"
+        "label": "Playlist",
+        "type": "featuremenu",
+        "description": "",
+        "model": "config.playlist",
+        "children": [
+          {
+            "type": "label",
+            "value": "Options"
+          },
+          {
+            "label": "Auto continue",
+            "helpnote": "Determine whether to continue to the next item automatically",
+            "type": "checkbox",
+            "initvalue": true,
+            "model": "config.playlist.options.autoContinue"
+          },
+          {
+            "label": "Loop",
+            "helpnote": "Determine whether to play the playlist in a loop. When is true the playlist will played automatically even autoContinue is false",
+            "type": "checkbox",
+            "model": "config.playlist.options.loop"
+          },
+          {
+            "type": "label",
+            "value": "Countdown"
+          },
+          {
+            "label": "Showing",
+            "helpnote": "Determines whether to show the countdown",
+            "type": "checkbox",
+            "initvalue": true,
+            "model": "config.playlist.countdown.showing"
+          },
+          {
+            "label": "Time to show",
+            "helpnote": "Shows when the countdown is scheduled to appear (by default, this is towards the end)",
+            "type": "float",
+            "filter": "nullableNumber",
+            "model": "config.playlist.countdown.timeToShow"
+          },
+          {
+            "label": "Duration",
+            "helpnote": "Shows for how long the countdown will appear",
+            "type": "float",
+            "filter": "nullableNumber",
+            "min": 0,
+            "initvalue": 10,
+            "model": "config.playlist.countdown.duration"
+          }
+        ]
       }
     ]
   },

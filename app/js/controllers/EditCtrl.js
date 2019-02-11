@@ -14,11 +14,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.isOvp = PlayerService.getPartnerType() === PlayerService.OVP;
 
-	$scope.setInitialConfig = function () {
-		$scope.playerData.config.playlist = $scope.playerData.config.playlist || {options: {}, countdown: {}};
-	};
-	$scope.setInitialConfig();
-
 		try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
@@ -270,13 +265,21 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    }
 		    $scope.addValidation(plugin);
 	    }
-	    if (plugin.model == "playlistAPI"){
+	    if (plugin.model === "config.playlist"){
 		    if (plugin.enabled) {
-			    $scope.entriesTypeSelector = "Entries";
-			    $scope.selectDefaultEntry($scope.userEntries);
+			    if ($scope.entriesTypeSelector !== "Entries") {
+				    $scope.entriesTypeSelector = "Entries";
+				    $scope.selectDefaultEntry($scope.userEntries);
+				    $scope.refreshPlayer();
+			    }
+			    delete $scope.playerData.config.playlist;
 		    }else{
-			    $scope.entriesTypeSelector = "Playlist";
-			    $scope.selectDefaultEntry($scope.userPlaylists);
+				if ($scope.entriesTypeSelector !== "Playlist") {
+				    $scope.entriesTypeSelector = "Playlist";
+				    $scope.selectDefaultEntry($scope.userPlaylists);
+				    $scope.refreshPlayer();
+			    }
+			    $scope.playerData.config.playlist = $scope.playerData.config.playlist || {options: {}, countdown: {}};
 		    }
 	    }
 
