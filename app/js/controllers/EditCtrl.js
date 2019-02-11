@@ -265,7 +265,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    }
 		    $scope.addValidation(plugin);
 	    }
-	    if (plugin.model === "config.playlist"){
+	    if (plugin.model === "playlist"){
 		    if (plugin.enabled) {
 			    if ($scope.entriesTypeSelector !== "Entries") {
 				    $scope.entriesTypeSelector = "Entries";
@@ -274,12 +274,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			    }
 			    delete $scope.playerData.config.playlist;
 		    }else{
-				if ($scope.entriesTypeSelector !== "Playlist") {
+			    $scope.playerData.config.playlist = $scope.playerData.config.playlist || {options: {}, countdown: {}};
+			    if ($scope.entriesTypeSelector !== "Playlist") {
 				    $scope.entriesTypeSelector = "Playlist";
 				    $scope.selectDefaultEntry($scope.userPlaylists);
-				    $scope.refreshPlayer();
+				    setTimeout($scope.refreshPlayer, 0);
 			    }
-			    $scope.playerData.config.playlist = $scope.playerData.config.playlist || {options: {}, countdown: {}};
 		    }
 	    }
 
