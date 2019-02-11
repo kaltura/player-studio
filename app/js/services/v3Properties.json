@@ -417,12 +417,11 @@
   {
     "label": "Playlist",
     "icon": "playlist",
-    "description": "",
+    "description": "Configure your playlists using the following options.",
     "type": "menu",
     "children": {
       "playlist": {
         "label": "Enable",
-        "description": "Configure your playlists using the following options.",
         "type": "featuremenu",
         "isOpen": true,
         "model": "config.playlist",
