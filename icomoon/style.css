@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?g1dk6k');
-  src:  url('fonts/icomoon.eot?g1dk6k#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.woff2?g1dk6k') format('woff2'),
-    url('fonts/icomoon.ttf?g1dk6k') format('truetype'),
-    url('fonts/icomoon.woff?g1dk6k') format('woff'),
-    url('fonts/icomoon.svg?g1dk6k#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?sqs3zr');
+  src:  url('fonts/icomoon.eot?sqs3zr#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.woff2?sqs3zr') format('woff2'),
+    url('fonts/icomoon.ttf?sqs3zr') format('truetype'),
+    url('fonts/icomoon.woff?sqs3zr') format('woff'),
+    url('fonts/icomoon.svg?sqs3zr#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -90,4 +90,10 @@
 }
 .icon-360:before {
   content: "\e615";
+}
+.icon-Chromecast:before {
+  content: "\e616";
+}
+.icon-playlist:before {
+  content: "\e617";
 }
