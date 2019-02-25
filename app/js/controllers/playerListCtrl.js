@@ -236,7 +236,6 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 				PlayerService.clonePlayer(item).then(function (data) {
 					// player finished duplicating - add it to the players list in memory in the first place (unshift the array)
 					$scope.data.unshift(data[1]);
-					PlayerService.OvpOrOtt = (typeof data[1].confVars === "string" && data[1].confVars.indexOf(PlayerService.KALTURA_PLAYER_OTT) > -1) ? PlayerService.OTT : PlayerService.OVP;
 					PlayerService.cachePlayers($scope.data); // update memory cache with the new player
 					$scope.goToEditPage(data[1]);
 				});

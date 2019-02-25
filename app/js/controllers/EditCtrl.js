@@ -12,11 +12,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
 
-	$scope.isOvp = PlayerService.getPartnerType() === PlayerService.OVP;
-
 		try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
+			PlayerService.OvpOrOtt = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
 			var playerName = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
 			var playerVersion = confVarsObj[playerName] === "{beta}" ? 'beta' : 'latest';
 			var autoUpdate = (confVarsObj[playerName] === "{beta}" || confVarsObj[playerName] === "{latest}");
@@ -36,6 +35,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	} catch (e) {
 		logTime(e);
 	}
+
+	$scope.isOvp = PlayerService.OvpOrOtt === PlayerService.OVP;
+
 		// auto preview flag
 	$scope.autoPreview = localStorageService.get('autoPreview') ? localStorageService.get('autoPreview')=='true' : false;
 	$scope.setAutoPreview = function(){
@@ -753,7 +755,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if ($scope.playerData.config.player.plugins.playlistAPI && $scope.playerData.config.player.plugins.playlistAPI.plugin){
 				$scope.addTags(['html5studio','playlist']); // set playlist tag
 			}else{
-				$scope.setTags(['kalturaPlayerJs','player', PlayerService.getPartnerType($scope.playerData)]); // set player tag
+				$scope.setTags(['kalturaPlayerJs','player', PlayerService.OvpOrOtt]); // set player tag
 			}
 			savePlayer();
 		}
