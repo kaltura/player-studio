@@ -145,19 +145,19 @@
         "label": "Support legacy HLS with Flash",
         "helpnote": "When using this option, if the platform doesn't support the media source extension or native HLS, we'll try to add Flash",
         "type": "checkbox",
-        "player-refresh": false,
         "model": "externals.playkit-flash.active",
         "componentName": "playkit-flash",
-        "kalturaPlayerMinVersion": "0.32.0"
+        "kalturaPlayerMinVersion": "0.32.0",
+        "resetKalturaPlayer": true
       },
       {
         "label": "Support Youtube playback",
         "helpnote": "When using this option, the player will support playing Youtube ingested content from the platform",
         "type": "checkbox",
-        "player-refresh": false,
         "model": "externals.playkit-youtube.active",
         "componentName": "playkit-youtube",
-        "kalturaPlayerMinVersion": "0.39.1"
+        "kalturaPlayerMinVersion": "0.39.1",
+        "resetKalturaPlayer": true
       }
     ]
   },
