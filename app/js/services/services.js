@@ -257,6 +257,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 				}
 			},
+			'switchToNewStructure': function (oldConfigStructure) {
+				var playerConfig = oldConfigStructure.player;
+				delete oldConfigStructure.player;
+				return angular.extend(oldConfigStructure, playerConfig)
+			},
+			'switchToOldStructure': function (playerConfig) {
+				playerConfig.player = playerConfig.player || {plugins: playerConfig.plugins, playback: playerConfig.playback};
+				delete playerConfig.plugins;
+				delete playerConfig.playback;
+			},
 			'validatePluginsSupport': function (playerData) {
 				for (var plugin in playerData.plugins) {
 					var pluginData = playerData.plugins[plugin];
@@ -490,6 +500,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				if (typeof player.config == 'string') {
 					player.config = angular.fromJson(player.config);
 				}
+				playersService.switchToOldStructure(player.config);
 				if (typeof player.config != 'undefined' && typeof player.config.player != 'undefined' && typeof player.config.player.plugins != 'undefined') {
 					player.config = playersService.addFeatureState(player.config); // preloaded data will get _featureEnabled
 				}
@@ -606,7 +617,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 				request['uiConf:confVars'] = JSON.stringify(playersService.getPlayerAndPluginsVersionObj(data));
 				playersService.removeUnsupportedPlugins(data, data2Save.player.plugins);
-				request['uiConf:config'] = JSON.stringify(data2Save, null, "\t");
+				var newStructure =  playersService.switchToNewStructure(data2Save);
+				request['uiConf:config'] = JSON.stringify(newStructure, null, "\t");
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
 					currentPlayer = {};
