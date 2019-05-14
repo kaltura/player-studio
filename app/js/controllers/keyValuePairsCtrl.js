@@ -2,8 +2,8 @@ KMCMenu.controller('keyValuePairsCtrl', ['$scope',
 	function ($scope) {
 		$scope.keyValuePairs = [];
 		// build key/value array
-		if ($scope.playerData.config.player.plugins && $scope.playerData.config.player.plugins[$scope.plugin.model]) {
-			var data = $scope.playerData.config.player.plugins[$scope.plugin.model];
+		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins[$scope.plugin.model]) {
+			var data = $scope.playerData.config.plugins[$scope.plugin.model];
 			for (var key in data){
 				if (key !== "plugin" && key !== "enabled" && key !== "keyValuePairs"){
 					$scope.keyValuePairs.push({"key":key ,"value": data[key]});
@@ -22,8 +22,8 @@ KMCMenu.controller('keyValuePairsCtrl', ['$scope',
 		};
 
 		$scope.updateKeyValueData = function(){
-			if ($scope.playerData.config.player.plugins && $scope.playerData.config.player.plugins[$scope.plugin.model]) {
-				var data = $scope.playerData.config.player.plugins[$scope.plugin.model];
+			if ($scope.playerData.config.plugins && $scope.playerData.config.plugins[$scope.plugin.model]) {
+				var data = $scope.playerData.config.plugins[$scope.plugin.model];
 				for (var prop in data){
 					if (prop !== "plugin" && prop !== "enabled"){
 						delete data[prop];

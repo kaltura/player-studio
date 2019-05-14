@@ -257,6 +257,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 				}
 			},
+			'switchToNewStructure': function (oldConfigStructure) {
+				var playerConfig = oldConfigStructure.player;
+				delete oldConfigStructure.player;
+				return angular.extend(oldConfigStructure, playerConfig)
+			},
 			'validatePluginsSupport': function (playerData) {
 				for (var plugin in playerData.plugins) {
 					var pluginData = playerData.plugins[plugin];
@@ -303,7 +308,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 					try {
 						var config = JSON.parse(playerConfig.jsonConfig);
-						playersService.removeUnsupportedPlugins(playerData, config.player.plugins);
+						playersService.removeUnsupportedPlugins(playerData, config.plugins);
 						config.targetId = playersService.PLAYER_ID;
 						Object.assign(config.provider, providerConfig);
 						if (window.__kalturaplayerdata) {
@@ -350,7 +355,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 
 				var getPluginsVersion = function () {
 					var pluginsVersion = '';
-					for (var plugin in playerData.config.player.plugins) {
+					for (var plugin in playerData.config.plugins) {
 						var pluginData = playerData.plugins[plugin];
 						if (pluginData && pluginData.componentName) {
 							pluginsVersion += (',' + pluginData.componentName + '=' + playersService.getComponentVersion(playerData, pluginData.componentName));
@@ -490,16 +495,19 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				if (typeof player.config == 'string') {
 					player.config = angular.fromJson(player.config);
 				}
-				if (typeof player.config != 'undefined' && typeof player.config.player != 'undefined' && typeof player.config.player.plugins != 'undefined') {
+				if (player.config.player) {
+					player.config = playersService.switchToNewStructure(player.config);
+				}
+				if (typeof player.config != 'undefined' && typeof player.config.plugins != 'undefined') {
 					player.config = playersService.addFeatureState(player.config); // preloaded data will get _featureEnabled
 				}
 				currentPlayer = player;
 			},
 			addFeatureState: function (data) {
-				angular.forEach(data.player.plugins, function (value, key) {
-					if ($.isArray(value)) data.player.plugins[key] = {};
-					if (angular.isObject(data.player.plugins[key]) && data.player.plugins[key].enabled !== false)
-						data.player.plugins[key].enabled = true;
+				angular.forEach(data.plugins, function (value, key) {
+					if ($.isArray(value)) data.plugins[key] = {};
+					if (angular.isObject(data.plugins[key]) && data.plugins[key].enabled !== false)
+						data.plugins[key].enabled = true;
 				});
 				return data;
 			},
@@ -569,17 +577,17 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'savePlayer': function (data) {
 				var deferred = $q.defer();
 				var data2Save = angular.copy(data.config);
-                data2Save.player.plugins = playersService.preparePluginsDataForRender(data2Save.player.plugins);
+                data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
                 if (data2Save.cast) {
                     data2Save.cast = playersService.preparePluginsDataForRender(data2Save.cast);
                 }
 				// remove preview playlist from data before saving
-				if (data2Save.player.plugins.playlistAPI) {
-					if (data2Save.player.plugins.playlistAPI.kpl0Id) {
-						delete data2Save.player.plugins.playlistAPI.kpl0Id;
+				if (data2Save.plugins.playlistAPI) {
+					if (data2Save.plugins.playlistAPI.kpl0Id) {
+						delete data2Save.plugins.playlistAPI.kpl0Id;
 					}
-					if (data2Save.player.plugins.playlistAPI.kpl0Name) {
-						delete data2Save.player.plugins.playlistAPI.kpl0Name;
+					if (data2Save.plugins.playlistAPI.kpl0Name) {
+						delete data2Save.plugins.playlistAPI.kpl0Name;
 					}
 				}
 				if (data2Save.enviornmentConfig) {
@@ -605,7 +613,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:description': data.description ? data.description : ''
 				};
 				request['uiConf:confVars'] = JSON.stringify(playersService.getPlayerAndPluginsVersionObj(data));
-				playersService.removeUnsupportedPlugins(data, data2Save.player.plugins);
+				playersService.removeUnsupportedPlugins(data, data2Save.plugins);
 				request['uiConf:config'] = JSON.stringify(data2Save, null, "\t");
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
@@ -685,10 +693,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				playersService.validatePluginsSupport(data);
 				for (var plugin in data.plugins) {
 					var pluginData = data.plugins[plugin] || {};
-					if (data.externals && data.config.player.plugins[plugin]) {
+					if (data.externals && data.config.plugins[plugin]) {
 						delete data.externals[pluginData.componentName];
 					}
-					if ((data.config.player.plugins[plugin] || data.config[plugin]) && pluginData.componentName) {
+					if ((data.config.plugins[plugin] || data.config[plugin]) && pluginData.componentName) {
 						playerAndPluginsVersionObj[pluginData.componentName] = playersService.getComponentVersion(data, pluginData.componentName);
 					}
 				}

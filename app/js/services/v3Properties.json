@@ -103,7 +103,7 @@
             "value": "explicit"
           }
         ],
-        "model": "config.player.playback.textLanguage",
+        "model": "config.playback.textLanguage",
         "filter": "defaultLanguage",
         "helpnote": "This is the default captions language. Off will not show captions at all. Auto will use the user set preferences from local storage, browser language, or the default language. Explicit requires entering a language code"
       },
@@ -120,25 +120,25 @@
         "type": "checkbox",
         "endline": "true",
         "filter": "preload",
-        "model": "config.player.playback.preload"
+        "model": "config.playback.preload"
       },
       {
         "label": "Autoplay",
         "helpnote": "Play the video automatically when the page loads",
         "type": "checkbox",
-        "model": "config.player.playback.autoplay"
+        "model": "config.playback.autoplay"
       },
       {
         "label": "Start Playback Muted",
         "helpnote": "When playback begins, start video in muted mode",
         "type": "checkbox",
-        "model": "config.player.playback.muted"
+        "model": "config.playback.muted"
       },
       {
         "label": "Fallback to Muted Autoplay",
         "helpnote": "Fall back to muted autoplay on browsers that block autoplay with sound",
         "type": "checkbox",
-        "model": "config.player.playback.allowMutedAutoPlay",
+        "model": "config.playback.allowMutedAutoPlay",
         "endline": "true"
       },
       {
@@ -171,14 +171,14 @@
         "label": "Youbora",
         "type": "featuremenu",
         "description": "A powerful intelligence analytics and optimization platform to deliver online TV-quality video experiences. For full options see <a href='http://developer.nicepeopleatwork.com/apidocs/js/$YB.data.Options.html' target='_blank'>Here</a>.<br>",
-        "model": "config.player.plugins.youbora",
+        "model": "config.plugins.youbora",
         "endline": "true",
         "componentName": "playkit-youbora",
         "children": [
           {
             "label": "Account code",
             "type": "text",
-            "model": "config.player.plugins.youbora.options",
+            "model": "config.plugins.youbora.options",
             "helpnote": "Enter your Youbora account ID",
             "filter": "accountCode"
           }
@@ -188,7 +188,7 @@
         "label": "Google Analytics",
         "type": "featuremenu",
         "description": "Supports sending player analytics events to Google. For full configuration options see <a href='https://github.com/kaltura/playkit-js-google-analytics/blob/master/docs/configuration.md' target='_blank'>Google Analytics config file</a>.<br>",
-        "model": "config.player.plugins.googleAnalytics",
+        "model": "config.plugins.googleAnalytics",
         "endline": "true",
         "componentName": "playkit-google-analytics",
         "kalturaPlayerMinVersion": "0.25.0",
@@ -196,7 +196,7 @@
           {
             "label": "Google tracking code",
             "type": "text",
-            "model": "config.player.plugins.googleAnalytics.trackingId",
+            "model": "config.plugins.googleAnalytics.trackingId",
             "helpnote": "The Google tracking code i.e. UA-30164991-1"
           }
         ]
@@ -205,26 +205,26 @@
         "label": "comScore",
         "type": "featuremenu",
         "description": "Integrates comScore Streaming Tag data collection.<br>Please contact your comScore account team for complete instructions for using these parameters, which will be tailored to the needs of the reporting product you aim to collect data for.",
-        "model": "config.player.plugins.comscore",
+        "model": "config.plugins.comscore",
         "endline": "true",
         "componentName": "playkit-comscore",
         "children": [
           {
             "label": "Publisher ID",
             "type": "text",
-            "model": "config.player.plugins.comscore.publisherId",
+            "model": "config.plugins.comscore.publisherId",
             "helpnote": "A comScore-provided number with at least 7 digits that is unique for each Publisher. The Publisher ID is also known as the 'Client ID' or 'c2' parameter value"
           },
           {
             "label": "Label Mapping",
             "type": "text",
-            "model": "config.player.plugins.comscore.labelMapping",
+            "model": "config.plugins.comscore.labelMapping",
             "helpnote": "A comma-separated list of 'name=source' pairs where the source values will be retrieved each time the player changes media and included in data transmissions from the plugin"
           },
           {
             "label": "Persistent Labels",
             "type": "text",
-            "model": "config.player.plugins.comscore.persistentLabels",
+            "model": "config.plugins.comscore.persistentLabels",
             "helpnote": "A comma-separated list of 'name=value' pairs which will be treated as static values and included in all data transmissions from the plugin"
           }
         ]
@@ -233,20 +233,20 @@
         "label": "IMA",
         "type": "featuremenu",
         "description": "The Google IMA SDK for HTML5 V3 allows developers to request and track VAST ads in a HTML5 video environment. For full APIs see: <br><a href='https://developers.google.com/interactive-media-ads/docs/sdks/html5/v3/apis' target='_blank'>Google IMA HTML5 SDK APIs</a>",
-        "model": "config.player.plugins.ima",
+        "model": "config.plugins.ima",
         "componentName": "playkit-ima",
         "children": [
           {
             "label": "Ad tag URL",
             "validation": "url",
             "type": "text",
-            "model": "config.player.plugins.ima.adTagUrl",
+            "model": "config.plugins.ima.adTagUrl",
             "helpnote": "Enter a URL for the advertising tag"
           },
           {
             "label": "Loading Timeout",
             "type": "number",
-            "model": "config.player.plugins.ima.adsRenderingSettings",
+            "model": "config.plugins.ima.adsRenderingSettings",
             "helpnote": "Set the timeout for loading ads (in milliseconds). If an ad can’t be loaded within this timeframe, load the video automatically",
             "min": 0,
             "initvalue": 5000,
@@ -255,7 +255,7 @@
           {
             "label": "HTML Companions",
             "type": "companions",
-            "model": "config.player.plugins.ima.companions.ads",
+            "model": "config.plugins.ima.companions.ads",
             "helpnote": "For each companion ad, specify the container Div ID and expected ad width/height",
             "filter": "companions",
             "initvalue": {
@@ -272,7 +272,7 @@
           {
             "label": "Size Criteria",
             "type": "sizeCriteria",
-            "model": "config.player.plugins.ima.companions.sizeCriteria",
+            "model": "config.plugins.ima.companions.sizeCriteria",
             "initvalue": "SELECT_EXACT_MATCH"
           }
         ]
@@ -306,14 +306,14 @@
         "description": "",
         "type": "featuremenu",
         "isOpen": true,
-        "model": "config.player.plugins.vr",
+        "model": "config.plugins.vr",
         "componentName": "playkit-vr",
         "kalturaPlayerMinVersion": "0.29.0",
         "children": [
           {
             "label": "Toggle Stereo",
             "type": "checkbox",
-            "model": "config.player.plugins.vr.toggleStereo",
+            "model": "config.plugins.vr.toggleStereo",
             "initvalue": true,
             "resetKalturaPlayer": true,
             "helpnote": "Whether to show the stereo toggle button (applicative to mobile devices)"
@@ -321,21 +321,21 @@
           {
             "label": "Start In Stereo Mode",
             "type": "checkbox",
-            "model": "config.player.plugins.vr.startInStereo",
+            "model": "config.plugins.vr.startInStereo",
             "helpnote": "Whether to start video with stereo mode"
           },
           {
             "label": "Move Multiplier",
             "type": "float",
             "initvalue": 0.15,
-            "model": "config.player.plugins.vr.moveMultiplier",
+            "model": "config.plugins.vr.moveMultiplier",
             "helpnote": "Defines the sensitivity of the mouse and touch movement"
           },
           {
             "label": "Device Motion Multiplier",
             "type": "float",
             "initvalue": 1,
-            "model": "config.player.plugins.vr.deviceMotionMultiplier",
+            "model": "config.plugins.vr.deviceMotionMultiplier",
             "helpnote": "Defines the sensitivity of the device motion",
             "endline": "true"
           },
@@ -349,7 +349,7 @@
             "type": "float",
             "initvalue": 75,
             "filter": "numberOnly",
-            "model": "config.player.plugins.vr.cameraOptions.fov"
+            "model": "config.plugins.vr.cameraOptions.fov"
           },
           {
             "label": "Camera frustum near plane",
@@ -357,7 +357,7 @@
             "type": "float",
             "initvalue": 0.1,
             "filter": "numberOnly",
-            "model": "config.player.plugins.vr.cameraOptions.near"
+            "model": "config.plugins.vr.cameraOptions.near"
           },
           {
             "label": "Camera frustum far plane",
@@ -365,7 +365,7 @@
             "type": "float",
             "initvalue": 1000,
             "filter": "numberOnly",
-            "model": "config.player.plugins.vr.cameraOptions.far"
+            "model": "config.plugins.vr.cameraOptions.far"
           }
         ]
       }

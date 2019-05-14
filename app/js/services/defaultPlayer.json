@@ -1,9 +1,7 @@
 {
   "disableUserCache": false,
-  "player" : {
-    "plugins": {},
-    "playback": {}
-  },
+  "plugins": {},
+  "playback": {},
   "provider": {
     "env": {}
   }
