@@ -260,7 +260,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'switchToNewStructure': function (oldConfigStructure) {
 				var playerConfig = oldConfigStructure.player;
 				delete oldConfigStructure.player;
-				return angular.extend(oldConfigStructure, playerConfig)
+				return angular.extend(oldConfigStructure, playerConfig);
 			},
 			'validatePluginsSupport': function (playerData) {
 				for (var plugin in playerData.plugins) {
