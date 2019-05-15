@@ -185,8 +185,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         }
 
 	    // add support for custom plugins
-	    for (var pl in $scope.playerData.config.player.plugins ){
-		    var custom_plugin = angular.copy($scope.playerData.config.player.plugins[pl]);
+	    for (var pl in $scope.playerData.config.plugins ){
+		    var custom_plugin = angular.copy($scope.playerData.config.plugins[pl]);
 		    if ( custom_plugin.custom ){
 			    delete custom_plugin.custom;
 			    delete custom_plugin.enabled;
@@ -260,7 +260,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (plugin.enabled){
 		    // since we are getting the event before the value is changed - enabled means that the plugin is going to be disabled - remove validation
 		    $scope.removeValidation(plugin);
-		    delete $scope.playerData.config.player.plugins[plugin.model]; // remove the plugin from the player data
+		    delete $scope.playerData.config.plugins[plugin.model]; // remove the plugin from the player data
 	    }else{
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
@@ -374,7 +374,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (property.resetKalturaPlayer){
 		    window.KalturaPlayer = null;
 	    }
-	    if (property.model === "playerVersion" || property.model === "config.player.playback.textLanguage"){ // handle player version and captions select
+	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage"){ // handle player version and captions select
 		    $scope.updatePlayerData(); // update the player data from the menu data
 	    }
 	    if (property.model === "languageKey"){ // handle captions input updated
@@ -489,8 +489,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.mergePlayerData = function(data){
 
 		// support multiple playlists
-		if ($scope.playerData.config.player.plugins && $scope.playerData.config.player.plugins.playlistAPI) {
-			var playlistData = $scope.playerData.config.player.plugins.playlistAPI;
+		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
+			var playlistData = $scope.playerData.config.plugins.playlistAPI;
 			var playlistMenuArr = data.lookAndFeel.children.playlistAPI.children;
 			var playlistIndex = 1;
 			while (playlistData["kpl" + playlistIndex + "Id"]) {
@@ -502,8 +502,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					}
 				}
 				if (!found) {
-					playlistMenuArr.push({"model": "config.player.plugins.playlistAPI.kpl" + playlistIndex + "Id", "type": "hiddenValue"});
-					playlistMenuArr.push({"model": "config.player.plugins.playlistAPI.kpl" + playlistIndex + "Name", "type": "hiddenValue"});
+					playlistMenuArr.push({"model": "config.plugins.playlistAPI.kpl" + playlistIndex + "Id", "type": "hiddenValue"});
+					playlistMenuArr.push({"model": "config.plugins.playlistAPI.kpl" + playlistIndex + "Name", "type": "hiddenValue"});
 				}
 				playlistIndex++;
 			}
@@ -519,7 +519,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
-						if ($scope.playerData.config[plug] || $scope.playerData.config.player.plugins[plug] || plug == "uiVars" || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
+						if ($scope.playerData.config[plug] || $scope.playerData.config.plugins[plug] || plug == "uiVars" || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
@@ -694,16 +694,16 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "accountCode") {
 			var youboraOptions = {};
-			if ($scope.playerData.config && $scope.playerData.config.player.plugins && $scope.playerData.config.player.plugins.youbora) {
-				youboraOptions = $scope.playerData.config.player.plugins.youbora.options || {};
+			if ($scope.playerData.config && $scope.playerData.config.plugins && $scope.playerData.config.plugins.youbora) {
+				youboraOptions = $scope.playerData.config.plugins.youbora.options || {};
 			}
 			youboraOptions.accountCode = data;
 			return youboraOptions;
 		}
 		if (filter == "loadVideoTimeout"){
 			var adsRenderingSettings = {};
-			if ($scope.playerData.config && $scope.playerData.config.player.plugins && $scope.playerData.config.player.plugins.ima) {
-				adsRenderingSettings = $scope.playerData.config.player.plugins.ima.adsRenderingSettings || {};
+			if ($scope.playerData.config && $scope.playerData.config.plugins && $scope.playerData.config.plugins.ima) {
+				adsRenderingSettings = $scope.playerData.config.plugins.ima.adsRenderingSettings || {};
 			}
 			adsRenderingSettings.loadVideoTimeout = Number(data);
 			return adsRenderingSettings;
@@ -752,7 +752,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.updatePlayerData();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
-			if ($scope.playerData.config.player.plugins.playlistAPI && $scope.playerData.config.player.plugins.playlistAPI.plugin){
+			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
 				$scope.addTags(['html5studio','playlist']); // set playlist tag
 			}else{
 				$scope.setTags(['kalturaPlayerJs','player', PlayerService.OvpOrOtt]); // set player tag
@@ -780,8 +780,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				for (var i = 0; i < plugins.length; i++) {
 					if (plugins[i].model === model) {
 						plugins[i].enabled = enabled; // update menu data so the plugin checkbox will update
-						if ($scope.playerData.config.player.plugins[model] && !enabled) {
-							delete $scope.playerData.config.player.plugins[model]; // remove plugin from player data if enabled=false
+						if ($scope.playerData.config.plugins[model] && !enabled) {
+							delete $scope.playerData.config.plugins[model]; // remove plugin from player data if enabled=false
 						}
 					}
 				}
@@ -850,7 +850,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						custom: true,
 						helpnote: "Configuration options",
 						label: "Configuration options",
-						model: "config.player.plugins." + model + ".config", // set config object to be edited by the json editor. Will be copied and removed when saving player data
+						model: "config.plugins." + model + ".config", // set config object to be edited by the json editor. Will be copied and removed when saving player data
 						type: "json"
 					}]
 				});
@@ -859,13 +859,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	};
 
 	$scope.updateCustomPlugins = function(plugin){
-		if ($scope.playerData.config.player.plugins[plugin] && $scope.playerData.config.player.plugins[plugin]["config"]){
-			var conf = $scope.playerData.config.player.plugins[plugin]["config"];
-			$scope.playerData.config.player.plugins[plugin] = {'enabled': true, 'custom': true, 'plugin': true}; // clear previous properties
+		if ($scope.playerData.config.plugins[plugin] && $scope.playerData.config.plugins[plugin]["config"]){
+			var conf = $scope.playerData.config.plugins[plugin]["config"];
+			$scope.playerData.config.plugins[plugin] = {'enabled': true, 'custom': true, 'plugin': true}; // clear previous properties
 			for (var prop in conf){ // copy properties from config object to the plugin root
-				$scope.playerData.config.player.plugins[plugin][prop] = conf[prop];
+				$scope.playerData.config.plugins[plugin][prop] = conf[prop];
 			}
-			delete $scope.playerData.config.player.plugins[plugin].config; // delete config object
+			delete $scope.playerData.config.plugins[plugin].config; // delete config object
 		}
 	};
 
