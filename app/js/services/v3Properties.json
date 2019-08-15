@@ -72,6 +72,46 @@
     ]
   },
   {
+    "label": "Look and Feel",
+    "icon": "TabLookandFeel",
+    "description": "Adjust the visual appearance of the player.",
+    "type": "menu",
+    "model": "config",
+    "children": {
+      "logo": {
+        "type": "featuremenu",
+        "description": "The Kaltura custom logo plugin.",
+        "label": "Logo",
+        "model": "config.ui.components.logo",
+        "children": [
+          {
+            "validation": "url",
+            "type": "text",
+            "label": "Logo image URL",
+            "model": "config.ui.components.logo.img",
+            "helpnote": "URL for custom control bar logo image."
+          },
+          {
+            "validation": "url",
+            "type": "text",
+            "label": "Logo link",
+            "model": "config.ui.components.logo.url",
+            "helpnote": "URL for the control bar logo to click through to.",
+            "initvalue": "http://www.kaltura.com"
+          },
+          {
+            "type": "text",
+            "label": "Title",
+            "model": "config.ui.components.logo.text",
+            "helpnote": "Title tooltip for the logo",
+            "initvalue": "Kaltura"
+          }
+        ],
+        "featureCheckbox": true
+      }
+    }
+  },
+  {
     "label": "Playback Options",
     "icon": "playback",
     "description": "Define playback settings.",
