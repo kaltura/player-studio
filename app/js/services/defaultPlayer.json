@@ -4,5 +4,8 @@
   "playback": {},
   "provider": {
     "env": {}
+  },
+  "ui": {
+    "components": {}
   }
 }
