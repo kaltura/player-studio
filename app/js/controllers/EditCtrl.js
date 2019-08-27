@@ -12,7 +12,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
 
-		try {
+	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
 			PlayerService.OvpOrOtt = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
@@ -289,6 +289,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
           $scope.toggleCastPlugins(plugin, this.category.plugins);
         }
 
+        if (this.category.label === "Look and Feel") {
+          $scope.toggleUiComponent(plugin);
+        }
+
 	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
@@ -323,6 +327,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				senderElement.classList.remove('disabled');
                 delete $scope.playerData.externals[plugin.componentName];
 			}
+		}
+	};
+
+	$scope.toggleUiComponent = function (uiComponent) {
+		if (uiComponent.enabled) {
+			// since we are getting the event before the value is changed - enabled means that the uiComponent is going to be disabled - remove from config
+			delete $scope.playerData.config.ui.components[uiComponent.model];
 		}
 	};
 
@@ -519,7 +530,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
-						if ($scope.playerData.config[plug] || $scope.playerData.config.plugins[plug] || plug == "uiVars" || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
+						if ($scope.playerData.config[plug] || $scope.playerData.config.plugins[plug] || $scope.playerData.config.ui.components[plug] || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
