@@ -579,6 +579,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				var data2Save = angular.copy(data.config);
                 data2Save.plugins = playersService.preparePluginsDataForRender(data2Save.plugins);
                 data2Save.ui.components = playersService.preparePluginsDataForRender(data2Save.ui.components);
+                ($.isEmptyObject(data2Save.ui.components)) && delete data2Save.ui;
                 if (data2Save.cast) {
                     data2Save.cast = playersService.preparePluginsDataForRender(data2Save.cast);
                 }
