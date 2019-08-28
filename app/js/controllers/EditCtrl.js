@@ -312,6 +312,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 delete $scope.playerData.externals[receiverPlugin.componentName];
 			} else {
 				receiverElement.classList.remove('disabled');
+				delete $scope.playerData.config.cast;
+				delete $scope.playerData.externals[plugin.componentName];
 			}
 		} else {
 			if (willActive) {
