@@ -611,6 +611,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.updatePlayerData = function(){
 		if(typeof $scope.playerData.config.ui !== "object"){
 			$scope.playerData.config.ui = {};
+		}
+		if(typeof $scope.playerData.config.ui.components !== "object"){
 			$scope.playerData.config.ui.components = {};
 		}
 		if ($scope.playerData.updateData === false) {
