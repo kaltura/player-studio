@@ -12,7 +12,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
 
-		try {
+	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
 			PlayerService.OvpOrOtt = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
@@ -134,7 +134,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         for (var cat in data){
             categoryIndex++;             // used for search indexing
             //$scope.templatesToLoad += 2; // for each category we load 2 templates: one for the icon and one for the data. currently removed to support IE8
-            var category = {'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon, properties:[]};
+            var category = {'id': data[cat].id, 'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon, properties:[]};
             var plugs = data[cat].children;
 
             var plugins = [];
@@ -285,8 +285,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    }
 	    }
 
-        if (this.category.label === "Cast") {
+        if (this.category.id === "cast") {
           $scope.toggleCastPlugins(plugin, this.category.plugins);
+        }
+
+        if (this.category.id === "lookandfeel") {
+          $scope.toggleUiComponent(plugin);
         }
 
 	    $scope.refreshNeeded = true;
@@ -325,6 +329,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				senderElement.classList.remove('disabled');
                 delete $scope.playerData.externals[plugin.componentName];
 			}
+		}
+	};
+
+	$scope.toggleUiComponent = function (uiComponent) {
+		if (uiComponent.enabled) {
+			// since we are getting the event before the value is changed - enabled means that the uiComponent is going to be disabled - remove from config
+			delete $scope.playerData.config.ui.components[uiComponent.model];
 		}
 	};
 
@@ -521,7 +532,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
-						if ($scope.playerData.config[plug] || $scope.playerData.config.plugins[plug] || plug == "uiVars" || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
+						if ($scope.playerData.config[plug] || $scope.playerData.config.plugins[plug] || ($scope.playerData.config.ui && $scope.playerData.config.ui.components && $scope.playerData.config.ui.components[plug]) || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
@@ -600,6 +611,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	};
 
 	$scope.updatePlayerData = function(){
+		if(typeof $scope.playerData.config.ui !== "object"){
+			$scope.playerData.config.ui = {};
+		}
+		if(typeof $scope.playerData.config.ui.components !== "object"){
+			$scope.playerData.config.ui.components = {};
+		}
 		if ($scope.playerData.updateData === false) {
 			return;
 		}
