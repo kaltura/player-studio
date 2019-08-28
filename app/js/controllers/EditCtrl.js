@@ -134,7 +134,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         for (var cat in data){
             categoryIndex++;             // used for search indexing
             //$scope.templatesToLoad += 2; // for each category we load 2 templates: one for the icon and one for the data. currently removed to support IE8
-            var category = {'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon, properties:[]};
+            var category = {'id': data[cat].id, 'label': data[cat].label, 'description': data[cat].description, 'icon': data[cat].icon, properties:[]};
             var plugs = data[cat].children;
 
             var plugins = [];
@@ -285,11 +285,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    }
 	    }
 
-        if (this.category.label === "Cast") {
+        if (this.category.id === "cast") {
           $scope.toggleCastPlugins(plugin, this.category.plugins);
         }
 
-        if (this.category.label === "Look and Feel") {
+        if (this.category.id === "lookandfeel") {
           $scope.toggleUiComponent(plugin);
         }
 

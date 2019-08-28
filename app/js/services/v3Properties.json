@@ -162,6 +162,7 @@
     ]
   },
   {
+    "id": "lookandfeel",
     "label": "Look and Feel",
     "icon": "TabLookandFeel",
     "description": "Adjust the visual appearance of the player.",
@@ -410,6 +411,7 @@
     }
   },
   {
+    "id": "cast",
     "label": "Cast",
     "icon": "Chromecast",
     "description": "Use this tab to enable cast capabilities and to specify whether this player should include the sender plugin or to defined as a receiver player.",
