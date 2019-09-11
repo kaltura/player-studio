@@ -319,22 +319,6 @@
     }
   },
   {
-    "label": "Offline Capabilities",
-    "icon": "nowifi",
-    "description": "",
-    "type": "menu",
-    "children": [
-      {
-        "label": "PWA",
-        "player-refresh": false,
-        "type": "checkbox",
-        "model": "externals.playkit-offline-manager.active",
-        "componentName": "playkit-offline-manager",
-        "kalturaPlayerMinVersion": "0.27.0"
-      }
-    ]
-  },
-  {
     "label": "360 & VR",
     "icon": "360",
     "description": "Play spherical 360 videos and immersive VR mode.",
