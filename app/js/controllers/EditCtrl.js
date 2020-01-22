@@ -15,17 +15,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
-			confVarsObj = confVarsObj.versions || confVarsObj;
-			PlayerService.OvpOrOtt = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
-			var playerName = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
-			var playerVersion = confVarsObj[playerName] === "{beta}" ? 'beta' : 'latest';
-			var autoUpdate = (confVarsObj[playerName] === "{beta}" || confVarsObj[playerName] === "{latest}");
+			var versionsObj = confVarsObj.versions || confVarsObj;
+			PlayerService.OvpOrOtt = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
+			var playerName = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
+			var playerVersion = versionsObj[playerName] === "{beta}" ? 'beta' : 'latest';
+			var autoUpdate = (versionsObj[playerName] === "{beta}" || versionsObj[playerName] === "{latest}");
 			$scope.playerData['playerVersion'] = playerVersion;
 			$scope.playerData['autoUpdate'] = autoUpdate;
-			for (var key in confVarsObj) {
-				if (confVarsObj[key] !== '{beta}' && confVarsObj[key] !== '{latest}') {
+			for (var key in versionsObj) {
+				if (versionsObj[key] !== '{beta}' && versionsObj[key] !== '{latest}') {
 					$scope.playerData.freezeVersions = $scope.playerData.freezeVersions || {};
-					$scope.playerData.freezeVersions[key] = confVarsObj[key];
+					$scope.playerData.freezeVersions[key] = versionsObj[key];
 				}
 				if (key !== playerName) {
 					$scope.playerData.externals = $scope.playerData.externals || {};
