@@ -15,6 +15,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
+			confVarsObj = confVarsObj.versions || confVarsObj;
 			PlayerService.OvpOrOtt = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
 			var playerName = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
 			var playerVersion = confVarsObj[playerName] === "{beta}" ? 'beta' : 'latest';
