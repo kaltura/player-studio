@@ -15,7 +15,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
-			$scope.playerData['playerLangs'] = confVarsObj.langs || [];
+			$scope.playerData['playerLangCodes'] = confVarsObj.langs || [];
 			var versionsObj = confVarsObj.versions || confVarsObj;
 			PlayerService.OvpOrOtt = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
 			var playerName = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
@@ -295,6 +295,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
           $scope.toggleUiComponent(plugin);
         }
 
+        if (plugin.model === "translation") {
+          $scope.propertyChanged(plugin.properties[0]);
+        }
+
 	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
@@ -336,8 +340,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.toggleUiComponent = function (uiComponent) {
 		if (uiComponent.enabled) {
-			// since we are getting the event before the value is changed - enabled means that the uiComponent is going to be disabled - remove from config
-			delete $scope.playerData.config.ui.components[uiComponent.model];
+			try {
+				// since we are getting the event before the value is changed - enabled means that the uiComponent is going to be disabled - remove from config
+				delete $scope.playerData.config.ui.components[uiComponent.model];
+			} catch (e) {}
 		}
 	};
 
@@ -385,6 +391,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
     // handle refresh
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
+    $scope.selectDefault = function(property){
+		if (!property.initvalue) {
+			try {
+				property.initvalue = $scope.playerData[property.options][0].value;
+			} catch (e) {}
+	    }
+    };
+
     $scope.propertyChanged = function(property, checkAutoRefresh){
 	    if (property.resetKalturaPlayer){
 		    window.KalturaPlayer = null;
@@ -394,6 +408,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
 	    if (property.model === "languageKey"){ // handle captions input updated
 		    $scope.playerData.languageKey = property.initvalue;
+	    }
+	    if (property.model === "playerLangCodes"){
+		    $scope.playerData.playerLangCodes = property.initvalue || [];
+		    $scope.playerData.playerLang = $.map($scope.playerData.playerLangCodes, function(lang) {
+				return $.grep(property.options, function (langObj) {
+				   return langObj.value === lang;
+			    })[0];
+		    });
 	    }
 	    if (property.componentName){ // handle external bundles
 		    $scope.playerData.externals = $scope.playerData.externals || {};
@@ -737,6 +759,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "nullableNumber"){
 			return data ? Number(data) : undefined;
+		}
+		if (filter == "array"){
+			return data || [];
 		}
 		return data;
 	};

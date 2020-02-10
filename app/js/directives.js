@@ -44,6 +44,7 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 						var importPluginBtn = $compile(angular.element('<p style="float: left; margin-right: 20px"><button ng-click="importPlugin()" class="btn btn-default importPlugin"><i class="glyphicon glyphicon-import">&nbsp;</i>Import Plugin</button></p>'))(scope);
 						$(".addPlugin").after(importPluginBtn);
 					}
+					$('div.select2-container-multi').parent().after('<div class="multiSelectSpace"></div>');
 				},50);
 				$timeout(function(){
 					$(".numeric").not(".allowNegative").numeric({allowMinus: false, allowDecSep: false}); // set integer number fields to accept only numbers

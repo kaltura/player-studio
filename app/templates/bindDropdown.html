@@ -1,8 +1,13 @@
 <div class="text dropdownContainer">
 	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
-	<select ng-multiple="{{property.multiple}}" ng-disabled="plugin!=null && !plugin.enabled" ng-change="propertyChanged(property, true)" ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}" ng-model="property.initvalue" class="dropdown">
-		<option value="{{item.value}}" ng-repeat="item in property.options">
+	<select ng-multiple="{{property.multiple}}"
+			ng-disabled="plugin!=null && !plugin.enabled"
+			ng-change="propertyChanged(property, true)"
+			ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}"
+			ng-model="property.initvalue"
+			class="dropdown">
+		<option value="{{item.value}}" ng-repeat="item in playerData[property.options]" ng-selected="selectDefault(property)">
 			{{item.label}}
 		</option>
 	</select>

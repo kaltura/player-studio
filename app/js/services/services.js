@@ -619,7 +619,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:width': data.width,
 					'uiConf:description': data.description ? data.description : ''
 				};
-				request['uiConf:confVars'] = JSON.stringify({versions: playersService.getPlayerAndPluginsVersionObj(data), langs: data.playerLangs});
+				request['uiConf:confVars'] = JSON.stringify({versions: playersService.getPlayerAndPluginsVersionObj(data), langs: data.playerLangCodes});
 				playersService.removeUnsupportedPlugins(data, data2Save.plugins);
 				request['uiConf:config'] = JSON.stringify(data2Save, null, "\t");
 				apiService.doRequest(request).then(function (result) {
