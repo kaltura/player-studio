@@ -422,7 +422,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						'uiConf:version': '161',
 						'uiConf:name': 'New Player',
 						'uiConf:tags': 'kalturaPlayerJs,player,' + playersService.getPartnerType(),
-						'uiConf:confVars': '{"versions":{"' + playersService.getPlayerBundle() + '":"{latest}"}, "langs": []}',
+						'uiConf:confVars': '{"versions":{"' + playersService.getPlayerBundle() + '":"{latest}"}, "langs": ["en"]}',
 						'uiConf:creationMode': 2,
 						'uiConf:config': angular.toJson(data, true)
 					};

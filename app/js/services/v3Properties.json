@@ -199,8 +199,8 @@
       },
       "translation": {
         "type": "featuremenu",
-        "description": "LANGS",
-        "label": "Internationalization",
+        "description": "",
+        "label": "Localization",
         "children": [
           {
             "label": "Select Languages",
@@ -255,6 +255,7 @@
             "label": "Default Language",
             "type": "bindDropdown",
             "model": "config.ui.locale",
+            "filter": "noEmpty",
             "options": "playerLang"
           }
         ]
