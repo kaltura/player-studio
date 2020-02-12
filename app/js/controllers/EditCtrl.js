@@ -11,6 +11,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
+	$scope.playerLangCodesChanged = false;
 
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
@@ -417,6 +418,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			    })[0];
 		    });
 	    }
+	    if (property.model === "config.ui.locale" && $scope.playerLangCodesChanged){
+		    $scope.playerLangCodesChanged = false;
+		    window.KalturaPlayer = null;
+	    }
+
 	    if (property.componentName){ // handle external bundles
 		    $scope.playerData.externals = $scope.playerData.externals || {};
 		    $scope.playerData.externals[property.componentName] = {

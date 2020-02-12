@@ -203,7 +203,7 @@
         "label": "Localization",
         "children": [
           {
-            "label": "Select Languages",
+            "label": "Language Selection",
             "type": "dropdown",
             "options": [
               {

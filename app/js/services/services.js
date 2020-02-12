@@ -301,7 +301,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 				var loadMedia = function () {
 					var providerConfig = {
-						partnerId: partner_id
+						partnerId: partner_id,
+						uiConfId: playerData.id
 					};
 					if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.ks) {
 						providerConfig['ks'] = window.parent.kmc.vars.ks;
@@ -387,7 +388,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 
 				var loadScript = function (env) {
-					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion(), callback);
+					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion() + '/langs/' + playerData.playerLangCodes.toString(), callback);
 				};
 
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.host) {
