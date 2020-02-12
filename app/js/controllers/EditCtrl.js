@@ -11,20 +11,23 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
+	$scope.playerLangCodesChanged = false;
 
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
-			PlayerService.OvpOrOtt = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
-			var playerName = confVarsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
-			var playerVersion = confVarsObj[playerName] === "{beta}" ? 'beta' : 'latest';
-			var autoUpdate = (confVarsObj[playerName] === "{beta}" || confVarsObj[playerName] === "{latest}");
+			$scope.playerData['playerLangCodes'] = confVarsObj.langs || ['en'];
+			var versionsObj = confVarsObj.versions || confVarsObj;
+			PlayerService.OvpOrOtt = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
+			var playerName = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
+			var playerVersion = versionsObj[playerName] === "{beta}" ? 'beta' : 'latest';
+			var autoUpdate = (versionsObj[playerName] === "{beta}" || versionsObj[playerName] === "{latest}");
 			$scope.playerData['playerVersion'] = playerVersion;
 			$scope.playerData['autoUpdate'] = autoUpdate;
-			for (var key in confVarsObj) {
-				if (confVarsObj[key] !== '{beta}' && confVarsObj[key] !== '{latest}') {
+			for (var key in versionsObj) {
+				if (versionsObj[key] !== '{beta}' && versionsObj[key] !== '{latest}') {
 					$scope.playerData.freezeVersions = $scope.playerData.freezeVersions || {};
-					$scope.playerData.freezeVersions[key] = confVarsObj[key];
+					$scope.playerData.freezeVersions[key] = versionsObj[key];
 				}
 				if (key !== playerName) {
 					$scope.playerData.externals = $scope.playerData.externals || {};
@@ -293,6 +296,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
           $scope.toggleUiComponent(plugin);
         }
 
+        if (plugin.model === "translation") {
+          $scope.propertyChanged(plugin.properties[0]);
+        }
+
 	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
@@ -334,8 +341,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.toggleUiComponent = function (uiComponent) {
 		if (uiComponent.enabled) {
-			// since we are getting the event before the value is changed - enabled means that the uiComponent is going to be disabled - remove from config
-			delete $scope.playerData.config.ui.components[uiComponent.model];
+			try {
+				// since we are getting the event before the value is changed - enabled means that the uiComponent is going to be disabled - remove from config
+				delete $scope.playerData.config.ui.components[uiComponent.model];
+			} catch (e) {}
 		}
 	};
 
@@ -383,6 +392,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
     // handle refresh
 	$scope.lastRefreshID = ''; // used to prevent refresh on blur after refresh on enter
+    $scope.selectDefault = function(property){
+		if (!property.initvalue) {
+			try {
+				property.initvalue = $scope.playerData[property.options][0].value;
+			} catch (e) {}
+	    }
+    };
+
     $scope.propertyChanged = function(property, checkAutoRefresh){
 	    if (property.resetKalturaPlayer){
 		    window.KalturaPlayer = null;
@@ -393,6 +410,20 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (property.model === "languageKey"){ // handle captions input updated
 		    $scope.playerData.languageKey = property.initvalue;
 	    }
+	    if (property.model === "playerLangCodes"){
+		    $scope.playerLangCodesChanged = true;
+		    $scope.playerData.playerLangCodes = property.initvalue || [];
+		    $scope.playerData.playerLang = $.map($scope.playerData.playerLangCodes, function(lang) {
+				return $.grep(property.options, function (langObj) {
+				   return langObj.value === lang;
+			    })[0];
+		    });
+	    }
+	    if (property.model === "config.ui.locale" && $scope.playerLangCodesChanged){
+		    $scope.playerLangCodesChanged = false;
+		    window.KalturaPlayer = null;
+	    }
+
 	    if (property.componentName){ // handle external bundles
 		    $scope.playerData.externals = $scope.playerData.externals || {};
 		    $scope.playerData.externals[property.componentName] = {
@@ -735,6 +766,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "nullableNumber"){
 			return data ? Number(data) : undefined;
+		}
+		if (filter == "array"){
+			return data || [];
 		}
 		return data;
 	};

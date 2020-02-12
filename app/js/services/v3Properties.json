@@ -195,8 +195,70 @@
             "model": "config.ui.components.logo.text",
             "helpnote": "Title tooltip for the logo"
           }
-        ],
-        "featureCheckbox": true
+        ]
+      },
+      "translation": {
+        "type": "featuremenu",
+        "description": "",
+        "label": "Localization",
+        "children": [
+          {
+            "label": "Language Selection",
+            "type": "dropdown",
+            "options": [
+              {
+                "label": "English",
+                "value": "en"
+              },
+              {
+                "label": "German",
+                "value": "de"
+              },
+              {
+                "label": "French",
+                "value": "fr"
+              },
+              {
+                "label": "Spanish",
+                "value": "es"
+              },
+              {
+                "label": "Dutch",
+                "value": "nl"
+              },
+              {
+                "label": "Russian",
+                "value": "ru"
+              },
+              {
+                "label": "Portuguese",
+                "value": "pt"
+              },
+              {
+                "label": "Japanese",
+                "value": "ja"
+              },
+              {
+                "label": "Chinese (Simplified)",
+                "value": "zh-hans"
+              },
+              {
+                "label": "Chinese (Traditional)",
+                "value": "zh-hant"
+              }
+            ],
+            "model": "playerLangCodes",
+            "filter": "array",
+            "multiple": true
+          },
+          {
+            "label": "Default Language",
+            "type": "bindDropdown",
+            "model": "config.ui.locale",
+            "filter": "noEmpty",
+            "options": "playerLang"
+          }
+        ]
       }
     }
   },
@@ -419,7 +481,7 @@
             "model": "config.cast.advertising.vast",
             "type": "checkbox",
             "filter": "advertising",
-            "initValue": false,
+            "initvalue": false,
             "helpnote": "By default, the receiver application uses VMAP ads; check this box to use VAST instead"
           }
         ]

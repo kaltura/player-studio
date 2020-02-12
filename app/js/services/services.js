@@ -301,7 +301,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 				var loadMedia = function () {
 					var providerConfig = {
-						partnerId: partner_id
+						partnerId: partner_id,
+						uiConfId: playerData.id
 					};
 					if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.ks) {
 						providerConfig['ks'] = window.parent.kmc.vars.ks;
@@ -387,7 +388,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 
 				var loadScript = function (env) {
-					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion(), callback);
+					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion() + '/langs/' + playerData.playerLangCodes.toString(), callback);
 				};
 
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.host) {
@@ -422,7 +423,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						'uiConf:version': '161',
 						'uiConf:name': 'New Player',
 						'uiConf:tags': 'kalturaPlayerJs,player,' + playersService.getPartnerType(),
-						'uiConf:confVars': '{"' + playersService.getPlayerBundle() + '":"{latest}"}',
+						'uiConf:confVars': '{"versions":{"' + playersService.getPlayerBundle() + '":"{latest}"}, "langs": ["en"]}',
 						'uiConf:creationMode': 2,
 						'uiConf:config': angular.toJson(data, true)
 					};
@@ -619,7 +620,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:width': data.width,
 					'uiConf:description': data.description ? data.description : ''
 				};
-				request['uiConf:confVars'] = JSON.stringify(playersService.getPlayerAndPluginsVersionObj(data));
+				request['uiConf:confVars'] = JSON.stringify({versions: playersService.getPlayerAndPluginsVersionObj(data), langs: data.playerLangCodes});
 				playersService.removeUnsupportedPlugins(data, data2Save.plugins);
 				request['uiConf:config'] = JSON.stringify(data2Save, null, "\t");
 				apiService.doRequest(request).then(function (result) {
