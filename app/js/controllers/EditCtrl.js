@@ -411,6 +411,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    $scope.playerData.languageKey = property.initvalue;
 	    }
 	    if (property.model === "playerLangCodes"){
+		    $scope.playerLangCodesChanged = true;
 		    $scope.playerData.playerLangCodes = property.initvalue || [];
 		    $scope.playerData.playerLang = $.map($scope.playerData.playerLangCodes, function(lang) {
 				return $.grep(property.options, function (langObj) {
