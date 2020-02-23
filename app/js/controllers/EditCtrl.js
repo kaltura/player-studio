@@ -149,7 +149,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 }else{ // plugin
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName, 'kalturaPlayerMinVersion': p.kalturaPlayerMinVersion};
+	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': !!p.checkable, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName, 'kalturaPlayerMinVersion': p.kalturaPlayerMinVersion};
 	                plugin.properties = [];
 	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
@@ -257,6 +257,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         }
     });
 
+	$scope.onPluginInit = function(plugin){
+		if (plugin.model === "translation") {
+			$scope.propertyChanged(plugin.properties[0]);
+		}
+	};
+
     // toggle plugin enable / disable
     $scope.togglePlugin = function(plugin, $event){
         $event.stopPropagation();
@@ -294,10 +300,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
         if (this.category.id === "lookandfeel") {
           $scope.toggleUiComponent(plugin);
-        }
-
-        if (plugin.model === "translation") {
-          $scope.propertyChanged(plugin.properties[0]);
         }
 
 	    $scope.refreshNeeded = true;
@@ -563,7 +565,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
-						if ($scope.playerData.config[plug] || $scope.playerData.config.plugins[plug] || ($scope.playerData.config.ui && $scope.playerData.config.ui.components && $scope.playerData.config.ui.components[plug]) || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
+						if (properties[plug].enabled || $scope.playerData.config[plug] || $scope.playerData.config.plugins[plug] || ($scope.playerData.config.ui && $scope.playerData.config.ui.components && $scope.playerData.config.ui.components[plug]) || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
