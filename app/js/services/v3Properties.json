@@ -199,11 +199,15 @@
       },
       "translation": {
         "type": "featuremenu",
-        "description": "",
+        "description": "Player language selection",
+        "checkable": false,
+        "enabled": true,
+        "isOpen": true,
         "label": "Localization",
         "children": [
           {
-            "label": "Language Selection",
+            "label": "Languages",
+            "helpnote": "Select all languages to be bundled with the player",
             "type": "dropdown",
             "options": [
               {
@@ -253,6 +257,7 @@
           },
           {
             "label": "Default Language",
+            "helpnote": "Select the default language for the player",
             "type": "bindDropdown",
             "model": "config.ui.locale",
             "filter": "noEmpty",
