@@ -227,6 +227,10 @@
                 "value": "es"
               },
               {
+                "label": "Italian",
+                "value": "it"
+              },
+              {
                 "label": "Dutch",
                 "value": "nl"
               },
@@ -235,8 +239,8 @@
                 "value": "ru"
               },
               {
-                "label": "Portuguese",
-                "value": "pt"
+                "label": "Portuguese (Brazilian)",
+                "value": "pt_br"
               },
               {
                 "label": "Japanese",
@@ -244,11 +248,19 @@
               },
               {
                 "label": "Chinese (Simplified)",
-                "value": "zh-hans"
+                "value": "zh_cn"
               },
               {
                 "label": "Chinese (Traditional)",
-                "value": "zh-hant"
+                "value": "zh_tw"
+              },
+              {
+                "label": "Hindi",
+                "value": "hi_in"
+              },
+              {
+                "label": "Arabic",
+                "value": "ar"
               }
             ],
             "model": "playerLangCodes",
