@@ -388,7 +388,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 
 				var loadScript = function (env) {
-					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion() + '/langs/' + playerData.playerLangCodes.toString(), callback);
+					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion() + '/langs/' + (playerData.playerLangCodes.toString() || 'en'), callback);
 				};
 
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.host) {
