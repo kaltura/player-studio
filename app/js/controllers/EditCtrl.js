@@ -414,6 +414,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
 	    if (property.model === "playerLangCodes"){
 		    $scope.playerLangCodesChanged = true;
+		    if ($scope.playerData.playerLangCodes.length === 0 && property.initvalue[0] !== 'en') {
+		    	// move from empty (english by default) to non-english
+			    window.KalturaPlayer = null;
+		    }
 		    $scope.playerData.playerLangCodes = property.initvalue || [];
 		    $scope.playerData.playerLang = $.map($scope.playerData.playerLangCodes, function(lang) {
 				return $.grep(property.options, function (langObj) {
