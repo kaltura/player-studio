@@ -208,6 +208,7 @@
           {
             "label": "Languages",
             "helpnote": "Select all languages to be bundled with the player",
+            "player-refresh": false,
             "type": "dropdown",
             "options": [
               {
