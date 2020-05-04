@@ -16,7 +16,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
 		if (confVarsObj) {
-			$scope.playerData['playerLangCodes'] = $.unique(confVarsObj.langs) || ['en'];
+			$scope.playerData['playerLangCodes'] = confVarsObj.langs || ['en'];
+			$scope.playerData.playerLangCodes = $.grep($scope.playerData.playerLangCodes, function (lang, inx) {
+				//remove duplications
+				return $scope.playerData.playerLangCodes.indexOf(lang) === inx;
+			});
 			var versionsObj = confVarsObj.versions || confVarsObj;
 			PlayerService.OvpOrOtt = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.OVP : PlayerService.OTT;
 			var playerName = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
