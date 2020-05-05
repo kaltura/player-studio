@@ -512,6 +512,26 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
     };
 
+    $scope.getAllLangCodes = function () {
+    	try {
+    		var lookAndFeelCategory = $.grep($scope.menuData, function (category) {
+    			return category.id === 'lookandfeel';
+		    })[0];
+    		var lookAndFeelPlugins = lookAndFeelCategory['plugins'] || lookAndFeelCategory['pluginsNotLoaded'];
+		    var localizationPlugin = $.grep(lookAndFeelPlugins, function (plugin) {
+			    return plugin.label === 'Localization';
+		    })[0];
+		    var languagesComponent = $.grep(localizationPlugin.properties, function (property) {
+			    return property.label === 'Languages';
+		    })[0];
+    		return $.map(languagesComponent.options, function(lang) {
+    			return lang.value;
+		    });
+	    } catch (e) {
+		    return '';
+	    }
+    };
+
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
@@ -533,7 +553,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		requestNotificationChannel.requestStarted('edit'); // show spinner
 		PlayerService.renderPlayer($scope.playerData, flashvars, entryID, function () {
 			requestNotificationChannel.requestEnded('edit'); // hide spinner
-		}, $scope.entriesTypeSelector === "Playlist");
+		}, $scope.entriesTypeSelector === "Playlist", $scope.getAllLangCodes());
 	};
 
 	// merge the player data with the menu data

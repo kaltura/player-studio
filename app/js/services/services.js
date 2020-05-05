@@ -225,7 +225,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			KALTURA_PLAYER_OTT: 'kaltura-tv-player',
 			OVP: 'ovp',
 			OTT: 'ott',
-			PLAYER_LANGS: 'en,de,fr,es,it,nl,ru,pt_br,ja,zh_cn,zh_tw,hi_in,ar',
 			playerVersionsMap: null,
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
@@ -290,7 +289,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				}
 				return true;
 			},
-			'renderPlayer': function (playerData, playerConfig, entry_id, callback, isPlaylist) {
+			'renderPlayer': function (playerData, playerConfig, entry_id, callback, isPlaylist, allLangCodes) {
 				var partner_id = playerData.partnerId;
 				var forceTouchUI = playerData.forceTouchUI;
 				var loadPlayer = function () {
@@ -341,9 +340,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					} else {
 						callback();
 					}
-				});
+				}, allLangCodes);
 			},
-			'loadKalturaPlayerScript': function (playerData, callback) {
+			'loadKalturaPlayerScript': function (playerData, callback, allLangCodes) {
 				if (window.KalturaPlayer) {
 					callback();
 					return;
@@ -389,7 +388,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 
 				var loadScript = function (env) {
-					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion() + '/langs/' + playersService.PLAYER_LANGS, callback);
+					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion() + '/langs/' + allLangCodes, callback);
 				};
 
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.host) {
