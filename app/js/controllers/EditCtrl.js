@@ -513,20 +513,20 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     };
 
     $scope.getAllLangCodes = function () {
-    	try {
-    		var lookAndFeelCategory = $.grep($scope.menuData, function (category) {
-    			return category.id === 'lookandfeel';
-		    })[0];
-    		var lookAndFeelPlugins = lookAndFeelCategory['plugins'] || lookAndFeelCategory['pluginsNotLoaded'];
-		    var localizationPlugin = $.grep(lookAndFeelPlugins, function (plugin) {
+		try {
+			var lookAndFeelCategory = $.grep($scope.menuData, function (category) {
+			    return category.id === 'lookandfeel';
+			})[0];
+			var lookAndFeelPlugins = lookAndFeelCategory['plugins'] || lookAndFeelCategory['pluginsNotLoaded'];
+			var localizationPlugin = $.grep(lookAndFeelPlugins, function (plugin) {
 			    return plugin.label === 'Localization';
-		    })[0];
-		    var languagesComponent = $.grep(localizationPlugin.properties, function (property) {
+			})[0];
+			var languagesComponent = $.grep(localizationPlugin.properties, function (property) {
 			    return property.label === 'Languages';
-		    })[0];
-    		return $.map(languagesComponent.options, function(lang) {
-    			return lang.value;
-		    });
+			})[0];
+			return $.map(languagesComponent.options, function(lang) {
+			    return lang.value;
+			});
 	    } catch (e) {
 		    return '';
 	    }
