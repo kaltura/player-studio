@@ -289,7 +289,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				}
 				return true;
 			},
-			'renderPlayer': function (playerData, playerConfig, entry_id, callback, isPlaylist) {
+			'renderPlayer': function (playerData, playerConfig, entry_id, callback, isPlaylist, allLangCodes) {
 				var partner_id = playerData.partnerId;
 				var forceTouchUI = playerData.forceTouchUI;
 				var loadPlayer = function () {
@@ -340,9 +340,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					} else {
 						callback();
 					}
-				});
+				}, allLangCodes);
 			},
-			'loadKalturaPlayerScript': function (playerData, callback) {
+			'loadKalturaPlayerScript': function (playerData, callback, allLangCodes) {
 				if (window.KalturaPlayer) {
 					callback();
 					return;
@@ -388,7 +388,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				};
 
 				var loadScript = function (env) {
-					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion() + '/langs/' + (playerData.playerLangCodes.toString() || 'en'), callback);
+					require('//' + env + '/p/' + partner_id + '/embedPlaykitJs/uiconf_id/' + uiconf_id + '/versions/' + playerVersionParam + getPluginsVersion() + '/langs/' + allLangCodes, callback);
 				};
 
 				if (window.parent.kmc && window.parent.kmc.vars && window.parent.kmc.vars.host) {

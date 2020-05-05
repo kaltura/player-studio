@@ -11,7 +11,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
-	$scope.playerLangCodesChanged = false;
 
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
@@ -417,11 +416,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    $scope.playerData.languageKey = property.initvalue;
 	    }
 	    if (property.model === "playerLangCodes"){
-		    $scope.playerLangCodesChanged = true;
-		    if ($scope.playerData.playerLangCodes.length === 0 && property.initvalue[0] !== 'en') {
-				// move from empty (english by default) to non-english
-			    window.KalturaPlayer = null;
-		    }
 		    $scope.playerData.playerLangCodes = property.initvalue || [];
 		    $scope.playerData.playerLang = $.map($scope.playerData.playerLangCodes, function(lang) {
 				return $.grep(property.options, function (langObj) {
@@ -429,9 +423,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			    })[0];
 		    });
 	    }
-	    if (property.model === "config.ui.locale" && $scope.playerLangCodesChanged){
-		    $scope.playerLangCodesChanged = false;
-		    window.KalturaPlayer = null;
+	    if (property.model === "config.ui.locale" && !property.initvalue) {
+			if ($scope.playerData.playerLangCodes.length === 0) {
+			    property.initvalue = 'en';
+		    } else {
+			    property.initvalue = $scope.playerData.playerLangCodes[0];
+		    }
 	    }
 
 	    if (property.componentName){ // handle external bundles
@@ -515,6 +512,26 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }
     };
 
+    $scope.getAllLangCodes = function () {
+    	try {
+    		var lookAndFeelCategory = $.grep($scope.menuData, function (category) {
+    			return category.id === 'lookandfeel';
+		    })[0];
+    		var lookAndFeelPlugins = lookAndFeelCategory['plugins'] || lookAndFeelCategory['pluginsNotLoaded'];
+		    var localizationPlugin = $.grep(lookAndFeelPlugins, function (plugin) {
+			    return plugin.label === 'Localization';
+		    })[0];
+		    var languagesComponent = $.grep(localizationPlugin.properties, function (property) {
+			    return property.label === 'Languages';
+		    })[0];
+    		return $.map(languagesComponent.options, function(lang) {
+    			return lang.value;
+		    });
+	    } catch (e) {
+		    return '';
+	    }
+    };
+
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
@@ -536,7 +553,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		requestNotificationChannel.requestStarted('edit'); // show spinner
 		PlayerService.renderPlayer($scope.playerData, flashvars, entryID, function () {
 			requestNotificationChannel.requestEnded('edit'); // hide spinner
-		}, $scope.entriesTypeSelector === "Playlist");
+		}, $scope.entriesTypeSelector === "Playlist", $scope.getAllLangCodes());
 	};
 
 	// merge the player data with the menu data
