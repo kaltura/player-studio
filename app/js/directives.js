@@ -28,7 +28,7 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 						$('div:contains("Youbora").panel').before('<div class="tabSubHeader Analytics">Analytics</div><p class="categoryDesc">Kaltura supports robust analytics via the Kaltura platform as well as via 3rd party analytics providers.</p>'); // add Analytics separator
 					}
 					if ($(".Monetization").length === 0){
-						$('div:contains("IMA").panel').before('<div class="tabSubHeader Monetization">Monetization</div><p class="categoryDesc">Content monetization settings.</p>'); // add Monetization separator
+						$('div:contains("IMA").panel:first').before('<div class="tabSubHeader Monetization">Monetization</div><p class="categoryDesc">Content monetization settings.</p>'); // add Monetization separator
 					}
 					if ($(".pwa").length === 0){
 						$('div:contains("PWA").checkbox').after('<div class="pwa"></div><p class="categoryDesc">Progressive Web App (PWA) capability allows to download content and play it offline, on the browser itself.<br>More information and documentation can be found <a href="https://github.com/kaltura/playkit-js-offline-manager#playkit-js-offline-manager" target="_blank">here</a>.</p>'); // add pwa separator

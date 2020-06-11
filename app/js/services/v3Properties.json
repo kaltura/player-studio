@@ -398,14 +398,12 @@
       },
       "imadai": {
         "label": "IMA-DAI",
+        "model": "imadai",
         "type": "featuremenu",
         "description": "The Google IMA DAI SDK for HTML5 allows developers to make a stream request for ad and content video and get the combined (stitched) video stream in an HTML5 video environment. ",
-        "model": "config.plugins.imadai",
         "componentName": "playkit-ima-dai",
         "children": [
           {
-            "label": "Dummy",
-            "model": "config.plugins.imadai.dummy"
           }
         ]
       }
