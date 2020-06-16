@@ -786,9 +786,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			return adsRenderingSettings;
 		}
 
-		if (filter == "Thresholdfloating"){
-			return data / 100;
-		}
+
 		if (filter == "noEmpty") {
 			return data || undefined;
 		}

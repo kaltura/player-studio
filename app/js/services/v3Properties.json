@@ -304,7 +304,7 @@
             "min": 0,
             "max": 100,
             "initvalue": 50,
-            "filter": "Thresholdfloating"
+            "filter": "numberOnly"
           },
           {
             "label": "Position",
