@@ -785,8 +785,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			adsRenderingSettings.loadVideoTimeout = Number(data);
 			return adsRenderingSettings;
 		}
-
-
 		if (filter == "noEmpty") {
 			return data || undefined;
 		}
