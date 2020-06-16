@@ -355,7 +355,7 @@
             "model": "config.plugins.visibility.floating.marginX",
             "helpnote": "Horizontal margin distance in pixels from window edge",
             "min": 0,
-            "initvalue": 2
+            "initvalue": 0
           },
           {
             "label": "Margin-Y",
@@ -364,7 +364,7 @@
             "model": "config.plugins.visibility.floating.marginY",
             "helpnote": "Vertical margin distance in pixels from window edge",
             "min": 0,
-            "initvalue": 2
+            "initvalue": 0
           },
           {
             "label": "Dismissible",
