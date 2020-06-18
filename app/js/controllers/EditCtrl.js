@@ -301,29 +301,22 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
           $scope.toggleCastPlugins(plugin, this.category.plugins);
         }
 
-        if (plugin.model === "imadai") {
-          $scope.toggleIMADAIPlugin(plugin);
-        }
-
         if (this.category.id === "lookandfeel") {
           $scope.toggleUiComponent(plugin);
         }
+
+		if (plugin.componentName){ // handle external bundles
+			$scope.playerData.externals = $scope.playerData.externals || {};
+			$scope.playerData.externals[plugin.componentName] = {
+				kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion,
+				active: !plugin.enabled
+			};
+		}
 
 	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
     };
-
-	$scope.toggleIMADAIPlugin = function (plugin) {
-		var willActive = !plugin.enabled;
-		if(willActive){
-			$scope.playerData.externals[plugin.componentName] = {
-				active: true
-			};
-		}else{
-			delete $scope.playerData.externals[plugin.componentName];
-		}
-	}
 
 	$scope.toggleCastPlugins = function (plugin, plugins) {
 		var senderElement = document.querySelector('#_' + plugins[0].id);
@@ -607,8 +600,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						// check plugin enabled
 						if (properties[plug].enabled || $scope.playerData.config[plug] || $scope.playerData.config.plugins[plug] ||
 							($scope.playerData.config.ui && $scope.playerData.config.ui.components && $scope.playerData.config.ui.components[plug]) ||
-							(plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName]) ||
-							(plug === "imadai" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
+							(plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
 							properties[plug].enabled = true;
 						}else{
 							properties[plug].enabled = false;
