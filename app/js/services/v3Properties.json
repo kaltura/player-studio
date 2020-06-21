@@ -457,7 +457,7 @@
       "ima": {
         "label": "IMA",
         "type": "featuremenu",
-        "description": "The Google IMA SDK for HTML5 V3 allows developers to request and track VAST ads in a HTML5 video environment. For full APIs see: <br><a href='https://developers.google.com/interactive-media-ads/docs/sdks/html5/v3/apis' target='_blank'>Google IMA HTML5 SDK APIs</a>",
+        "description": "The Google IMA SDK for HTML5 V3 allows developers to request and track VAST ads in a HTML5 video environment. For full APIs see: <br><a href='https://developers.google.com/interactive-media-ads/docs/sdks/html5' target='_blank'>Google IMA HTML5 SDK APIs</a>",
         "model": "config.plugins.ima",
         "componentName": "playkit-ima",
         "children": [
@@ -500,6 +500,15 @@
             "model": "config.plugins.ima.companions.sizeCriteria",
             "initvalue": "SELECT_EXACT_MATCH"
           }
+        ]
+      },
+      "imadai": {
+        "label": "IMA DAI",
+        "type": "featuremenu",
+        "description": "The Google IMA DAI SDK for HTML5 allows developers to make a stream request for ad and content video and get the combined (stitched) video stream in an HTML5 video environment. ",
+        "componentName": "playkit-ima-dai",
+        "kalturaPlayerMinVersion": "0.32.0",
+        "children": [
         ]
       }
     }

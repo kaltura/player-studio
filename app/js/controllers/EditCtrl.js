@@ -305,6 +305,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
           $scope.toggleUiComponent(plugin);
         }
 
+		if (plugin.componentName){ // handle external bundles
+			$scope.playerData.externals = $scope.playerData.externals || {};
+			$scope.playerData.externals[plugin.componentName] = {
+				kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion,
+				active: !plugin.enabled
+			};
+		}
+
 	    $scope.refreshNeeded = true;
 	    $scope.dataChanged = true;
 	    window.parent.studioDataChanged = true; // used when navigating away from studio
