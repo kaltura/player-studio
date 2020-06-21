@@ -1,19 +1,19 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?sqs3zr');
-  src:  url('fonts/icomoon.eot?sqs3zr#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.woff2?sqs3zr') format('woff2'),
-    url('fonts/icomoon.ttf?sqs3zr') format('truetype'),
-    url('fonts/icomoon.woff?sqs3zr') format('woff'),
-    url('fonts/icomoon.svg?sqs3zr#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?j7grdd');
+  src:  url('fonts/icomoon.eot?j7grdd#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?j7grdd') format('truetype'),
+    url('fonts/icomoon.woff?j7grdd') format('woff'),
+    url('fonts/icomoon.svg?j7grdd#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
-  speak: none;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -96,4 +96,7 @@
 }
 .icon-playlist:before {
   content: "\e617";
+}
+.icon-theming:before {
+  content: "\e618";
 }
