@@ -387,6 +387,21 @@
     }
   },
   {
+    "label": "Theming",
+    "icon": "theming",
+    "description": "Adjust the styling of the player.",
+    "type": "menu",
+    "children": [
+          {
+            "label": "External CSS",
+            "type": "text",
+            "model": "config.ui.css",
+            "filter": "noEmpty",
+            "helpnote": "Player will load the given CSS file using this URL"
+        }
+    ]
+  },
+  {
     "label": "Analytics & Monetization",
     "icon": "TabAnalytics",
     "description": "",
