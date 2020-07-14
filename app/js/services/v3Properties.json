@@ -381,6 +381,14 @@
             "model": "config.plugins.visibility.floating.dismissible",
             "helpnote": "When set to true, viewer will be able to dismiss the floating player so that it doesn’t appear anymore while he scrolls the current page",
             "initvalue": true
+          },
+          {
+            "label": "Draggable",
+            "type": "checkbox",
+            "section": "floating",
+            "model": "config.plugins.visibility.floating.draggable",
+            "helpnote": "When set to true, viewer will be able to drag the floating player. Uncheck if you want to have a fixed location for the floating player",
+            "initvalue": true
           }
         ]
       }
