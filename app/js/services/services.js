@@ -250,13 +250,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return previewEntryObj;
 				}
 			},
-			'removeUnsupportedPlugins': function (playerData, plugins) {
-				for (var plugin in plugins) {
-					if (!playerData.plugins[plugin]) {
-						delete plugins[plugin];
-					}
-				}
-			},
 			'switchToNewStructure': function (oldConfigStructure) {
 				var playerConfig = oldConfigStructure.player;
 				delete oldConfigStructure.player;
@@ -309,7 +302,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 					try {
 						var config = JSON.parse(playerConfig.jsonConfig);
-						playersService.removeUnsupportedPlugins(playerData, config.plugins);
 						config.targetId = playersService.PLAYER_ID;
 						Object.assign(config.provider, providerConfig);
 						if (window.__kalturaplayerdata) {
@@ -621,7 +613,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:description': data.description ? data.description : ''
 				};
 				request['uiConf:confVars'] = JSON.stringify({versions: playersService.getPlayerAndPluginsVersionObj(data), langs: data.playerLangCodes});
-				playersService.removeUnsupportedPlugins(data, data2Save.plugins);
 				request['uiConf:config'] = JSON.stringify(data2Save, null, "\t");
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
