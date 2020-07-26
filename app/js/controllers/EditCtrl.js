@@ -152,7 +152,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 }else{ // plugin
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName, 'kalturaPlayerMinVersion': p.kalturaPlayerMinVersion};
+	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName};
 	                plugin.properties = [];
 	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
@@ -308,7 +308,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if (plugin.componentName){ // handle external bundles
 			$scope.playerData.externals = $scope.playerData.externals || {};
 			$scope.playerData.externals[plugin.componentName] = {
-				kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion,
 				active: !plugin.enabled
 			};
 		}
@@ -338,7 +337,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		} else {
 			if (willActive) {
 				$scope.playerData.externals[plugin.componentName] = {
-					kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion,
 					active: true
 				};
 				senderPlugin.enabled = false;
@@ -442,7 +440,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (property.componentName){ // handle external bundles
 		    $scope.playerData.externals = $scope.playerData.externals || {};
 		    $scope.playerData.externals[property.componentName] = {
-			    kalturaPlayerMinVersion: property.kalturaPlayerMinVersion,
 			    active: property.initvalue
 		    };
 	    }
@@ -710,8 +707,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
         var modelArr = plugin.model.split('.');
         var model = modelArr.length > 1 ? modelArr[modelArr.length - 1] : modelArr[0];
 		$scope.playerData.plugins[model] = {
-			componentName: plugin.componentName,
-			kalturaPlayerMinVersion: plugin.kalturaPlayerMinVersion
+			componentName: plugin.componentName
 		};
 	};
 

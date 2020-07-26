@@ -147,7 +147,6 @@
         "type": "checkbox",
         "model": "externals.playkit-flash.active",
         "componentName": "playkit-flash",
-        "kalturaPlayerMinVersion": "0.32.0",
         "resetKalturaPlayer": true
       },
       {
@@ -156,7 +155,6 @@
         "type": "checkbox",
         "model": "externals.playkit-youtube.active",
         "componentName": "playkit-youtube",
-        "kalturaPlayerMinVersion": "0.39.1",
         "resetKalturaPlayer": true
       }
     ]
@@ -439,7 +437,6 @@
         "model": "config.plugins.googleAnalytics",
         "endline": "true",
         "componentName": "playkit-google-analytics",
-        "kalturaPlayerMinVersion": "0.25.0",
         "children": [
           {
             "label": "Google tracking code",
@@ -530,7 +527,6 @@
         "type": "featuremenu",
         "description": "The Google IMA DAI SDK for HTML5 allows developers to make a stream request for ad and content video and get the combined (stitched) video stream in an HTML5 video environment. ",
         "componentName": "playkit-ima-dai",
-        "kalturaPlayerMinVersion": "0.32.0",
         "children": [
         ]
       }
@@ -549,7 +545,6 @@
         "isOpen": true,
         "model": "config.plugins.vr",
         "componentName": "playkit-vr",
-        "kalturaPlayerMinVersion": "0.29.0",
         "children": [
           {
             "label": "Toggle Stereo",
@@ -624,7 +619,6 @@
         "type": "featuremenu",
         "model": "config.cast",
         "componentName": "playkit-cast-sender",
-        "kalturaPlayerMinVersion": "0.33.1",
         "children": [
           {
             "label": "Application ID",
@@ -647,7 +641,6 @@
         "type": "featuremenu",
         "model": "receiver",
         "componentName": "playkit-cast-receiver",
-        "kalturaPlayerMinVersion": "0.33.1",
         "description": "Enabling this option means that current player is defined as a receiver type, and should only be used in the receiver application <br><br>* <i>Currently all receiver configuration should be handled through the customer receiver application </i>",
         "children": [
           {}
