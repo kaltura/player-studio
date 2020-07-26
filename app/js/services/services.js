@@ -250,44 +250,10 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return previewEntryObj;
 				}
 			},
-			'removeUnsupportedPlugins': function (playerData, plugins) {
-				for (var plugin in plugins) {
-					if (!playerData.plugins[plugin]) {
-						delete plugins[plugin];
-					}
-				}
-			},
 			'switchToNewStructure': function (oldConfigStructure) {
 				var playerConfig = oldConfigStructure.player;
 				delete oldConfigStructure.player;
 				return angular.extend(oldConfigStructure, playerConfig);
-			},
-			'validatePluginsSupport': function (playerData) {
-				for (var plugin in playerData.plugins) {
-					var pluginData = playerData.plugins[plugin];
-					if (!playersService.isValidPlayerVersion(playerData, pluginData.kalturaPlayerMinVersion)) {
-						if (playerData.externals) {
-							delete playerData.externals[pluginData.componentName];
-						}
-						delete playerData.plugins[plugin];
-					}
-				}
-			},
-			'isValidPlayerVersion': function (playerData, requiredMinPlayerVersion) {
-				if (typeof requiredMinPlayerVersion === "string") {
-					var playerVersion = playersService.getPlayerVersion(playerData);
-					var requiredMinPlayerVersionArr = requiredMinPlayerVersion.split('.');
-					var playerVersionArr = playerVersion.split('.');
-					for (var i = 0; i < requiredMinPlayerVersionArr.length; i++) {
-						if (requiredMinPlayerVersionArr[i] > playerVersionArr[i]) {
-							return false;
-						}
-						if (requiredMinPlayerVersionArr[i] < playerVersionArr[i]) {
-							return true;
-						}
-					}
-				}
-				return true;
 			},
 			'renderPlayer': function (playerData, playerConfig, entry_id, callback, isPlaylist, allLangCodes) {
 				var partner_id = playerData.partnerId;
@@ -309,7 +275,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 					try {
 						var config = JSON.parse(playerConfig.jsonConfig);
-						playersService.removeUnsupportedPlugins(playerData, config.plugins);
 						config.targetId = playersService.PLAYER_ID;
 						Object.assign(config.provider, providerConfig);
 						if (window.__kalturaplayerdata) {
@@ -352,7 +317,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				var playerBundle = playersService.getPlayerBundle(playerData);
 				var playerVersion = playersService.getPlayerVersion(playerData);
 				var playerVersionParam = playerBundle + '=' + playerVersion;
-				playersService.validatePluginsSupport(playerData);
 
 				var getPluginsVersion = function () {
 					var pluginsVersion = '';
@@ -621,7 +585,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:description': data.description ? data.description : ''
 				};
 				request['uiConf:confVars'] = JSON.stringify({versions: playersService.getPlayerAndPluginsVersionObj(data), langs: data.playerLangCodes});
-				playersService.removeUnsupportedPlugins(data, data2Save.plugins);
 				request['uiConf:config'] = JSON.stringify(data2Save, null, "\t");
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
@@ -698,7 +661,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			},
 			'getPlayerAndPluginsVersionObj': function (data) {
 				var playerAndPluginsVersionObj = playersService.getPlayerVersionObj(data);
-				playersService.validatePluginsSupport(data);
 				for (var plugin in data.plugins) {
 					var pluginData = data.plugins[plugin] || {};
 					if (data.externals && data.config.plugins[plugin]) {
@@ -709,7 +671,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					}
 				}
 				for (var external in data.externals) {
-					if (data.externals[external].active && playersService.isValidPlayerVersion(data, data.externals[external].kalturaPlayerMinVersion)) {
+					if (data.externals[external].active){
 						playerAndPluginsVersionObj[external] = playersService.getComponentVersion(data, external);
 					}
 				}
