@@ -539,6 +539,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
+		$scope.maybeAddAnalyticsPlugins();
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
 
@@ -834,6 +835,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				);
 			};
 			$scope.updatePlayerData();
+			$scope.maybeAddAnalyticsPlugins();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
@@ -953,4 +955,22 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 	};
 
+	$scope.maybeAddAnalyticsPlugins = function(){
+		var noAnalyticsVersionMajor = 56;
+		var playerVersion = PlayerService.getComponentVersion($scope.playerData, playerName);
+		if (playerVersion === '{latest}' || playerVersion === '{beta}' || playerVersion.split('.')[1] >= noAnalyticsVersionMajor) {
+			$scope.playerData.plugins = $scope.playerData.plugins || {};
+			$scope.playerData.plugins.kava = {
+				componentName: 'playkit-kava'
+			};
+			$scope.playerData.config.plugins.kava = {};
+			if (PlayerService.OvpOrOtt === PlayerService.OTT) {
+				$scope.playerData.plugins.ottAnalytics = {
+					componentName: 'playkit-ott-analytics'
+				};
+				$scope.playerData.config.plugins.kava = {disable: true};
+				$scope.playerData.config.plugins.ottAnalytics = {};
+			}
+		}
+	};
 }]);
