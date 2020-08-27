@@ -968,8 +968,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.playerData.plugins.ottAnalytics = {
 					componentName: 'playkit-ott-analytics'
 				};
-				$scope.playerData.config.plugins.kava = $scope.playerData.config.plugins.kava || {disable: true};
 				$scope.playerData.config.plugins.ottAnalytics = $scope.playerData.config.plugins.ottAnalytics || {};
+				if ($scope.playerData.config.plugins.kava.disable !== false) {
+					$scope.playerData.config.plugins.kava.disable = true;
+				}
 			}
 		}
 	};
