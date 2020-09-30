@@ -616,11 +616,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				if (j == objArr.length-1 && data.initvalue !== undefined){  // last object in model path - this is the value property
 					// set the data in this property
 					if (data.filter) {
-						pData[prop] = $scope.setFilter(data.initvalue, data.filter)
+						pData[prop] = $scope.setFilter(data.initvalue, data.filter);
 					} else if (data.type === 'number') {
-						pData[prop] = Number(data.initvalue)
+						pData[prop] = Number(data.initvalue);
 					} else {
-						pData[prop] = data.initvalue
+						pData[prop] = data.initvalue;
 					}
 				}else{
 					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
