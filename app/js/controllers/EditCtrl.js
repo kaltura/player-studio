@@ -344,10 +344,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				senderPlugin.enabled = false;
 				airPlayPlugin.enabled = false;
 				senderElement.classList.add('disabled');
-				airPlayElement.classList.add('');
+				airPlayElement.classList.add('disabled');
 				delete $scope.playerData.config.cast;
-				delete $scope.playerData.plugins.airplay;
+				delete $scope.playerData.config.plugins.airplay;
 				delete $scope.playerData.externals[senderPlugin.componentName];
+				delete $scope.playerData.externals[airPlayPlugin.componentName];
 			} else {
 				senderElement.classList.remove('disabled');
 				airPlayElement.classList.remove('disabled');
@@ -356,7 +357,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		} else if (plugin.label === "AirPlay") {
 			if (willActive) {
 				airPlayPlugin.enabled = true;
-				$scope.playerData.config.plugins = $scope.playerData.config.plugins || {};
 				$scope.playerData.config.plugins.airplay = {};
 			} else {
 				airPlayPlugin.enabled = false;
