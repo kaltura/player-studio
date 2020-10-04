@@ -881,7 +881,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if (plugins && plugins.length > 0) {
 				for (var i = 0; i < plugins.length; i++) {
 					if (plugins[i].model === model) {
-						plugins[i].enabled = enabled; // update menu data so the p// lugin checkbox will update
+						plugins[i].enabled = enabled; // update menu data so the plugin checkbox will update
 						if ($scope.playerData.config.plugins[model] && !enabled) {
 							delete $scope.playerData.config.plugins[model]; // remove plugin from player data if enabled=false
 						}
