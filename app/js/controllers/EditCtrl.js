@@ -320,9 +320,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.toggleCastPlugins = function (plugin, plugins) {
 		var senderElement = document.querySelector('#_' + plugins[0].id);
 		var receiverElement = document.querySelector('#_' + plugins[1].id);
+		var airPlayElement = document.querySelector('#_' + plugins[2].id);
 		var willActive = !plugin.enabled;
 		var senderPlugin = plugins[0];
 		var receiverPlugin = plugins[1];
+		var airPlayPlugin = plugins[2];
 		$scope.playerData.externals = $scope.playerData.externals || {};
 		if (plugin.label === "Sender") {
 			if (willActive) {
@@ -334,18 +336,31 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				delete $scope.playerData.config.cast;
 				delete $scope.playerData.externals[plugin.componentName];
 			}
-		} else {
+		} else if (plugin.label === "Receiver") {
 			if (willActive) {
 				$scope.playerData.externals[plugin.componentName] = {
 					active: true
 				};
 				senderPlugin.enabled = false;
+				airPlayPlugin.enabled = false;
 				senderElement.classList.add('disabled');
+				airPlayElement.classList.add('');
 				delete $scope.playerData.config.cast;
-                delete $scope.playerData.externals[senderPlugin.componentName];
+				delete $scope.playerData.plugins.airplay;
+				delete $scope.playerData.externals[senderPlugin.componentName];
 			} else {
 				senderElement.classList.remove('disabled');
-                delete $scope.playerData.externals[plugin.componentName];
+				airPlayElement.classList.remove('disabled');
+				delete $scope.playerData.externals[plugin.componentName];
+			}
+		} else if (plugin.label === "AirPlay") {
+			if (willActive) {
+				airPlayPlugin.enabled = true;
+				$scope.playerData.config.plugins = $scope.playerData.config.plugins || {};
+				$scope.playerData.config.plugins.airplay = {};
+			} else {
+				airPlayPlugin.enabled = false;
+				delete 	$scope.playerData.config.airplay;
 			}
 		}
 	};
@@ -557,6 +572,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		var entryID = $scope.selectedEntry && $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
 		requestNotificationChannel.requestStarted('edit'); // show spinner
+		$scope.playerData.partnerId = '1091';
 		PlayerService.renderPlayer($scope.playerData, flashvars, entryID, function () {
 			requestNotificationChannel.requestEnded('edit'); // hide spinner
 		}, $scope.entriesTypeSelector === "Playlist", $scope.getAllLangCodes());
@@ -865,7 +881,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if (plugins && plugins.length > 0) {
 				for (var i = 0; i < plugins.length; i++) {
 					if (plugins[i].model === model) {
-						plugins[i].enabled = enabled; // update menu data so the plugin checkbox will update
+						plugins[i].enabled = enabled; // update menu data so the p// lugin checkbox will update
 						if ($scope.playerData.config.plugins[model] && !enabled) {
 							delete $scope.playerData.config.plugins[model]; // remove plugin from player data if enabled=false
 						}
