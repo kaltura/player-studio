@@ -124,11 +124,11 @@
       },
       {
         "label": "Autoplay",
-        "helpnote": "If set to 'Auto' - The video will play automatically when the page loads, if set to 'In View' the video will play automatically only if the player is in view. If player is not in view, playback will start only when viewer scrolls to it" ,
+        "helpnote": "If set to 'Always' - The video will play automatically when the page loads, if set to 'In View' the video will play automatically only if the player is in view. If player is not in view, playback will start only when viewer scrolls to it" ,
         "type": "dropdown",
         "options": [
           {
-            "label": "Auto",
+            "label": "Always",
             "value": "true"
           },
           {
