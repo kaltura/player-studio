@@ -686,6 +686,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				return val;
 			}
 		}
+		if (filter == "containsBooleans"){
+			return val === true || val === false ? String(val) : val;
+		}
 		return val;
 	};
 
@@ -749,7 +752,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				if (j == objArr.length-1 && data.initvalue !== undefined){  // last object in model path - this is the value property
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
 				}else{
-					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
+					if ((prop == "visibility" || j == objArr.length-2) && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
 						pData[prop] = data.custom ? {'custom':true, 'enabled':true} : {'enabled':true};
 					}
 					if (pData[prop]) {
@@ -816,6 +819,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "array"){
 			return data || [];
+		}
+		if (filter == "containsBooleans"){
+			return data === "true" || data === "false" ? Boolean(data === "true") : data;
 		}
 		return data;
 	};
