@@ -1,6 +1,7 @@
 {
   "disableUserCache": false,
   "plugins": {},
+  "advertising": {},
   "playback": {},
   "provider": {
     "env": {}

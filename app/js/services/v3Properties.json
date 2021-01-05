@@ -389,6 +389,47 @@
             "initvalue": true
           }
         ]
+      },
+      "timeline": {
+        "type": "featuremenu",
+        "description": "Enable this to be able to customize the timeline scrubber view and add your own cue-points on the timeline",
+        "componentName": "playkit-timeline",
+        "emptyConfig": true,
+        "model": "config.plugins.timeline",
+        "label": "Advanced Timeline Scrubber",
+        "sections": {
+          "tabset": [{
+            "label": "Advertisement Cues",
+            "key": "adv",
+            "children": [
+              {
+                "label": "Ads markers on the timeline",
+                "type": "checkbox",
+                "helpnote": "Adds timeline markers indicating advertisement cues",
+                "initvalue": false,
+                "model": "timelineAdCuePoint.enabled"
+              },
+              {
+                "label": "        Marker Width",
+                "type": "number",
+                "filter": "numberOnly",
+                "helpnote": "This is the width of the marker in pixels",
+                "min": 0,
+                "initvalue": 2,
+                "model": "timelineAdCuePoint.width"
+              },
+              {
+                "label": "\tMarker Color",
+                "type": "color",
+                "initvalue": "#ffffff",
+                "helpnote": "This is the color of the marker",
+                "model": "timelineAdCuePoint.color"
+              }
+            ],
+            "active": true
+          }]
+        },
+        "children": []
       }
     }
   },
@@ -526,6 +567,8 @@
         "label": "IMA DAI",
         "type": "featuremenu",
         "description": "The Google IMA DAI SDK for HTML5 allows developers to make a stream request for ad and content video and get the combined (stitched) video stream in an HTML5 video environment. ",
+        "emptyConfig": true,
+        "model": "config.plugins.imadai",
         "componentName": "playkit-ima-dai",
         "children": [
         ]

@@ -42,6 +42,21 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		logTime(e);
 	}
 
+	$scope.updatePlayerDataFromConfig = function () {
+		var advertising = $scope.playerData.config.advertising;
+		if (advertising) {
+			$scope.playerData.timelineAdCuePoint = {
+				enabled: !!advertising.showAdBreakCuePoint
+			};
+			if (advertising.adBreakCuePointStyle) {
+				$scope.playerData.timelineAdCuePoint.width = advertising.adBreakCuePointStyle.marker.width;
+				$scope.playerData.timelineAdCuePoint.color = advertising.adBreakCuePointStyle.marker.color;
+			}
+		}
+	};
+
+	$scope.updatePlayerDataFromConfig();
+
 	$scope.isOvp = PlayerService.OvpOrOtt === PlayerService.OVP;
 
 		// auto preview flag
@@ -152,7 +167,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 }else{ // plugin
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName};
+	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName, 'emptyConfig': !!p.emptyConfig};
 	                plugin.properties = [];
 	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
@@ -713,9 +728,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						if (plugin.custom){
 							$scope.updateCustomPlugins(plugin.model);
 						}
+						if (plugin.emptyConfig){
+							// Plugin which has not any prop in it the studio doesn't add it the plugins
+							$scope.playerData.config.plugins[plugin.model] = {};
+						}
 					}
 			}
 		}
+		$scope.handleTimelinePlugin();
 	};
 
 	$scope.setPluginData = function(plugin){
@@ -987,6 +1007,39 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				if ($scope.playerData.config.plugins.kava.disable !== false) {
 					$scope.playerData.config.plugins.kava.disable = true;
 				}
+			}
+		}
+	};
+
+	$scope.handleTimelinePlugin = function () {
+		$scope.playerData.config.advertising = $scope.playerData.config.advertising || {};
+		if ($scope.playerData.config.plugins.timeline && $scope.playerData.timelineAdCuePoint && $scope.playerData.timelineAdCuePoint.enabled) {
+			var adCuePointsConfig = {
+				showAdBreakCuePoint: true,
+				adBreakCuePointStyle: {
+					marker: {
+						width: $scope.playerData.timelineAdCuePoint.width,
+						color: $scope.playerData.timelineAdCuePoint.color
+					}
+				}
+			};
+			$.extend($scope.playerData.config.advertising, adCuePointsConfig);
+			if ($scope.playerData.config.plugins.ima) {
+				$.extend($scope.playerData.config.plugins.ima, adCuePointsConfig);
+			}
+			if ($scope.playerData.config.plugins.imadai) {
+				$.extend($scope.playerData.config.plugins.imadai, adCuePointsConfig);
+			}
+		} else {
+			delete $scope.playerData.config.advertising.showAdBreakCuePoint;
+			delete $scope.playerData.config.advertising.adBreakCuePointStyle;
+			if ($scope.playerData.config.plugins.ima) {
+				delete $scope.playerData.config.plugins.ima.adBreakCuePointStyle;
+				delete $scope.playerData.config.plugins.ima.showAdBreakCuePoint;
+			}
+			if ($scope.playerData.config.plugins.imadai) {
+				delete $scope.playerData.config.plugins.imadai.adBreakCuePointStyle;
+				delete $scope.playerData.config.plugins.imadai.showAdBreakCuePoint;
 			}
 		}
 	};
