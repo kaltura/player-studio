@@ -11,6 +11,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
+	$scope.dependencyPlugins = {};
+	$scope.dependencyExternals = {};
 
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
@@ -41,21 +43,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	} catch (e) {
 		logTime(e);
 	}
-
-	$scope.updatePlayerDataFromConfig = function () {
-		var advertising = $scope.playerData.config.advertising;
-		if (advertising) {
-			$scope.playerData.timelineAdCuePoint = {
-				enabled: !!advertising.showAdBreakCuePoint
-			};
-			if (advertising.adBreakCuePointStyle) {
-				$scope.playerData.timelineAdCuePoint.width = advertising.adBreakCuePointStyle.marker.width;
-				$scope.playerData.timelineAdCuePoint.color = advertising.adBreakCuePointStyle.marker.color;
-			}
-		}
-	};
-
-	$scope.updatePlayerDataFromConfig();
 
 	$scope.isOvp = PlayerService.OvpOrOtt === PlayerService.OVP;
 
@@ -288,6 +275,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    // since we are getting the event before the value is changed - enabled means that the plugin is going to be disabled - remove validation
 		    $scope.removeValidation(plugin);
 		    delete $scope.playerData.config.plugins[plugin.model]; // remove the plugin from the player data
+		    for (var i = 0; i < plugin.properties.length; i++) {
+			    $scope.handleDependencies(plugin.properties[i].dependencies, plugin.properties[i].model)
+		    }
 	    }else{
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
@@ -735,7 +725,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					}
 			}
 		}
-		$scope.handleTimelinePlugin();
+		$scope.removeUnusedDependencies();
 	};
 
 	$scope.setPluginData = function(plugin){
@@ -768,8 +758,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				var prop = objArr[j];
 				if (j == objArr.length-1 && data.initvalue !== undefined){  // last object in model path - this is the value property
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
+					$scope.handleDependencies(data.dependencies, data.model, data.initvalue);
 				}else{
-					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
+					if (j <= objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
 						pData[prop] = data.custom ? {'custom':true, 'enabled':true} : {'enabled':true};
 					}
 					if (pData[prop]) {
@@ -838,6 +829,53 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			return data || [];
 		}
 		return data;
+	};
+
+	$scope.handleDependencies = function(propDependencies, propModel, propValue) {
+		if (propDependencies) {
+			for (var i = 0; i < propDependencies.length; i++) {
+				var dependency = propDependencies[i];
+				if (propValue && propValue === dependency.condition) {
+					if (dependency.componentName) {
+						if (!($scope.playerData.plugins[dependency.plugin] || $scope.dependencyExternals[dependency.componentName])) {
+							window.KalturaPlayer = null;
+						}
+						if (dependency.pluginConfig) {
+							$scope.playerData.plugins[dependency.plugin] = {componentName: dependency.componentName}
+						} else {
+							$scope.playerData.externals[dependency.componentName] = {active: true};
+							$scope.dependencyExternals[dependency.componentName] = $scope.dependencyExternals[dependency.componentName] || {};
+							$scope.dependencyExternals[dependency.componentName][propModel] = true;
+						}
+					}
+					if (dependency.pluginConfig) {
+						$scope.playerData.config.plugins[dependency.plugin] = dependency.pluginConfig;
+						$scope.dependencyPlugins[dependency.plugin] = $scope.dependencyPlugins[dependency.plugin] || {};
+						$scope.dependencyPlugins[dependency.plugin][propModel] = true;
+					}
+				} else {
+					if ($scope.dependencyPlugins[dependency.plugin]) {
+						delete $scope.dependencyPlugins[dependency.plugin][propModel];
+					}
+					if ($scope.dependencyExternals[dependency.componentName]) {
+						delete $scope.dependencyExternals[dependency.componentName][propModel];
+					}
+				}
+			}
+		}
+	};
+
+	$scope.removeUnusedDependencies = function () {
+		for (var plugin in $scope.dependencyPlugins) {
+			if ($.isEmptyObject($scope.dependencyPlugins[plugin])) {
+				delete $scope.playerData.config.plugins[plugin];
+			}
+		}
+		for (var external in $scope.dependencyExternals) {
+			if ($.isEmptyObject($scope.dependencyExternals[external])) {
+				$scope.playerData.externals[external] = {active: false};
+			}
+		}
 	};
 
 	$scope.backToList = function(){
@@ -1007,39 +1045,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				if ($scope.playerData.config.plugins.kava.disable !== false) {
 					$scope.playerData.config.plugins.kava.disable = true;
 				}
-			}
-		}
-	};
-
-	$scope.handleTimelinePlugin = function () {
-		$scope.playerData.config.advertising = $scope.playerData.config.advertising || {};
-		if ($scope.playerData.config.plugins.timeline && $scope.playerData.timelineAdCuePoint && $scope.playerData.timelineAdCuePoint.enabled) {
-			var adCuePointsConfig = {
-				showAdBreakCuePoint: true,
-				adBreakCuePointStyle: {
-					marker: {
-						width: $scope.playerData.timelineAdCuePoint.width,
-						color: $scope.playerData.timelineAdCuePoint.color
-					}
-				}
-			};
-			$.extend($scope.playerData.config.advertising, adCuePointsConfig);
-			if ($scope.playerData.config.plugins.ima) {
-				$.extend($scope.playerData.config.plugins.ima, adCuePointsConfig);
-			}
-			if ($scope.playerData.config.plugins.imadai) {
-				$.extend($scope.playerData.config.plugins.imadai, adCuePointsConfig);
-			}
-		} else {
-			delete $scope.playerData.config.advertising.showAdBreakCuePoint;
-			delete $scope.playerData.config.advertising.adBreakCuePointStyle;
-			if ($scope.playerData.config.plugins.ima) {
-				delete $scope.playerData.config.plugins.ima.adBreakCuePointStyle;
-				delete $scope.playerData.config.plugins.ima.showAdBreakCuePoint;
-			}
-			if ($scope.playerData.config.plugins.imadai) {
-				delete $scope.playerData.config.plugins.imadai.adBreakCuePointStyle;
-				delete $scope.playerData.config.plugins.imadai.showAdBreakCuePoint;
 			}
 		}
 	};
