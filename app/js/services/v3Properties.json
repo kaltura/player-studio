@@ -547,7 +547,6 @@
             "type": "color",
             "initvalue": "#ffffff",
             "helpnote": "This is the color of the marker",
-            "filter": "marker",
             "model": "config.plugins.ima.adBreakCuePointStyle.marker.color"
           }
         ]

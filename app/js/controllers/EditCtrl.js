@@ -154,7 +154,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 }else{ // plugin
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName, 'emptyConfig': !!p.emptyConfig};
+	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName};
 	                plugin.properties = [];
 	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
@@ -717,10 +717,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 						$scope.setPlayerProperties(plugin.properties);
 						if (plugin.custom){
 							$scope.updateCustomPlugins(plugin.model);
-						}
-						if (plugin.emptyConfig){
-							// Plugin which has not any prop in it the studio doesn't add it the plugins
-							$scope.playerData.config.plugins[plugin.model] = {};
 						}
 					}
 			}
