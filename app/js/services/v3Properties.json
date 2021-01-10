@@ -297,17 +297,17 @@
           }
         ]
       },
-      "visibility": {
+      "floating": {
         "type": "featuremenu",
         "description": "When a viewer scrolls the player out of view, a floating player would pop-up and position itself following the configuration. This allows the viewer to engage with both the video content and the article.",
-        "model": "config.plugins.visibility",
+        "model": "config.plugins.floating",
         "componentName": "playkit-visibility",
         "label": "Floating",
         "children": [
           {
             "label": "Position",
             "type": "dropdown",
-            "model": "config.plugins.visibility.floating.position",
+            "model": "config.plugins.floating.position",
             "options": [
               {
                 "label": "Top Right",
@@ -330,7 +330,7 @@
           {
             "label": "Width",
             "type": "number",
-            "model": "config.plugins.visibility.floating.width",
+            "model": "config.plugins.floating.width",
             "helpnote": "The width of the floating player in pixels",
             "min": 0,
             "initvalue": 400,
@@ -339,7 +339,7 @@
           {
             "label": "Height",
             "type": "number",
-            "model": "config.plugins.visibility.floating.height",
+            "model": "config.plugins.floating.height",
             "helpnote": "The height of the floating player in pixels",
             "min": 0,
             "initvalue": 225,
@@ -348,7 +348,7 @@
           {
             "label": "Margin-X",
             "type": "number",
-            "model": "config.plugins.visibility.floating.marginX",
+            "model": "config.plugins.floating.marginX",
             "helpnote": "The margin, in pixels, from the selected edge, on the X-Axis",
             "min": 0,
             "initvalue": 0,
@@ -357,7 +357,7 @@
           {
             "label": "Margin-Y",
             "type": "number",
-            "model": "config.plugins.visibility.floating.marginY",
+            "model": "config.plugins.floating.marginY",
             "helpnote": "The margin, in pixels, from the selected edge, on the Y-Axis",
             "min": 0,
             "initvalue": 0,
@@ -366,14 +366,14 @@
           {
             "label": "Dismissible",
             "type": "checkbox",
-            "model": "config.plugins.visibility.floating.dismissible",
+            "model": "config.plugins.floating.dismissible",
             "helpnote": "When set to true, viewer will be able to dismiss the floating player so that it doesn’t appear anymore while he scrolls the current page",
             "initvalue": true
           },
           {
             "label": "Draggable",
             "type": "checkbox",
-            "model": "config.plugins.visibility.floating.draggable",
+            "model": "config.plugins.floating.draggable",
             "helpnote": "When set to true, viewer will be able to drag the floating player. Uncheck if you want to have a fixed location for the floating player",
             "initvalue": true
           }

@@ -360,7 +360,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.playerData.config.plugins.airplay = {};
 			} else {
 				airPlayPlugin.enabled = false;
-				delete 	$scope.playerData.config.airplay;
+				delete $scope.playerData.config.airplay;
 			}
 		}
 	};
@@ -579,6 +579,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
+		//  backward compatibility with old plugins.visibility
+		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.visibility) {
+			$scope.playerData.config.visibility = {};
+			$scope.playerData.config.visibility.playerThreshold = $scope.playerData.config.plugins.visibility.threshold;
+			if ($scope.playerData.config.plugins.visibility.floating){
+				$scope.playerData.config.plugins.floating = $scope.playerData.config.plugins.visibility.floating;
+				delete $scope.playerData.config.plugins.visibility;
+			}
+		}
 
 		// support multiple playlists
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
@@ -752,7 +761,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				if (j == objArr.length-1 && data.initvalue !== undefined){  // last object in model path - this is the value property
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
 				}else{
-					if ((prop == "visibility" || j == objArr.length-2) && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
+					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
 						pData[prop] = data.custom ? {'custom':true, 'enabled':true} : {'enabled':true};
 					}
 					if (pData[prop]) {
