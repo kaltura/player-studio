@@ -519,6 +519,35 @@
             "type": "sizeCriteria",
             "model": "config.plugins.ima.companions.sizeCriteria",
             "initvalue": "SELECT_EXACT_MATCH"
+          },
+          {
+            "label": "Ads markers on the timeline",
+            "type": "checkbox",
+            "helpnote": "Adds timeline markers indicating advertisement cues",
+            "initvalue": false,
+            "dependencies": [{
+              "componentName": "playkit-timeline",
+              "plugin": "timeline",
+              "pluginConfig": {},
+              "condition": true
+            }],
+            "model": "config.plugins.ima.showAdBreakCuePoint"
+          },
+          {
+            "label": "Marker Width",
+            "type": "number",
+            "filter": "numberOnly",
+            "helpnote": "This is the width of the marker in pixels",
+            "min": 0,
+            "initvalue": 2,
+            "model": "config.plugins.ima.adBreakCuePointStyle.marker.width"
+          },
+          {
+            "label": "Marker Color",
+            "type": "color",
+            "initvalue": "#ffffff",
+            "helpnote": "This is the color of the marker",
+            "model": "config.plugins.ima.adBreakCuePointStyle.marker.color"
           }
         ]
       },
@@ -526,8 +555,38 @@
         "label": "IMA DAI",
         "type": "featuremenu",
         "description": "The Google IMA DAI SDK for HTML5 allows developers to make a stream request for ad and content video and get the combined (stitched) video stream in an HTML5 video environment. ",
+        "model": "config.plugins.imadai",
         "componentName": "playkit-ima-dai",
         "children": [
+          {
+            "label": "Ads markers on the timeline",
+            "type": "checkbox",
+            "helpnote": "Adds timeline markers indicating advertisement cues",
+            "initvalue": false,
+            "dependencies": [{
+              "componentName": "playkit-timeline",
+              "plugin": "timeline",
+              "pluginConfig": {},
+              "condition": true
+            }],
+            "model": "config.plugins.imadai.showAdBreakCuePoint"
+          },
+          {
+            "label": "Marker Width",
+            "type": "number",
+            "filter": "numberOnly",
+            "helpnote": "This is the width of the marker in pixels",
+            "min": 0,
+            "initvalue": 2,
+            "model": "config.plugins.imadai.adBreakCuePointStyle.marker.width"
+          },
+          {
+            "label": "Marker Color",
+            "type": "color",
+            "initvalue": "#ffffff",
+            "helpnote": "This is the color of the marker",
+            "model": "config.plugins.imadai.adBreakCuePointStyle.marker.color"
+          }
         ]
       }
     }
