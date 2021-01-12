@@ -276,7 +276,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		    $scope.removeValidation(plugin);
 		    delete $scope.playerData.config.plugins[plugin.model]; // remove the plugin from the player data
 		    for (var i = 0; i < plugin.properties.length; i++) {
-			    $scope.handleDependencies(plugin.properties[i].dependencies, plugin.properties[i].model)
+			    $scope.handleDependencies(plugin.properties[i].dependencies, plugin.properties[i].model);
 		    }
 	    }else{
 			if (plugin.componentName) {
@@ -837,7 +837,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 							window.KalturaPlayer = null;
 						}
 						if (dependency.pluginConfig) {
-							$scope.playerData.plugins[dependency.plugin] = {componentName: dependency.componentName}
+							$scope.playerData.plugins[dependency.plugin] = {componentName: dependency.componentName};
 						} else {
 							$scope.playerData.externals[dependency.componentName] = {active: true};
 							$scope.dependencyExternals[dependency.componentName] = $scope.dependencyExternals[dependency.componentName] || {};
