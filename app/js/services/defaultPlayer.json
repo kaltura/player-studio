@@ -1,7 +1,7 @@
 {
   "disableUserCache": false,
   "plugins": {},
-  "visibility": {
+  "viewability": {
     "playerThreshold": 50
   },
   "provider": {

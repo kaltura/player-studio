@@ -248,12 +248,26 @@ a:hover{
 	margin-left: 490px;
 	padding-top: 10px;
 	padding-right: 50px;
-	height: 300%;
+	height: 100%;
 	-webkit-transition: margin-left 0.3s;
 	-moz-transition: margin-left 0.3s;
 	-o-transition: margin-left 0.3s;
 	-ms-transition: margin-left 0.3s;
 	transition: margin-left 0.3s;
+}
+.outOfView{
+	margin-top: 100vh;
+	transition: margin 700ms;
+}
+#video-wrapper{
+	margin-top: 10px;
+	overflow: scroll;
+	width: 100%;
+	height: 100%;
+}
+
+#kVideoTarget-container{
+	margin-bottom: 100vh;
 }
 .menuFooter{
 	position: absolute;

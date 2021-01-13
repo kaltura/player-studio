@@ -571,8 +571,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.mergePlayerData = function(data){
 		//  backward compatibility with old plugins.visibility
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.visibility) {
-			$scope.playerData.config.visibility = {};
-			$scope.playerData.config.visibility.playerThreshold = $scope.playerData.config.plugins.visibility.threshold;
+			$scope.playerData.config.viewability = $scope.playerData.config.viewability || {};
+			$scope.playerData.config.viewability.playerThreshold = $scope.playerData.config.plugins.visibility.threshold;
 			if ($scope.playerData.config.plugins.visibility.floating){
 				$scope.playerData.config.plugins.floating = $scope.playerData.config.plugins.visibility.floating;
 				delete $scope.playerData.config.plugins.visibility;
