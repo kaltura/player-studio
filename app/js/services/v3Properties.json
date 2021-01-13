@@ -670,7 +670,7 @@
     "id": "cast",
     "label": "Cast",
     "icon": "Chromecast",
-    "description": "Use this tab to enable different cast capabilities.",
+    "description": "Use this tab to enable cast capabilities and to specify whether this player should include the sender plugin or to defined as a receiver player.",
     "type": "menu",
     "children": {
       "cast": {
@@ -703,16 +703,6 @@
         "description": "Enabling this option means that current player is defined as a receiver type, and should only be used in the receiver application <br><br>* <i>Currently all receiver configuration should be handled through the customer receiver application </i>",
         "children": [
           {}
-        ]
-      },
-      "airplay": {
-        "label": "AirPlay",
-        "type": "featuremenu",
-        "description": "Checking this option specifies whether the player should include the AirPlay plugin or not.",
-        "model": "config.plugins.airplay",
-        "endline": "true",
-        "componentName": "playkit-airplay",
-        "children": [
         ]
       }
     }
