@@ -521,7 +521,7 @@
             "initvalue": "SELECT_EXACT_MATCH"
           },
           {
-            "label": "Ads markers on the timeline",
+            "label": "Ad markers on the timeline",
             "type": "checkbox",
             "helpnote": "Adds timeline markers indicating advertisement cues",
             "initvalue": false,
@@ -559,7 +559,7 @@
         "componentName": "playkit-ima-dai",
         "children": [
           {
-            "label": "Ads markers on the timeline",
+            "label": "Ad markers on the timeline",
             "type": "checkbox",
             "helpnote": "Adds timeline markers indicating advertisement cues",
             "initvalue": false,
