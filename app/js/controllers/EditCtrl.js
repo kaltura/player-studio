@@ -274,11 +274,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (plugin.enabled){
 		    // since we are getting the event before the value is changed - enabled means that the plugin is going to be disabled - remove validation
 		    $scope.removeValidation(plugin);
-		    delete $scope.playerData.config.plugins[plugin.model]; // remove the plugin from the player data
+		    $scope.playerData.config.plugins[plugin.model] = {disable: true};
 		    for (var i = 0; i < plugin.properties.length; i++) {
 			    $scope.handleDependencies(plugin.properties[i].dependencies, plugin.properties[i].model);
 		    }
 	    }else{
+		    $scope.playerData.config.plugins[plugin.model] && delete $scope.playerData.config.plugins[plugin.model].disable;
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
 		    }
@@ -676,6 +677,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				return val;
 			}
 		}
+		if (filter == "bumperPosition"){
+			if ($.isArray(val)) {
+				if (val.length === 1) {
+					return val[0] === 0 ? 'pre' : 'post'
+				} else {
+					return 'both';
+				}
+			}
+		}
 		return val;
 	};
 
@@ -808,6 +818,16 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "array"){
 			return data || [];
+		}
+		if (filter == "bumperPosition"){
+			switch (data) {
+				case 'pre':
+					return [0];
+				case 'post':
+					return [-1];
+				case 'both':
+					return [0, -1];
+			}
 		}
 		return data;
 	};
