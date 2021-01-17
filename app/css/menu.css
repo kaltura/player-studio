@@ -255,10 +255,6 @@ a:hover{
 	-ms-transition: margin-left 0.3s;
 	transition: margin-left 0.3s;
 }
-.outOfView{
-	margin-top: 100vh;
-	transition: margin 700ms;
-}
 #video-wrapper{
 	margin-top: 10px;
 	overflow: scroll;
