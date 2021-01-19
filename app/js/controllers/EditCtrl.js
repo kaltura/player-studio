@@ -679,10 +679,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "bumperPosition"){
 			if ($.isArray(val)) {
-				if (val.length === 1) {
-					return val[0] === 0 ? 'pre' : 'post'
-				} else {
+				if (val.length === 1 && val[0] === -1) {
+					return 'post'
+				} else if ($.inArray(0, val) > -1 && $.inArray(-1, val) > -1) {
 					return 'both';
+				} else {
+					return 'pre';
 				}
 			}
 		}
