@@ -525,7 +525,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				var copyobj = data.plugins || data;
 				angular.forEach(copyobj, function (value, key) {
 					if (angular.isObject(value)) {
-						if (value.enabled && value.enabled === false) {
+						if (value.disable || (value.enabled && value.enabled === false)) {
 							delete copyobj[key];
 						}
 						else {
@@ -666,7 +666,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					if (data.externals && data.config.plugins[plugin]) {
 						delete data.externals[pluginData.componentName];
 					}
-					if ((data.config.plugins[plugin] || data.config[plugin]) && pluginData.componentName) {
+					if (((data.config.plugins[plugin] && !data.config.plugins[plugin].disable)|| data.config[plugin]) && pluginData.componentName) {
 						playerAndPluginsVersionObj[pluginData.componentName] = playersService.getComponentVersion(data, pluginData.componentName);
 					}
 				}

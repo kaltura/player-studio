@@ -216,6 +216,48 @@
           }
         ]
       },
+      "bumper": {
+        "label": "Bumper",
+        "type": "featuremenu",
+        "description": "Enable to have a bumper displayed before or after (or both) your content. The bumper could either be attached to an entry (in which case - leave the external url below empty) or provided as an external url.",
+        "model": "config.plugins.bumper",
+        "componentName": "playkit-bumper",
+        "children": [
+          {
+            "label": "External URL",
+            "validation": "url",
+            "type": "text",
+            "model": "config.plugins.bumper.url",
+            "helpnote": "A progressive content url to be used as a bumper"
+          }, {
+            "label": "Click Through URL",
+            "validation": "url",
+            "type": "text",
+            "model": "config.plugins.bumper.clickThroughUrl"
+          }, {
+            "label": "Position",
+            "type": "dropdown",
+            "options": [
+              {
+                "label": "Pre",
+                "value": "pre"
+              },
+              {
+                "label": "Post",
+                "value": "post"
+              },
+              {
+                "label": "Both",
+                "value": "both"
+              }
+            ],
+            "filter": "bumperPosition",
+            "initvalue": "pre",
+            "model": "config.plugins.bumper.position",
+            "helpnote": "Choose when the bumper should be played"
+          }
+        ]
+      },
       "translation": {
         "type": "featuremenu",
         "description": "Player language selection",
