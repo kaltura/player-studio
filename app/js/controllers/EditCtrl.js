@@ -570,6 +570,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
+		//  backward compatibility with old plugins.visibility
+		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.visibility) {
+			$scope.playerData.config.viewability = $scope.playerData.config.viewability || {};
+			$scope.playerData.config.viewability.playerThreshold = $scope.playerData.config.plugins.visibility.threshold;
+			if ($scope.playerData.config.plugins.visibility.floating){
+				$scope.playerData.config.plugins.floating = $scope.playerData.config.plugins.visibility.floating;
+				delete $scope.playerData.config.plugins.visibility;
+			}
+		}
 
 		// support multiple playlists
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
@@ -676,6 +685,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			} else {
 				return val;
 			}
+		}
+		if (filter == "containsBooleans"){
+			return val === true || val === false ? String(val) : val;
 		}
 		if (filter == "bumperPosition"){
 			if ($.isArray(val)) {
@@ -820,6 +832,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		if (filter == "array"){
 			return data || [];
+		}
+		if (filter == "containsBooleans"){
+			return data === "true" || data === "false" ? Boolean(data === "true") : data;
 		}
 		if (filter == "bumperPosition"){
 			switch (data) {

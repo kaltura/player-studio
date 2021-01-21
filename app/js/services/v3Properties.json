@@ -124,9 +124,30 @@
       },
       {
         "label": "Autoplay",
-        "helpnote": "Play the video automatically when the page loads",
-        "type": "checkbox",
+        "helpnote": "If set to 'Always' - The video will play automatically when the page loads, if set to 'In View' the video will play automatically only if the player is in view. If player is not in view, playback will start only when viewer scrolls to it" ,
+        "type": "dropdown",
+        "options": [
+          {
+            "label": "Always",
+            "value": "true"
+          },
+          {
+            "label": "In View",
+            "value": "inview"
+          },
+          {
+            "label": "Off",
+            "value": "false"
+          }
+        ],
+        "filter": "containsBooleans",
         "model": "config.playback.autoplay"
+      },
+      {
+        "label": "Autopause",
+        "helpnote": "Pause the video automatically when player scrolls out of view. Resume playback when player goes back into view",
+        "type": "checkbox",
+        "model": "config.playback.autopause"
       },
       {
         "label": "Start Playback Muted",
@@ -318,43 +339,17 @@
           }
         ]
       },
-      "visibility": {
+      "floating": {
         "type": "featuremenu",
-        "description": "Viewability plugin handles player behaviour when in / out of view",
-        "model": "config.plugins.visibility",
+        "description": "When a viewer scrolls the player out of view, a floating player would pop-up and position itself following the configuration. This allows the viewer to engage with both the video content and the article.",
+        "model": "config.plugins.floating",
         "componentName": "playkit-visibility",
-        "sections": {
-          "tabset": [{
-            "label": "Floating",
-            "key": "floating",
-            "componentName": "playkit-visibility",
-            "children": [
-            ],
-            "active": true
-          }]
-        },
-        "label": "Viewability",
+        "label": "Floating",
         "children": [
-          {
-            "label": "When a viewer scrolls the player out of view, a floating player would pop-up and position itself following the configuration. This allows the viewer to engage with both the video content and the article.",
-            "type": "text",
-            "section": "floating"
-          },
-          {
-            "label": "Threshold",
-            "type": "number",
-            "model": "config.plugins.visibility.threshold",
-            "helpnote": "This value defines when to pop-out or pop-in the floating player. When player visibility is above this value, the floating player would pop-in and disappear. When visibility is below this value, the floating player would pop-out (0-100)",
-            "min": 0,
-            "max": 100,
-            "initvalue": 50,
-            "filter": "numberOnly"
-          },
           {
             "label": "Position",
             "type": "dropdown",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.position",
+            "model": "config.plugins.floating.position",
             "options": [
               {
                 "label": "Top Right",
@@ -377,8 +372,7 @@
           {
             "label": "Width",
             "type": "number",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.width",
+            "model": "config.plugins.floating.width",
             "helpnote": "The width of the floating player in pixels",
             "min": 0,
             "initvalue": 400,
@@ -387,8 +381,7 @@
           {
             "label": "Height",
             "type": "number",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.height",
+            "model": "config.plugins.floating.height",
             "helpnote": "The height of the floating player in pixels",
             "min": 0,
             "initvalue": 225,
@@ -397,8 +390,7 @@
           {
             "label": "Margin-X",
             "type": "number",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.marginX",
+            "model": "config.plugins.floating.marginX",
             "helpnote": "The margin, in pixels, from the selected edge, on the X-Axis",
             "min": 0,
             "initvalue": 0,
@@ -407,8 +399,7 @@
           {
             "label": "Margin-Y",
             "type": "number",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.marginY",
+            "model": "config.plugins.floating.marginY",
             "helpnote": "The margin, in pixels, from the selected edge, on the Y-Axis",
             "min": 0,
             "initvalue": 0,
@@ -417,16 +408,14 @@
           {
             "label": "Dismissible",
             "type": "checkbox",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.dismissible",
+            "model": "config.plugins.floating.dismissible",
             "helpnote": "When set to true, viewer will be able to dismiss the floating player so that it doesn’t appear anymore while he scrolls the current page",
             "initvalue": true
           },
           {
             "label": "Draggable",
             "type": "checkbox",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.draggable",
+            "model": "config.plugins.floating.draggable",
             "helpnote": "When set to true, viewer will be able to drag the floating player. Uncheck if you want to have a fixed location for the floating player",
             "initvalue": true
           }
