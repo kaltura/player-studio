@@ -279,7 +279,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			    $scope.handleDependencies(plugin.properties[i].dependencies, plugin.properties[i].model);
 		    }
 	    }else{
-		    $scope.playerData.config.plugins[plugin.model] && delete $scope.playerData.config.plugins[plugin.model].disable;
+			if ($scope.playerData.config.plugins[plugin.model]) {
+		        delete $scope.playerData.config.plugins[plugin.model].disable;
+		    }
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
 		    }
@@ -692,7 +694,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if (filter == "bumperPosition"){
 			if ($.isArray(val)) {
 				if (val.length === 1 && val[0] === -1) {
-					return 'post'
+					return 'post';
 				} else if ($.inArray(0, val) > -1 && $.inArray(-1, val) > -1) {
 					return 'both';
 				} else {
