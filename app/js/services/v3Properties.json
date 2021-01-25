@@ -167,7 +167,6 @@
         "helpnote": "Select the default screen lock orientation for the player",
         "type": "dropdown",
         "model": "config.playback.screenLockOrientionMode",
-        "filter": "noEmpty",
         "options": [
           {
             "label": "None",
