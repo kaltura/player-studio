@@ -163,6 +163,50 @@
         "endline": "true"
       },
       {
+        "label": "Screen lock orientation",
+        "helpnote": "Select the default screen lock orientation for the player when in fullscreen",
+        "type": "dropdown",
+        "model": "config.playback.screenLockOrientionMode",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "Any",
+            "value": "any"
+          },
+          {
+            "label": "Natural",
+            "value": "natural"
+          },
+          {
+            "label": "Landscape",
+            "value": "landscape"
+          },
+          {
+            "label": "Portrait",
+            "value": "portrait"
+          },
+          {
+            "label": "Portrait primary",
+            "value": "portrait-primary"
+          },
+          {
+            "label": "Portrait secondary",
+            "value": "portrait-secondary"
+          },
+          {
+            "label": "Landscape primary",
+            "value": "landscape-primary"
+          },
+          {
+            "label": "Landscape secondary",
+            "value": "landscape-secondary"
+          }
+        ]
+      },
+      {
         "label": "Support legacy HLS with Flash",
         "helpnote": "When using this option, if the platform doesn't support the media source extension or native HLS, we'll try to add Flash",
         "type": "checkbox",
