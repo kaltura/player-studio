@@ -164,7 +164,7 @@
       },
       {
         "label": "Screen lock orientation",
-        "helpnote": "Select the default screen lock orientation for the player",
+        "helpnote": "Select the default screen lock orientation for the player when in fullscreen",
         "type": "dropdown",
         "model": "config.playback.screenLockOrientionMode",
         "options": [
