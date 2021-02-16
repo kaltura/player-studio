@@ -1,0 +1,5 @@
+<div ng-class="{disabled: (plugin!=null && !plugin.enabled) || playerData.playerVersion=='beta'}" class="ng-scope">
+	<!--span bind-once>{{property.label}}</span><br-->
+	<div class="pluginLabel" id="{{property.id}}">* Latest version: {{playerData.latestPlayerProductVersion}}</div>
+	<div class="pluginLabel" id="{{property.id}}">* Current version: {{playerData.frozenProductVersion || playerData.autoUpdate && playerData.latestPlayerProductVersion || "Not available"}}</div>
+</div>

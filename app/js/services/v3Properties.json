@@ -41,6 +41,9 @@
         "initvalue": "latest"
       },
       {
+        "type": "versionsInfo"
+      },
+      {
         "label": "Keep Player on Current Version",
         "helpnote": "Prevents the player from automatically updating when a new version becomes available",
         "type": "freezeVersion",
