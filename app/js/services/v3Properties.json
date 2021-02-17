@@ -634,8 +634,8 @@
         "componentName": "playkit-ima-dai",
         "children": [
           {
-            "label": "Enable pre-roll with live",
-            "helpnote": "Should set ad holiday duration on stream when client-side pre-rolls are used before a live stream",
+            "label": "Enable ad holiday",
+            "helpnote": "Activate this option to avoid showing viewers an ad immediately after they've just watched a pre-roll ad. Please note that the duration must be set in Google Ad Manager",
             "model": "config.plugins.imadai.adTagParameters.dai-ah",
             "filter": "prerollImaDAI",
             "type": "checkbox"
