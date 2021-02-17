@@ -634,6 +634,13 @@
         "componentName": "playkit-ima-dai",
         "children": [
           {
+            "label": "Enable pre-roll with live",
+            "helpnote": "Should set ad holiday duration on stream when client-side pre-rolls are used before a live stream",
+            "model": "config.plugins.imadai.adTagParameters.dai-ah",
+            "filter": "prerollImaDAI",
+            "type": "checkbox"
+          },
+          {
             "label": "Ad markers on the timeline",
             "type": "checkbox",
             "helpnote": "Adds timeline markers indicating advertisement cues",
