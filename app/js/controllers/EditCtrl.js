@@ -688,6 +688,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				return val;
 			}
 		}
+		if (filter == "prerollImaDAI") {
+			return val === 1 || val;
+		}
 		if (filter == "containsBooleans"){
 			return val === true || val === false ? String(val) : val;
 		}
