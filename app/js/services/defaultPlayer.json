@@ -1,7 +1,9 @@
 {
   "disableUserCache": false,
   "plugins": {},
-  "playback": {},
+  "viewability": {
+    "playerThreshold": 50
+  },
   "provider": {
     "env": {}
   },

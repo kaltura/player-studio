@@ -124,9 +124,30 @@
       },
       {
         "label": "Autoplay",
-        "helpnote": "Play the video automatically when the page loads",
-        "type": "checkbox",
+        "helpnote": "If set to 'Always' - The video will play automatically when the page loads, if set to 'In View' the video will play automatically only if the player is in view. If player is not in view, playback will start only when viewer scrolls to it" ,
+        "type": "dropdown",
+        "options": [
+          {
+            "label": "Always",
+            "value": "true"
+          },
+          {
+            "label": "In View",
+            "value": "inview"
+          },
+          {
+            "label": "Off",
+            "value": "false"
+          }
+        ],
+        "filter": "containsBooleans",
         "model": "config.playback.autoplay"
+      },
+      {
+        "label": "Autopause",
+        "helpnote": "Pause the video automatically when player scrolls out of view. Resume playback when player goes back into view",
+        "type": "checkbox",
+        "model": "config.playback.autopause"
       },
       {
         "label": "Start Playback Muted",
@@ -140,6 +161,50 @@
         "type": "checkbox",
         "model": "config.playback.allowMutedAutoPlay",
         "endline": "true"
+      },
+      {
+        "label": "Screen lock orientation",
+        "helpnote": "Select the default screen lock orientation for the player when in fullscreen",
+        "type": "dropdown",
+        "model": "config.playback.screenLockOrientionMode",
+        "options": [
+          {
+            "label": "None",
+            "value": "none"
+          },
+          {
+            "label": "Any",
+            "value": "any"
+          },
+          {
+            "label": "Natural",
+            "value": "natural"
+          },
+          {
+            "label": "Landscape",
+            "value": "landscape"
+          },
+          {
+            "label": "Portrait",
+            "value": "portrait"
+          },
+          {
+            "label": "Portrait primary",
+            "value": "portrait-primary"
+          },
+          {
+            "label": "Portrait secondary",
+            "value": "portrait-secondary"
+          },
+          {
+            "label": "Landscape primary",
+            "value": "landscape-primary"
+          },
+          {
+            "label": "Landscape secondary",
+            "value": "landscape-secondary"
+          }
+        ]
       },
       {
         "label": "Support legacy HLS with Flash",
@@ -192,6 +257,48 @@
             "label": "Title",
             "model": "config.ui.components.logo.text",
             "helpnote": "Title tooltip for the logo"
+          }
+        ]
+      },
+      "bumper": {
+        "label": "Bumper",
+        "type": "featuremenu",
+        "description": "Enable to have a bumper displayed before or after (or both) your content. The bumper could either be attached to an entry (in which case - leave the external url below empty) or provided as an external url.",
+        "model": "config.plugins.bumper",
+        "componentName": "playkit-bumper",
+        "children": [
+          {
+            "label": "External URL",
+            "validation": "url",
+            "type": "text",
+            "model": "config.plugins.bumper.url",
+            "helpnote": "A progressive content url to be used as a bumper"
+          }, {
+            "label": "Click Through URL",
+            "validation": "url",
+            "type": "text",
+            "model": "config.plugins.bumper.clickThroughUrl"
+          }, {
+            "label": "Position",
+            "type": "dropdown",
+            "options": [
+              {
+                "label": "Pre",
+                "value": "pre"
+              },
+              {
+                "label": "Post",
+                "value": "post"
+              },
+              {
+                "label": "Both",
+                "value": "both"
+              }
+            ],
+            "filter": "bumperPosition",
+            "initvalue": "pre",
+            "model": "config.plugins.bumper.position",
+            "helpnote": "Choose when the bumper should be played"
           }
         ]
       },
@@ -276,43 +383,17 @@
           }
         ]
       },
-      "visibility": {
+      "floating": {
         "type": "featuremenu",
-        "description": "Viewability plugin handles player behaviour when in / out of view",
-        "model": "config.plugins.visibility",
+        "description": "When a viewer scrolls the player out of view, a floating player would pop-up and position itself following the configuration. This allows the viewer to engage with both the video content and the article.",
+        "model": "config.plugins.floating",
         "componentName": "playkit-visibility",
-        "sections": {
-          "tabset": [{
-            "label": "Floating",
-            "key": "floating",
-            "componentName": "playkit-visibility",
-            "children": [
-            ],
-            "active": true
-          }]
-        },
-        "label": "Viewability",
+        "label": "Floating",
         "children": [
-          {
-            "label": "When a viewer scrolls the player out of view, a floating player would pop-up and position itself following the configuration. This allows the viewer to engage with both the video content and the article.",
-            "type": "text",
-            "section": "floating"
-          },
-          {
-            "label": "Threshold",
-            "type": "number",
-            "model": "config.plugins.visibility.threshold",
-            "helpnote": "This value defines when to pop-out or pop-in the floating player. When player visibility is above this value, the floating player would pop-in and disappear. When visibility is below this value, the floating player would pop-out (0-100)",
-            "min": 0,
-            "max": 100,
-            "initvalue": 50,
-            "filter": "numberOnly"
-          },
           {
             "label": "Position",
             "type": "dropdown",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.position",
+            "model": "config.plugins.floating.position",
             "options": [
               {
                 "label": "Top Right",
@@ -335,8 +416,7 @@
           {
             "label": "Width",
             "type": "number",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.width",
+            "model": "config.plugins.floating.width",
             "helpnote": "The width of the floating player in pixels",
             "min": 0,
             "initvalue": 400,
@@ -345,8 +425,7 @@
           {
             "label": "Height",
             "type": "number",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.height",
+            "model": "config.plugins.floating.height",
             "helpnote": "The height of the floating player in pixels",
             "min": 0,
             "initvalue": 225,
@@ -355,8 +434,7 @@
           {
             "label": "Margin-X",
             "type": "number",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.marginX",
+            "model": "config.plugins.floating.marginX",
             "helpnote": "The margin, in pixels, from the selected edge, on the X-Axis",
             "min": 0,
             "initvalue": 0,
@@ -365,8 +443,7 @@
           {
             "label": "Margin-Y",
             "type": "number",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.marginY",
+            "model": "config.plugins.floating.marginY",
             "helpnote": "The margin, in pixels, from the selected edge, on the Y-Axis",
             "min": 0,
             "initvalue": 0,
@@ -375,16 +452,14 @@
           {
             "label": "Dismissible",
             "type": "checkbox",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.dismissible",
+            "model": "config.plugins.floating.dismissible",
             "helpnote": "When set to true, viewer will be able to dismiss the floating player so that it doesn’t appear anymore while he scrolls the current page",
             "initvalue": true
           },
           {
             "label": "Draggable",
             "type": "checkbox",
-            "section": "floating",
-            "model": "config.plugins.visibility.floating.draggable",
+            "model": "config.plugins.floating.draggable",
             "helpnote": "When set to true, viewer will be able to drag the floating player. Uncheck if you want to have a fixed location for the floating player",
             "initvalue": true
           }
@@ -519,6 +594,35 @@
             "type": "sizeCriteria",
             "model": "config.plugins.ima.companions.sizeCriteria",
             "initvalue": "SELECT_EXACT_MATCH"
+          },
+          {
+            "label": "Ad markers on the timeline",
+            "type": "checkbox",
+            "helpnote": "Adds timeline markers indicating advertisement cues",
+            "initvalue": false,
+            "dependencies": [{
+              "componentName": "playkit-timeline",
+              "plugin": "timeline",
+              "pluginConfig": {},
+              "condition": true
+            }],
+            "model": "config.plugins.ima.showAdBreakCuePoint"
+          },
+          {
+            "label": "Marker Width",
+            "type": "number",
+            "filter": "numberOnly",
+            "helpnote": "This is the width of the marker in pixels",
+            "min": 0,
+            "initvalue": 2,
+            "model": "config.plugins.ima.adBreakCuePointStyle.marker.width"
+          },
+          {
+            "label": "Marker Color",
+            "type": "color",
+            "initvalue": "#ffffff",
+            "helpnote": "This is the color of the marker",
+            "model": "config.plugins.ima.adBreakCuePointStyle.marker.color"
           }
         ]
       },
@@ -526,8 +630,45 @@
         "label": "IMA DAI",
         "type": "featuremenu",
         "description": "The Google IMA DAI SDK for HTML5 allows developers to make a stream request for ad and content video and get the combined (stitched) video stream in an HTML5 video environment. ",
+        "model": "config.plugins.imadai",
         "componentName": "playkit-ima-dai",
         "children": [
+          {
+            "label": "Enable ad holiday",
+            "helpnote": "Activate this option to avoid showing viewers an ad immediately after they've just watched a pre-roll ad. Please note that the duration must be set in Google Ad Manager",
+            "model": "config.plugins.imadai.adTagParameters.dai-ah",
+            "filter": "prerollImaDAI",
+            "type": "checkbox"
+          },
+          {
+            "label": "Ad markers on the timeline",
+            "type": "checkbox",
+            "helpnote": "Adds timeline markers indicating advertisement cues",
+            "initvalue": false,
+            "dependencies": [{
+              "componentName": "playkit-timeline",
+              "plugin": "timeline",
+              "pluginConfig": {},
+              "condition": true
+            }],
+            "model": "config.plugins.imadai.showAdBreakCuePoint"
+          },
+          {
+            "label": "Marker Width",
+            "type": "number",
+            "filter": "numberOnly",
+            "helpnote": "This is the width of the marker in pixels",
+            "min": 0,
+            "initvalue": 2,
+            "model": "config.plugins.imadai.adBreakCuePointStyle.marker.width"
+          },
+          {
+            "label": "Marker Color",
+            "type": "color",
+            "initvalue": "#ffffff",
+            "helpnote": "This is the color of the marker",
+            "model": "config.plugins.imadai.adBreakCuePointStyle.marker.color"
+          }
         ]
       }
     }

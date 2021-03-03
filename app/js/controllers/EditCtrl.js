@@ -11,6 +11,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.aspectRatio = playerRatio == (9/16) ? "wide" : playerRatio == (3/4) ? "narrow" : "custom";  // set aspect ratio to wide screen
 	$scope.newPlayer = !$routeParams.id;            // New player flag
 	$scope.menuOpen = true;
+	$scope.dependencyPlugins = {};
+	$scope.dependencyExternals = {};
 
 	try {
 		var confVarsObj = JSON.parse($scope.playerData.confVars);
@@ -272,8 +274,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (plugin.enabled){
 		    // since we are getting the event before the value is changed - enabled means that the plugin is going to be disabled - remove validation
 		    $scope.removeValidation(plugin);
-		    delete $scope.playerData.config.plugins[plugin.model]; // remove the plugin from the player data
+		    $scope.playerData.config.plugins[plugin.model] = {disable: true};
+		    for (var i = 0; i < plugin.properties.length; i++) {
+			    $scope.handleDependencies(plugin.properties[i].dependencies, plugin.properties[i].model);
+		    }
 	    }else{
+			if ($scope.playerData.config.plugins[plugin.model]) {
+		        delete $scope.playerData.config.plugins[plugin.model].disable;
+		    }
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
 		    }
@@ -579,6 +587,15 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	// merge the player data with the menu data
 	$scope.mergePlayerData = function(data){
+		//  backward compatibility with old plugins.visibility
+		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.visibility) {
+			$scope.playerData.config.viewability = $scope.playerData.config.viewability || {};
+			$scope.playerData.config.viewability.playerThreshold = $scope.playerData.config.plugins.visibility.threshold;
+			if ($scope.playerData.config.plugins.visibility.floating){
+				$scope.playerData.config.plugins.floating = $scope.playerData.config.plugins.visibility.floating;
+				delete $scope.playerData.config.plugins.visibility;
+			}
+		}
 
 		// support multiple playlists
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins.playlistAPI) {
@@ -686,6 +703,23 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				return val;
 			}
 		}
+		if (filter == "prerollImaDAI") {
+			return val === 1 || val;
+		}
+		if (filter == "containsBooleans"){
+			return val === true || val === false ? String(val) : val;
+		}
+		if (filter == "bumperPosition"){
+			if ($.isArray(val)) {
+				if (val.length === 1 && val[0] === -1) {
+					return 'post';
+				} else if ($.inArray(0, val) > -1 && $.inArray(-1, val) > -1) {
+					return 'both';
+				} else {
+					return 'pre';
+				}
+			}
+		}
 		return val;
 	};
 
@@ -716,6 +750,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					}
 			}
 		}
+		$scope.removeUnusedDependencies();
 	};
 
 	$scope.setPluginData = function(plugin){
@@ -748,8 +783,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				var prop = objArr[j];
 				if (j == objArr.length-1 && data.initvalue !== undefined){  // last object in model path - this is the value property
 					pData[prop] = data.filter ? $scope.setFilter(data.initvalue, data.filter) : data.initvalue; // set the data in this property
+					$scope.handleDependencies(data.dependencies, data.model, data.initvalue);
 				}else{
-					if (j == objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
+					if (j <= objArr.length-2 && !pData[prop]){ // object path doesn't exist - create is (add plugin that was enabled)
 						pData[prop] = data.custom ? {'custom':true, 'enabled':true} : {'enabled':true};
 					}
 					if (pData[prop]) {
@@ -805,6 +841,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			adsRenderingSettings.loadVideoTimeout = Number(data);
 			return adsRenderingSettings;
 		}
+		if (filter == "prerollImaDAI") {
+			return data ? 1 : 0;
+		}
 		if (filter == "noEmpty") {
 			return data || undefined;
 		}
@@ -817,7 +856,67 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if (filter == "array"){
 			return data || [];
 		}
+		if (filter == "containsBooleans"){
+			return data === "true" || data === "false" ? Boolean(data === "true") : data;
+		}
+		if (filter == "bumperPosition"){
+			switch (data) {
+				case 'pre':
+					return [0];
+				case 'post':
+					return [-1];
+				case 'both':
+					return [0, -1];
+			}
+		}
 		return data;
+	};
+
+	$scope.handleDependencies = function(propDependencies, propModel, propValue) {
+		if (propDependencies) {
+			for (var i = 0; i < propDependencies.length; i++) {
+				var dependency = propDependencies[i];
+				if (propValue && propValue === dependency.condition) {
+					if (dependency.componentName) {
+						if (!($scope.playerData.plugins[dependency.plugin] || $scope.dependencyExternals[dependency.componentName])) {
+							window.KalturaPlayer = null;
+						}
+						if (dependency.pluginConfig) {
+							$scope.playerData.plugins[dependency.plugin] = {componentName: dependency.componentName};
+						} else {
+							$scope.playerData.externals[dependency.componentName] = {active: true};
+							$scope.dependencyExternals[dependency.componentName] = $scope.dependencyExternals[dependency.componentName] || {};
+							$scope.dependencyExternals[dependency.componentName][propModel] = true;
+						}
+					}
+					if (dependency.pluginConfig) {
+						$scope.playerData.config.plugins[dependency.plugin] = dependency.pluginConfig;
+						$scope.dependencyPlugins[dependency.plugin] = $scope.dependencyPlugins[dependency.plugin] || {};
+						$scope.dependencyPlugins[dependency.plugin][propModel] = true;
+					}
+				} else {
+					if ($scope.dependencyPlugins[dependency.plugin]) {
+						delete $scope.dependencyPlugins[dependency.plugin][propModel];
+					}
+					if ($scope.dependencyExternals[dependency.componentName]) {
+						delete $scope.dependencyExternals[dependency.componentName][propModel];
+					}
+				}
+			}
+		}
+	};
+
+	$scope.removeUnusedDependencies = function () {
+		for (var plugin in $scope.dependencyPlugins) {
+			if ($.isEmptyObject($scope.dependencyPlugins[plugin])) {
+				delete $scope.playerData.config.plugins[plugin];
+			}
+		}
+		for (var external in $scope.dependencyExternals) {
+			if ($.isEmptyObject($scope.dependencyExternals[external])) {
+				$scope.playerData.externals[external] = {active: false};
+			}
+		}
 	};
 
 	$scope.backToList = function(){
