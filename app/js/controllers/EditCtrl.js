@@ -360,7 +360,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.playerData.config.plugins.airplay = {};
 			} else {
 				airPlayPlugin.enabled = false;
-				delete 	$scope.playerData.config.airplay;
+				delete 	$scope.playerData.config.plugins.airplay;
 			}
 		}
 	};
