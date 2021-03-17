@@ -24,8 +24,8 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 					if ($(".playlistSetup").length === 0){
 						$('div:contains("Playlist Configuration").panel').before('<div class="tabSubHeader playlistSetup">Playlist setup:</div>'); // add playlist separator
 					}
-					if ($(".Chromecast").length === 0){
-						$('div:contains("Sender").panel').before('<div class="tabSubHeader Chromecast">Google Chromecast</div><p class="categoryDesc">Specify whether this player should include the sender plugin or to defined as a receiver player.</p>');
+					if ($(".GenericCast").length === 0){
+						$('div:contains("Sender").panel').before('<div class="tabSubHeader GenericCast">Google Chromecast</div><p class="categoryDesc">Specify whether this player should include the sender plugin or to defined as a receiver player.</p>');
 					}
 					if ($(".AirPlay").length === 0){
 						$('div:contains("AirPlay").panel').before('<div class="tabSubHeader AirPlay">Apple AirPlay</div><p class="categoryDesc">Use the below to enable casting capabilities from iOS devices, using the Apple AirPlay protocol.</p>');
