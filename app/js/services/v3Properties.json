@@ -751,7 +751,7 @@
   {
     "id": "cast",
     "label": "Cast",
-    "icon": "Chromecast",
+    "icon": "GenericCast",
     "description": "Use this tab to enable different cast capabilities.",
     "type": "menu",
     "children": {

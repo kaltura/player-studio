@@ -87,6 +87,9 @@
 .icon-theming:before {
     content: "\e618";
 }
+.icon-GenericCast:before {
+    content: "\e619";
+}
 
 .icon{
 	cursor: pointer;
