@@ -10,3 +10,4 @@ app/bower_components/angular-ui-sortable/src/sortable.min.js
 app/lib/colorpicker/js/bootstrap-colorpicker-module.min.js
 app/lib/colorpickerV1/js/bootstrap-colorpicker-module.min.js
 app/lib/colorpickerV1/lib/bootstrap-colorpicker.min.js
+.DS_Store
