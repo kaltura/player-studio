@@ -637,6 +637,13 @@
         "componentName": "playkit-ima-dai",
         "children": [
           {
+            "label": "Enable ad holiday",
+            "helpnote": "Activate this option to avoid showing viewers an ad immediately after they've just watched a pre-roll ad. Please note that the duration must be set in Google Ad Manager",
+            "model": "config.plugins.imadai.adTagParameters.dai-ah",
+            "filter": "prerollImaDAI",
+            "type": "checkbox"
+          },
+          {
             "label": "Ad markers on the timeline",
             "type": "checkbox",
             "helpnote": "Adds timeline markers indicating advertisement cues",
@@ -747,8 +754,8 @@
   {
     "id": "cast",
     "label": "Cast",
-    "icon": "Chromecast",
-    "description": "Use this tab to enable cast capabilities and to specify whether this player should include the sender plugin or to defined as a receiver player.",
+    "icon": "GenericCast",
+    "description": "Use this tab to enable different cast capabilities.",
     "type": "menu",
     "children": {
       "cast": {
@@ -781,6 +788,16 @@
         "description": "Enabling this option means that current player is defined as a receiver type, and should only be used in the receiver application <br><br>* <i>Currently all receiver configuration should be handled through the customer receiver application </i>",
         "children": [
           {}
+        ]
+      },
+      "airplay": {
+        "label": "AirPlay",
+        "type": "featuremenu",
+        "description": "Checking this option specifies whether the player should include the AirPlay plugin or not.",
+        "model": "config.plugins.airplay",
+        "endline": "true",
+        "componentName": "playkit-airplay",
+        "children": [
         ]
       }
     }
