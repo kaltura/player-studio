@@ -1,0 +1,34 @@
+<!--<div ng-class="{disabled: (plugin!=null && !plugin.enabled) || playerData.playerVersion=='beta'}" class="ng-scope">-->
+<!--	&lt;!&ndash;span bind-once>{{property.label}}</span><br&ndash;&gt;-->
+<!--	<div class="pluginLabel" id="{{property.id}}">* Latest version: {{playerData.latestPlayerProductVersion}}</div>-->
+<!--	<div class="pluginLabel" id="{{property.id}}">* Current version: {{playerData.frozenProductVersion || playerData.autoUpdate && playerData.latestPlayerProductVersion || "Not available"}}</div>-->
+<!--</div>-->
+
+<div class="text dropdownContainer">
+	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
+	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
+	<select ng-show="playerData.autoUpdate"
+			ng-disabled="plugin!=null && !plugin.enabled"
+			ng-change="propertyChanged(property, true)"
+			ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}"
+			ng-model="property.initvalue"
+			class="dropdown">
+		<option value="latest">
+			Latest {{playerData.latestPlayerProductVersion ? "(" + playerData.latestPlayerProductVersion + ")" : ""}}
+		</option>
+		<option value="beta">
+			Beta {{playerData.latestPlayerBetaProductVersion ? "(" + playerData.latestPlayerBetaProductVersion + ")" : ""}}
+		</option>
+	</select>
+	<select ng-show="!playerData.autoUpdate"
+			ng-disabled="true"
+			ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}"
+			ng-model="playerData.latestPlayerProductVersion"
+			class="dropdown">
+		<option value="{{playerData.latestPlayerProductVersion}}">
+			{{playerData.latestPlayerProductVersion}}
+		</option>
+	</select>
+
+	<hr bind-once ng-if="property.endline">
+</div>

@@ -226,6 +226,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			OTT: 'ott',
 			playerVersionsMap: null,
 			playerProductVersion: undefined,
+			playerBetaProductVersion: undefined,
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
 				currentRefresh = null;
@@ -642,14 +643,46 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getPlayerProductVersion': function () {
 				if (playersService.playerProductVersion === undefined) {
 					var kmc = window.parent.kmc;
-					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerProductVersion) {
+					kmc =
+						{
+						vars : {
+							studioV3: {
+								playerConfVars: '{"version":"7.32.3"}'
+							}
+						}
+					}
+					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerConfVars) {
 						try {
-							playersService.playerProductVersion = JSON.parse(kmc.vars.studioV3.playerProductVersion);
-						} catch (e) {}
+							playersService.playerProductVersion = JSON.parse(kmc.vars.studioV3.playerConfVars);
+						} catch (e) {
+							console.error(e);
+						}
 					}
 					playersService.playerProductVersion = angular.isObject(playersService.playerProductVersion) &&  playersService.playerProductVersion.version ? playersService.playerProductVersion.version : "";
 				}
 				return playersService.playerProductVersion;
+			},
+            'getPlayerBetaProductVersion': function () {
+				if (playersService.playerBetaProductVersion === undefined) {
+					var kmc = window.parent.kmc;
+					kmc =
+						{
+						vars : {
+							studioV3: {
+								playerBetaConfVars: '{"version":"7.32.5"}'
+							}
+						}
+					}
+					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerBetaConfVars) {
+						try {
+							playersService.playerBetaProductVersion = JSON.parse(kmc.vars.studioV3.playerBetaConfVars);
+						} catch (e) {
+							console.error(e);
+						}
+					}
+					playersService.playerBetaProductVersion = angular.isObject(playersService.playerBetaProductVersion) &&  playersService.playerBetaProductVersion.version ? playersService.playerBetaProductVersion.version : "";
+				}
+				return playersService.playerBetaProductVersion;
 			},
 			'getComponentVersion': function (data, componentName) {
 				if (data.playerVersion === "beta") {

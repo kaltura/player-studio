@@ -1,4 +1,7 @@
 const tagToProductVersion = {
+	'1.5.5': '7.32.3',
+	'1.5.2': '7.32.1',
+	'1.5.0': '7.32',
 	'1.4.0': '7.31',
 	'1.3.0': '7.30',
 	'1.2.1': '7.29.1',
@@ -84,6 +87,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				}
 			}
 			$scope.playerData['latestPlayerProductVersion'] = PlayerService.getPlayerProductVersion();
+			$scope.playerData['latestPlayerBetaProductVersion'] = PlayerService.getPlayerBetaProductVersion();
 		}
 	} catch (e) {
 		logTime(e);
@@ -480,10 +484,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     };
 
     $scope.propertyChanged = function(property, checkAutoRefresh){
-	    if (property.resetKalturaPlayer){
+	    if (property.	resetKalturaPlayer){
 		    window.KalturaPlayer = null;
 	    }
-	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage"){ // handle player version and captions select
+	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage" || property.model === "autoUpdate"){ // handle player version and captions select
 		    $scope.updatePlayerData(); // update the player data from the menu data
 	    }
 	    if (property.model === "languageKey"){ // handle captions input updated
