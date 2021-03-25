@@ -484,7 +484,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
     };
 
     $scope.propertyChanged = function(property, checkAutoRefresh){
-	    if (property.	resetKalturaPlayer){
+	    if (property.resetKalturaPlayer){
 		    window.KalturaPlayer = null;
 	    }
 	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage" || property.model === "autoUpdate"){ // handle player version and captions select
@@ -773,6 +773,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	};
 
 	$scope.updatePlayerData = function(){
+		if ($scope.playerData.autoUpdate){
+			$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
+			$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
+		}
+
 		if(typeof $scope.playerData.config.ui !== "object"){
 			$scope.playerData.config.ui = {};
 		}
@@ -991,7 +996,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					$scope.playerData.html5Url = "";
 				}
 				else {
-					$scope.playerData.frozenProductVersion = $scope.playerData.frozenProductVersion || $scope.playerData.latestPlayerProductVersion;
+					$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
 					$scope.playerData.html5Url = JSON.stringify({version: $scope.playerData.frozenProductVersion});
 				}
 

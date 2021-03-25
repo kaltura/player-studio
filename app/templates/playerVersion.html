@@ -23,10 +23,10 @@
 	<select ng-show="!playerData.autoUpdate"
 			ng-disabled="true"
 			ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}"
-			ng-model="playerData.latestPlayerProductVersion"
+			ng-model="playerData.frozenProductVersion"
 			class="dropdown">
-		<option value="{{playerData.latestPlayerProductVersion}}">
-			{{playerData.latestPlayerProductVersion}}
+		<option value="{{playerData.frozenProductVersion}}">
+			{{playerData.frozenProductVersion}}
 		</option>
 	</select>
 
