@@ -631,13 +631,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'getPlayerVersionsMap': function () {
 				if (!playersService.playerVersionsMap) {
 					var kmc = window.parent.kmc;
-					kmc = {
-						vars: {
-							studioV3: {
-								playerVersionsMap: '{"kaltura-ovp-player":"1.5.5","kaltura-tv-player":"1.5.5","playkit-bumper":"2.0.4","playkit-cast-receiver":"1.0.1","playkit-cast-sender":"1.1.0","playkit-comscore":"3.0.1","playkit-flash":"2.0.2","playkit-google-analytics":"1.0.1","playkit-ima":"1.3.0","playkit-ima-dai":"1.2.1","playkit-offline-manager":"1.2.0","playkit-streamlyzer":"0.1.0","playkit-vr":"2.0.1","playkit-youbora":"2.0.2","playkit-youtube":"2.0.1","playkit-visibility":"2.1.0","playkit-kava":"1.2.0","playkit-ott-analytics":"1.0.1","playkit-timeline":"1.1.1"}'
-							}
-						}
-					}
 					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerVersionsMap) {
 						try {
 							playersService.playerVersionsMap = JSON.parse(kmc.vars.studioV3.playerVersionsMap);
@@ -650,14 +643,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getPlayerProductVersion': function () {
 				if (playersService.playerProductVersion === undefined) {
 					var kmc = window.parent.kmc;
-					kmc =
-						{
-						vars : {
-							studioV3: {
-								playerConfVars: '{"version":"7.32.3"}'
-							}
-						}
-					}
 					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerConfVars) {
 						try {
 							playersService.playerProductVersion = JSON.parse(kmc.vars.studioV3.playerConfVars);
@@ -672,14 +657,6 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
             'getPlayerBetaProductVersion': function () {
 				if (playersService.playerBetaProductVersion === undefined) {
 					var kmc = window.parent.kmc;
-					kmc =
-						{
-						vars : {
-							studioV3: {
-								playerBetaConfVars: '{"version":"7.32.5"}'
-							}
-						}
-					}
 					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerBetaConfVars) {
 						try {
 							playersService.playerBetaProductVersion = JSON.parse(kmc.vars.studioV3.playerBetaConfVars);
@@ -696,9 +673,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					return '{beta}';
 				}
 				if (!data.autoUpdate) {
-					// if (data.freezeVersions && data.freezeVersions[componentName]) {
-					// 	return data.freezeVersions[componentName];
-					// }
+					if (data.freezeVersions && data.freezeVersions[componentName]) {
+						return data.freezeVersions[componentName];
+					}
 					var componentVersion = playersService.getPlayerVersionsMap()[componentName];
 					if (componentVersion) {
 						return componentVersion;

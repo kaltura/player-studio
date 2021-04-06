@@ -774,8 +774,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.updatePlayerData = function(){
 		if ($scope.playerData.autoUpdate){
-			$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
-			$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
+			$scope.playerData.frozenProductVersion = $scope.playerData.frozenProductVersion || $scope.playerData.latestPlayerProductVersion;
 		}
 
 		if(typeof $scope.playerData.config.ui !== "object"){
@@ -996,7 +995,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					$scope.playerData.html5Url = "";
 				}
 				else {
-					$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
+					$scope.playerData.frozenProductVersion = $scope.playerData.frozenProductVersion || $scope.playerData.latestPlayerProductVersion;
 					$scope.playerData.html5Url = JSON.stringify({version: $scope.playerData.frozenProductVersion});
 				}
 
