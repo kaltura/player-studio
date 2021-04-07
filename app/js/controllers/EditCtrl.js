@@ -1,3 +1,4 @@
+const UNKNOWN_PRODUCT_VERSION = "Unknown"
 const tagToProductVersion = {
 	'1.5.5': '7.32.3',
 	'1.5.2': '7.32.1',
@@ -61,18 +62,22 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			var playerName = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
 			var playerVersion = versionsObj[playerName] === "{beta}" ? 'beta' : 'latest';
 			var autoUpdate = (versionsObj[playerName] === "{beta}" || versionsObj[playerName] === "{latest}");
-			try {
-				if ($scope.playerData.html5Url){
-					$scope.playerData.html5Url = JSON.parse($scope.playerData.html5Url);
+			if (!autoUpdate){
+				try {
+					if ($scope.playerData.html5Url){
+						$scope.playerData.html5Url = JSON.parse($scope.playerData.html5Url);
+						if ($scope.playerData.html5Url.version) {
+							$scope.playerData['frozenProductVersion'] = $scope.playerData.html5Url.version;
+						}
+					}
+					if(!$scope.playerData['frozenProductVersion']){
+						$scope.playerData['frozenProductVersion'] = tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION ;
+					}
+				} catch (e) {
+					$scope.playerData['frozenProductVersion'] = tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION;
 				}
-				if ($scope.playerData.html5Url && $scope.playerData.html5Url.version) {
-					$scope.playerData['frozenProductVersion'] = $scope.playerData.html5Url.version;
-				}else {
-					$scope.playerData['frozenProductVersion'] = tagToProductVersion[versionsObj[playerName]];
-				}
-			} catch (e) {
-				$scope.playerData['frozenProductVersion'] = "";
 			}
+
 
 			$scope.playerData['playerVersion'] = playerVersion;
 			$scope.playerData['autoUpdate'] = autoUpdate;
@@ -993,10 +998,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			var savePlayer = function () {
 				if ($scope.playerData.autoUpdate) {
 					$scope.playerData.html5Url = "";
+					$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
 				}
 				else {
-					$scope.playerData.frozenProductVersion = $scope.playerData.frozenProductVersion || $scope.playerData.latestPlayerProductVersion;
-					$scope.playerData.html5Url = JSON.stringify({version: $scope.playerData.frozenProductVersion});
+					if($scope.playerData.frozenProductVersion && $scope.playerData.frozenProductVersion != UNKNOWN_PRODUCT_VERSION){
+						$scope.playerData.html5Url = JSON.stringify({version: $scope.playerData.frozenProductVersion});
+					}
 				}
 
 				PlayerService.savePlayer($scope.playerData).then(function(value) {
