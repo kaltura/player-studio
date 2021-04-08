@@ -37,11 +37,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 								$scope.playerData['frozenProductVersion'] = $scope.playerData.html5Url.version;
 							}
 						}
-						if(!$scope.playerData['frozenProductVersion']){
-							$scope.playerData['frozenProductVersion'] = tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION ;
-						}
+						$scope.playerData['frozenProductVersion'] = $scope.playerData['frozenProductVersion'] || tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION;
+
 					} catch (e) {
-						$scope.playerData['frozenProductVersion'] = tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION;
+						$scope.playerData['frozenProductVersion'] = $scope.playerData['frozenProductVersion'] || tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION;
 					}
 				}
 			});

@@ -1,9 +1,3 @@
-<!--<div ng-class="{disabled: (plugin!=null && !plugin.enabled) || playerData.playerVersion=='beta'}" class="ng-scope">-->
-<!--	&lt;!&ndash;span bind-once>{{property.label}}</span><br&ndash;&gt;-->
-<!--	<div class="pluginLabel" id="{{property.id}}">* Latest version: {{playerData.latestPlayerProductVersion}}</div>-->
-<!--	<div class="pluginLabel" id="{{property.id}}">* Current version: {{playerData.frozenProductVersion || playerData.autoUpdate && playerData.latestPlayerProductVersion || "Not available"}}</div>-->
-<!--</div>-->
-
 <div class="text dropdownContainer">
 	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
 	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
