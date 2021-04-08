@@ -37,11 +37,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 								$scope.playerData['frozenProductVersion'] = $scope.playerData.html5Url.version;
 							}
 						}
-						$scope.playerData['frozenProductVersion'] = $scope.playerData['frozenProductVersion'] || tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION;
 
-					} catch (e) {
-						$scope.playerData['frozenProductVersion'] = $scope.playerData['frozenProductVersion'] || tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION;
-					}
+					} catch (e) {}
+					$scope.playerData['frozenProductVersion'] = $scope.playerData['frozenProductVersion'] || tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION;
+
 				}
 			});
 

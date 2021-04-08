@@ -217,35 +217,20 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			}
 			return currentRefresh.promise;
 		};
-		var getLastestPlayerProductVersion = function(){
-			if (playersService.playerProductVersion === undefined) {
+		var getPlayerProductVersion = function(propertyName, kmcPropertyName){
+			if (playersService[propertyName] === undefined) {
 				var kmc = window.parent.kmc;
-				if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerConfVars) {
+				if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3[kmcPropertyName]) {
 					try {
-						playersService.playerProductVersion = JSON.parse(kmc.vars.studioV3.playerConfVars);
+						playersService[propertyName] = JSON.parse(kmc.vars.studioV3[kmcPropertyName]);
 					} catch (e) {
 						console.error(e);
 					}
 				}
-				playersService.playerProductVersion = angular.isObject(playersService.playerProductVersion) &&  playersService.playerProductVersion.version ? playersService.playerProductVersion.version : "";
+				playersService[propertyName] = angular.isObject(playersService[propertyName]) &&  playersService[propertyName].version ? playersService[propertyName].version : "";
 			}
-			return playersService.playerProductVersion;
+			return playersService[propertyName];
 		};
-
-		var getBetaPlayerProductVersion = function(){
-			if (playersService.playerBetaProductVersion === undefined) {
-				var kmc = window.parent.kmc;
-				if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerBetaConfVars) {
-					try {
-						playersService.playerBetaProductVersion = JSON.parse(kmc.vars.studioV3.playerBetaConfVars);
-					} catch (e) {
-						console.error(e);
-					}
-				}
-				playersService.playerBetaProductVersion = angular.isObject(playersService.playerBetaProductVersion) &&  playersService.playerBetaProductVersion.version ? playersService.playerBetaProductVersion.version : "";
-			}
-			return playersService.playerBetaProductVersion;
-		}
 
 		var playersService = {
 			kalturaPlayer: null,
@@ -675,9 +660,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			},
             'getPlayerProductVersion': function (type) {
 				if (type === "latest"){
-					return getLastestPlayerProductVersion();
+					return getPlayerProductVersion("playerProductVersion", "playerConfVars");
 				} else if (type === "beta"){
-					return getBetaPlayerProductVersion();
+					return getPlayerProductVersion("playerBetaProductVersion", "playerBetaConfVars");
 				} else{
 					return ""
 				}
