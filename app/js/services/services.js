@@ -516,6 +516,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'getDefaultConfig': function () {
 				return $http.get('js/services/defaultPlayer.json');
 			},
+			'getTagToProductVersion': function () {
+				return $http.get('js/services/tagToProductVersion.json');
+			},
 			'getKDPConfig': function () {
 				$http.get('js/services/kdp.xml').success(function (data, status, headers, config) {
 					kdpConfig = data;
