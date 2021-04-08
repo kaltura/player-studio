@@ -58,8 +58,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					$scope.playerData.externals[key] = {active: true};
 				}
 			}
-			$scope.playerData['latestPlayerProductVersion'] = PlayerService.getPlayerProductVersion();
-			$scope.playerData['latestPlayerBetaProductVersion'] = PlayerService.getPlayerBetaProductVersion();
+			$scope.playerData['latestPlayerProductVersion'] = PlayerService.getPlayerProductVersion("latest");
+			$scope.playerData['latestPlayerBetaProductVersion'] = PlayerService.getPlayerProductVersion("beta");
 		}
 	} catch (e) {
 		logTime(e);

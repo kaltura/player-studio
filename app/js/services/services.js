@@ -217,6 +217,36 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			}
 			return currentRefresh.promise;
 		};
+		var getLastestPlayerProductVersion = function(){
+			if (playersService.playerProductVersion === undefined) {
+				var kmc = window.parent.kmc;
+				if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerConfVars) {
+					try {
+						playersService.playerProductVersion = JSON.parse(kmc.vars.studioV3.playerConfVars);
+					} catch (e) {
+						console.error(e);
+					}
+				}
+				playersService.playerProductVersion = angular.isObject(playersService.playerProductVersion) &&  playersService.playerProductVersion.version ? playersService.playerProductVersion.version : "";
+			}
+			return playersService.playerProductVersion;
+		};
+
+		var getBetaPlayerProductVersion = function(){
+			if (playersService.playerBetaProductVersion === undefined) {
+				var kmc = window.parent.kmc;
+				if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerBetaConfVars) {
+					try {
+						playersService.playerBetaProductVersion = JSON.parse(kmc.vars.studioV3.playerBetaConfVars);
+					} catch (e) {
+						console.error(e);
+					}
+				}
+				playersService.playerBetaProductVersion = angular.isObject(playersService.playerBetaProductVersion) &&  playersService.playerBetaProductVersion.version ? playersService.playerBetaProductVersion.version : "";
+			}
+			return playersService.playerBetaProductVersion;
+		}
+
 		var playersService = {
 			kalturaPlayer: null,
 			PLAYER_ID: 'kVideoTarget',
@@ -643,34 +673,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				}
 				return playersService.playerVersionsMap;
 			},
-            'getPlayerProductVersion': function () {
-				if (playersService.playerProductVersion === undefined) {
-					var kmc = window.parent.kmc;
-					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerConfVars) {
-						try {
-							playersService.playerProductVersion = JSON.parse(kmc.vars.studioV3.playerConfVars);
-						} catch (e) {
-							console.error(e);
-						}
-					}
-					playersService.playerProductVersion = angular.isObject(playersService.playerProductVersion) &&  playersService.playerProductVersion.version ? playersService.playerProductVersion.version : "";
+            'getPlayerProductVersion': function (type) {
+				if (type === "latest"){
+					return getLastestPlayerProductVersion();
+				} else if (type === "beta"){
+					return getBetaPlayerProductVersion();
+				} else{
+					return ""
 				}
-				return playersService.playerProductVersion;
 			},
-            'getPlayerBetaProductVersion': function () {
-				if (playersService.playerBetaProductVersion === undefined) {
-					var kmc = window.parent.kmc;
-					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerBetaConfVars) {
-						try {
-							playersService.playerBetaProductVersion = JSON.parse(kmc.vars.studioV3.playerBetaConfVars);
-						} catch (e) {
-							console.error(e);
-						}
-					}
-					playersService.playerBetaProductVersion = angular.isObject(playersService.playerBetaProductVersion) &&  playersService.playerBetaProductVersion.version ? playersService.playerBetaProductVersion.version : "";
-				}
-				return playersService.playerBetaProductVersion;
-			},
+
 			'getComponentVersion': function (data, componentName) {
 				if (data.playerVersion === "beta") {
 					return '{beta}';
