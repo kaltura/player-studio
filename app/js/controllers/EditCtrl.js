@@ -746,6 +746,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.updatePlayerData = function(){
 		if ($scope.playerData.autoUpdate){
+			// Makes sure frozenProductVersion has a version - either from previous saved lock or the lastest
 			$scope.playerData.frozenProductVersion = $scope.playerData.frozenProductVersion || $scope.playerData.latestPlayerProductVersion;
 		}
 
@@ -965,6 +966,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			var savePlayer = function () {
 				if ($scope.playerData.autoUpdate) {
 					$scope.playerData.html5Url = "";
+					// Clears previous locked version for the case the user wants to re-lock it on the latest
 					$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
 				}
 				else {
