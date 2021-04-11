@@ -1,0 +1,28 @@
+<div class="text dropdownContainer">
+	<span ng-class="{disabled: plugin!=null && !plugin.enabled}" class="pluginLabel" id="{{property.id}}">{{property.label}}</span>
+	<i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i>
+	<select ng-show="playerData.autoUpdate"
+			ng-disabled="plugin!=null && !plugin.enabled"
+			ng-change="propertyChanged(property, true)"
+			ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}"
+			ng-model="property.initvalue"
+			class="dropdown">
+		<option value="latest">
+			Latest {{playerData.latestPlayerProductVersion ? "(" + playerData.latestPlayerProductVersion + ")" : ""}}
+		</option>
+		<option value="beta">
+			Beta {{playerData.latestPlayerBetaProductVersion ? "(" + playerData.latestPlayerBetaProductVersion + ")" : ""}}
+		</option>
+	</select>
+	<select ng-show="!playerData.autoUpdate"
+			ng-disabled="true"
+			ui-select2="{ allowClear: true, width: '175px', minimumResultsForSearch: -1}"
+			ng-model="playerData.frozenProductVersion"
+			class="dropdown">
+		<option value="{{playerData.frozenProductVersion}}">
+			{{playerData.frozenProductVersion}}
+		</option>
+	</select>
+
+	<hr bind-once ng-if="property.endline">
+</div>

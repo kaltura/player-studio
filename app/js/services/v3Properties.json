@@ -24,17 +24,7 @@
       },
       {
         "label": "Player Version",
-        "type": "dropdown",
-        "options": [
-          {
-            "label": "Latest",
-            "value": "latest"
-          },
-          {
-            "label": "Beta",
-            "value": "beta"
-          }
-        ],
+        "type": "playerVersion",
         "model": "playerVersion",
         "resetKalturaPlayer": true,
         "helpnote": "Select a TV Platform Player version - latest or beta. Beta allows you to experiment with new functionalities that will be released in the next version. Latest will always update to the latest version unless you select “Keep Player on Current Version“",

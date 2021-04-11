@@ -1,3 +1,4 @@
+var UNKNOWN_PRODUCT_VERSION = "Unknown";
 var KMCMenu = angular.module('KMCmenu', ['ui.bootstrap', 'ngSanitize', 'ui.select2', 'angularSpectrumColorpicker']);
 
 KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', '$location','requestNotificationChannel', 'select2Svc', 'utilsSvc',
@@ -27,6 +28,23 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			var playerName = versionsObj[PlayerService.KALTURA_PLAYER] ? PlayerService.KALTURA_PLAYER : PlayerService.KALTURA_PLAYER_OTT;
 			var playerVersion = versionsObj[playerName] === "{beta}" ? 'beta' : 'latest';
 			var autoUpdate = (versionsObj[playerName] === "{beta}" || versionsObj[playerName] === "{latest}");
+			PlayerService.getTagToProductVersion().success(function (tagToProductVersion) {
+				if (!autoUpdate){
+					try {
+						if ($scope.playerData.html5Url){
+							$scope.playerData.html5Url = JSON.parse($scope.playerData.html5Url);
+							if ($scope.playerData.html5Url.version) {
+								$scope.playerData['frozenProductVersion'] = $scope.playerData.html5Url.version;
+							}
+						}
+
+					} catch (e) {}
+					$scope.playerData['frozenProductVersion'] = $scope.playerData['frozenProductVersion'] || tagToProductVersion[versionsObj[playerName]] || UNKNOWN_PRODUCT_VERSION;
+
+				}
+			});
+
+
 			$scope.playerData['playerVersion'] = playerVersion;
 			$scope.playerData['autoUpdate'] = autoUpdate;
 			for (var key in versionsObj) {
@@ -39,6 +57,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					$scope.playerData.externals[key] = {active: true};
 				}
 			}
+			$scope.playerData['latestPlayerProductVersion'] = PlayerService.getPlayerProductVersion("latest");
+			$scope.playerData['latestPlayerBetaProductVersion'] = PlayerService.getPlayerProductVersion("beta");
 		}
 	} catch (e) {
 		logTime(e);
@@ -438,7 +458,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    if (property.resetKalturaPlayer){
 		    window.KalturaPlayer = null;
 	    }
-	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage"){ // handle player version and captions select
+	    if (property.model === "playerVersion" || property.model === "config.playback.textLanguage" || property.model === "autoUpdate"){ // handle player version and captions select
 		    $scope.updatePlayerData(); // update the player data from the menu data
 	    }
 	    if (property.model === "languageKey"){ // handle captions input updated
@@ -724,6 +744,11 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	};
 
 	$scope.updatePlayerData = function(){
+		if ($scope.playerData.autoUpdate){
+			// Makes sure frozenProductVersion has a version - either from previous saved lock or the lastest
+			$scope.playerData.frozenProductVersion = $scope.playerData.frozenProductVersion || $scope.playerData.latestPlayerProductVersion;
+		}
+
 		if(typeof $scope.playerData.config.ui !== "object"){
 			$scope.playerData.config.ui = {};
 		}
@@ -938,6 +963,17 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			utilsSvc.alert('Save Player Settings','Some plugin features values are invalid. The player cannot be saved.');
 		}else{
 			var savePlayer = function () {
+				if ($scope.playerData.autoUpdate) {
+					$scope.playerData.html5Url = "";
+					// Clears previous locked version for the case the user wants to re-lock it on the latest
+					$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
+				}
+				else {
+					if($scope.playerData.frozenProductVersion && $scope.playerData.frozenProductVersion != UNKNOWN_PRODUCT_VERSION){
+						$scope.playerData.html5Url = JSON.stringify({version: $scope.playerData.frozenProductVersion});
+					}
+				}
+
 				PlayerService.savePlayer($scope.playerData).then(function(value) {
 						localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
 						apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads

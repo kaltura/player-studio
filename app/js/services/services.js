@@ -1,7 +1,6 @@
 'use strict';
 /* Services */
 var KMCServices = angular.module('KMC.services', []);
-
 KMCServices.config(['$httpProvider', function ($httpProvider) {
 	$httpProvider.defaults.useXDomain = true;
 	delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -218,6 +217,21 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			}
 			return currentRefresh.promise;
 		};
+		var getPlayerProductVersion = function(propertyName, kmcPropertyName){
+			if (playersService[propertyName] === undefined) {
+				var kmc = window.parent.kmc;
+				if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3[kmcPropertyName]) {
+					try {
+						playersService[propertyName] = JSON.parse(kmc.vars.studioV3[kmcPropertyName]);
+					} catch (e) {
+						console.error(e);
+					}
+				}
+				playersService[propertyName] = angular.isObject(playersService[propertyName]) &&  playersService[propertyName].version ? playersService[propertyName].version : "";
+			}
+			return playersService[propertyName];
+		};
+
 		var playersService = {
 			kalturaPlayer: null,
 			PLAYER_ID: 'kVideoTarget',
@@ -226,6 +240,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			OVP: 'ovp',
 			OTT: 'ott',
 			playerVersionsMap: null,
+			playerProductVersion: undefined,
+			playerBetaProductVersion: undefined,
 			autoRefreshEnabled: false,
 			clearCurrentRefresh: function () {
 				currentRefresh = null;
@@ -515,6 +531,9 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'getDefaultConfig': function () {
 				return $http.get('js/services/defaultPlayer.json');
 			},
+			'getTagToProductVersion': function () {
+				return $http.get('js/services/tagToProductVersion.json');
+			},
 			'getKDPConfig': function () {
 				$http.get('js/services/kdp.xml').success(function (data, status, headers, config) {
 					kdpConfig = data;
@@ -585,6 +604,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					'uiConf:description': data.description ? data.description : ''
 				};
 				request['uiConf:confVars'] = JSON.stringify({versions: playersService.getPlayerAndPluginsVersionObj(data), langs: data.playerLangCodes});
+				request['uiConf:html5Url'] = data.html5Url;
 				request['uiConf:config'] = JSON.stringify(data2Save, null, "\t");
 				apiService.doRequest(request).then(function (result) {
 					playersCache[data.id] = data; // update player data in players cache
@@ -638,6 +658,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				}
 				return playersService.playerVersionsMap;
 			},
+            'getPlayerProductVersion': function (type) {
+				if (type === "latest"){
+					return getPlayerProductVersion("playerProductVersion", "playerConfVars");
+				} else if (type === "beta"){
+					return getPlayerProductVersion("playerBetaProductVersion", "playerBetaConfVars");
+				} else{
+					return ""
+				}
+			},
+
 			'getComponentVersion': function (data, componentName) {
 				if (data.playerVersion === "beta") {
 					return '{beta}';
