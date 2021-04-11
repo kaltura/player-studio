@@ -977,6 +977,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				PlayerService.savePlayer($scope.playerData).then(function(value) {
 						localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
 						apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
+
+						// if the version is locked on an older version than latest then warn the user
 						if (!$scope.autoUpdate && $scope.playerData.frozenProductVersion !== $scope.playerData.latestPlayerProductVersion){
 							utilsSvc.alert('Save Player Settings','Player Saved Successfully.<br /><br /><span style="color: red">Please note, You are currently on an old player version, on which some features might not be available. Please consider upgrading to latest version.</span>');
 						}else{
