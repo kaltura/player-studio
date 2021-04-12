@@ -200,6 +200,10 @@ module.exports = function(grunt) {
 		                dest: '_dist/js/services/defaultPlayer.json'
 	                },
                     {
+		                src: 'app/js/services/tagToProductVersion.json',
+		                dest: '_dist/js/services/tagToProductVersion.json'
+	                },
+                    {
                         src: 'app/js/services/v3Properties.json',
                         dest: '_dist/js/services/v3Properties.json'
                     },
