@@ -664,7 +664,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				} else if (type === "beta"){
 					return getPlayerProductVersion("playerBetaProductVersion", "playerBetaConfVars");
 				} else{
-					return ""
+					return "";
 				}
 			},
 
