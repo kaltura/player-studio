@@ -969,7 +969,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 					$scope.playerData.frozenProductVersion = $scope.playerData.latestPlayerProductVersion;
 				}
 				else {
-					if($scope.playerData.frozenProductVersion && $scope.playerData.frozenProductVersion != UNKNOWN_PRODUCT_VERSION){
+					if($scope.playerData.frozenProductVersion && $scope.playerData.frozenProductVersion !== UNKNOWN_PRODUCT_VERSION){
 						$scope.playerData.html5Url = JSON.stringify({version: $scope.playerData.frozenProductVersion});
 					}
 				}
@@ -977,7 +977,13 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				PlayerService.savePlayer($scope.playerData).then(function(value) {
 						localStorageService.remove('tempPlayerID'); // remove temp player from storage (used for deleting unsaved players)
 						apiService.setCache(false);                 // prevent the list controller from using the cache the next time the list loads
-						utilsSvc.alert('Save Player Settings','Player Saved Successfully');
+
+						// if the version is locked on an older version than latest then warn the user
+						if (!$scope.autoUpdate && $scope.playerData.frozenProductVersion !== $scope.playerData.latestPlayerProductVersion){
+							utilsSvc.alert('Save Player Settings','Player Saved Successfully.<br /><br /><span style="color: red">Please note, You are currently on an old player version, on which some features might not be available. Please consider upgrading to latest version.</span>');
+						}else{
+							utilsSvc.alert('Save Player Settings','Player Saved Successfully');
+						}
 					},
 					function(msg) {
 						utilsSvc.alert('Player save failure',msg);
