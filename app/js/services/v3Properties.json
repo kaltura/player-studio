@@ -357,6 +357,18 @@
               {
                 "label": "Arabic",
                 "value": "ar"
+              },
+              {
+                "label": "Hebrew",
+                "value": "he"
+              },
+              {
+                "label": "Korean",
+                "value": "ko"
+              },
+              {
+                "label": "Canadian French",
+                "value": "fr_ca"
               }
             ],
             "model": "playerLangCodes",
