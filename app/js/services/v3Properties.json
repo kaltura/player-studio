@@ -197,14 +197,6 @@
         ]
       },
       {
-        "label": "Support legacy HLS with Flash",
-        "helpnote": "When using this option, if the platform doesn't support the media source extension or native HLS, we'll try to add Flash",
-        "type": "checkbox",
-        "model": "externals.playkit-flash.active",
-        "componentName": "playkit-flash",
-        "resetKalturaPlayer": true
-      },
-      {
         "label": "Support Youtube playback",
         "helpnote": "When using this option, the player will support playing Youtube ingested content from the platform",
         "type": "checkbox",
