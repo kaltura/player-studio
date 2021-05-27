@@ -361,6 +361,10 @@
               {
                 "label": "Canadian French",
                 "value": "fr_ca"
+              },
+              {
+                "label": "Finnish",
+                "value": "fi"
               }
             ],
             "model": "playerLangCodes",
