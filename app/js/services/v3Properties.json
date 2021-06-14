@@ -462,6 +462,51 @@
             "initvalue": true
           }
         ]
+      },
+      "share": {
+        "type": "featuremenu",
+        "description": "Add the share interface to the player.",
+        "model": "config.plugins.share",
+        "componentName": "playkit-share",
+        "label": "Share",
+        "children": [
+          {
+            "label": "Share current page",
+            "helpnote": "Use current page url for sharing and embedding",
+            "type": "checkbox",
+            "model": "config.plugins.share.useParentUrl"
+          },
+          {
+            "label": "Share url",
+            "helpnote": "Share url if current Current page sharing isn't available",
+            "type": "text",
+            "model": "config.plugins.share.shareUrl"
+          },
+          {
+            "label": "Embed url",
+            "helpnote": "Embed url if current Current page sharing isn't available",
+            "type": "text",
+            "model": "config.plugins.share.embedUrl"
+          },
+          {
+            "label": "UiConf for sharing",
+            "helpnote": "Using kaltura share url with different UiConf",
+            "type": "text",
+            "model": "config.plugins.share.UiConfForSharing"
+          },
+          {
+            "label": "Allow time offset",
+            "helpnote": "Allow setting time offset for entry",
+            "type": "checkbox",
+            "model": "config.plugins.share.enableTimeOffset"
+          },
+          {
+            "label": "Social networks",
+            "helpnote": "Define included networks.",
+            "type": "json",
+            "model": "config.plugins.share.socialNetworks"
+          }
+        ]
       }
     }
   },
