@@ -483,12 +483,6 @@
             "model": "config.plugins.share.embedUrl"
           },
           {
-            "label": "UiConf for sharing",
-            "helpnote": "Using kaltura share url with different UiConf",
-            "type": "text",
-            "model": "config.plugins.share.UiConfForSharing"
-          },
-          {
             "label": "Allow time offset",
             "helpnote": "Allow setting time offset for entry",
             "type": "checkbox",
