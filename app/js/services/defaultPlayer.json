@@ -3,7 +3,7 @@
   "plugins": {
     "share": {
       "disable": true,
-      "useParentUrl": true,
+      "useNative": false,
       "socialNetworks": {
         "facebook": {
           "templateUrl": "https://www.facebook.com/sharer/sharer.php?u={shareUrl}",

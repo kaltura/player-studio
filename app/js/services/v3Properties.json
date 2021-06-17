@@ -471,20 +471,14 @@
         "label": "Share",
         "children": [
           {
-            "label": "Share current page",
-            "helpnote": "Use current page url for sharing and embedding",
-            "type": "checkbox",
-            "model": "config.plugins.share.useParentUrl"
-          },
-          {
             "label": "Share url",
-            "helpnote": "Share url if current Current page sharing isn't available",
+            "helpnote": "Share url override Current page sharing",
             "type": "text",
             "model": "config.plugins.share.shareUrl"
           },
           {
             "label": "Embed url",
-            "helpnote": "Embed url if current Current page sharing isn't available",
+            "helpnote": "Embed url override Current page sharing",
             "type": "text",
             "model": "config.plugins.share.embedUrl"
           },
