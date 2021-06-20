@@ -489,6 +489,12 @@
             "model": "config.plugins.share.enableTimeOffset"
           },
           {
+            "label": "Use native share",
+            "helpnote": "Use the native share dialog of the device",
+            "type": "checkbox",
+            "model": "config.plugins.share.useNative"
+          },
+          {
             "label": "Social networks",
             "helpnote": "Define included networks.",
             "type": "json",
