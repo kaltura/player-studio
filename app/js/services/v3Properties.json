@@ -512,10 +512,16 @@
         "componentName": "playkit-google-analytics",
         "children": [
           {
-            "label": "Google tracking code",
+            "label": "Universal Analytics Account ID",
             "type": "text",
             "model": "config.plugins.googleAnalytics.trackingId",
-            "helpnote": "The Google tracking code i.e. UA-30164991-1"
+            "helpnote": "The Universal Analytics Account ID i.e. UA-30164991-1"
+          },
+          {
+            "label": "Google Analytics 4 data stream ID",
+            "type": "text",
+            "model": "config.plugins.googleAnalytics.trackingGA4Id",
+            "helpnote": "The Google Analytics 4 data stream ID (aka GA4 Measurement ID) i.e. G-4XZ9KWPHEC"
           }
         ]
       },
