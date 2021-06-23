@@ -468,7 +468,7 @@
         "description": "Add the share interface to the player.",
         "model": "config.plugins.share",
         "componentName": "playkit-share",
-        "label": "Share",
+        "label": "Share and embed",
         "children": [
           {
             "label": "Share url",
