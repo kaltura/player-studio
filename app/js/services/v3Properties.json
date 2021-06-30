@@ -501,7 +501,7 @@
             "label": "Social networks",
             "helpnote": "Define included networks.",
             "type": "json",
-            "model": "config.plugins.share.socialNetworks",
+            "model": "config.plugins.share.shareOptions",
             "initvalue": {
               "facebook":{
                 "display":true,
