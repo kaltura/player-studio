@@ -294,7 +294,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						config.targetId = playersService.PLAYER_ID;
 						Object.assign(config.provider, providerConfig);
 						if (window.__kalturaplayerdata) {
-							config.provider.env = $.extend(true, {}, window.__kalturaplayerdata.UIConf[playerData.id].provider.env, config.provider.env);
+							if (window.__kalturaplayerdata.UIConf) {
+								config.provider.env = $.extend(true, {}, window.__kalturaplayerdata.UIConf[playerData.id].provider.env, config.provider.env);
+							} else {
+								config.provider.env = $.extend(true, {}, window.__kalturaplayerdata.provider.env, config.provider.env);
+							}
 						}
 						if (forceTouchUI) {
 							Object.assign(config, {ui: {forceTouchUI: true}});
