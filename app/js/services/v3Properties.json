@@ -77,6 +77,13 @@
         "model": "config.disableUserCache"
       },
       {
+        "label": "Disable Autoplay Restrictions check",
+        "helpnote": "This would disable the platform autoplay restriction detection, forcing the player to respect the autoplay configuration only. This should be checked when player is used on smart TVs, set top boxes or other platforms which do not have such restrictions.",
+        "type": "checkbox",
+        "endline": "true",
+        "model": "config.playback.disableAutoplayCapabilityTest"
+      },
+      {
         "label": "Captions default display",
         "type": "dropdown",
         "options": [
