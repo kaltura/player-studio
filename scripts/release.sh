@@ -1,17 +1,10 @@
 #!/bin/sh
 read -p "Enter Tag Number without prefix v: "  tag
 
-PREV_TAG=$(git describe --tags)
-PREV_TAG_WITHOUT_V="${PREV_TAG#v}"
 NEW_TAG="v$tag"
-
 echo "creating $NEW_TAG!"
-echo "previous tag $PREV_TAG!"
 
-sed -iE "s/$PREV_TAG_WITHOUT_V/$tag/g" ./app/studio.ini
-sed -iE "s/$PREV_TAG_WITHOUT_V/$tag/g" ./app/dist_src/studio.ini
-rm ./app/studio.iniE
-rm ./app/dist_src/studio.iniE
+sed -e "s/{{tagVersion}}/$tag/g" ./template_studio.ini > ./app/dist_src/studio.ini
 
 git commit -a -m "bump version to $NEW_TAG"
 git tag $NEW_TAG
