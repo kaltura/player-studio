@@ -34,7 +34,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "grunt && npm run create:zip",
-    "create:zip": "cd _dist && zip -r studio_$TAG.zip ."
+    "create:zip": "cd _dist && zip -r studio_$TAG.zip .",
+    "release": "sh ./scripts/release.sh",
+    "pushTaggedReleaseV3": "git push --follow-tags --no-verify origin studio-v3"
   },
   "repository": {
     "type": "git",
