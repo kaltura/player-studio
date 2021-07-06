@@ -29,6 +29,7 @@ jobs:
     # https://docs.travis-ci.com/user/build-stages/deploy-github-releases/
     - stage: Release
       name: 'Releasing a new version'
+      env: TRAVIS_MODE=release
       if: tag IS present
       deploy:
         - provider: releases
