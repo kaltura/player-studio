@@ -32,7 +32,9 @@
     "grunt-contrib-watch": "~0.5.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "grunt && npm run create:zip",
+    "create:zip": "cd _dist && zip -r studio_$TAG.zip ."
   },
   "repository": {
     "type": "git",
