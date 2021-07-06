@@ -21,7 +21,6 @@ before_install:
 script: ./scripts/travis.sh
 
 stages:
-  - Tests
   - Release
 
 jobs:
@@ -40,7 +39,3 @@ jobs:
           skip_cleanup: true
           on:
             tags: true
-    - stage: Tests
-      if: (branch = master) OR (tag IS present) OR (type = pull_request)
-      name: 'Test grunt'
-      env: TRAVIS_MODE=grunt

@@ -7,9 +7,6 @@ if [ "${TRAVIS_MODE}" = "release" ]; then
   TAG=$TRAVIS_TAG yarn run build
   echo "Finish building"
 else
-  echo "Building..."
-  TAG=$TRAVIS_TAG yarn run build
-  echo "Finish building"
-#	echo "Unknown travis mode: ${TRAVIS_MODE}" 1>&2
-#	exit 1
+	echo "Unknown travis mode: ${TRAVIS_MODE}" 1>&2
+	exit 1
 fi
