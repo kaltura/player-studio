@@ -540,6 +540,50 @@
             }
           }
         ]
+      },
+      "related": {
+        "type": "featuremenu",
+        "description": "Add the Related Videos screen at the end of the video to attract users to watch additional videos",
+        "model": "config.plugins.related",
+        "componentName": "playkit-related",
+        "label": "Related",
+        "children": [
+          {
+            "label": "Auto continue",
+            "helpnote": "Automatically plays the next item",
+            "type": "checkbox",
+            "model": "config.plugins.related.autoContinue",
+            "initvalue": true
+          },
+          {
+            "label": "Auto continue time",
+            "type": "number",
+            "model": "config.plugins.related.autoContinueTime",
+            "helpnote": "Time to wait before playing the next item (in seconds)",
+            "min": 0,
+            "initvalue": 5
+          },
+          {
+            "label": "Display when playback is paused",
+            "helpnote": "Display related screen when playback is paused",
+            "type": "checkbox",
+            "model": "config.plugins.related.showOnPlaybackPaused",
+            "initvalue": false
+          },
+          {
+            "label": "Display on playback done",
+            "helpnote": "Display related screen when playback ends",
+            "type": "checkbox",
+            "model": "config.plugins.related.showOnPlaybackDone",
+            "initvalue": true
+          },
+          {
+            "label": "Related Entries Source",
+            "helpnote": "Select the related entries source.",
+            "configObject": "playlistSelectBox",
+            "type": "related"
+          }
+        ]
       }
     }
   },
