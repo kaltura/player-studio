@@ -5,8 +5,8 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 		$scope.playlistId = {id:'' ,text:''};
 		if(!("related" in $scope.playerData.config.plugins)) {
 			$scope.playerData.config.plugins["related"] = {disable: true};
+			$scope.playerData.config.plugins["related"].useContext = true;
 		}
-		$scope.playerData.config.plugins["related"].useContext = true;
 
 		// init radio buttons according to selected related entries source
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins["related"]) {
@@ -62,6 +62,5 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			}
 			return id;
 		};
-		$scope.relatedSelected();
 	}
 ]);
