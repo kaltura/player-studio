@@ -26,7 +26,6 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			// unselect playlist ID
 			$scope.playerData.config.plugins["related"].playlistId = null;
 			$scope.playerData.config.plugins["related"].useContext = false;
-			$scope.playlistId = {id:'',text:''};
 			// set entries list
 			$scope.playerData.config.plugins["related"].entryList = $scope.entryList.split(',').map(id => {return {entryId: id.trim()}});
 		};
@@ -36,7 +35,6 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			// unselect entries list
 			$scope.playerData.config.plugins["related"].entryList = [];
 			$scope.playerData.config.plugins["related"].useContext = false;
-			$scope.entryList = [];
 			// set playlist ID
 			$scope.playerData.config.plugins["related"].playlistId = $scope.playlistId.id;
 		};
