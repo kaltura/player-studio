@@ -3,6 +3,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 		$scope.relatedOption = "relatedToEntry";
 		$scope.entryList = "";
 		$scope.playlistId = {id:'' ,text:''};
+		$scope.playerData.config.plugins["related"] = {disable: true};
 
 		// init radio buttons according to selected related entries source
 		if ($scope.playerData.config.plugins && $scope.playerData.config.plugins["related"]) {
@@ -21,6 +22,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 		$scope.entryListChange = function(){
 			// unselect playlist ID
 			$scope.playerData.config.plugins["related"].playlistId = null;
+			$scope.playerData.config.plugins["related"].useContext = false;
 			$scope.playlistId = {id:'',text:''};
 			// set entries list
 			$scope.playerData.config.plugins["related"].entryList = $scope.entryList;
@@ -30,6 +32,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 		$scope.playlistIdChange = function(){
 			// unselect entries list
 			$scope.playerData.config.plugins["related"].entryList = [];
+			$scope.playerData.config.plugins["related"].useContext = false;
 			$scope.entryList = "";
 			// set playlist ID
 			$scope.playerData.config.plugins["related"].playlistId = $scope.playlistId.id;
@@ -40,6 +43,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			$scope.playerData.config.plugins["related"].playlistId = null;
 			$scope.playerData.config.plugins["related"].entryList = [];
 			$scope.playerData.config.plugins["related"].useContext = true;
+
 			$scope.playlistId = {id:'',text:''};
 			$scope.entryList = "";
 			$scope.propertyChanged("related", true);
@@ -55,6 +59,6 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			}
 			return id;
 		};
-
+		$scope.relatedSelected();
 	}
 ]);
