@@ -1,7 +1,7 @@
 KMCMenu.controller('relatedCtrl', ['$scope',
 	function ($scope) {
 		$scope.relatedOption = "relatedToEntry";
-		$scope.entryList = [];
+		$scope.entryList = '';
 		$scope.playlistId = {id:'' ,text:''};
 		if(!("related" in $scope.playerData.config.plugins)) {
 			$scope.playerData.config.plugins["related"] = {disable: true};
@@ -13,7 +13,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			var data = $scope.playerData.config.plugins["related"];
 			if (data.entryList?.length > 0){
 				$scope.relatedOption = "entryList";
-				$scope.entryList = data.entryList;
+				$scope.entryList = data.entryList.map(mediaInfo => mediaInfo.entryId).join(',');
 			}
 			if (data.playlistId && data.playlistId !== ""){
 				$scope.relatedOption = "playlistId";
@@ -28,7 +28,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			$scope.playerData.config.plugins["related"].useContext = false;
 			$scope.playlistId = {id:'',text:''};
 			// set entries list
-			$scope.playerData.config.plugins["related"].entryList = $scope.entryList.replace(/\s/g,'').split(',');
+			$scope.playerData.config.plugins["related"].entryList = $scope.entryList.replace(/\s/g,'').split(',').map(entryId => {return {entryId}});
 		};
 
 		// update playlist ID
