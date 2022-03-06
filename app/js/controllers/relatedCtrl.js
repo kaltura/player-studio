@@ -28,7 +28,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			$scope.playerData.config.plugins["related"].useContext = false;
 			$scope.playlistId = {id:'',text:''};
 			// set entries list
-			$scope.playerData.config.plugins["related"].entryList = $scope.entryList.replace(/\s/g,'').split(',').map(entryId => {return {entryId}});
+			$scope.playerData.config.plugins["related"].entryList = $scope.entryList.split(',').map(id => {return {entryId: id.trim()}});
 		};
 
 		// update playlist ID
