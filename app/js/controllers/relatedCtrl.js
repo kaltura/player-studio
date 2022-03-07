@@ -11,7 +11,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 		// init radio buttons according to selected related entries source
 		if ($scope.playerData.config.plugins["related"].enabled) {
 			var data = $scope.playerData.config.plugins["related"];
-			if (data.entryList?.length > 0){
+			if (Array.isArray(data.entryList) && data.entryList.length > 0){
 				$scope.relatedOption = "entryList";
 				$scope.entryList = data.entryList.map(mediaInfo => mediaInfo.entryId).join(',');
 			}
