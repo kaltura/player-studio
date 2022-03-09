@@ -2,7 +2,7 @@
 # https://docs.travis-ci.com/user/customizing-the-build/#Implementing-Complex-Build-Steps
 set -ev
 npm install -g grunt
-yarn install
+#yarn install
 if [ "${TRAVIS_MODE}" = "release" ]; then
   echo "Building..."
   TAG=$TRAVIS_TAG yarn run build
