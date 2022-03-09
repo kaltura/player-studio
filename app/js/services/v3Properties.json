@@ -571,7 +571,7 @@
             "initvalue": false
           },
           {
-            "label": "Display on playback done",
+            "label": "Display when playback is over",
             "helpnote": "Display related screen when playback ends",
             "type": "checkbox",
             "model": "config.plugins.related.showOnPlaybackDone",
