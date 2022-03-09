@@ -6,6 +6,7 @@
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-babel": "^8.0.0",
+    "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.16.11",
     "grunt-ngmin": "*",
     "grunt-contrib-concat": "*",
