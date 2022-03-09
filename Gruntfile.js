@@ -13,7 +13,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: './',
                         src: ['app/js/**/*.js'],
-                        dest: 'build/'
+                        dest: 'transpiled/'
                     }
                 ]
             }
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: './',
-                        src: ['build/**/*.js'],
+                        src: ['transpiled/**/*.js'],
                         dest: '_dist/app/'
                     }
                 ]
@@ -284,7 +284,7 @@ module.exports = function(grunt) {
             }
         },
         clean: {
-            build: ["_dist", "build"],
+            build: ["_dist", "transpiled"],
             release: ["_dist/app"]
         },
         ngtemplates: {
