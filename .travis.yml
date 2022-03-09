@@ -21,6 +21,7 @@ before_install:
 script: ./scripts/travis.sh
 
 stages:
+  - Tests
   - Release
 
 jobs:
