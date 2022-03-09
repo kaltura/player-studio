@@ -2,6 +2,7 @@
 # https://docs.travis-ci.com/user/customizing-the-build/#Implementing-Complex-Build-Steps
 set -ev
 npm install -g grunt
+npm i -g phantomjs-prebuilt@^2.1.8
 yarn install
 if [ "${TRAVIS_MODE}" = "release" ]; then
   echo "Building..."
