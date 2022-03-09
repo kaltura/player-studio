@@ -20,7 +20,7 @@ module.exports = function (grunt) {
   var generateGlyphiconsData = require('./grunt/bs-glyphicons-data-generator.js');
   var BsLessdocParser = require('./grunt/bs-lessdoc-parser.js');
   var generateRawFilesJs = require('./grunt/bs-raw-files-generator.js');
-  var updateShrinkwrap = require('./grunt/shrinkwrap.js');
+  // var updateShrinkwrap = require('./grunt/shrinkwrap.js');
 
   // Project configuration.
   grunt.initConfig({
@@ -258,12 +258,12 @@ module.exports = function (grunt) {
       }
     },
 
-    qunit: {
-      options: {
-        inject: 'js/tests/unit/phantom.js'
-      },
-      files: 'js/tests/index.html'
-    },
+    // qunit: {
+    //   options: {
+    //     inject: 'js/tests/unit/phantom.js'
+    //   },
+    //   files: 'js/tests/index.html'
+    // },
 
     connect: {
       server: {
@@ -312,20 +312,20 @@ module.exports = function (grunt) {
       }
     },
 
-    watch: {
-      src: {
-        files: '<%= jshint.src.src %>',
-        tasks: ['jshint:src', 'qunit']
-      },
-      test: {
-        files: '<%= jshint.test.src %>',
-        tasks: ['jshint:test', 'qunit']
-      },
-      less: {
-        files: 'less/*.less',
-        tasks: 'less'
-      }
-    },
+    // watch: {
+    //   src: {
+    //     files: '<%= jshint.src.src %>',
+    //     tasks: ['jshint:src', 'qunit']
+    //   },
+    //   test: {
+    //     files: '<%= jshint.test.src %>',
+    //     tasks: ['jshint:test', 'qunit']
+    //   },
+    //   less: {
+    //     files: 'less/*.less',
+    //     tasks: 'less'
+    //   }
+    // },
 
     sed: {
       versionNumber: {
@@ -338,16 +338,16 @@ module.exports = function (grunt) {
       }
     },
 
-    'saucelabs-qunit': {
-      all: {
-        options: {
-          build: process.env.TRAVIS_JOB_ID,
-          concurrency: 10,
-          urls: ['http://127.0.0.1:3000/js/tests/index.html'],
-          browsers: grunt.file.readYAML('test-infra/sauce_browsers.yml')
-        }
-      }
-    },
+    // 'saucelabs-qunit': {
+    //   all: {
+    //     options: {
+    //       build: process.env.TRAVIS_JOB_ID,
+    //       concurrency: 10,
+    //       urls: ['http://127.0.0.1:3000/js/tests/index.html'],
+    //       browsers: grunt.file.readYAML('test-infra/sauce_browsers.yml')
+    //     }
+    //   }
+    // },
 
     exec: {
       npmUpdate: {
@@ -370,7 +370,7 @@ module.exports = function (grunt) {
   var testSubtasks = [];
   // Skip core tests if running a different subset of the test suite
   if (!process.env.TWBS_TEST || process.env.TWBS_TEST === 'core') {
-    testSubtasks = testSubtasks.concat(['dist-css', 'csslint', 'jshint', 'jscs', 'qunit', 'build-customizer-html']);
+    testSubtasks = testSubtasks.concat(['dist-css', 'csslint', 'jshint', 'jscs', 'build-customizer-html']);
   }
   // Skip HTML validation if running a different subset of the test suite
   if (!process.env.TWBS_TEST || process.env.TWBS_TEST === 'validate-html') {
@@ -381,7 +381,7 @@ module.exports = function (grunt) {
       // Skip Sauce if running a different subset of the test suite
       (!process.env.TWBS_TEST || process.env.TWBS_TEST === 'sauce-js-unit')) {
     testSubtasks.push('connect');
-    testSubtasks.push('saucelabs-qunit');
+    // testSubtasks.push('saucelabs-qunit');
   }
   grunt.registerTask('test', testSubtasks);
 
@@ -416,6 +416,6 @@ module.exports = function (grunt) {
   });
 
   // Task for updating the npm packages used by the Travis build.
-  grunt.registerTask('update-shrinkwrap', ['exec:npmUpdate', 'exec:npmShrinkWrap', '_update-shrinkwrap']);
-  grunt.registerTask('_update-shrinkwrap', function () { updateShrinkwrap.call(this, grunt); });
+  // grunt.registerTask('update-shrinkwrap', ['exec:npmUpdate', 'exec:npmShrinkWrap', '_update-shrinkwrap']);
+  // grunt.registerTask('_update-shrinkwrap', function () { updateShrinkwrap.call(this, grunt); });
 };
