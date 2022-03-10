@@ -8,3 +8,4 @@ sed -e "s/{{tagVersion}}/$tag/g" ./template_studio.ini > ./app/dist_src/studio.i
 
 git commit -a -m "bump version to $NEW_TAG"
 git tag $NEW_TAG
+git push origin $NEW_TAG
