@@ -2,22 +2,6 @@
 module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
-        babel: {
-            options: {
-                // sourceMap: true,
-                presets: ["@babel/preset-env"],
-            },
-            dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: './',
-                        src: ['app/js/**/*.js'],
-                        dest: 'build/'
-                    }
-                ]
-            }
-        },
         pkg: grunt.file.readJSON('package.json'),
         meta: {
             banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
@@ -28,7 +12,6 @@ module.exports = function(grunt) {
         },
         jshint: {
             options: {
-                "esnext": true,
                 "curly": false,
                 "eqnull": false,
                 "eqeqeq": false,
@@ -55,15 +38,15 @@ module.exports = function(grunt) {
                     "KalturaPlayer": true
                 }
             },
-            dev: ['app/js/**/*.js'],
+            dev: ['app/js/**/*.js']
         },
         ngmin: {
             dist: {
                 files: [
                     {
                         expand: true,
-                        cwd: './',
-                        src: ['build/**/*.js'],
+                        cwd: 'app/js',
+                        src: ['**/*.js'],
                         dest: '_dist/app/'
                     }
                 ]
@@ -284,7 +267,7 @@ module.exports = function(grunt) {
             }
         },
         clean: {
-            build: ["_dist", "build"],
+            build: ["_dist"],
             release: ["_dist/app"]
         },
         ngtemplates: {
@@ -301,7 +284,6 @@ module.exports = function(grunt) {
 
     // Add grunt plugins
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-ngmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -313,6 +295,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task.
-    grunt.registerTask('default', ['jshint:dev', 'clean:build', 'less', 'copy', 'cssmin', 'babel', 'ngmin:dist', 'uglify:libs', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
+    grunt.registerTask('default', ['jshint:dev', 'clean:build', 'less', 'copy', 'cssmin', 'ngmin:dist', 'uglify:libs', 'concat', 'uglify:dist', 'ngtemplates', 'clean:release']);
 
 };

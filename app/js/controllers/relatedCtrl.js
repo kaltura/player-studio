@@ -13,7 +13,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			var data = $scope.playerData.config.plugins["related"];
 			if (Array.isArray(data.entryList) && data.entryList.length > 0){
 				$scope.relatedOption = "entryList";
-				$scope.entryList = data.entryList.map(mediaInfo => mediaInfo.entryId).join(',');
+				$scope.entryList = data.entryList.map(function (mediaInfo) {return mediaInfo.entryId;}).join(',');
 			}
 			if (data.playlistId && data.playlistId !== ""){
 				$scope.relatedOption = "playlistId";
@@ -27,7 +27,7 @@ KMCMenu.controller('relatedCtrl', ['$scope',
 			$scope.playerData.config.plugins["related"].playlistId = null;
 			$scope.playerData.config.plugins["related"].useContext = false;
 			// set entries list
-			$scope.playerData.config.plugins["related"].entryList = $scope.entryList.split(',').map(id => ({entryId: id.trim()}));
+			$scope.playerData.config.plugins["related"].entryList = $scope.entryList.split(',').map(function (id) { return {entryId: id.trim()};});
 		};
 
 		// update playlist ID

@@ -5,8 +5,6 @@
   "main": "Gruntfile.js",
   "devDependencies": {
     "grunt": "~0.4.2",
-    "grunt-babel": "^8.0.0",
-    "@babel/preset-env": "^7.16.11",
     "grunt-ngmin": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-uglify": "*",
@@ -24,7 +22,6 @@
     "karma-coffee-preprocessor": "~0.1.1",
     "requirejs": "~2.1.9",
     "karma-requirejs": "~0.2.0",
-    "karma-phantomjs-launcher": "~0.1.1",
     "karma-ng-html2js-preprocessor": "~0.1.0",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-clean": "~0.5.0",
