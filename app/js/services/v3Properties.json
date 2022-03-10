@@ -596,7 +596,7 @@
             "label": "Auto-hide skip control",
             "type": "number",
             "model": "config.plugins.skip.timeout",
-            "helpnote": "Automatically hide the skip control after the given amout of time (in seconds)",
+            "helpnote": "Automatically hide the skip control after the given amount of time (in seconds)",
             "min": 1,
             "initvalue": 5
           }
