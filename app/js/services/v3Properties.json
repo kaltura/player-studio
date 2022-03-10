@@ -584,6 +584,23 @@
             "type": "related"
           }
         ]
+      },
+      "skip": {
+        "type": "featuremenu",
+        "description": "The player can be configured with content cues, which will make it pop-up a skip control, allowing the viewers to skip of certain segments of the content. This is useful to skip intros, end credits and other segments",
+        "model": "config.plugins.skip",
+        "componentName": "playkit-skip",
+        "label": "Skip Intro/Credits",
+        "children": [
+          {
+            "label": "Auto-hide skip control",
+            "type": "number",
+            "model": "config.plugins.skip.timeout",
+            "helpnote": "Automatically hide the skip control after the given amount of time (in seconds)",
+            "min": 1,
+            "initvalue": 5
+          }
+        ]
       }
     }
   },
