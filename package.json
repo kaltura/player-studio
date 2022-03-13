@@ -1,7 +1,7 @@
 {
   "name": "Studio-v2",
   "description": "KMC Video Studio V2",
-  "version": "3.14.0-.rc.0",
+  "version": "3.13.1",
   "main": "Gruntfile.js",
   "devDependencies": {
     "grunt": "~0.4.2",
@@ -35,7 +35,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "grunt && npm run create:zip",
     "create:zip": "cd _dist && zip -r studio_$TAG.zip .",
-    "pre-release": "standard-version --prerelease .rc && sh ./scripts/release.sh",
+    "pre-release": "standard-version --prerelease rc && sh ./scripts/release.sh",
     "release": "standard-version && sh ./scripts/release.sh",
     "pushTaggedReleaseV3": "git push --follow-tags --no-verify origin studio-v3"
   },
