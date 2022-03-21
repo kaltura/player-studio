@@ -571,13 +571,6 @@
             "initvalue": false
           },
           {
-            "label": "Display when playback is over",
-            "helpnote": "Display related screen when playback ends",
-            "type": "checkbox",
-            "model": "config.plugins.related.showOnPlaybackDone",
-            "initvalue": true
-          },
-          {
             "label": "Related Entries Source",
             "helpnote": "Select the related entries source.",
             "configObject": "playlistSelectBox",
