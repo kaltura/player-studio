@@ -101,7 +101,13 @@
         "label": "Language key",
         "type": "captions",
         "model": "languageKey",
-        "helpnote": "Deafult captions language",
+        "helpnote": "Deafult captions language"
+      },
+      {
+        "label": "CC Button for turning on/off subtitles",
+        "helpnote": "This button allows the user to enable and disable subtitles based on the chosen language in the subtitles settings ",
+        "type": "checkbox",
+        "model": "config.ui.showCCButton",
         "endline": "true"
       },
       {
