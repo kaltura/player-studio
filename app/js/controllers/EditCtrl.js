@@ -174,7 +174,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
                 }else{ // plugin
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
-	                var plugin = {'enabled': p.enabled, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName};
+	                var plugin = {'enabled': p.enabled, hideArrow: !p.children.length, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName};
 	                plugin.properties = [];
 	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
@@ -301,7 +301,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	    }else{
 			if ($scope.playerData.config.plugins[plugin.model]) {
 		        delete $scope.playerData.config.plugins[plugin.model].disable;
-		    }
+		    }else{
+				$scope.playerData.config.plugins[plugin.model] = {}
+			}
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
 		    }
@@ -583,6 +585,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
 		$scope.maybeAddAnalyticsPlugins();
+		$scope.maybeAddkalturaCuePointsPlugins();
+		$scope.maybeAddUIManagersPlugins();
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
 
@@ -600,6 +604,9 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		var entryID = $scope.selectedEntry && $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
 		requestNotificationChannel.requestStarted('edit'); // show spinner
+		// $scope.playerData.partnerId = '1091'
+		// entryID = '0_wifqaipd';
+
 		PlayerService.renderPlayer($scope.playerData, flashvars, entryID, function () {
 			requestNotificationChannel.requestEnded('edit'); // hide spinner
 		}, $scope.entriesTypeSelector === "Playlist", $scope.getAllLangCodes());
@@ -992,6 +999,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			};
 			$scope.updatePlayerData();
 			$scope.maybeAddAnalyticsPlugins();
+			$scope.maybeAddkalturaCuePointsPlugins();
+			$scope.maybeAddUIManagersPlugins();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
@@ -1111,6 +1120,36 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 	};
 
+	$scope.maybeAddUIManagersPlugins = function() {
+		if ($scope.playerData.config.plugins.playlist && $scope.playerData.config.plugins.playlist.disable !== true ||
+			$scope.playerData.config.plugins["playkit-js-transcript"] && $scope.playerData.config.plugins["playkit-js-transcript"].disable !== true ||
+			$scope.playerData.config.plugins.qna && $scope.playerData.config.plugins.qna.disable !== true ||
+			$scope.playerData.config.plugins.navigation && $scope.playerData.config.plugins.navigation.disable !== true	) {
+			$scope.playerData.plugins = $scope.playerData.plugins || {};
+			$scope.playerData.config.plugins.uiManagers = {}
+			$scope.playerData.plugins.uiManagers = {
+				componentName: 'playkit-ui-managers'
+			};
+		}else{
+			delete $scope.playerData.config.plugins.uiManagers
+			delete $scope.playerData.plugins.uiManagers
+		}
+	}
+
+	$scope.maybeAddkalturaCuePointsPlugins = function(){
+		if ($scope.playerData.config.plugins.dualscreen && $scope.playerData.config.plugins.dualscreen.disable !== true ||
+			$scope.playerData.config.plugins.ivq && $scope.playerData.config.plugins.ivq.disable !== true
+		) {
+			$scope.playerData.plugins = $scope.playerData.plugins || {};
+			$scope.playerData.config.plugins.kalturaCuepoints = {}
+			$scope.playerData.plugins.kalturaCuepoints = {
+				componentName: 'playkit-kaltura-cuepoints'
+			};
+		}else{
+			delete $scope.playerData.config.plugins.kalturaCuepoints
+			delete $scope.playerData.plugins.kalturaCuepoints
+		}
+	}
 	$scope.maybeAddAnalyticsPlugins = function(){
 		var noAnalyticsVersionMajor = 56;
 		var playerVersion = PlayerService.getComponentVersion($scope.playerData, playerName);
