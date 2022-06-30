@@ -653,6 +653,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'getPlayerVersionsMap': function () {
 				if (!playersService.playerVersionsMap) {
 					var kmc = window.parent.kmc;
+					// for local run - to have the versions of the plugins and KP
 					//
 					// kmc = {
 					// 	vars : {
