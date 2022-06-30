@@ -605,6 +605,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		var entryID = $scope.selectedEntry && $scope.selectedEntry.id ? $scope.selectedEntry.id : $scope.selectedEntry;
 		requestNotificationChannel.requestStarted('edit'); // show spinner
+		// for local running
 		// $scope.playerData.partnerId = '1091'
 		// entryID = '0_wifqaipd';
 
