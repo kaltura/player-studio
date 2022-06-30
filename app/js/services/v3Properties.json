@@ -600,6 +600,21 @@
             "initvalue": 5
           }
         ]
+      },
+      "googleTagManager": {
+        "type": "featuremenu",
+        "description": "Enables your website or app to communicate with the the Google Tag Manager servers, and manage your tags from your <a href='https://tagmanager.google.com' target='_blank'>Google Tag Manager</a> web interface. For full options see <a href='https://github.com/kaltura/playkit-js-google-tag-manager/blob/master/docs/guide.md' target='_blank'>GTM Plugin Guide</a>.<br>",
+        "model": "config.plugins.googleTagManager",
+        "componentName": "playkit-google-tag-manager",
+        "label": "google Tag Manager",
+        "children": [
+          {
+            "label": "your container id (formatted as GTM-XXXXXX)",
+            "type": "text",
+            "model": "config.plugins.googleTagManager.containerId",
+            "helpnote": "Should be displayed on your admin tab in your Google Tag Manager dashboard (formatted as GTM-XXXXXX)"
+          }
+        ]
       }
     }
   },
