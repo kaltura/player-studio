@@ -303,7 +303,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		        delete $scope.playerData.config.plugins[plugin.model].disable;
 		    }else{
 		                // supporting plugins w/o config properties
-				$scope.playerData.config.plugins[plugin.model] = {}
+				$scope.playerData.config.plugins[plugin.model] = {};
 			}
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
