@@ -1136,7 +1136,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			delete $scope.playerData.config.plugins.uiManagers;
 			delete $scope.playerData.plugins.uiManagers;
 		}
-	}
+	};
 
 	$scope.maybeAddkalturaCuePointsPlugins = function(){
 		if ($scope.playerData.config.plugins.dualscreen && $scope.playerData.config.plugins.dualscreen.disable !== true ||
@@ -1151,7 +1151,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			delete $scope.playerData.config.plugins.kalturaCuepoints;
 			delete $scope.playerData.plugins.kalturaCuepoints;
 		}
-	}
+	};
+	
 	$scope.maybeAddAnalyticsPlugins = function(){
 		var noAnalyticsVersionMajor = 56;
 		var playerVersion = PlayerService.getComponentVersion($scope.playerData, playerName);
