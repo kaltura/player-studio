@@ -1133,8 +1133,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				componentName: 'playkit-ui-managers'
 			};
 		}else{
-			delete $scope.playerData.config.plugins.uiManagers
-			delete $scope.playerData.plugins.uiManagers
+			delete $scope.playerData.config.plugins.uiManagers;
+			delete $scope.playerData.plugins.uiManagers;
 		}
 	}
 
@@ -1148,8 +1148,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				componentName: 'playkit-kaltura-cuepoints'
 			};
 		}else{
-			delete $scope.playerData.config.plugins.kalturaCuepoints
-			delete $scope.playerData.plugins.kalturaCuepoints
+			delete $scope.playerData.config.plugins.kalturaCuepoints;
+			delete $scope.playerData.plugins.kalturaCuepoints;
 		}
 	}
 	$scope.maybeAddAnalyticsPlugins = function(){
