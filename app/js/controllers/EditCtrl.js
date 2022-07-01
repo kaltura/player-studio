@@ -1128,7 +1128,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.playerData.config.plugins.qna && $scope.playerData.config.plugins.qna.disable !== true ||
 			$scope.playerData.config.plugins.navigation && $scope.playerData.config.plugins.navigation.disable !== true	) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
-			$scope.playerData.config.plugins.uiManagers = {}
+			$scope.playerData.config.plugins.uiManagers = {};
 			$scope.playerData.plugins.uiManagers = {
 				componentName: 'playkit-ui-managers'
 			};
@@ -1143,7 +1143,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.playerData.config.plugins.ivq && $scope.playerData.config.plugins.ivq.disable !== true
 		) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
-			$scope.playerData.config.plugins.kalturaCuepoints = {}
+			$scope.playerData.config.plugins.kalturaCuepoints = {};
 			$scope.playerData.plugins.kalturaCuepoints = {
 				componentName: 'playkit-kaltura-cuepoints'
 			};
