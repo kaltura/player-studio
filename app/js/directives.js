@@ -31,7 +31,7 @@ DirectivesModule.directive('onFinishRender', ['$timeout','$compile', function ($
 						$('div:contains("AirPlay").panel').before('<div class="tabSubHeader AirPlay">Apple AirPlay</div><p class="categoryDesc">Use the below to enable casting capabilities from iOS devices, using the Apple AirPlay protocol.</p>');
 					}
 					if ($(".Analytics").length === 0){
-						$('div:contains("Youbora").panel').before('<div class="tabSubHeader Analytics">Analytics</div><p class="categoryDesc">Kaltura supports robust analytics via the Kaltura platform as well as via 3rd party analytics providers.</p>'); // add Analytics separator
+						$('div:contains("google Tag Manager").panel').before('<div class="tabSubHeader Analytics">Analytics</div><p class="categoryDesc">Kaltura supports robust analytics via the Kaltura platform as well as via 3rd party analytics providers.</p>'); // add Analytics separator
 					}
 					if ($(".Monetization").length === 0){
 						$('div:contains("IMA").panel:first').before('<div class="tabSubHeader Monetization">Monetization</div><p class="categoryDesc">Content monetization settings.</p>'); // add Monetization separator

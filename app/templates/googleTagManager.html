@@ -1,0 +1,7 @@
+<div class="text" style="height: 115px" ng-controller="gtmPluginCtrl">
+    <span class="pluginLabel" ng-class="{disabled: plugin!=null && !plugin.enabled}" id="{{property.id}}">{{property.label}}</span>
+    <i class="glyphicon glyphicon-question-sign helpIcon" ng-class="{disabled: plugin!=null && !plugin.enabled}" ng-show="{{property.helpnote != null}}" tooltip-html-unsafe="{{property.helpnote}}" tooltip-placement="right" tooltip-popup-delay="500"></i><br>
+
+    <span class="featureDesc">Please enter a comma delimited list of <a href='https://github.com/kaltura/playkit-js/blob/master/src/event/event-type.js'> Player Custom Events</a>:</span>
+    <input type="text" class="alpha" ng-model="customEvents" ng-change="customEventsChange();propertyChanged(property, false)" ng-enter="customEventsChange();propertyChanged(property, 'enter')" ng-blur="customEventsChange();propertyChanged(property, 'blur')" ng-disabled="plugin!=null && !plugin.enabled">
+</div>
