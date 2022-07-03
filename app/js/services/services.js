@@ -670,7 +670,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerVersionsMap) {
 						try {
 							playersService.playerVersionsMap = JSON.parse(kmc.vars.studioV3.playerVersionsMap);
-							const playerOvpVersionsMap  = JSON.parse(kmc.vars.studioV3.playerOvpVersionsMap);
+							var playerOvpVersionsMap  = JSON.parse(kmc.vars.studioV3.playerOvpVersionsMap);
 							playersService.playerVersionsMap = {...playersService.playerVersionsMap, ...playerOvpVersionsMap};
 						} catch (e) {}
 					}
