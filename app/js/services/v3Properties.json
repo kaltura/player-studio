@@ -1109,7 +1109,61 @@
         "model": "config.plugins.playlist",
         "endline": "true",
         "componentName": "playkit-playlist",
-        "children": []
+        "children": [
+          {
+            "label": "Position",
+            "type": "dropdown",
+            "model": "config.plugins.playlist.position",
+            "options": [
+              {
+                "label": "Right",
+                "value": "right"
+              },
+              {
+                "label": "Left",
+                "value": "left"
+              },
+              {
+                "label": "Top",
+                "value": "top"
+              },
+              {
+                "label": "Bottom",
+                "value": "bottom"
+              }
+            ],
+            "initvalue": "right",
+            "helpnote": "Playlist position"
+          },
+          {
+            "label": "Expand mode",
+            "type": "dropdown",
+            "model": "config.plugins.playlist.expandMode",
+            "options": [
+              {
+                "label": "Over",
+                "value": "over"
+              },
+              {
+                "label": "Alongside",
+                "value": "alongside"
+              },
+              {
+                "label": "Hidden",
+                "value": "hidden"
+              }
+            ],
+            "initvalue": "over",
+            "helpnote": "Playlist expand mode"
+          },
+          {
+            "label": "Show playlist when movie loads",
+            "helpnote": "Uncheck to keep the playlist hidden until first play",
+            "type": "checkbox",
+            "initvalue": true,
+            "model": "config.plugins.playlist.expandOnFirstPlay"
+          }
+        ]
       }
     }
 
