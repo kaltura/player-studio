@@ -671,7 +671,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 						try {
 							playersService.playerVersionsMap = JSON.parse(kmc.vars.studioV3.playerVersionsMap);
 							var playerOvpVersionsMap  = JSON.parse(kmc.vars.studioV3.playerOvpVersionsMap);
-							playersService.playerVersionsMap = {...playersService.playerVersionsMap, ...playerOvpVersionsMap};
+							playersService.playerVersionsMap = Object.assign(playersService.playerVersionsMap, playerOvpVersionsMap);
 						} catch (e) {}
 					}
 					playersService.playerVersionsMap = angular.isObject(playersService.playerVersionsMap) ? playersService.playerVersionsMap : {};
