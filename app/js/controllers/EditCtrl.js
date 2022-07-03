@@ -303,7 +303,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		        delete $scope.playerData.config.plugins[plugin.model].disable;
 		    }else{
 		                // supporting plugins w/o config properties
-				$scope.playerData.config.plugins[plugin.model] = {}
+				$scope.playerData.config.plugins[plugin.model] = {};
 			}
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
@@ -1128,30 +1128,31 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.playerData.config.plugins.qna && $scope.playerData.config.plugins.qna.disable !== true ||
 			$scope.playerData.config.plugins.navigation && $scope.playerData.config.plugins.navigation.disable !== true	) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
-			$scope.playerData.config.plugins.uiManagers = {}
+			$scope.playerData.config.plugins.uiManagers = {};
 			$scope.playerData.plugins.uiManagers = {
 				componentName: 'playkit-ui-managers'
 			};
 		}else{
-			delete $scope.playerData.config.plugins.uiManagers
-			delete $scope.playerData.plugins.uiManagers
+			delete $scope.playerData.config.plugins.uiManagers;
+			delete $scope.playerData.plugins.uiManagers;
 		}
-	}
+	};
 
 	$scope.maybeAddkalturaCuePointsPlugins = function(){
 		if ($scope.playerData.config.plugins.dualscreen && $scope.playerData.config.plugins.dualscreen.disable !== true ||
 			$scope.playerData.config.plugins.ivq && $scope.playerData.config.plugins.ivq.disable !== true
 		) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
-			$scope.playerData.config.plugins.kalturaCuepoints = {}
+			$scope.playerData.config.plugins.kalturaCuepoints = {};
 			$scope.playerData.plugins.kalturaCuepoints = {
 				componentName: 'playkit-kaltura-cuepoints'
 			};
 		}else{
-			delete $scope.playerData.config.plugins.kalturaCuepoints
-			delete $scope.playerData.plugins.kalturaCuepoints
+			delete $scope.playerData.config.plugins.kalturaCuepoints;
+			delete $scope.playerData.plugins.kalturaCuepoints;
 		}
-	}
+	};
+	
 	$scope.maybeAddAnalyticsPlugins = function(){
 		var noAnalyticsVersionMajor = 56;
 		var playerVersion = PlayerService.getComponentVersion($scope.playerData, playerName);
