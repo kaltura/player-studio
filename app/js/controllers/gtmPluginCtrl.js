@@ -14,7 +14,7 @@ KMCMenu.controller('gtmPluginCtrl', ['$scope',
 			}
 		}
 
-		// update entries list
+		// update player custom events list
 		$scope.customEventsChange = function(){
 			$scope.playerData.config.plugins["googleTagManager"].customEvents = $scope.customEvents.split(',');
 		};
