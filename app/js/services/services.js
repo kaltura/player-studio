@@ -653,6 +653,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'getPlayerVersionsMap': function () {
 				if (!playersService.playerVersionsMap) {
 					var kmc = window.parent.kmc;
+					var kmcConfig = window.parent.kmcConfig; // Note - kmcConfig is the new kmc configuration object. TODO [BE] - move all config to the new kmcConfig object and then we can update Studio to use the new config only
 					// for local run - to have the versions of the plugins and KP
 					//
 					// kmc = {
@@ -670,8 +671,11 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerVersionsMap) {
 						try {
 							playersService.playerVersionsMap = JSON.parse(kmc.vars.studioV3.playerVersionsMap);
-							var playerOvpVersionsMap  = JSON.parse(kmc.vars.studioV3.playerOvpVersionsMap);
-							playersService.playerVersionsMap = Object.assign(playersService.playerVersionsMap, playerOvpVersionsMap);
+							// grab playerOvpVersionsMap from the new config (see TODO above)
+							if (kmcConfig && kmcConfig.externalApps && kmcConfig.externalApps.studioV3 && kmcConfig.externalApps.studioV3.playerOvpVersionsMap) {
+								var playerOvpVersionsMap = JSON.parse(kmcConfig.externalApps.studioV3.playerOvpVersionsMap);
+								playersService.playerVersionsMap = Object.assign(playersService.playerVersionsMap, playerOvpVersionsMap);
+							}
 						} catch (e) {}
 					}
 					playersService.playerVersionsMap = angular.isObject(playersService.playerVersionsMap) ? playersService.playerVersionsMap : {};
