@@ -653,9 +653,29 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			'getPlayerVersionsMap': function () {
 				if (!playersService.playerVersionsMap) {
 					var kmc = window.parent.kmc;
+					var kmcConfig = window.parent.kmcConfig; // Note - kmcConfig is the new kmc configuration object. TODO [BE] - move all config to the new kmcConfig object and then we can update Studio to use the new config only
+					// for local run - to have the versions of the plugins and KP
+					//
+					// kmc = {
+					// 	vars : {
+					// 		studioV3: {
+					// 			playerVersionsMap: "{\"kaltura-ovp-player\":\"3.3.0\",\"kaltura-tv-player\":\"3.3.0\",\"playkit-bumper\":\"2.0.7\",\"playkit-cast-receiver\":\"1.1.1\",\"playkit-cast-sender\":\"1.2.3\",\"playkit-comscore\":\"3.0.1\",\"playkit-flash\":\"2.0.11\",\"playkit-google-analytics\":\"1.1.0\",\"playkit-ima\":\"1.6.3\",\"playkit-ima-dai\":\"1.3.1\",\"playkit-offline-manager\":\"1.2.0\",\"playkit-streamlyzer\":\"0.1.0\",\"playkit-vr\":\"2.0.1\",\"playkit-youbora\":\"2.3.3\",\"playkit-youtube\":\"2.0.3\",\"playkit-visibility\":\"2.1.0\",\"playkit-kava\":\"1.3.1\",\"playkit-ott-analytics\":\"1.1.0\",\"playkit-timeline\":\"1.2.0\",\"playkit-airplay\":\"1.1.2\",\"playkit-smartswitch\":\"0.2.0\",\"playkit-share\":\"1.1.3\",\"playkit-skip\":\"1.1.4\",\"playkit-related\":\"0.1.2\",\"playkit-broadpeak\":\"1.3.2\",\"playkit-ui-managers\":\"1.2.1\"}",
+					// 			"playerConfVars": "{\"version\":\"7.48\"}",
+					// 			"playerBetaVersionsMap": "{\"kaltura-ovp-player\":\"3.3.0\",\"kaltura-tv-player\":\"3.3.0\",\"playkit-bumper\":\"2.0.7\",\"playkit-cast-receiver\":\"1.1.1\",\"playkit-cast-sender\":\"1.2.3\",\"playkit-comscore\":\"3.0.1\",\"playkit-flash\":\"2.0.11\",\"playkit-google-analytics\":\"1.1.0\",\"playkit-ima\":\"1.6.3\",\"playkit-ima-dai\":\"1.3.1\",\"playkit-offline-manager\":\"1.2.0\",\"playkit-streamlyzer\":\"0.1.0\",\"playkit-vr\":\"2.0.1\",\"playkit-youbora\":\"2.3.3\",\"playkit-youtube\":\"2.0.3\",\"playkit-visibility\":\"2.1.0\",\"playkit-kava\":\"1.3.1\",\"playkit-ott-analytics\":\"1.1.0\",\"playkit-timeline\":\"1.2.0\",\"playkit-airplay\":\"1.1.2\",\"playkit-smartswitch\":\"0.2.0\",\"playkit-share\":\"1.1.3\",\"playkit-skip\":\"1.1.4\",\"playkit-related\":\"0.1.2\",\"playkit-broadpeak\":\"1.3.2\",\"playkit-ui-managers\":\"1.2.1\"}",
+					// 			"playerBetaConfVars": "{\"version\":\"7.48\"}",
+					// 			"playerOvpVersionsMap": '{"rapt":"0.4.3","playkit-qna":"2.1.3","playkit-kaltura-live":"2.1.4","playkit-hotspots":"2.1.4","playkit-navigation":"2.1.7","playkit-transcript":"2.1.4","playkit-dual-screen":"1.3.1","playkit-kaltura-cuepoints":"1.5.5","playkit-ivq":"0.4.0","playkit-info":"2.0.12","playkit-moderation":"2.1.1","playkit-playlist":"0.0.1"}'
+					// 		}
+					// 	}
+					// }
+
 					if (kmc && kmc.vars && kmc.vars.studioV3 && kmc.vars.studioV3.playerVersionsMap) {
 						try {
 							playersService.playerVersionsMap = JSON.parse(kmc.vars.studioV3.playerVersionsMap);
+							// grab playerOvpVersionsMap from the new config (see TODO above)
+							if (kmcConfig && kmcConfig.externalApps && kmcConfig.externalApps.studioV3 && kmcConfig.externalApps.studioV3.playerOvpVersionsMap) {
+								var playerOvpVersionsMap = JSON.parse(kmcConfig.externalApps.studioV3.playerOvpVersionsMap);
+								playersService.playerVersionsMap = Object.assign(playersService.playerVersionsMap, playerOvpVersionsMap);
+							}
 						} catch (e) {}
 					}
 					playersService.playerVersionsMap = angular.isObject(playersService.playerVersionsMap) ? playersService.playerVersionsMap : {};
