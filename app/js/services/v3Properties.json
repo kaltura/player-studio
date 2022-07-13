@@ -641,6 +641,30 @@
             "label": "Player Custom Events",
             "helpnote": "Player Custom Events list to be tracked",
             "type": "googleTagManager"
+          },
+          {
+            "label": "Track All Core Events (includes Ads Events)",
+            "helpnote":"this option automatically register your player to trigger all Core Events (including Ads Events)",
+            "model": "config.plugins.googleTagManager.customEventsTracking.preset.coreEvents",
+            "type": "checkbox"
+          },
+          {
+            "label": "Track All UI Events",
+            "helpnote": "this option automatically register your player to trigger all UI Events",
+            "model": "config.plugins.googleTagManager.customEventsTracking.preset.UIEvents",
+            "type": "checkbox"
+          },
+          {
+            "label": "Track All Playlist Events",
+            "helpnote": "this option automatically register your player to trigger all Playlist Events",
+            "model": "config.plugins.googleTagManager.customEventsTracking.preset.playlistEvents",
+            "type": "checkbox"
+          },
+          {
+            "label": "Track All Core Cast Events",
+            "helpnote":"this option automatically register your player to trigger all Cast Events",
+            "model": "config.plugins.googleTagManager.customEventsTracking.preset.castEvents",
+            "type": "checkbox"
           }
         ]
       },
