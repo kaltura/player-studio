@@ -632,13 +632,13 @@
         "componentName": "playkit-google-tag-manager",
         "children": [
           {
-            "label": "your container id (formatted as GTM-XXXXXX)",
+            "label": "Container id (formatted as GTM-XXXXXX)",
             "type": "text",
             "model": "config.plugins.googleTagManager.containerId",
             "helpnote": "Should be displayed on your admin tab in your Google Tag Manager dashboard (formatted as GTM-XXXXXX)"
           },
           {
-            "label": "Player Custom Events",
+            "label": "Track Player Custom Events",
             "helpnote": "Player Custom Events list to be tracked",
             "type": "googleTagManager"
           },

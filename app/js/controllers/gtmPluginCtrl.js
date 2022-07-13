@@ -18,7 +18,9 @@ KMCMenu.controller('gtmPluginCtrl', ['$scope',
 		}
 
 		$scope.customListOfCustomEventsChange = function(){
-			$scope.playerData.config.plugins["googleTagManager"].customEventsTracking.custom = $scope.customListOfCustomEvents.split(',');
+			$scope.playerData.config.plugins["googleTagManager"].customEventsTracking.custom = $scope.customListOfCustomEvents
+				.replace(/\s/g,'')
+				.split(',');
 		};
 	}
 ]);
