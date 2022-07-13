@@ -6,9 +6,8 @@ KMCMenu.controller('gtmPluginCtrl', ['$scope',
 			$scope.playerData.config.plugins["googleTagManager"] = {disable: true};
 		}
 
-		// init radio buttons according to selected related entries source
 		if ($scope.playerData.config.plugins["googleTagManager"].enabled) {
-			var data = $scope.playerData.config.plugins["googleTagManager"];
+			const data = $scope.playerData.config.plugins["googleTagManager"];
 			if (Array.isArray(data?.customEventsTracking?.custom) && data?.customEventsTracking?.custom.length > 0){
 				$scope.customListOfCustomEvents = data.customEventsTracking.custom.join(',');
 			} else if (!('customEventsTracking' in $scope.playerData.config.plugins["googleTagManager"])) {
@@ -18,7 +17,6 @@ KMCMenu.controller('gtmPluginCtrl', ['$scope',
 			}
 		}
 
-		// update player custom events list
 		$scope.customListOfCustomEventsChange = function(){
 			$scope.playerData.config.plugins["googleTagManager"].customEventsTracking.custom = $scope.customListOfCustomEvents.split(',');
 		};
