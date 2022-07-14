@@ -7,7 +7,7 @@ KMCMenu.controller('gtmPluginCtrl', ['$scope',
 		}
 
 		if ($scope.playerData.config.plugins["googleTagManager"].enabled) {
-			const data = $scope.playerData.config.plugins["googleTagManager"];
+			var data = $scope.playerData.config.plugins["googleTagManager"];
 			if (Array.isArray(data.customEventsTracking && data.customEventsTracking.custom) && data.customEventsTracking.custom.length > 0){
 				$scope.customListOfCustomEvents = data.customEventsTracking.custom.join(',');
 			} else if (!('customEventsTracking' in $scope.playerData.config.plugins["googleTagManager"])) {
