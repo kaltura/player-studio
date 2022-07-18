@@ -986,6 +986,66 @@
     }
   },
   {
+    "label": "Playlist",
+    "icon": "playlist",
+    "description": "Configure your playlists using the following options.",
+    "type": "menu",
+    "children": {
+      "playlist": {
+        "label": "Enable",
+        "type": "featuremenu",
+        "isOpen": true,
+        "model": "config.playlist",
+        "children": [
+          {
+            "type": "label",
+            "value": "Options"
+          },
+          {
+            "label": "Auto continue",
+            "helpnote": "Determines whether to continue to the next item automatically",
+            "type": "checkbox",
+            "initvalue": true,
+            "model": "config.playlist.options.autoContinue"
+          },
+          {
+            "label": "Loop",
+            "helpnote": "Determines whether to play the playlist in a loop. When selected, the playlist will play automatically even if autoContinue is set to false",
+            "type": "checkbox",
+            "model": "config.playlist.options.loop"
+          },
+          {
+            "type": "label",
+            "value": "Countdown"
+          },
+          {
+            "label": "Showing",
+            "helpnote": "Determines whether to show the countdown",
+            "type": "checkbox",
+            "initvalue": true,
+            "model": "config.playlist.countdown.showing"
+          },
+          {
+            "label": "Time to show",
+            "helpnote": "Shows when the countdown is scheduled to appear (by default, this is towards the end)",
+            "type": "float",
+            "filter": "nullableNumber",
+            "model": "config.playlist.countdown.timeToShow"
+          },
+          {
+            "label": "Duration",
+            "helpnote": "Shows for how long the countdown will appear",
+            "type": "float",
+            "filter": "nullableNumber",
+            "min": 0,
+            "initvalue": 10,
+            "model": "config.playlist.countdown.duration"
+          }
+        ]
+      }
+    }
+  },
+  {
     "label": "Advanced Settings",
     "icon": "advanced",
     "description": "Edit your player’s configuration file using advanced settings. Recommended only for advanced player developers.",
