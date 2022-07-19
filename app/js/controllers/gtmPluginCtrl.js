@@ -11,7 +11,7 @@ KMCMenu.controller('gtmPluginCtrl', ['$scope',
 			if (Array.isArray(data.customEventsTracking && data.customEventsTracking.custom) && data.customEventsTracking.custom.length > 0){
 				$scope.customListOfCustomEvents = data.customEventsTracking.custom.join(',');
 			} else {
-				$scope.playerData.config.plugins["googleTagManager"] = {customEventsTracking: {custom:[]}}
+				$scope.playerData.config.plugins["googleTagManager"] = {customEventsTracking: {custom:[]}};
 			}
 		}
 
