@@ -624,6 +624,23 @@
     "description": "",
     "type": "menu",
     "children": {
+      "youbora": {
+        "label": "Youbora",
+        "type": "featuremenu",
+        "description": "A powerful intelligence analytics and optimization platform to deliver online TV-quality video experiences. For full options see <a href='http://developer.nicepeopleatwork.com/apidocs/js/$YB.data.Options.html' target='_blank'>Here</a>.<br>",
+        "model": "config.plugins.youbora",
+        "endline": "true",
+        "componentName": "playkit-youbora",
+        "children": [
+          {
+            "label": "Account code",
+            "type": "text",
+            "model": "config.plugins.youbora.options",
+            "helpnote": "Enter your Youbora account ID",
+            "filter": "accountCode"
+          }
+        ]
+      },
       "googleTagManager": {
         "label": "Google Tag Manager",
         "type": "featuremenu",
@@ -665,23 +682,6 @@
             "helpnote":"this option automatically register your player to trigger all Cast Events",
             "model": "config.plugins.googleTagManager.customEventsTracking.preset.castEvents",
             "type": "checkbox"
-          }
-        ]
-      },
-      "youbora": {
-        "label": "Youbora",
-        "type": "featuremenu",
-        "description": "A powerful intelligence analytics and optimization platform to deliver online TV-quality video experiences. For full options see <a href='http://developer.nicepeopleatwork.com/apidocs/js/$YB.data.Options.html' target='_blank'>Here</a>.<br>",
-        "model": "config.plugins.youbora",
-        "endline": "true",
-        "componentName": "playkit-youbora",
-        "children": [
-          {
-            "label": "Account code",
-            "type": "text",
-            "model": "config.plugins.youbora.options",
-            "helpnote": "Enter your Youbora account ID",
-            "filter": "accountCode"
           }
         ]
       },
