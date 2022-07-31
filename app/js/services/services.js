@@ -1006,9 +1006,9 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location', 'localS
 		},
 		listPlaylists: function () {
 			var request = {
-				'service': 'baseentry',
-				'filter:objectType': 'KalturaBaseEntryFilter',
-				'filter:typeEqual': '5',
+				'service': 'playlist',
+				'filter:objectType': 'KalturaPlaylistFilter',
+				'filter:playListTypeIn': '3,10',
 				'action': 'list'
 
 			};
@@ -1016,11 +1016,11 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location', 'localS
 		},
 		searchPlaylists: function (term) {
 			var request = {
-				'service': 'baseentry',
+				'service': 'playlist',
 				'action': 'list',
 				'filter:freeText': term,
-				'filter:objectType': 'KalturaBaseEntryFilter',
-				'filter:typeEqual': '5',
+				'filter:objectType': 'KalturaPlaylistFilter',
+				'filter:playListTypeIn': '3,10',
 				ignoreNull: '1'
 			};
 			return apiService.doRequest(request, true);
