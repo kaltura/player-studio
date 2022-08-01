@@ -986,7 +986,8 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location', 'localS
 		listMedia: function () {
 			var request = {
 				'service': 'baseentry',
-				'filter:mediaTypeIn': '1,2,5,6,201', // copied from KMC search
+				'filter:mediaTypeIn': '1,5,6,201', // copied from KMC search without images (type 2)
+			        'filter:statusIn': '2', // in ready status (2) only
 				'filter:objectType': 'KalturaMediaEntryFilter',
 				'action': 'list'
 
@@ -998,7 +999,8 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location', 'localS
 				'service': 'baseentry',
 				'action': 'list',
 				'filter:freeText': term,
-				'filter:mediaTypeIn': '1,2,5,6,201', // copied from KMC search
+				'filter:mediaTypeIn': '1,5,6,201', // copied from KMC search without images (type 2)
+			        'filter:statusIn': '2', // in ready status (2) only
 				'filter:objectType': 'KalturaMediaEntryFilter',
 				ignoreNull: '1'
 			};
