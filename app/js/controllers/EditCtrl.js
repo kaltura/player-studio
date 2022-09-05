@@ -588,6 +588,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		$scope.maybeAddAnalyticsPlugins();
 		$scope.maybeAddkalturaCuePointsPlugins();
 		$scope.maybeAddUIManagersPlugins();
+		$scope.maybeAddTimelinePlugins();
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
 
@@ -1003,6 +1004,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.maybeAddAnalyticsPlugins();
 			$scope.maybeAddkalturaCuePointsPlugins();
 			$scope.maybeAddUIManagersPlugins();
+			$scope.maybeAddTimelinePlugins();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
@@ -1123,10 +1125,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	};
 
 	$scope.maybeAddUIManagersPlugins = function() {
-		if ($scope.playerData.config.plugins.playlist && $scope.playerData.config.plugins.playlist.disable !== true ||
-			$scope.playerData.config.plugins["playkit-js-transcript"] && $scope.playerData.config.plugins["playkit-js-transcript"].disable !== true ||
-			$scope.playerData.config.plugins.qna && $scope.playerData.config.plugins.qna.disable !== true ||
-			$scope.playerData.config.plugins.navigation && $scope.playerData.config.plugins.navigation.disable !== true	) {
+		if (($scope.playerData.config.plugins.playlist && $scope.playerData.config.plugins.playlist.disable !== true) ||
+			($scope.playerData.config.plugins["playkit-js-transcript"] && $scope.playerData.config.plugins["playkit-js-transcript"].disable !== true) ||
+			($scope.playerData.config.plugins.qna && $scope.playerData.config.plugins.qna.disable !== true) ||
+			($scope.playerData.config.plugins.navigation && $scope.playerData.config.plugins.navigation.disable !== true)) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
 			$scope.playerData.config.plugins.uiManagers = {};
 			$scope.playerData.plugins.uiManagers = {
@@ -1138,9 +1140,26 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 	};
 
+	$scope.maybeAddTimelinePlugins = function() {
+		if ($scope.playerData.config.plugins.ivq && $scope.playerData.config.plugins.ivq.disable !== true) {
+			$scope.playerData.plugins = $scope.playerData.plugins || {};
+			$scope.playerData.config.plugins.timeline = {};
+			$scope.playerData.plugins.timeline = {
+				componentName: 'playkit-timeline.js'
+			};
+		}else{
+			delete $scope.playerData.config.plugins.timeline;
+			delete $scope.playerData.plugins.timeline;
+		}
+	};
+
 	$scope.maybeAddkalturaCuePointsPlugins = function(){
-		if ($scope.playerData.config.plugins.dualscreen && $scope.playerData.config.plugins.dualscreen.disable !== true ||
-			$scope.playerData.config.plugins.ivq && $scope.playerData.config.plugins.ivq.disable !== true
+		if (($scope.playerData.config.plugins.dualscreen && $scope.playerData.config.plugins.dualscreen.disable !== true) ||
+			($scope.playerData.config.plugins.ivq && $scope.playerData.config.plugins.ivq.disable !== true) ||
+			($scope.playerData.config.plugins.qna && $scope.playerData.config.plugins.qna.disable !== true) ||
+			($scope.playerData.config.plugins.navigation && $scope.playerData.config.plugins.navigation.disable !== true) ||
+			($scope.playerData.config.plugins["playkit-js-hotspots"] && $scope.playerData.config.plugins["playkit-js-hotspots"].disable !== true) ||
+			($scope.playerData.config.plugins["playkit-js-transcript"] && $scope.playerData.config.plugins["playkit-js-transcript"].disable !== true)
 		) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
 			$scope.playerData.config.plugins.kalturaCuepoints = {};
