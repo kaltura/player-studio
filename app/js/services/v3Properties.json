@@ -1046,7 +1046,7 @@
     }
   },
   {
-    "label": "Plugins",
+    "label": "Additional Plugins",
     "type": "menu",
     "model": "pluginSettings",
     "icon": "TabPlugins",
@@ -1132,7 +1132,6 @@
         "children": []
       }
     }
-
   },
   {
     "label": "Advanced Settings",
