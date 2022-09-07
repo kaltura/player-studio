@@ -1145,7 +1145,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
 			$scope.playerData.config.plugins.timeline = {};
 			$scope.playerData.plugins.timeline = {
-				componentName: 'playkit-timeline.js'
+				componentName: 'playkit-timeline'
 			};
 		}else{
 			delete $scope.playerData.config.plugins.timeline;
