@@ -656,7 +656,6 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.getPlayerProperties(properties);
 			}else{ // plugin
 				for (var plug in properties){
-
 					if (properties[plug].children){
 						// save plugin name in a model
 						properties[plug].model = plug;
