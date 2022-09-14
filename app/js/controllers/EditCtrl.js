@@ -175,7 +175,7 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 	                pluginIndex++;
 	                $scope.propertiesSearch.push({'label': p.label,'categoryIndex':categoryIndex, 'accIndex': pluginIndex, 'id': 'accHeader'+categoryIndex + "_"  +pluginIndex}); // add accordion header to the search indexing
 	                var plugin = {'enabled': p.enabled, hideArrow: !p.children.length, 'label': p.label, 'description':p.description, 'isopen': !!p.isOpen, 'checkable': p.checkable !== false, 'model': p.model, 'id': 'accHeader'+categoryIndex + "_" + pluginIndex, 'componentName': p.componentName};
-	                plugin.properties = [];
+					plugin.properties = [];
 	                // check for tabs
 	                var tabObj = {'type':'tabs', 'children':[]}; // create tab object
 	                if (p.sections){ // tabs found - create tabs
@@ -302,8 +302,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			if ($scope.playerData.config.plugins[plugin.model]) {
 		        delete $scope.playerData.config.plugins[plugin.model].disable;
 		    }else{
-		                // supporting plugins w/o config properties
-				$scope.playerData.config.plugins[plugin.model] = {};
+		        // supporting plugins w/o config properties, don't override playlist
+				if (plugin.model !== "playlist" || (plugin.model === "playlist" && plugin.componentName)) {
+					$scope.playerData.config.plugins[plugin.model] = {};
+				}
 			}
 			if (plugin.componentName) {
 			    window.KalturaPlayer = null;
@@ -654,12 +656,23 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				$scope.getPlayerProperties(properties);
 			}else{ // plugin
 				for (var plug in properties){
+
 					if (properties[plug].children){
 						// save plugin name in a model
 						properties[plug].model = plug;
 						// check plugin enabled
 						if (properties[plug].enabled || $scope.playerData.config[plug] || ($scope.playerData.config.plugins[plug] && !$scope.playerData.config.plugins[plug].disable) || ($scope.playerData.config.ui && $scope.playerData.config.ui.components && $scope.playerData.config.ui.components[plug]) || (plug === "receiver" && $scope.playerData.externals && $scope.playerData.externals[properties[plug].componentName])){
 							properties[plug].enabled = true;
+							// special fix for playlist as we use the same name for the plugin and the core feature
+							if (plug === "playlist") {
+								if (properties[plug].componentName === "playkit-playlist") {
+									// this is the plugin
+									properties[plug].enabled = $scope.playerData.config.plugins[plug] ? true : false;
+								} else {
+									// this is the core feature
+									properties[plug].enabled = properties[plug].enabled === true;
+								}
+							}
 						}else{
 							properties[plug].enabled = false;
 						}
