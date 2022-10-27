@@ -587,10 +587,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
-		$scope.maybeAddAnalyticsPlugins();
-		$scope.maybeAddkalturaCuePointsPlugins();
-		$scope.maybeAddUIManagersPlugins();
-		$scope.maybeAddTimelinePlugins();
+		// $scope.maybeAddAnalyticsPlugins();
+		// $scope.maybeAddkalturaCuePointsPlugins();
+		// $scope.maybeAddUIManagersPlugins();
+		// $scope.maybeAddTimelinePlugins();
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
 
@@ -1013,10 +1013,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				);
 			};
 			$scope.updatePlayerData();
-			$scope.maybeAddAnalyticsPlugins();
-			$scope.maybeAddkalturaCuePointsPlugins();
-			$scope.maybeAddUIManagersPlugins();
-			$scope.maybeAddTimelinePlugins();
+			// $scope.maybeAddAnalyticsPlugins();
+			// $scope.maybeAddkalturaCuePointsPlugins();
+			// $scope.maybeAddUIManagersPlugins();
+			// $scope.maybeAddTimelinePlugins();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
