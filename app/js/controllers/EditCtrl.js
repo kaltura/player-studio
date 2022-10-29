@@ -587,10 +587,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 
 	$scope.renderPlayer = function(){
 		$scope.updatePlayerData(); // update the player data from the menu data
-		// $scope.maybeAddAnalyticsPlugins();
-		// $scope.maybeAddkalturaCuePointsPlugins();
-		// $scope.maybeAddUIManagersPlugins();
-		// $scope.maybeAddTimelinePlugins();
+		$scope.maybeAddAnalyticsPlugins();
+		$scope.maybeAddkalturaCuePointsPlugins();
+		$scope.maybeAddUIManagersPlugins();
+		$scope.maybeAddTimelinePlugins();
 		$scope.$broadcast('beforeRenderEvent'); // allow other controllers to update the player data if needed
 		$(".onpagePlaylistInterface").remove(); // remove any playlist onpage containers that might exists from previous rendering
 
@@ -1013,10 +1013,10 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 				);
 			};
 			$scope.updatePlayerData();
-			// $scope.maybeAddAnalyticsPlugins();
-			// $scope.maybeAddkalturaCuePointsPlugins();
-			// $scope.maybeAddUIManagersPlugins();
-			// $scope.maybeAddTimelinePlugins();
+			$scope.maybeAddAnalyticsPlugins();
+			$scope.maybeAddkalturaCuePointsPlugins();
+			$scope.maybeAddUIManagersPlugins();
+			$scope.maybeAddTimelinePlugins();
 			$scope.dataChanged = false;
 			window.parent.studioDataChanged = false; // used when navigating away from studio
 			if ($scope.playerData.config.plugins.playlistAPI && $scope.playerData.config.plugins.playlistAPI.plugin){
@@ -1143,12 +1143,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 			($scope.playerData.config.plugins.navigation && $scope.playerData.config.plugins.navigation.disable !== true)) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
 			$scope.playerData.config.plugins.uiManagers = {};
-			$scope.playerData.plugins.uiManagers = {
-				componentName: 'playkit-ui-managers'
-			};
+			// $scope.playerData.plugins.uiManagers = {
+			// 	componentName: 'playkit-ui-managers'
+			// };
 		}else{
 			delete $scope.playerData.config.plugins.uiManagers;
-			delete $scope.playerData.plugins.uiManagers;
+			// delete $scope.playerData.plugins.uiManagers;
 		}
 	};
 
@@ -1156,12 +1156,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		if ($scope.playerData.config.plugins.ivq && $scope.playerData.config.plugins.ivq.disable !== true) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
 			$scope.playerData.config.plugins.timeline = {};
-			$scope.playerData.plugins.timeline = {
-				componentName: 'playkit-timeline'
-			};
+			// $scope.playerData.plugins.timeline = {
+			// 	componentName: 'playkit-timeline'
+			// };
 		}else{
 			delete $scope.playerData.config.plugins.timeline;
-			delete $scope.playerData.plugins.timeline;
+			// delete $scope.playerData.plugins.timeline;
 		}
 	};
 
@@ -1175,12 +1175,12 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
 			$scope.playerData.config.plugins.kalturaCuepoints = {};
-			$scope.playerData.plugins.kalturaCuepoints = {
-				componentName: 'playkit-kaltura-cuepoints'
-			};
+			// $scope.playerData.plugins.kalturaCuepoints = {
+			// 	componentName: 'playkit-kaltura-cuepoints'
+			// };
 		}else{
 			delete $scope.playerData.config.plugins.kalturaCuepoints;
-			delete $scope.playerData.plugins.kalturaCuepoints;
+			// delete $scope.playerData.plugins.kalturaCuepoints;
 		}
 	};
 	
@@ -1189,14 +1189,14 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		var playerVersion = PlayerService.getComponentVersion($scope.playerData, playerName);
 		if (playerVersion === '{latest}' || playerVersion === '{beta}' || playerVersion.split('.')[1] >= noAnalyticsVersionMajor) {
 			$scope.playerData.plugins = $scope.playerData.plugins || {};
-			$scope.playerData.plugins.kava = {
-				componentName: 'playkit-kava'
-			};
+			// $scope.playerData.plugins.kava = {
+			// 	componentName: 'playkit-kava'
+			// };
 			$scope.playerData.config.plugins.kava = $scope.playerData.config.plugins.kava || {};
 			if (PlayerService.OvpOrOtt === PlayerService.OTT) {
-				$scope.playerData.plugins.ottAnalytics = {
-					componentName: 'playkit-ott-analytics'
-				};
+				// $scope.playerData.plugins.ottAnalytics = {
+				// 	componentName: 'playkit-ott-analytics'
+				// };
 				$scope.playerData.config.plugins.ottAnalytics = $scope.playerData.config.plugins.ottAnalytics || {};
 				if ($scope.playerData.config.plugins.kava.disable !== false) {
 					$scope.playerData.config.plugins.kava.disable = true;
