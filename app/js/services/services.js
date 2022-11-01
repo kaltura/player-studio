@@ -184,8 +184,8 @@ KMCServices.factory('sortSvc', [function () {
 	}]
 );
 
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService', '$filter', 'localStorageService', '$location', 'utilsSvc',
-	function ($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc) {
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService', '$filter', 'localStorageService', '$location', 'utilsSvc', 'PlayerDataService',
+	function ($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc, PlayerDataService) {
 		var playersCache = {};
 		var currentPlayer = {};
 		var previewEntry;
@@ -534,6 +534,37 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 				);
 				return deferred.promise;
 			},
+			'playerUpgradeV7': function(playerObj, mode, templateId) {
+				var deferred = $q.defer();
+				var paramsPromise;
+				switch (mode) {
+					case 'default':
+						paramsPromise = PlayerDataService.getDefaultV7PlayerConf(playerObj.name, playerObj.description);
+						break;
+					case 'template':
+						paramsPromise = PlayerDataService.getV7PlayerConfFromTemplate(playerObj.name, templateId);
+						break;
+					default:
+						deferred.reject('Unknown upgrade mode "' + mode + '"');
+				}
+
+				paramsPromise.then(function (request) {
+					request['service'] = 'uiConf';
+					request['action'] = 'update';
+					request['id'] = playerObj.id;
+
+					var rejectText = $filter('translate')('Upgrade player action was rejected: ');
+
+					apiService.doRequest(request).then(function (result) {
+							deferred.resolve(result);
+						}, function (msg) {
+							deferred.reject(rejectText + msg);
+						}
+					);
+				});
+
+				return deferred.promise;
+			},
 			'playerUpdate': function (playerObj, html5lib, isPlaylist) {
 // use the upgradePlayer service to convert the old XML config to the new json config object
 				var deferred = $q.defer();
@@ -586,6 +617,123 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 		return playersService;
 	}])
 ;
+
+KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q', 'utilsSvc',
+	function ($http, apiService, $q, utilsSvc) {
+		function validateV7Player(player) {
+			return player.tags && player.tags.includes('kalturaPlayerJs');
+		}
+
+		function cleanupV7PlayerConfig(playerConfig) {
+			const v7UpgradeCleanupFields = ['uiConf:confFile', 'uiConf:swfUrlVersion', 'uiConf:html5Url'];
+
+			for (var field of v7UpgradeCleanupFields) {
+				playerConfig[field] = ' ';
+			}
+
+			return playerConfig;
+		}
+
+		var playerDataService = {
+			getDefaultV7PlayerConf: function (name, description) {
+				var deferred = $q.defer();
+				var result = {
+					'uiConf:objectType': 'KalturaUiConf',
+					'uiConf:objType': 1,
+					'uiConf:description': description,
+					'uiConf:height': 395,
+					'uiConf:width': 560,
+					'uiConf:swfUrl': '/',
+					'uiConf:name': name,
+					'uiConf:tags': 'kalturaPlayerJs,player,ovp',
+					'uiConf:config': '{\n' +
+						'    "disableUserCache": false,\n' +
+						'    "plugins": {\n' +
+						'        "kava": {},\n' +
+						'        "playkit-js-hotspots": {},\n' +
+						'        "navigation": {},\n' +
+						'        "playkit-js-transcript": {\n' +
+						'            "position": "bottom",\n' +
+						'            "showTime": true,\n' +
+						'            "expandOnFirstPlay": false,\n' +
+						'            "downloadDisabled": true,\n' +
+						'            "printDisabled": true\n' +
+						'        },\n' +
+						'        "playkit-js-info": {},\n' +
+						'        "dualscreen": {},' +
+						'        "timeline": {},\n' +
+						'        "ivq": {},\n' +
+						'        "kalturaCuepoints": {}' +
+						'    },\n' +
+						'    "viewability": {\n' +
+						'        "playerThreshold": 50\n' +
+						'    },\n' +
+						'    "provider": {\n' +
+						'        "env": {}\n' +
+						'    },\n' +
+						'    "playback": {\n' +
+						'        "enabled": true\n' +
+						'    }\n' +
+						'}',
+					'uiConf:confVars': '{"versions":{"kaltura-ovp-player":"{latest}","playkit-hotspots":"{latest}",' +
+						'"playkit-navigation":"{latest}","playkit-transcript":"{latest}","playkit-info":"{latest}",' +
+						'"playkit-ivq":"{latest}","playkit-timeline":"{latest}","playkit-kaltura-cuepoints":"{latest}",' +
+						'"playkit-dual-screen":"{latest}"},"langs":["en"]}',
+					'uiConf:creationMode': 2,
+				};
+
+				result = cleanupV7PlayerConfig(result);
+
+				deferred.resolve(result);
+				return deferred.promise;
+			},
+
+			getV7PlayerConfFromTemplate: function (name, playerId) {
+				var deferred = $q.defer();
+				apiService.setCache(false);
+				var request = {
+					'service': 'uiConf',
+					'action': 'get',
+					'id': playerId
+				};
+				apiService.doRequest(request).then(function (result) {
+						if (!validateV7Player(result)) {
+							deferred.reject("not v7 player");
+							utilsSvc.alert('Invalid Player', 'The provided player ID is not a V7 player.<br>Player ID: ' + result.id);
+						}
+						// validate result to catch invalid JSON configs
+						if (typeof result.config === 'string') {
+							try {
+								angular.fromJson(result.config);
+								const ignoredFields = ['id', 'name', 'description', 'partnerId', 'objTypeAsString', 'createdAt', 'updatedAt', 'version'];
+								var template = {
+									'uiConf:name': name,
+								};
+
+								for (const [key, value] of Object.entries(result)) {
+									if (ignoredFields.includes(key)) {
+										continue;
+									}
+									template['uiConf:' + key] = value;
+								}
+
+								template = cleanupV7PlayerConfig(template)
+								deferred.resolve(template);
+							} catch (e) {
+								deferred.reject("invalid JSON config");
+								utilsSvc.alert('Invalid Player', 'The template player configuration object is not valid.<br>Player ID: ' + result.id);
+							}
+						}
+					}, function () {
+						deferred.reject("can't fetch template Player");
+						utilsSvc.alert('Invalid Player', 'The provided player ID does not exist.<br>Player ID: ' + playerId);
+					}
+				);
+				return deferred.promise;
+			}
+		};
+		return playerDataService;
+	}]);
 
 KMCServices.factory('requestNotificationChannel', ['$rootScope', function ($rootScope) {
 // private notification messages

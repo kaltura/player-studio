@@ -135,6 +135,10 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 				return !$scope.checkVersionNeedsUpgrade(item) && window.MWEMBED_VERSION !== html5libVersion && html5libVersion !== "latest";
 			};
 
+			$scope.checkV7Upgrade = function (item) {
+				return true;
+			}
+
 			// check if this player should be upgraded (binded to the player's HTML outdated message)
 			$scope.checkVersionNeedsUpgrade = function (item) {
 				var html5libVersion = getHTML5Version(item.html5Url)[0]; // get html5 lib version number from its URL
@@ -322,6 +326,42 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 				return upgradeProccess.promise;
 			};
 
+			$scope.upgradeV7 = function(player) {
+				var modal = $modal.open({
+					templateUrl: 'templates/playerUpgradeMode.html',
+					controller: 'PlayerUpgradeModeCtrl',
+					resolve: {
+						settings: function () {
+							return {};
+						}
+					}
+				});
+				modal.result.then(function (result) {
+					if (result && result.result) {
+						var confirmMsg = 'Do you want to convert this V2 player to a V7 player?<br/><br/>' +
+								'Player\'s customization and configuration will be lost<br/>' +
+								'Player\'s embeds will need to be modified.<br/><br/>' +
+								'This option is mostly relevant for KAF Browse, Search and Embed players.';
+
+						var confirmModal = utilsSvc.confirm('Convert to Player V7 confirmation', confirmMsg, 'Convert');
+						confirmModal.result.then(function (confirmResult) {
+							if (confirmResult) {
+								PlayerService.playerUpgradeV7(player, result.mode, result.templateId)
+									.then(function () {
+										$scope.data.splice($scope.data.indexOf(player), 1);
+										$scope.triggerLayoutChange();
+									}, function (reason) {
+										utilsSvc.alert('Upgrade failure', reason);
+									});
+							}
+						});
+					}
+				}, function () {
+					$log.info('Upgrade modal dismissed at: ' + new Date());
+				})
+
+			}
+
 			// updater an outdated player
 			$scope.update = function (player) {
 				var upgradeProccess = $q.defer();
@@ -356,4 +396,38 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			};
 		}
 	])
+	.controller('PlayerUpgradeModeCtrl',
+		function ($scope, $modalInstance, settings) {
+			$scope.playerId = '';
+			$scope.mode = '';
+
+			$scope.close = function (result) {
+				const modalResult = result ? {
+					result: true,
+					mode: this.mode,
+					templateId: Number(this.playerId)
+				} : {
+					result: false
+				};
+				$modalInstance.close(modalResult);
+			};
+
+			$scope.cancel = function () {
+				$modalInstance.dismiss('cancel');
+			};
+
+			$scope.validate = function () {
+				if (this.mode === '') {
+					return false;
+				}
+
+				if (this.mode === 'template' && (this.playerId === '') || isNaN(this.playerId)) {
+					return false;
+				}
+
+				return true;
+			};
+
+			angular.extend($scope, settings);
+		})
 ;
