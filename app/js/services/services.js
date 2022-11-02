@@ -536,31 +536,36 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 			},
 			'playerUpgradeV7': function(playerObj, mode, templateId) {
 				var deferred = $q.defer();
-				var paramsPromise;
-				switch (mode) {
-					case 'default':
-						paramsPromise = PlayerDataService.getDefaultV7PlayerConf(playerObj.name, playerObj.description);
-						break;
-					case 'template':
-						paramsPromise = PlayerDataService.getV7PlayerConfFromTemplate(playerObj.name, templateId);
-						break;
-					default:
-						deferred.reject('Unknown upgrade mode "' + mode + '"');
+
+				function getV7PlayerConf(playerObj, mode, templateId) {
+					switch (mode) {
+						case 'default':
+							return PlayerDataService.getDefaultV7PlayerConf(playerObj.name, playerObj.description);
+						case 'template':
+							return PlayerDataService.getV7PlayerConfFromTemplate(playerObj.name, templateId);
+						default:
+							var confDeferred = $q.defer();
+							confDeferred.reject('Unknown upgrade mode "' + mode + '"')
+							return confDeferred.promise;
+					}
 				}
+
+				var paramsPromise = getV7PlayerConf(playerObj, mode, templateId);
 
 				paramsPromise.then(function (request) {
 					request['service'] = 'uiConf';
 					request['action'] = 'update';
 					request['id'] = playerObj.id;
 
-					var rejectText = $filter('translate')('Upgrade player action was rejected: ');
-
 					apiService.doRequest(request).then(function (result) {
 							deferred.resolve(result);
 						}, function (msg) {
+							var rejectText = $filter('translate')('Upgrade player action was rejected: ');
 							deferred.reject(rejectText + msg);
 						}
 					);
+				}, function (msg) {
+					deferred.reject(msg);
 				});
 
 				return deferred.promise;
@@ -618,18 +623,16 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 	}])
 ;
 
-KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q', 'utilsSvc',
-	function ($http, apiService, $q, utilsSvc) {
+KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q',
+	function ($http, apiService, $q) {
 		function validateV7Player(player) {
 			return player.tags && player.tags.includes('kalturaPlayerJs');
 		}
 
 		function cleanupV7PlayerConfig(playerConfig) {
-			const v7UpgradeCleanupFields = ['uiConf:confFile', 'uiConf:swfUrlVersion', 'uiConf:html5Url'];
-
-			for (var field of v7UpgradeCleanupFields) {
-				playerConfig[field] = ' ';
-			}
+			playerConfig['uiConf:confFile'] = ' ';
+			playerConfig['uiConf:swfUrlVersion'] = '';
+			playerConfig['uiConf:html5Url'] = '';
 
 			return playerConfig;
 		}
@@ -640,7 +643,7 @@ KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q', 'utilsSvc
 				var result = {
 					'uiConf:objectType': 'KalturaUiConf',
 					'uiConf:objType': 1,
-					'uiConf:description': description,
+					'uiConf:description': description ?? '',
 					'uiConf:height': 395,
 					'uiConf:width': 560,
 					'uiConf:swfUrl': '/',
@@ -698,8 +701,8 @@ KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q', 'utilsSvc
 				};
 				apiService.doRequest(request).then(function (result) {
 						if (!validateV7Player(result)) {
-							deferred.reject("not v7 player");
-							utilsSvc.alert('Invalid Player', 'The provided player ID is not a V7 player.<br>Player ID: ' + result.id);
+							deferred.reject('The provided player ID is not a V7 player.\nPlayer ID: ' + result.id);
+							return;
 						}
 						// validate result to catch invalid JSON configs
 						if (typeof result.config === 'string') {
@@ -720,13 +723,11 @@ KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q', 'utilsSvc
 								template = cleanupV7PlayerConfig(template)
 								deferred.resolve(template);
 							} catch (e) {
-								deferred.reject("invalid JSON config");
-								utilsSvc.alert('Invalid Player', 'The template player configuration object is not valid.<br>Player ID: ' + result.id);
+								deferred.reject('The template player configuration object is not valid.\nPlayer ID: ' + result.id);
 							}
 						}
 					}, function () {
-						deferred.reject("can't fetch template Player");
-						utilsSvc.alert('Invalid Player', 'The provided player ID does not exist.<br>Player ID: ' + playerId);
+						deferred.reject('The provided player ID does not exist.\nPlayer ID: ' + playerId);
 					}
 				);
 				return deferred.promise;

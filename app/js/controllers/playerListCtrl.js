@@ -135,10 +135,6 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 				return !$scope.checkVersionNeedsUpgrade(item) && window.MWEMBED_VERSION !== html5libVersion && html5libVersion !== "latest";
 			};
 
-			$scope.checkV7Upgrade = function (item) {
-				return true;
-			}
-
 			// check if this player should be upgraded (binded to the player's HTML outdated message)
 			$scope.checkVersionNeedsUpgrade = function (item) {
 				var html5libVersion = getHTML5Version(item.html5Url)[0]; // get html5 lib version number from its URL
@@ -351,7 +347,8 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 										$scope.data.splice($scope.data.indexOf(player), 1);
 										$scope.triggerLayoutChange();
 									}, function (reason) {
-										utilsSvc.alert('Upgrade failure', reason);
+										var msg = reason.replace('\n', '<br/>');
+										utilsSvc.alert('Upgrade failure', msg);
 									});
 							}
 						});
