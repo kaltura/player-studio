@@ -355,9 +355,8 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 					}
 				}, function () {
 					$log.info('Upgrade modal dismissed at: ' + new Date());
-				})
-
-			}
+				});
+			};
 
 			// updater an outdated player
 			$scope.update = function (player) {
@@ -399,7 +398,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			$scope.mode = '';
 
 			$scope.close = function (result) {
-				const modalResult = result ? {
+				var modalResult = result ? {
 					result: true,
 					mode: this.mode,
 					templateId: Number(this.playerId)

@@ -545,7 +545,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							return PlayerDataService.getV7PlayerConfFromTemplate(playerObj.name, templateId);
 						default:
 							var confDeferred = $q.defer();
-							confDeferred.reject('Unknown upgrade mode "' + mode + '"')
+							confDeferred.reject('Unknown upgrade mode "' + mode + '"');
 							return confDeferred.promise;
 					}
 				}
@@ -643,7 +643,7 @@ KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q',
 				var result = {
 					'uiConf:objectType': 'KalturaUiConf',
 					'uiConf:objType': 1,
-					'uiConf:description': description ?? '',
+					'uiConf:description': description || '',
 					'uiConf:height': 395,
 					'uiConf:width': 560,
 					'uiConf:swfUrl': '/',
@@ -708,19 +708,20 @@ KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q',
 						if (typeof result.config === 'string') {
 							try {
 								angular.fromJson(result.config);
-								const ignoredFields = ['id', 'name', 'description', 'partnerId', 'objTypeAsString', 'createdAt', 'updatedAt', 'version'];
+								var ignoredFields = ['id', 'name', 'description', 'partnerId', 'objTypeAsString', 'createdAt', 'updatedAt', 'version'];
 								var template = {
 									'uiConf:name': name,
 								};
 
-								for (const [key, value] of Object.entries(result)) {
-									if (ignoredFields.includes(key)) {
-										continue;
+								Object.entries(result).forEach(function(entry) {
+									var key = entry[0];
+									var value = entry[1];
+									if (!ignoredFields.includes(key)) {
+										template['uiConf:' + key] = value;
 									}
-									template['uiConf:' + key] = value;
-								}
+								});
 
-								template = cleanupV7PlayerConfig(template)
+								template = cleanupV7PlayerConfig(template);
 								deferred.resolve(template);
 							} catch (e) {
 								deferred.reject('The template player configuration object is not valid.\nPlayer ID: ' + result.id);
