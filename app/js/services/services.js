@@ -545,7 +545,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 							return PlayerDataService.getV7PlayerConfFromTemplate(playerObj.name, templateId);
 						default:
 							var confDeferred = $q.defer();
-							confDeferred.reject('Unknown upgrade mode "' + mode + '"');
+							confDeferred.reject($filter('translate')('Unknown upgrade mode "') + mode + '"');
 							return confDeferred.promise;
 					}
 				}
@@ -623,8 +623,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 	}])
 ;
 
-KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q',
-	function ($http, apiService, $q) {
+KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q', '$filter',
+	function ($http, apiService, $q, $filter) {
 		function validateV7Player(player) {
 			return player.tags && player.tags.includes('kalturaPlayerJs');
 		}
@@ -701,7 +701,7 @@ KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q',
 				};
 				apiService.doRequest(request).then(function (result) {
 						if (!validateV7Player(result)) {
-							deferred.reject('The provided player ID is not a V7 player.\nPlayer ID: ' + result.id);
+							deferred.reject($filter('translate')('The provided player ID is not a V7 player.\nPlayer ID: ') + result.id);
 							return;
 						}
 						// validate result to catch invalid JSON configs
@@ -724,11 +724,11 @@ KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q',
 								template = cleanupV7PlayerConfig(template);
 								deferred.resolve(template);
 							} catch (e) {
-								deferred.reject('The template player configuration object is not valid.\nPlayer ID: ' + result.id);
+								deferred.reject($filter('translate')('The template player configuration object is not valid.\nPlayer ID: ') + result.id);
 							}
 						}
 					}, function () {
-						deferred.reject('The provided player ID does not exist.\nPlayer ID: ' + playerId);
+						deferred.reject($filter('translate')('The provided player ID does not exist.\nPlayer ID: ') + playerId);
 					}
 				);
 				return deferred.promise;

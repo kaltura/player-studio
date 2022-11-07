@@ -334,12 +334,12 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 				});
 				modal.result.then(function (result) {
 					if (result && result.result) {
-						var confirmMsg = 'Do you want to convert this V2 player to a V7 player?<br/><br/>' +
+						var confirmMsg = $filter('translate')('Do you want to convert this V2 player to a V7 player?<br/><br/>' +
 								'Player\'s customization and configuration will be lost<br/>' +
 								'Player\'s embeds will need to be modified.<br/><br/>' +
-								'This option is mostly relevant for KAF Browse, Search and Embed players.';
+								'This option is mostly relevant for KAF Browse, Search and Embed players.');
 
-						var confirmModal = utilsSvc.confirm('Convert to Player V7 confirmation', confirmMsg, 'Convert');
+						var confirmModal = utilsSvc.confirm($filter('translate')('Convert to Player V7 confirmation'), confirmMsg, $filter('translate')('Convert'));
 						confirmModal.result.then(function (confirmResult) {
 							if (confirmResult) {
 								PlayerService.playerUpgradeV7(player, result.mode, result.templateId)
@@ -347,14 +347,12 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 										$scope.data.splice($scope.data.indexOf(player), 1);
 										$scope.triggerLayoutChange();
 									}, function (reason) {
-										var msg = reason.replace('\n', '<br/>');
-										utilsSvc.alert('Upgrade failure', msg);
+										var msg = reason.replaceAll('\n', '<br/>');
+										utilsSvc.alert($filter('translate')('Upgrade failure'), msg);
 									});
 							}
 						});
 					}
-				}, function () {
-					$log.info('Upgrade modal dismissed at: ' + new Date());
 				});
 			};
 
