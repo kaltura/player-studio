@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('KMCModule').controller('PlayerListCtrl',
-	['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc',
-		function (apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, utilsSvc) {
+	['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc', 'PermissionsService',
+		function (apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, utilsSvc, PermissionsService) {
 			// start request to show the spinner. When data is rendered, the onFinishRender directive will hide the spinner
 			requestNotificationChannel.requestStarted('list');
 			$rootScope.lang = 'en-US';
@@ -18,6 +18,21 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 				}
 				return version;
 			};
+
+			$scope.v7UpgradeAllowed = false;
+
+			var checkV7UpgradeAllowed = function () {
+				PermissionsService.hasPermission('FEATURE_V3_STUDIO_PERMISSION')
+					.then(function (result) {
+						$scope.v7UpgradeAllowed = result;
+					}, function (reason) {
+						$log.error('Failed to check permissions: ' + reason);
+						$scope.v7UpgradeAllowed = false;
+					});
+			};
+
+			checkV7UpgradeAllowed();
+
 			// init search
 			$scope.search = '';
 			$scope.searchSelect2Options = {};
