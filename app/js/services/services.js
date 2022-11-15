@@ -623,8 +623,8 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 	}])
 ;
 
-KMCServices.factory('PlayerDataService', ['$http', 'apiService', '$q', '$filter',
-	function ($http, apiService, $q, $filter) {
+KMCServices.factory('PlayerDataService', ['apiService', '$q', '$filter',
+	function (apiService, $q, $filter) {
 		function validateV7Player(player) {
 			return player.tags && player.tags.includes('kalturaPlayerJs');
 		}
@@ -1096,4 +1096,31 @@ KMCServices.factory('playerTemplates', ['$http', function ($http) {
 		}
 	};
 
+}]);
+KMCServices.factory('PermissionsService', ['apiService', '$q', function (apiService, $q) {
+	var permissionsService = {
+		hasPermission: function (permission) {
+			var deferred = $q.defer();
+			apiService.setCache(false);
+			var request = {
+				'service': 'permission',
+				'action': 'getCurrentPermissions'
+			};
+			apiService.doRequest(request).then(function (data) {
+				if (!data) {
+					deferred.resolve(false);
+				} else {
+					var permissions = data.split(',');
+					var hasPermission = permissions.includes(permission);
+					deferred.resolve(hasPermission);
+				}
+			}, function (reason) {
+				deferred.reject(reason);
+			});
+
+			return deferred.promise;
+		}
+	};
+
+	return permissionsService;
 }]);
