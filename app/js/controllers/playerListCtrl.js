@@ -2,8 +2,43 @@
 
 /* Controllers */
 
-angular.module('KMCModule').controller('PlayerListCtrl',
-	['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc', 'PermissionsService',
+angular.module('KMCModule')
+	.controller('PlayerUpgradeModeCtrl',
+		function ($scope, $modalInstance, settings) {
+			$scope.playerId = '';
+			$scope.mode = '';
+
+			$scope.close = function (result) {
+				var modalResult = result ? {
+					result: true,
+					mode: this.mode,
+					templateId: Number(this.playerId)
+				} : {
+					result: false
+				};
+				$modalInstance.close(modalResult);
+			};
+
+			$scope.cancel = function () {
+				$modalInstance.dismiss('cancel');
+			};
+
+			$scope.validate = function () {
+				if (this.mode === '') {
+					return false;
+				}
+
+				if (this.mode === 'template' && (this.playerId === '') || isNaN(this.playerId)) {
+					return false;
+				}
+
+				return true;
+			};
+
+			angular.extend($scope, settings);
+		})
+	.controller('PlayerListCtrl',
+		['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc', 'PermissionsService',
 		function (apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, utilsSvc, PermissionsService) {
 			// start request to show the spinner. When data is rendered, the onFinishRender directive will hide the spinner
 			requestNotificationChannel.requestStarted('list');
@@ -405,38 +440,4 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			};
 		}
 	])
-	.controller('PlayerUpgradeModeCtrl',
-		function ($scope, $modalInstance, settings) {
-			$scope.playerId = '';
-			$scope.mode = '';
-
-			$scope.close = function (result) {
-				var modalResult = result ? {
-					result: true,
-					mode: this.mode,
-					templateId: Number(this.playerId)
-				} : {
-					result: false
-				};
-				$modalInstance.close(modalResult);
-			};
-
-			$scope.cancel = function () {
-				$modalInstance.dismiss('cancel');
-			};
-
-			$scope.validate = function () {
-				if (this.mode === '') {
-					return false;
-				}
-
-				if (this.mode === 'template' && (this.playerId === '') || isNaN(this.playerId)) {
-					return false;
-				}
-
-				return true;
-			};
-
-			angular.extend($scope, settings);
-		})
 ;
