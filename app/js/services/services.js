@@ -650,38 +650,44 @@ KMCServices.factory('PlayerDataService', ['apiService', '$q', '$filter',
 					'uiConf:name': name,
 					'uiConf:tags': 'kalturaPlayerJs,player,ovp',
 					'uiConf:config': '{\n' +
-						'    "disableUserCache": false,\n' +
-						'    "plugins": {\n' +
-						'        "kava": {},\n' +
-						'        "playkit-js-hotspots": {},\n' +
-						'        "navigation": {},\n' +
-						'        "playkit-js-transcript": {\n' +
-						'            "position": "bottom",\n' +
-						'            "showTime": true,\n' +
-						'            "expandOnFirstPlay": false,\n' +
-						'            "downloadDisabled": true,\n' +
-						'            "printDisabled": true\n' +
-						'        },\n' +
-						'        "playkit-js-info": {},\n' +
-						'        "dualscreen": {},' +
-						'        "timeline": {},\n' +
-						'        "ivq": {},\n' +
-						'        "kalturaCuepoints": {}' +
-						'    },\n' +
-						'    "viewability": {\n' +
-						'        "playerThreshold": 50\n' +
-						'    },\n' +
-						'    "provider": {\n' +
-						'        "env": {}\n' +
-						'    },\n' +
-						'    "playback": {\n' +
-						'        "enabled": true\n' +
-						'    }\n' +
+						'\t"disableUserCache": false,\n' +
+						'\t"plugins": {\n' +
+						'\t\t"kava": {},\n' +
+						'\t\t"playkit-js-hotspots": {},\n' +
+						'\t\t"navigation": {},\n' +
+						'\t\t"playkit-js-transcript": {\n' +
+						'\t\t\t"position": "bottom",\n' +
+						'\t\t\t"showTime": true,\n' +
+						'\t\t\t"expandOnFirstPlay": false,\n' +
+						'\t\t\t"downloadDisabled": true,\n' +
+						'\t\t\t"printDisabled": true\n' +
+						'\t\t},\n' +
+						'\t\t"playkit-js-info": {},\n' +
+						'\t\t"dualscreen": {},\n' +
+						'\t\t"timeline": {},\n' +
+						'\t\t"ivq": {},\n' +
+						'\t\t"kalturaCuepoints": {},\n' +
+						'\t\t"uiManagers": {},\n' +
+						'\t\t"playlist": {}\n' +
+						'\t},\n' +
+						'\t"viewability": {\n' +
+						'\t\t"playerThreshold": 50\n' +
+						'\t},\n' +
+						'\t"provider": {\n' +
+						'\t\t"env": {}\n' +
+						'\t},\n' +
+						'\t"playback": {\n' +
+						'\t\t"enabled": true\n' +
+						'\t},\n' +
+						'\t"playlist": {\n' +
+						'\t\t"options": {},\n' +
+						'\t\t"countdown": {}\n' +
+						'\t}\n' +
 						'}',
-					'uiConf:confVars': '{"versions":{"kaltura-ovp-player":"{latest}","playkit-hotspots":"{latest}",' +
-						'"playkit-navigation":"{latest}","playkit-transcript":"{latest}","playkit-info":"{latest}",' +
-						'"playkit-ivq":"{latest}","playkit-timeline":"{latest}","playkit-kaltura-cuepoints":"{latest}",' +
-						'"playkit-dual-screen":"{latest}"},"langs":["en"]}',
+					'uiConf:confVars': '{"versions":{"kaltura-ovp-player":"{latest}","playkit-navigation":"{latest}",' +
+						'"playkit-transcript":"{latest}","playkit-hotspots":"{latest}","playkit-info":"{latest}",' +
+						'"playkit-dual-screen":"{latest}","playkit-ivq":"{latest}","playkit-playlist":"{latest}",' +
+						'"playkit-timeline":"{latest}","playkit-kaltura-cuepoints":"{latest}"},"langs":["en"]}',
 					'uiConf:creationMode': 2,
 				};
 
