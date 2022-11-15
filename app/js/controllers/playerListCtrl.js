@@ -9,14 +9,14 @@ angular.module('KMCModule')
 			$scope.mode = '';
 
 			$scope.close = function (result) {
-				var modalResult = result ? {
-					result: true,
+				if (!result) {
+					return $modalInstance.close();
+				}
+
+				$modalInstance.close({
 					mode: this.mode,
 					templateId: Number(this.playerId)
-				} : {
-					result: false
-				};
-				$modalInstance.close(modalResult);
+				});
 			};
 
 			$scope.cancel = function () {
@@ -24,7 +24,7 @@ angular.module('KMCModule')
 			};
 
 			$scope.validate = function () {
-				if (this.mode === '') {
+				if (!this.mode) {
 					return false;
 				}
 
@@ -383,7 +383,7 @@ angular.module('KMCModule')
 					}
 				});
 				modal.result.then(function (result) {
-					if (result && result.result) {
+					if (result) {
 						var confirmMsg = $filter('translate')('Do you want to convert this V2 player to a V7 player?<br/><br/>' +
 								'Player\'s customization and configuration will be lost<br/>' +
 								'Player\'s embeds will need to be modified.<br/><br/>' +
