@@ -2,8 +2,43 @@
 
 /* Controllers */
 
-angular.module('KMCModule').controller('PlayerListCtrl',
-	['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc', 'PermissionsService',
+angular.module('KMCModule')
+	.controller('PlayerUpgradeModeCtrl',
+		function ($scope, $modalInstance, settings) {
+			$scope.playerId = '';
+			$scope.mode = '';
+
+			$scope.close = function (result) {
+				if (!result) {
+					return $modalInstance.close();
+				}
+
+				$modalInstance.close({
+					mode: this.mode,
+					templateId: Number(this.playerId)
+				});
+			};
+
+			$scope.cancel = function () {
+				$modalInstance.dismiss('cancel');
+			};
+
+			$scope.validate = function () {
+				if (!this.mode) {
+					return false;
+				}
+
+				if (this.mode === 'template' && (this.playerId === '') || isNaN(this.playerId)) {
+					return false;
+				}
+
+				return true;
+			};
+
+			angular.extend($scope, settings);
+		})
+	.controller('PlayerListCtrl',
+		['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc', 'PermissionsService',
 		function (apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, utilsSvc, PermissionsService) {
 			// start request to show the spinner. When data is rendered, the onFinishRender directive will hide the spinner
 			requestNotificationChannel.requestStarted('list');
@@ -348,7 +383,7 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 					}
 				});
 				modal.result.then(function (result) {
-					if (result && result.result) {
+					if (result) {
 						var confirmMsg = $filter('translate')('Do you want to convert this V2 player to a V7 player?<br/><br/>' +
 								'Player\'s customization and configuration will be lost<br/>' +
 								'Player\'s embeds will need to be modified.<br/><br/>' +
@@ -405,38 +440,4 @@ angular.module('KMCModule').controller('PlayerListCtrl',
 			};
 		}
 	])
-	.controller('PlayerUpgradeModeCtrl',
-		function ($scope, $modalInstance, settings) {
-			$scope.playerId = '';
-			$scope.mode = '';
-
-			$scope.close = function (result) {
-				var modalResult = result ? {
-					result: true,
-					mode: this.mode,
-					templateId: Number(this.playerId)
-				} : {
-					result: false
-				};
-				$modalInstance.close(modalResult);
-			};
-
-			$scope.cancel = function () {
-				$modalInstance.dismiss('cancel');
-			};
-
-			$scope.validate = function () {
-				if (this.mode === '') {
-					return false;
-				}
-
-				if (this.mode === 'template' && (this.playerId === '') || isNaN(this.playerId)) {
-					return false;
-				}
-
-				return true;
-			};
-
-			angular.extend($scope, settings);
-		})
 ;
