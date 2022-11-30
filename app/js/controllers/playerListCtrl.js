@@ -2,44 +2,9 @@
 
 /* Controllers */
 
-angular.module('KMCModule')
-	.controller('PlayerUpgradeModeCtrl',
-		function ($scope, $modalInstance, settings) {
-			$scope.playerId = '';
-			$scope.mode = '';
-
-			$scope.close = function (result) {
-				if (!result) {
-					return $modalInstance.close();
-				}
-
-				$modalInstance.close({
-					mode: this.mode,
-					templateId: Number(this.playerId)
-				});
-			};
-
-			$scope.cancel = function () {
-				$modalInstance.dismiss('cancel');
-			};
-
-			$scope.validate = function () {
-				if (!this.mode) {
-					return false;
-				}
-
-				if (this.mode === 'template' && (this.playerId === '') || isNaN(this.playerId)) {
-					return false;
-				}
-
-				return true;
-			};
-
-			angular.extend($scope, settings);
-		})
-	.controller('PlayerListCtrl',
-		['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc', 'PermissionsService',
-		function (apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, utilsSvc, PermissionsService) {
+angular.module('KMCModule').controller('PlayerListCtrl',
+	['apiService', 'loadINI', '$location', '$rootScope', '$scope', '$filter', '$modal', '$timeout', '$log', "$compile", "$window", 'localStorageService', 'requestNotificationChannel', 'PlayerService', '$q', 'utilsSvc',
+		function (apiService, loadINI, $location, $rootScope, $scope, $filter, $modal, $timeout, $log, $compile, $window, localStorageService, requestNotificationChannel, PlayerService, $q, utilsSvc) {
 			// start request to show the spinner. When data is rendered, the onFinishRender directive will hide the spinner
 			requestNotificationChannel.requestStarted('list');
 			$rootScope.lang = 'en-US';
@@ -53,21 +18,6 @@ angular.module('KMCModule')
 				}
 				return version;
 			};
-
-			$scope.v7UpgradeAllowed = false;
-
-			var checkV7UpgradeAllowed = function () {
-				PermissionsService.hasPermission('FEATURE_V3_STUDIO_PERMISSION')
-					.then(function (result) {
-						$scope.v7UpgradeAllowed = result;
-					}, function (reason) {
-						$log.error('Failed to check permissions: ' + reason);
-						$scope.v7UpgradeAllowed = false;
-					});
-			};
-
-			checkV7UpgradeAllowed();
-
 			// init search
 			$scope.search = '';
 			$scope.searchSelect2Options = {};
@@ -370,40 +320,6 @@ angular.module('KMCModule')
 					}
 				});
 				return upgradeProccess.promise;
-			};
-
-			$scope.upgradeV7 = function(player) {
-				var modal = $modal.open({
-					templateUrl: 'templates/playerUpgradeMode.html',
-					controller: 'PlayerUpgradeModeCtrl',
-					resolve: {
-						settings: function () {
-							return {};
-						}
-					}
-				});
-				modal.result.then(function (result) {
-					if (result) {
-						var confirmMsg = $filter('translate')('Do you want to convert this V2 player to a V7 player?<br/><br/>' +
-								'Player\'s customization and configuration will be lost<br/>' +
-								'Player\'s embeds will need to be modified.<br/><br/>' +
-								'This option is mostly relevant for KAF Browse, Search and Embed players.');
-
-						var confirmModal = utilsSvc.confirm($filter('translate')('Convert to Player V7 confirmation'), confirmMsg, $filter('translate')('Convert'));
-						confirmModal.result.then(function (confirmResult) {
-							if (confirmResult) {
-								PlayerService.playerUpgradeV7(player, result.mode, result.templateId)
-									.then(function () {
-										$scope.data.splice($scope.data.indexOf(player), 1);
-										$scope.triggerLayoutChange();
-									}, function (reason) {
-										var msg = reason.replaceAll('\n', '<br/>');
-										utilsSvc.alert($filter('translate')('Upgrade failure'), msg);
-									});
-							}
-						});
-					}
-				});
 			};
 
 			// updater an outdated player
