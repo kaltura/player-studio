@@ -148,8 +148,9 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                     'api': ['api', 'apiService', 'sessionService', '$location', '$q', function (api, apiService, sessionService, $location, $q) {
                         return ksCheck(api, apiService, sessionService, $location, $q);
                     }],
-                    'PlayerData': ['api', 'PlayerService', function (api, PlayerService) {
-                        return api.then(function () {
+                    'PlayerData': ['api', 'apiService', 'sessionService', '$location', '$q', 'PlayerService', function (api, apiService, sessionService, $location, $q, PlayerService) {
+                        // create the player only after the session is available
+                        return ksCheck(api, apiService, sessionService, $location, $q).then(function () {
                             return PlayerService.newPlayer();
                         });
                     }]

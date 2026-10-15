@@ -833,18 +833,28 @@ KMCServices.provider('api', function () {
 KMCServices.factory('sessionService', ['$q', '$rootScope', function ($q, $rootScope) {
 	var ks = null;
 	var hostSession = null;
+	var pendingListener = null;
 
-	// remove a ks persisted by previous studio versions
+	// remove a ks persisted by previous studio versions (localStorage, or the cookie fallback used when localStorage was unavailable)
 	try {
 		window.localStorage.removeItem('ls.ks');
 	} catch (e) {
 	}
+	document.cookie = 'ls.ks=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
 
+	// hosted when loaded inside KMC, which provides the studio configuration on window.kmc.vars (same origin)
 	var isHosted = function () {
 		try {
-			return window.parent !== window && typeof window.parent.kmcConfig !== 'undefined';
+			return window.parent !== window && !!(window.parent.kmc && window.parent.kmc.vars);
 		} catch (e) {
 			return false;
+		}
+	};
+
+	var removePendingListener = function () {
+		if (pendingListener) {
+			window.removeEventListener('message', pendingListener);
+			pendingListener = null;
 		}
 	};
 
@@ -855,12 +865,14 @@ KMCServices.factory('sessionService', ['$q', '$rootScope', function ($q, $rootSc
 			if (e.origin !== window.location.origin || e.source !== window.parent || !e.data || e.data.messageType !== 'init') {
 				return;
 			}
-			window.removeEventListener('message', listener);
+			removePendingListener();
 			var payload = e.data.payload || {};
 			$rootScope.$apply(function () {
 				deferred.resolve(typeof payload.ks === 'string' ? payload.ks : null);
 			});
 		};
+		removePendingListener();
+		pendingListener = listener;
 		window.addEventListener('message', listener);
 		window.parent.postMessage({'messageType': 'studioInit'}, window.location.origin);
 		return deferred.promise;
@@ -874,8 +886,11 @@ KMCServices.factory('sessionService', ['$q', '$rootScope', function ($q, $rootSc
 		setKs: function (value) {
 			ks = value || null;
 		},
+		// forget the session, including a cached or pending host handshake, so the next load requests a fresh ks
 		clear: function () {
 			ks = null;
+			hostSession = null;
+			removePendingListener();
 		},
 		// resolves with the ks: from memory, or (when hosted) from the host - requested only once
 		load: function () {
@@ -886,10 +901,15 @@ KMCServices.factory('sessionService', ['$q', '$rootScope', function ($q, $rootSc
 				return $q.when(null);
 			}
 			if (!hostSession) {
-				hostSession = requestHostSession().then(function (hostKs) {
+				var request = requestHostSession().then(function (hostKs) {
+					// ignore a response for a handshake that was cleared while pending
+					if (hostSession !== request) {
+						return null;
+					}
 					ks = hostKs;
 					return ks;
 				});
+				hostSession = request;
 			}
 			return hostSession;
 		}
