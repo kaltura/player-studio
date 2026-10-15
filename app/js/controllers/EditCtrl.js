@@ -1,7 +1,7 @@
 var KMCMenu = angular.module('KMCmenu', ['ui.bootstrap', 'ngSanitize', 'ui.select2', 'angularSpectrumColorpicker']);
 
-KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', '$location','requestNotificationChannel', 'select2Svc', 'utilsSvc',
-	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, $location, requestNotificationChannel, select2Svc, utilsSvc) {
+KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','PlayerService', 'apiService', 'editableProperties', 'localStorageService','$routeParams','$modal', '$location','requestNotificationChannel', 'select2Svc', 'utilsSvc', 'sessionService',
+	function ($scope, $http, $timeout, PlayerData, PlayerService, apiService, editableProperties, localStorageService, $routeParams, $modal, $location, requestNotificationChannel, select2Svc, utilsSvc, sessionService) {
 
 	$scope.playerData = angular.copy(PlayerData);   // get the player data
 	$scope.isIE8 = window.ie8;                      // set IE8 flash for color picker
@@ -415,8 +415,8 @@ KMCMenu.controller('EditCtrl', ['$scope','$http', '$timeout','PlayerData','Playe
 		}
 		delete $scope.playerData.config.enviornmentConfig;
 		angular.extend(flashvars,{'jsonConfig': angular.toJson($scope.playerData.config)}); // update the player with the new configuration
-		if (window.parent.kmc && window.parent.kmc.vars.ks){
-			angular.extend(flashvars, {'ks': window.parent.kmc.vars.ks}); // add ks if available
+		if (sessionService.getKs()){
+			angular.extend(flashvars, {'ks': sessionService.getKs()}); // add ks if available
 		}
 		if ($scope.isIE8) {                      // for IE8 add transparent mode
 			angular.extend(flashvars, {'wmode': 'transparent'});

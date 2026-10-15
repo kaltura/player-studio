@@ -29,10 +29,12 @@
     "grunt-angular-templates": "~0.5.1",
     "grunt-contrib-less": "~2.0.0",
     "grunt-contrib-jshint": "~3.2.0",
-    "grunt-contrib-watch": "~1.1.0"
+    "grunt-contrib-watch": "~1.1.0",
+    "http-server": "14.1.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server _dist -p 8000 -c-1",
     "build": "grunt && npm run create:zip",
     "create:zip": "cd _dist && zip -r studio_$TAG.zip .",
     "release": "sh ./scripts/release.sh",

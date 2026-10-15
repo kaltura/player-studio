@@ -85,37 +85,27 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 templateUrl: 'view/list.html',
                 controller: 'PlayerListCtrl',
                 resolve: {
-                    'apiService': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
+                    'apiService': ['api', 'apiService', 'sessionService', '$location', '$q', function (api, apiService, sessionService, $location, $q) {
                         // make sure we load the list only if we have valid KS
-                        return ksCheck(api, apiService, localStorageService, $location).then(function () {
+                        return ksCheck(api, apiService, sessionService, $location, $q).then(function () {
                             return apiService;
                         });
                     }]
                 }
             }
         );
-        var ksCheck = function (api, apiService, localStorageService, $location) {
-            // Check if we have ks in locaclstorage
-            try {
-                var kmc = window.parent.kmc;
-                if (kmc && kmc.vars) {
-                    // got ks from KMC - save to local storage
-                    if (kmc.vars.ks)
-                        localStorageService.add('ks', kmc.vars.ks);
+        // resolves with the api once a ks is available (in memory, or requested from the hosting KMC); otherwise navigates to login
+        var ksCheck = function (api, apiService, sessionService, $location, $q) {
+            return sessionService.load().then(function (ks) {
+                if (!ks) { //navigate to login
+                    $location.path("/login");
+                    return $q.reject('no ks');
                 }
-            } catch (e) {
-                cl('Could not located parent.kmc: ' + e);
-            }
-            var ks = localStorageService.get('ks');
-            if (!ks) { //navigate to login
-                $location.path("/login");
-                return false;
-            } else {
-                api.then(function () {
-                    apiService.setKs(ks);
+                return api.then(function (apiObj) {
+                    apiObj.setKs(ks);
+                    return apiObj;
                 });
-            }
-            return api; // changed to return the promise of the API
+            });
         };
 
         // deep linking to plugin setup
@@ -124,13 +114,10 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 controller: 'EditCtrl',
                 reloadOnSearch: false,
                 resolve: {
-                    'PlayerData': ['PlayerService', '$route', 'api', 'apiService', 'localStorageService', '$location', function (PlayerService, $route, api, apiService, localStorageService, $location) {
-                        var apiLoaded = ksCheck(api, apiService, localStorageService, $location);
-                        if (apiLoaded) {
-                            return apiLoaded.then(function (api) {
-                                return PlayerService.getPlayer($route.current.params.id);
-                            });
-                        }
+                    'PlayerData': ['PlayerService', '$route', 'api', 'apiService', 'sessionService', '$location', '$q', function (PlayerService, $route, api, apiService, sessionService, $location, $q) {
+                        return ksCheck(api, apiService, sessionService, $location, $q).then(function () {
+                            return PlayerService.getPlayer($route.current.params.id);
+                        });
                     }],
                     'editProperties': 'editableProperties'
                 }
@@ -158,11 +145,12 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
                 controller: 'EditCtrl',
                 reloadOnSearch: false,
                 resolve: {
-                    'api': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
-                        return ksCheck(api, apiService, localStorageService, $location);
+                    'api': ['api', 'apiService', 'sessionService', '$location', '$q', function (api, apiService, sessionService, $location, $q) {
+                        return ksCheck(api, apiService, sessionService, $location, $q);
                     }],
-                    'PlayerData': ['api', 'PlayerService', function (api, PlayerService) {
-                        return api.then(function () {
+                    'PlayerData': ['api', 'apiService', 'sessionService', '$location', '$q', 'PlayerService', function (api, apiService, sessionService, $location, $q, PlayerService) {
+                        // create the player only after the session is available
+                        return ksCheck(api, apiService, sessionService, $location, $q).then(function () {
                             return PlayerService.newPlayer();
                         });
                     }]
@@ -170,20 +158,21 @@ KMCModule.config(['$routeProvider', '$locationProvider', '$httpProvider', '$tool
             }
         );
         $routeProvider.when('/logout', {
-            resolve: {'logout': ['localStorageService', 'apiService', '$location', function (localStorageService, apiService, $location) {
+            resolve: {'logout': ['localStorageService', 'apiService', 'sessionService', '$location', function (localStorageService, apiService, sessionService, $location) {
                 if (localStorageService.isSupported()) {
                     localStorageService.clearAll();
                 }
+                sessionService.clear();
                 apiService.unSetks();
                 $location.path('/login');
             }]}
 
         });
         $routeProvider.otherwise({
-            resolve: {'res': ['api', 'apiService', 'localStorageService', '$location', function (api, apiService, localStorageService, $location) {
-                if (ksCheck(api, apiService, localStorageService, $location)) {
-                    return $location.path('/list');
-                }
+            resolve: {'res': ['api', 'apiService', 'sessionService', '$location', '$q', function (api, apiService, sessionService, $location, $q) {
+                return ksCheck(api, apiService, sessionService, $location, $q).then(function () {
+                    $location.path('/list');
+                });
             }]}
         });
     }]).run(["$rootScope", "$rootElement", "$location", function ($rootScope, $rootElement, $location) {

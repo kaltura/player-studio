@@ -184,8 +184,8 @@ KMCServices.factory('sortSvc', [function () {
 	}]
 );
 
-KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService', '$filter', 'localStorageService', '$location', 'utilsSvc',
-	function ($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc) {
+KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiService', '$filter', 'localStorageService', '$location', 'utilsSvc', 'sessionService',
+	function ($http, $modal, $log, $q, apiService, $filter, localStorageService, $location, utilsSvc, sessionService) {
 		var playersCache = {};
 		var currentPlayer = {};
 		var previewEntry;
@@ -541,7 +541,7 @@ KMCServices.factory('PlayerService', ['$http', '$modal', '$log', '$q', 'apiServi
 
 				var method = 'get';
 				var url = window.kWidget.getPath() + 'services.php';
-				var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: localStorageService.get("ks")};
+				var params = {service: 'upgradePlayer', uiconf_id: playerObj.id, ks: sessionService.getKs()};
 				if (window.IE < 10) {
 					params["callback"] = 'JSON_CALLBACK';
 					method = 'jsonp';
@@ -828,7 +828,95 @@ KMCServices.provider('api', function () {
 		}
 	};
 });
-KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location', 'localStorageService', 'apiCache', 'requestNotificationChannel', '$filter', function (api, $q, $timeout, $location, localStorageService, apiCache, requestNotificationChannel, $filter) {
+// keeps the session (ks) in memory only - it must never be persisted to localStorage / sessionStorage.
+// when hosted in KMC the session is requested from the host over an origin-checked postMessage handshake.
+KMCServices.factory('sessionService', ['$q', '$rootScope', function ($q, $rootScope) {
+	var ks = null;
+	var hostSession = null;
+	var pendingListener = null;
+
+	// remove a ks persisted by previous studio versions (localStorage, or the cookie fallback used when localStorage was unavailable)
+	try {
+		window.localStorage.removeItem('ls.ks');
+	} catch (e) {
+	}
+	document.cookie = 'ls.ks=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+
+	// hosted when loaded inside KMC, which provides the studio configuration on window.kmc.vars (same origin)
+	var isHosted = function () {
+		try {
+			return window.parent !== window && !!(window.parent.kmc && window.parent.kmc.vars);
+		} catch (e) {
+			return false;
+		}
+	};
+
+	var removePendingListener = function () {
+		if (pendingListener) {
+			window.removeEventListener('message', pendingListener);
+			pendingListener = null;
+		}
+	};
+
+	var requestHostSession = function () {
+		var deferred = $q.defer();
+		var listener = function (e) {
+			// only the hosting window, on our own origin, may provide the session
+			if (e.origin !== window.location.origin || e.source !== window.parent || !e.data || e.data.messageType !== 'init') {
+				return;
+			}
+			removePendingListener();
+			var payload = e.data.payload || {};
+			$rootScope.$apply(function () {
+				deferred.resolve(typeof payload.ks === 'string' ? payload.ks : null);
+			});
+		};
+		removePendingListener();
+		pendingListener = listener;
+		window.addEventListener('message', listener);
+		window.parent.postMessage({'messageType': 'studioInit'}, window.location.origin);
+		return deferred.promise;
+	};
+
+	return {
+		isHosted: isHosted,
+		getKs: function () {
+			return ks;
+		},
+		setKs: function (value) {
+			ks = value || null;
+		},
+		// forget the session, including a cached or pending host handshake, so the next load requests a fresh ks
+		clear: function () {
+			ks = null;
+			hostSession = null;
+			removePendingListener();
+		},
+		// resolves with the ks: from memory, or (when hosted) from the host - requested only once
+		load: function () {
+			if (ks) {
+				return $q.when(ks);
+			}
+			if (!isHosted()) {
+				return $q.when(null);
+			}
+			if (!hostSession) {
+				var request = requestHostSession().then(function (hostKs) {
+					// ignore a response for a handshake that was cleared while pending
+					if (hostSession !== request) {
+						return null;
+					}
+					ks = hostKs;
+					return ks;
+				});
+				hostSession = request;
+			}
+			return hostSession;
+		}
+	};
+}]);
+
+KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location', 'sessionService', 'apiCache', 'requestNotificationChannel', '$filter', function (api, $q, $timeout, $location, sessionService, apiCache, requestNotificationChannel, $filter) {
 	var apiService = {
 		apiObj: api,
 		unSetks: function () {
@@ -911,7 +999,7 @@ KMCServices.factory('apiService', ['api', '$q', '$timeout', '$location', 'localS
 					api.doRequest(params, function (data) {
 						if (data.code) {
 							if (data.code == "INVALID_KS") {
-								localStorageService.remove('ks');
+								sessionService.clear();
 								$location.path("/login");
 							}
 							if (!ignoreSpinner) {
